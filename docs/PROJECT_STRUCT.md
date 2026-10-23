@@ -18,7 +18,7 @@ ift4001-memetic-timetabling/
 │   ├── utils/                  # Lecture de fichiers et parsing
 │   │   ├── __init__.py
 │   │   └── io.py
-│   └── main.py                 # Point d'entrée pour lancer le POC
+│   └── drivers/                # Point d'entrée pour lancer les expériences
 ├── requirements.txt            # Dépendances Python
 └── README.md                   # Instructions d'exécution
 ```
