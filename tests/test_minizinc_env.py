@@ -1,6 +1,7 @@
 """Tests de la localisation de MiniZinc et de la recherche des solveurs."""
 
 import os
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -31,6 +32,9 @@ class TestExceptionHierarchy(unittest.TestCase):
 class TestLocateMiniZincDriver(unittest.TestCase):
     """Ordre de recherche : variable d'environnement d'abord, puis recherche par défaut."""
 
+    # Seul macOS a un emplacement d'installation connu de minizinc-python hors du PATH (/Applications/MiniZincIDE.app).
+    MACOS_PLATFORM: str = "darwin"
+
     def setUp(self) -> None:
         # Environnement sans la variable, pour exercer la recherche par défaut.
         self.environment_without_variable = {
@@ -42,8 +46,9 @@ class TestLocateMiniZincDriver(unittest.TestCase):
             driver = locate_minizinc_driver()
         self.assertIsInstance(driver, minizinc.Driver)
 
+    @unittest.skipUnless(sys.platform == MACOS_PLATFORM, "Recherche hors PATH propre à l'installation macOS.")
     def test_default_search_does_not_need_path(self) -> None:
-        # Cas PyCharm : le PATH ne contient pas MiniZinc.
+        # Cas PyCharm sous macOS : le PATH ne contient pas MiniZinc.
         environment_without_path = dict(self.environment_without_variable, PATH="")
         with mock.patch.dict(os.environ, environment_without_path, clear=True):
             driver = locate_minizinc_driver()

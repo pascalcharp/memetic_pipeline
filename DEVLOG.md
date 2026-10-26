@@ -100,3 +100,20 @@
 - Les descriptions suivent les décisions D5 et D6 : `chromosome.py` contient le génotype (`Encoding[G]`). `local_search.py` fait la recherche locale et la réparation, mais plus le décodage, qui revient à l'encodage.
 
 **À noter** : l'arborescence existe en deux exemplaires (CLAUDE.md et `docs/PROJECT_STRUCT.md`), qu'il faudra garder synchronisés.
+
+## 2026-10-26 — Étape 0 : Dockerfile
+
+**Fait**
+- `Dockerfile` en deux étapes (multi-stage). MiniZinc 2.10.0 est copié depuis l'image officielle `minizinc/minizinc:2.10.0-noble` dans `python:3.13-slim-trixie` : le pilote, `fzn-cp-sat`, `fzn-gecode`, `fzn-chuffed`, `libhighs.so` et `share/minizinc`.
+- `ENV MINIZINC_PATH=/usr/local/bin/minizinc`, lu par `minizinc_env`.
+- `.dockerignore` : `.git`, `.idea`, `.venv`, caches Python.
+- Commande par défaut : la suite de tests. Elle passe en arm64 (Mac) et en amd64 (émulation, la même architecture que GitHub Actions) : 18 tests OK, 1 ignoré. L'image fait environ 373 Mo.
+
+**Choix** : on copie les binaires au lieu de compiler MiniZinc ou de partir de l'image MiniZinc.
+- L'image MiniZinc est basée sur Ubuntu noble, qui fournit Python 3.12 et non 3.13.
+- Les binaires ne dépendent que de libc, libstdc++, libgcc, libm et libz. Ils sont compatibles entre noble (glibc 2.39) et trixie (glibc 2.41).
+- CP-SAT 9.15 est inclus dans l'image officielle, la même version qu'en local.
+
+**Blocage et correctif** : `test_default_search_does_not_need_path` échouait dans le conteneur.
+- Sans `PATH`, `Driver.find()` ne trouve MiniZinc que sous macOS (`/Applications/MiniZincIDE.app`). Sous Linux, l'échec est le comportement attendu.
+- Le test est donc limité à macOS (`skipUnless(sys.platform == "darwin")`).
