@@ -71,3 +71,4 @@ ift4001-memetic-timetabling/
 * **Documentation :** Documentation des méthodes importantes des interfaces, documentation des classes obligatoire
 * **Gestion des erreurs :** Exceptions sur mesure pour les classes, gestion cohérente de celles-ci au même niveau
 * **Constantes et nombres magiques:** Aucune constante codée en dur dans le code.  Elles sont toutes stockées dans une classe spéciale ou une classe ayant un lien logique avec le code.
+* **Messages d'erreur :** ce sont des constantes. Chaque module qui définit des exceptions sur mesure regroupe ses gabarits de messages dans une classe `...Messages` placée à côté de ces exceptions. Les gabarits utilisent des espaces réservés nommés (`"{path} ..."`, remplis par `.format(path=...)`), jamais de f-strings. Les tests vérifient que le message contient l'information utile au diagnostic (chemin, nom de variable, identifiant), pas son texte exact.

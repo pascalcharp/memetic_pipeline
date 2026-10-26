@@ -56,3 +56,25 @@
 - Le modèle en îles reste possible plus tard (plusieurs moteurs + `MigrationPolicy`).
 
 **Impact sur le TODO** : D7 est ajoutée. L'étape 9 intègre `Executor`, la dérivation des graines et de nouveaux tests (reproductibilité, entrées des opérateurs jamais modifiées).
+
+## 2026-10-26 — Étape 0 : localisation de MiniZinc, dépendances, squelette de tests
+
+**Fait**
+- `minizinc.Driver.find()` trouve MiniZinc même avec un `PATH` vide (cas PyCharm), parce qu'il cherche aussi dans `/Applications/MiniZincIDE.app`. La constante de repli prévue au TODO est donc inutile : le TODO est aligné sur le code.
+- Dépendances déjà présentes dans `.venv` : minizinc 0.10.0, numpy 2.5.4 (Python 3.13.3).
+- Squelette `tests/` (unittest) et `tests/test_minizinc_env.py`, qui compte 15 tests : hiérarchie des exceptions, recherche par défaut (y compris avec un `PATH` vide), priorité de `MINIZINC_PATH`, valeurs invalides de la variable, solveur par défaut disponible, solveur inconnu.
+- `.gitignore` : ajout de `__pycache__/`.
+
+**Défaut trouvé et corrigé** (correction écrite par Pascal)
+- Quand `MINIZINC_PATH` désignait un fichier existant mais inutilisable, `minizinc.Driver(...)` laissait remonter une exception brute au lieu de `MiniZincNotFoundError` :
+  - fichier non exécutable : `PermissionError` ;
+  - exécutable sans format reconnu : `OSError` (Exec format error) ;
+  - exécutable étranger : `AssertionError` (assert interne de la bibliothèque), qui devient un `AttributeError` sous `python -O`.
+- Une première correction (`except (PermissionError, AssertionError)` autour de toute la fonction) laissait encore passer les deux derniers cas et donnait un message trompeur aux erreurs de `find()`.
+- Correction retenue : `try` limité au seul appel `minizinc.Driver(executable)`, `except Exception` converti en `MiniZincNotFoundError ... from error`. Une capture large est acceptable ici parce qu'elle est confinée à une ligne, à la frontière avec une bibliothèque externe dont les exceptions ne font pas partie du contrat.
+- Leçon : énumérer les exceptions « devinées » d'une bibliothèque est fragile, puisque la liste dépend de son code interne et même des options de l'interpréteur.
+
+**Convention ajoutée à CLAUDE.md** : les messages d'erreur sont des constantes.
+- Chaque module qui définit des exceptions regroupe ses gabarits dans une classe `...Messages` placée à côté d'elles (ici `MiniZincEnvironmentMessages`).
+- Les gabarits utilisent des espaces réservés nommés et `.format`, jamais de f-strings.
+- Les tests vérifient que le message contient l'information utile au diagnostic (variable, chemin, identifiant de solveur), pas son texte exact.

@@ -7,6 +7,15 @@ import minizinc
 
 from src.config import MiniZincConfig
 
+class MiniZincEnvironmentMessages:
+    """Messages d'erreur MiniZinc."""
+
+    FILE_NOT_FOUND: str       =  "{variable}={path} n'est pas un fichier existant."
+    INVALID_EXECUTABLE: str   =  "{variable}={path} n'est pas un exécutable MiniZinc valide."
+    MINIZINC_NOT_FOUND: str   =  "MiniZinc est introuvable dans le PATH et les emplacements par défaut. " \
+                                 "Installez-le ou définissez la variable d'environnement {variable}."
+    SOLVER_NOT_AVAILABLE: str =  "Le solveur {solver_id} n'est pas disponible."
+
 
 class MiniZincEnvironmentError(Exception):
     """Erreur de base pour tout problème d'environnement MiniZinc."""
@@ -28,8 +37,8 @@ def locate_minizinc_driver() -> minizinc.Driver:
       2. la recherche par défaut de minizinc-python (PATH et emplacements d'installation usuels).
 
     Raises:
-        MiniZincNotFoundError: si la variable pointe vers un fichier inexistant,
-            ou si aucune installation n'est trouvée.
+        MiniZincNotFoundError: si la variable pointe vers un fichier inexistant, si le fichier n'est pas exécutable ou
+        si aucune installation n'est trouvée.
     """
     configured_path = os.environ.get(MiniZincConfig.EXECUTABLE_ENV_VAR)
 
@@ -37,16 +46,21 @@ def locate_minizinc_driver() -> minizinc.Driver:
         executable = Path(configured_path)
         if not executable.is_file():
             raise MiniZincNotFoundError(
-                f"{MiniZincConfig.EXECUTABLE_ENV_VAR}={configured_path} ne désigne pas un fichier existant."
+                MiniZincEnvironmentMessages.FILE_NOT_FOUND.format(variable=MiniZincConfig.EXECUTABLE_ENV_VAR, path=configured_path)
             )
-        return minizinc.Driver(executable)
+        try:
+            return minizinc.Driver(executable)
+        except Exception as error:
+            raise MiniZincNotFoundError(
+                MiniZincEnvironmentMessages.INVALID_EXECUTABLE.format(variable=MiniZincConfig.EXECUTABLE_ENV_VAR, path=configured_path)
+            ) from error
 
     driver = minizinc.Driver.find()
     if driver is None:
         raise MiniZincNotFoundError(
-            "MiniZinc est introuvable. Installez-le ou définissez "
-            f"la variable d'environnement {MiniZincConfig.EXECUTABLE_ENV_VAR}."
+            MiniZincEnvironmentMessages.MINIZINC_NOT_FOUND.format(variable=MiniZincConfig.EXECUTABLE_ENV_VAR)
         )
+
     return driver
 
 
@@ -59,4 +73,6 @@ def lookup_solver(solver_id: str, driver: minizinc.Driver) -> minizinc.Solver:
     try:
         return minizinc.Solver.lookup(solver_id, driver=driver)
     except LookupError as error:
-        raise SolverNotAvailableError(f"Le solveur « {solver_id} » n'est pas disponible.") from error
+        raise SolverNotAvailableError(
+            MiniZincEnvironmentMessages.SOLVER_NOT_AVAILABLE.format(solver_id=solver_id)
+        ) from error
