@@ -1,0 +1,23 @@
+# Lance la suite de tests dans l'image Docker du projet à chaque push sur main.
+# Les tests s'exécutent dans le même environnement que le développement (Python 3.13 + MiniZinc 2.10 + CP-SAT).
+
+name: Tests
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Récupérer le dépôt
+        uses: actions/checkout@v4
+
+      - name: Construire l'image Docker
+        run: docker build --tag memetic-pipeline .
+
+      - name: Lancer les tests dans le conteneur
+        run: docker run --rm memetic-pipeline python -W error::DeprecationWarning -m unittest discover --verbose
