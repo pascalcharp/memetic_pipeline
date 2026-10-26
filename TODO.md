@@ -31,7 +31,7 @@ Règle : une seule étape à la fois ; on ne passe à la suivante qu'une fois le
 - [x] Squelette `tests/` (unittest, découverte via `python -m unittest discover`) + `tests/test_minizinc_env.py` (15 tests verts)
 - [x] Test de fumée : MiniZinc + CP-SAT résolvent `horaire.mzn` sur `bench_1.json` depuis Python (`tests/test_smoke_minizinc.py`, optimum 94 prouvé en < 1 s)
 - [x] Dockerfile (Python 3.13 + MiniZinc + CP-SAT) : en second, le développement se fait d'abord en local dans PyCharm. Multi-stage depuis `minizinc/minizinc:2.10.0-noble`, testé en arm64 et amd64
-- [ ] Action GitHub : à chaque push sur `main`, construire l'image Docker et y lancer la suite de tests
+- [x] Action GitHub : à chaque push sur `main`, construire l'image Docker et y lancer la suite de tests (`.github/workflows/tests.yml`, premier run vert)
 - [x] Harmoniser la structure réelle avec CLAUDE.md (`horaire.mzn` vs `schedule_model.mzn`, noms des instances `bench_*.json`) : la documentation a été alignée sur les fichiers réels
 
 ## Étape 1 — Constantes du domaine **(C)**

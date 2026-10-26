@@ -117,3 +117,13 @@
 **Blocage et correctif** : `test_default_search_does_not_need_path` échouait dans le conteneur.
 - Sans `PATH`, `Driver.find()` ne trouve MiniZinc que sous macOS (`/Applications/MiniZincIDE.app`). Sous Linux, l'échec est le comportement attendu.
 - Le test est donc limité à macOS (`skipUnless(sys.platform == "darwin")`).
+
+## 2026-10-26 — Étape 0 : intégration continue (GitHub Actions) — étape 0 terminée
+
+**Fait**
+- `.github/workflows/tests.yml` : à chaque push sur `main`, le workflow construit l'image Docker et lance la suite de tests dans le conteneur, avec les `DeprecationWarning` traités comme des erreurs. Limite de temps : 20 minutes.
+- Premier run (commit `5dd6d78`) vert : https://github.com/pascalcharp/memetic_pipeline/actions/runs/40331236691. Toutes les étapes ont réussi et le job a duré environ 16 s.
+
+**Choix** : les tests tournent dans l'image du projet plutôt que dans un Python installé par l'action. La CI exerce ainsi exactement l'environnement de développement (Python 3.13, MiniZinc 2.10, CP-SAT 9.15).
+
+**Étape 0 terminée** : toutes ses tâches sont validées.
