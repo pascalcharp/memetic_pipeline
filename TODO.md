@@ -29,7 +29,7 @@ Règle : une seule étape à la fois ; on ne passe à la suivante qu'une fois le
 - [x] Localisation de l'exécutable MiniZinc : variable d'environnement `MINIZINC_PATH` en priorité, sinon repli sur `minizinc.Driver.find()`, qui trouve aussi `/Applications/MiniZincIDE.app` sans `PATH` (donc pas de constante de repli). Exécutable absent ou invalide ⇒ `MiniZincNotFoundError`
 - [x] Installer `requirements.txt` dans `.venv` (minizinc 0.10.0, numpy 2.5.4, Python 3.13.3)
 - [x] Squelette `tests/` (unittest, découverte via `python -m unittest discover`) + `tests/test_minizinc_env.py` (15 tests verts)
-- [ ] Test de fumée : MiniZinc + CP-SAT résolvent `horaire.mzn` sur `bench_1.json` depuis Python
+- [x] Test de fumée : MiniZinc + CP-SAT résolvent `horaire.mzn` sur `bench_1.json` depuis Python (`tests/test_smoke_minizinc.py`, optimum 94 prouvé en < 1 s)
 - [ ] Dockerfile (Python 3.13 + MiniZinc + CP-SAT) : en second, le développement se fait d'abord en local dans PyCharm
 - [ ] Harmoniser la structure réelle avec CLAUDE.md (`horaire.mzn` vs `schedule_model.mzn`, noms des instances `bench_*.json`)
 

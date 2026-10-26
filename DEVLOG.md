@@ -78,3 +78,15 @@
 - Chaque module qui définit des exceptions regroupe ses gabarits dans une classe `...Messages` placée à côté d'elles (ici `MiniZincEnvironmentMessages`).
 - Les gabarits utilisent des espaces réservés nommés et `.format`, jamais de f-strings.
 - Les tests vérifient que le message contient l'information utile au diagnostic (variable, chemin, identifiant de solveur), pas son texte exact.
+
+## 2026-10-26 — Étape 0 : test de fumée MiniZinc
+
+**Fait**
+- `tests/test_smoke_minizinc.py` : la chaîne Python → MiniZinc 2.10 → CP-SAT 9.15 résout `horaire.mzn` sur `bench_1.json`.
+- Vérifications : le fichier modèle existe, le statut est `OPTIMAL_SOLUTION`, le coût vaut 94 et chaque variable de décision a une valeur par employé.
+- CP-SAT prouve l'optimum en environ 0,4 s. Toute la suite (19 tests) passe, même quand les `DeprecationWarning` sont traités comme des erreurs.
+
+**Constats**
+- L'optimum de `bench_1` (94) est enregistré comme valeur de référence. Il servira à la validation croisée de la fonction de coût (étape 4).
+- `minizinc-python` 0.10 déprécie le paramètre `timeout` au profit de `time_limit`. Seul `time_limit` sera utilisé.
+- On peut passer une instance `.json` directement par `Model.add_file`, sans conversion en `.dzn`.
