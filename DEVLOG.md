@@ -90,3 +90,13 @@
 - L'optimum de `bench_1` (94) est enregistré comme valeur de référence. Il servira à la validation croisée de la fonction de coût (étape 4).
 - `minizinc-python` 0.10 déprécie le paramètre `timeout` au profit de `time_limit`. Seul `time_limit` sera utilisé.
 - On peut passer une instance `.json` directement par `Model.add_file`, sans conversion en `.dzn`.
+
+## 2026-10-26 — Étape 0 : harmonisation de la documentation
+
+**Fait** : l'arborescence de CLAUDE.md et de `docs/PROJECT_STRUCT.md` a été alignée sur le dépôt réel. On a corrigé la documentation au lieu de renommer les fichiers.
+- Racine `memetic_pipeline/`, modèle `horaire.mzn`, instances `bench_1..5.json`.
+- Ajout de `config.py`, `utils/minizinc_env.py`, `tests/`, `docs/`, `TODO.md` et `DEVLOG.md`.
+- Les fichiers prévus mais pas encore créés sont marqués « (à venir) ».
+- Les descriptions suivent les décisions D5 et D6 : `chromosome.py` contient le génotype (`Encoding[G]`). `local_search.py` fait la recherche locale et la réparation, mais plus le décodage, qui revient à l'encodage.
+
+**À noter** : l'arborescence existe en deux exemplaires (CLAUDE.md et `docs/PROJECT_STRUCT.md`), qu'il faudra garder synchronisés.
