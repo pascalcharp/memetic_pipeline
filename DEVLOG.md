@@ -195,3 +195,43 @@ En plus : un badge CI en tête de fichier. Toutes les commandes Docker document�
 - Les sous-coûts valent 1 000 000 seulement là où la demande est positive : c'est une pénalité quasi dure. Les autres sous-coûts sont petits (0 à 3) et les sur-coûts vont de 0 à 10.
 - Dans les 5 instances, la plage utile couvre toute la journée.
 - La contrainte de bris de symétrie de `horaire.mzn` est en commentaire, donc désactivée.
+
+## 2026-10-28 — Décision D8 : observabilité (journal de diagnostic et données d'expérience)
+
+**Besoin** : le projet est expérimental. On veut des statistiques complètes sur les chromosomes, leur diversité, leur coût en contraintes et leur évolution au fil des itérations, envoyées vers la console ou vers des fichiers selon ce que demande le concepteur de l'expérience.
+
+**Décision D8**
+1. **Deux flux séparés.**
+   - *Journal de diagnostic* (« que s'est-il passé ? ») : texte avec des niveaux, module `logging`.
+   - *Données d'expérience* (« comment l'algorithme se comporte-t-il ? ») : enregistrements structurés, relus par des scripts d'analyse.
+   - Les mélanger produit des journaux inexploitables.
+2. **Patron Observateur**, dans l'esprit de D5.
+   - Le moteur ne calcule ni n'écrit aucune statistique : il émet des événements.
+   - Des `MetricCollector` calculent, des `RecordSink` écrivent.
+   - Le choix se fait par configuration, comme pour les opérateurs.
+3. **Destinations** :
+   - `ConsoleSink` : résumé lisible toutes les *k* générations ;
+   - `JsonlSink` : écrit au fil de l'eau, résiste à un plantage, relu directement par pandas ;
+   - `CsvSink` : résumé par génération ;
+   - `MemorySink` : pour les tests ;
+   - `NullSink` : par défaut.
+4. **Statistiques** :
+   - coût de la population ;
+   - **coût décomposé** ;
+   - diversité génotypique (distance insensible à la permutation des employés, lien avec D3), phénotypique et des coûts ; une diversité par paires coûte O(n²), d'où une fréquence configurable ou un échantillonnage ;
+   - efficacité de chaque opérateur ;
+   - apport de la recherche locale, qui justifie le volet mémétique par rapport à un GA pur.
+5. **Une exécution = un répertoire** `results/<expérience>/<run_id>/`. Il contient `config.json` (configuration, graine, commit Git, versions), de quoi rejouer l'exécution.
+6. **Principes** :
+   - enregistrer assez de données brutes pour recalculer les statistiques plus tard ;
+   - un schéma versionné ;
+   - mesurer ne perturbe pas l'algorithme : un collecteur ne consomme jamais le générateur aléatoire du moteur, donc la même graine donne la même évolution, avec ou sans mesure ;
+   - événements émis par le thread principal (compatible avec D7) ;
+   - temps marqués comme non déterministes ;
+   - pas de dépendance lourde (MLflow ou TensorBoard pourront devenir une destination de plus).
+
+**Impact sur le TODO**
+- Étape 4 : l'évaluation retourne un `CostBreakdown`. C'est le seul impact immédiat : sans lui, le coût décomposé serait impossible à obtenir plus tard.
+- Nouvelle **étape 8b** (`src/observability/`), avant la boucle : interfaces, destinations, configuration de `logging`, répertoire d'exécution, collecteurs.
+- Étape 9 : émission des événements, et un test de reproductibilité avec ou sans collecteurs.
+- Étape 10 : analyse qui relit `results/`.

@@ -21,6 +21,12 @@ Règle : une seule étape à la fois ; on ne passe à la suivante qu'une fois le
   - **RNG dérivé par tâche** (graine déterministe par tâche, ex. `SeedSequence.spawn`), jamais un RNG partagé entre tâches ;
   - interface **`Executor`** (`map(tâche, lot)`), avec pour seule implémentation `SequentialExecutor` ; une version par threads ou async viendra plus tard ;
   - à garder en tête : arbitrage entre appels parallèles et threads internes de CP-SAT ; une limite en temps rend le solveur non déterministe ; modèle en îles possible plus tard (`MigrationPolicy`).
+- [x] **D8 — Observabilité : journal de diagnostic et données d'expérience** :
+  - deux flux séparés : **diagnostic** (texte, niveaux, module `logging`) et **données d'expérience** (enregistrements structurés, schéma versionné) ;
+  - patron **Observateur** : le moteur émet des événements (`run_started`, `individual_created`, `local_search_done`, `generation_ended`, `converged`, `restarted`, `run_ended`) ; des `MetricCollector` calculent, des `RecordSink` écrivent (`ConsoleSink`, `JsonlSink`, `CsvSink`, `MemorySink` pour les tests, `NullSink` par défaut) ; choix par configuration ;
+  - statistiques : coût (min, moyenne, médiane, max, écart-type), **coût décomposé** (sous-couverture, sur-couverture, violations de la contrainte « au moins 1 », cellules à 1 000 000), diversité (génotypique insensible à la permutation des employés, phénotypique, des coûts ; fréquence configurable ou échantillonnage), efficacité des opérateurs, apport de la recherche locale ;
+  - une exécution = `results/<expérience>/<run_id>/` (`config.json` avec graine, commit Git et versions, `events.jsonl`, `generations.csv`, `run.log`), ignoré par Git ;
+  - principes : enregistrer assez de données brutes pour recalculer plus tard ; `schema_version` et `event` dans chaque enregistrement ; un collecteur ne consomme jamais le générateur aléatoire du moteur ; événements émis par le thread principal après chaque lot (D7) ; temps marqués non déterministes ; bibliothèque standard seulement.
 - [ ] **D4 — Remplacement / convergence / restart** (avant étape 8) : élitisme (μ+λ) ? mesure de diversité ? quelle fraction conserver au restart ?
 
 ---
@@ -65,6 +71,7 @@ Principe : toute la documentation est dans `docs/`, et chaque document est acces
 
 ## Étape 4 — Évaluation (fonction de coût) **(P)**
 - [ ] Calcul de `total[p, a]` puis du coût sur/sous-couverture, identique à `cout_total`
+- [ ] L'évaluation retourne une décomposition `CostBreakdown` (sous-couverture, sur-couverture, violations de « au moins 1 », cellules à pénalité 1 000 000, total), pas seulement un scalaire (D8)
 - [ ] Traitement de la contrainte « au moins 1 employé si demande > 0 » (infaisable ou pénalité ?)
 - [ ] Tests : cas calculés à la main + **validation croisée** avec le coût renvoyé par MiniZinc sur des solutions réelles
 
@@ -95,19 +102,28 @@ Principe : toute la documentation est dans `docs/`, et chaque document est acces
 - [ ] `SelectPop` (remplacement), détection de convergence, `Restart`
 - [ ] Tests : taille conservée, meilleur individu jamais perdu (si élitiste), convergence détectée sur population homogène
 
+## Étape 8b — Observabilité (`src/observability/`) **(C→P)**
+- [ ] Interfaces `MetricCollector` et `RecordSink`, catalogue des événements et schéma des enregistrements (`schema_version`, `event`) **(C)**
+- [ ] Destinations `ConsoleSink`, `JsonlSink`, `CsvSink`, `MemorySink`, `NullSink` **(C)**
+- [ ] Configuration du journal de diagnostic (`logging`) : console et/ou `run.log`, niveau choisi par l'expérience **(C)**
+- [ ] Répertoire d'exécution `results/<expérience>/<run_id>/` avec `config.json` (graine, commit Git, versions) ; `results/` ajouté au `.gitignore` **(C)**
+- [ ] Collecteurs de coût (statistiques + décomposition) et de diversité (génotypique insensible à la permutation, phénotypique, des coûts) **(P)**
+- [ ] Tests : événements reçus dans l'ordre (`MemorySink`), fichiers JSONL/CSV relisibles, collecteurs sur des populations construites à la main, mesure sans effet sur le générateur aléatoire du moteur
+
 ## Étape 9 — Boucle mémétique `Memetic(NR, NM)` **(P)**
 - [ ] `MemeticConfig` (dataclass) : stratégies choisies + paramètres scalaires (NR, NM, taille, graine)
 - [ ] Interface `Executor` + `SequentialExecutor` ; le moteur passe par `executor.map` pour traiter chaque lot (D7)
 - [ ] Dérivation des graines par tâche à partir de la graine maître (D7)
 - [ ] Assemblage selon le pseudo-code de CLAUDE.md ; le moteur ne dépend que des interfaces ; critère `terminé(P)` via `TerminationCriterion`
-- [ ] Journalisation de l'historique (meilleur coût, coût moyen, diversité par génération)
-- [ ] Tests : terminaison, coût du meilleur monotone non croissant, exécution complète sur `bench_1`, moteur exercé avec des opérateurs factices, reproductibilité (même graine ⇒ même historique, solveur limité en effort plutôt qu'en temps), entrées des opérateurs jamais modifiées
+- [ ] Émission des événements de D8 aux points prévus ; collecteurs et destinations choisis dans `MemeticConfig`
+- [ ] Tests : terminaison, coût du meilleur monotone non croissant, exécution complète sur `bench_1`, moteur exercé avec des opérateurs factices, reproductibilité (même graine ⇒ même historique, avec ou sans collecteurs ; solveur limité en effort plutôt qu'en temps), entrées des opérateurs jamais modifiées
 
 ## Étape 10 — Driver et expériences (`src/drivers/`) **(C)**
 - [ ] Point d'entrée CLI (instance, NR, NM, taille de population, graine, limite de temps)
 - [ ] Expériences décrites par fichier de configuration (encodage, opérateurs, paramètres), résolues via le registre
 - [ ] Campagne sur `bench_1` … `bench_5` : mémétique vs MiniZinc seul (coût, temps)
-- [ ] Export des résultats (CSV/JSON), accompagnés de la configuration complète utilisée
+- [ ] Export des résultats (CSV/JSON), accompagnés de la configuration complète utilisée (via les destinations de D8)
+- [ ] Scripts ou notebooks d'analyse qui relisent `results/` (évolution du coût, de la diversité, comparaison d'opérateurs)
 
 ## Étape 11 — Documentation **(C)**
 - [ ] README : construction Docker, lancement des tests, lancement des expériences
