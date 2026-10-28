@@ -10,9 +10,20 @@ Règle : une seule étape à la fois ; on ne passe à la suivante qu'une fois le
 
 ## Décisions de conception à trancher (avant l'étape concernée)
 
-- [ ] **D1 — Encodage du chromosome** (avant étape 3) : l'encodage est polymorphe (interface `Encoding[G]`, voir D5). À trancher : la forme exacte de l'interface et l'encodage implémenté en premier (proposition : direct, par employé : `debut, pause1, diner, pause2, fin, activites[4]`). Les autres (par paramètres, direct trié, …) viendront une fois la boucle complète fonctionnelle.
+- [x] **D1 — Encodage du chromosome** : l'encodage est polymorphe (interface `Encoding[G]`, voir D5) ; interface réduite à `encode(Horaire) -> G` et `decode(G) -> Horaire`, traduction pure (D6).
+  - premier encodage implémenté : **par blocs** (`BlockEncoding`), un gène par employé : `debut, a1, d1, a2, d2, a3, d3, a4, d4` (activité et durée de chacun des 4 blocs) ;
+  - jalons déduits : `pause1 = debut + d1`, `diner = pause1 + 1 + d2`, `pause2 = diner + 4 + d3`, `fin = pause2 + d4` ; bijection avec les jalons du phénotype, donc traduction pure ;
+  - l'ordre des jalons est garanti par construction, et les 4 écarts minimaux deviennent des domaines par gène (`d_i ≥ 4`) ;
+  - restent deux contraintes de couplage : `22 ≤ d1 + d2 + d3 + d4 ≤ 30` (6 à 8 h rémunérées, `fin - debut = Σd + 5`), et le quart dans la plage utile (`MIN_PERIODES ≤ debut`, `debut + Σd + 5 ≤ MAX_PERIODES`) ;
+  - la contrainte de couverture concerne tous les encodages : elle relève de l'évaluation et du `LocalSolver`, pas de l'encodage ;
+  - l'encodage direct (`DirectEncoding`, 5 jalons + 4 activités) devient une variante de comparaison, après la boucle complète ;
+  - la représentation concrète du génome (tuple, tableau numpy) se décide au scaffold de l'étape 3b.
 - [x] **D2 — Rôle de MiniZinc comme `SolveurLocal`** : recherche locale d'amélioration (on fixe une partie des gènes, le solveur ré-optimise le reste sous limite de temps). Solveur par défaut : CP-SAT. Les particularités de chaque solveur sont cachées derrière une classe d'indirection, pour pouvoir en changer (Gecode, Chuffed, HiGHS, …).
-- [ ] **D3 — Symétrie entre employés** (avant étape 7) : les employés sont interchangeables ; un croisement « par employé » peut être destructeur. Normaliser (trier les employés) avant de croiser ?
+- [x] **D3 — Symétrie entre employés** : dans l'AG, c'est un problème de représentation (croiser deux parents équivalents mais permutés), pas de recherche.
+  - **aucune contrainte de bris de symétrie dans le modèle MiniZinc** : CP-SAT gère les symétries mieux que nous, et la contrainte s'était montrée nuisible ;
+  - premier temps : pas de normalisation ; on mesure l'effet (D8) avant de compliquer ;
+  - variante 1 : ordre **lexicographique** sur le gène complet, dans un encodage distinct (`SortedBlockEncoding`, dont le génome est la liste triée des gènes) ; le tri est un invariant du génome, rétabli après chaque opérateur et après le `LocalSolver` ; c'est une vraie forme canonique, mais fragile aux quasi-permutations (la première clé, `debut`, domine l'ordre) ;
+  - variante 2, en réserve : **alignement** des employés au croisement (affectation minimisant la distance entre quarts), responsabilité de l'opérateur, sans modifier les génomes.
 - [x] **D5 — Architecture polymorphe du moteur génétique** : patron Stratégie, une interface abstraite par rôle du pseudo-code (`ParentSelector`, `Crossover[G]`, `MutableSelector`, `Mutation[G]`, `LocalSolver`, `SurvivorSelector`, `ConvergenceCriterion`, `RestartPolicy`, `TerminationCriterion`). Séparation génotype / phénotype : phénotype canonique unique `Horaire` (faisabilité, coût, grille, MiniZinc) ; génotype polymorphe via `Encoding[G]`. Les opérateurs de variation sont liés à un encodage ; la compatibilité est vérifiée à l'assemblage (`MemeticConfig`, exception `IncompatibleOperatorError`). Registre par nom pour décrire les expériences en configuration. `random.Random` injecté dans chaque opérateur (reproductibilité). Taux de mutation (scalaire) et type de mutation (implémentation) sont deux axes distincts.
 - [x] **D6 — Responsabilité de `encode` / `decode`** : traduction pure, rien d'autre. `decode` peut rendre un `Horaire` infaisable ; la vérification de faisabilité et la réparation (`LocalSolver`) sont des responsabilités distinctes.
 - [x] **D7 — Préparation au parallélisme** (aucun parallélisme dans le POC, mais l'architecture doit le permettre sans réécriture) :
@@ -63,12 +74,12 @@ Principe : toute la documentation est dans `docs/`, et chaque document est acces
 - [ ] Conversion vers la grille « employé × période → activité ou 0 » (même sémantique que la 2ᵉ sortie du modèle)
 - [ ] Tests : horaires valides, chaque contrainte violée isolément, bornes exactes des fenêtres
 
-## Étape 3b — Génotype : `Encoding[G]` et `DirectEncoding` (`src/ga/chromosome.py`) **(C→P)**
-- [ ] Trancher D1
+## Étape 3b — Génotype : `Encoding[G]` et `BlockEncoding` (`src/ga/chromosome.py`) **(C→P)**
+- [x] Trancher D1 : encodage par blocs, un gène par employé
 - [ ] Interface `Encoding[G]` : `encode(Horaire) -> G`, `decode(G) -> Horaire` (traduction pure, D6)
-- [ ] Implémentation `DirectEncoding` **(P)**
+- [ ] Implémentation `BlockEncoding` **(P)**
 - [ ] Classe `Individu` : génome, phénotype décodé (cache), coût
-- [ ] Tests : aller-retour `decode(encode(h)) == h`, décodage d'un génome produisant un horaire infaisable (aucune exception)
+- [ ] Tests : aller-retour `decode(encode(h)) == h`, décodage d'un génome produisant un horaire infaisable, par exemple Σd hors de 22..30 ou quart débordant la plage utile (aucune exception)
 
 ## Étape 4 — Évaluation (fonction de coût) **(P)**
 - [ ] Calcul de `total[p, a]` puis du coût sur/sous-couverture, identique à `cout_total`
@@ -89,7 +100,7 @@ Principe : toute la documentation est dans `docs/`, et chaque document est acces
 - [ ] Tests : taille, faisabilité de tous les individus, reproductibilité avec la même graine
 
 ## Étape 7 — Opérateurs génétiques (`src/ga/operators.py`) **(P)**
-- [ ] Trancher D3
+- [x] Trancher D3 : pas de normalisation au départ ; tri lexicographique et alignement en variantes
 - [ ] Scaffold des interfaces `ParentSelector`, `Crossover[G]`, `MutableSelector`, `Mutation[G]` **(C→P)**
 - [ ] `SelectParent` (ex. tournoi)
 - [ ] `Recombine` (croisement préservant la faisabilité, ou suivi d'une réparation)
@@ -122,6 +133,7 @@ Principe : toute la documentation est dans `docs/`, et chaque document est acces
 ## Étape 10 — Driver et expériences (`src/drivers/`) **(C)**
 - [ ] Point d'entrée CLI (instance, NR, NM, taille de population, graine, limite de temps)
 - [ ] Expériences décrites par fichier de configuration (encodage, opérateurs, paramètres), résolues via le registre
+- [ ] Variantes à comparer (D1, D3) : `DirectEncoding`, `SortedBlockEncoding`, croisement avec alignement des employés
 - [ ] Campagne sur `bench_1` … `bench_5` : mémétique vs MiniZinc seul (coût, temps)
 - [ ] Export des résultats (CSV/JSON), accompagnés de la configuration complète utilisée (via les destinations de D8)
 - [ ] Scripts ou notebooks d'analyse qui relisent `results/` (évolution du coût, de la diversité, comparaison d'opérateurs)

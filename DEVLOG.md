@@ -278,3 +278,26 @@ Suite complète : 63 tests verts en local et dans Docker (1 ignoré sous Linux).
 - Gabarits dans `InstanceDisplay`, selon la convention sur les constantes textuelles.
 
 **Tests** : 5 tests de plus dans `tests/test_io.py` (`TestDisplay`), dont un qui vérifie que le repr n'affiche pas les matrices et un autre qui vérifie que l'affichage suit le rognage de la plage utile.
+
+## 2026-10-28 — Décisions D1 (encodage par blocs) et D3 (symétrie)
+
+**D1** (validée par Pascal) :
+- L'interface `Encoding[G]` se limite à `encode(Horaire) -> G` et `decode(G) -> Horaire`. C'est une traduction pure (D6) : ni vérification de faisabilité, ni réparation.
+- D1 a d'abord été tranchée pour l'encodage direct (5 jalons + 4 activités par employé). Pascal a ensuite proposé un encodage moins fragile, retenu comme **premier encodage** : `BlockEncoding`, un gène par employé, `debut, a1, d1, a2, d2, a3, d3, a4, d4` (activité et durée de chacun des 4 blocs).
+- Les jalons s'en déduisent : `pause1 = debut + d1`, `diner = pause1 + 1 + d2`, `pause2 = diner + 4 + d3`, `fin = pause2 + d4`. C'est une bijection avec les jalons du phénotype, donc `encode` / `decode` restent une traduction pure. Exemple, employé 1 de l'optimum de `bench_1` (1, 5, 10, 20, 28) : d = 4, 4, 6, 8.
+- Ce que l'encodage garantit par construction : l'ordre des jalons. Les 4 écarts minimaux deviennent des domaines par gène (`d_i ≥ 4`), qu'une mutation respecte en tirant dans le domaine.
+- Ce qui reste : deux contraintes de couplage linéaires. D'une part `22 ≤ Σd ≤ 30`, puisque `fin - debut = Σd + 5` et qu'on veut 6 à 8 h rémunérées. D'autre part, le quart doit rentrer dans la plage utile. Un croisement qui mélange des durées peut les violer, mais la réparation est triviale.
+- L'encodage invite à des opérateurs naturels : décaler `debut` déplace le quart en gardant sa forme ; transférer une période d'un bloc à l'autre déplace une pause sans changer la durée.
+- La contrainte de couverture est la vraie difficulté, mais elle est la même pour tous les encodages : elle relève de l'évaluation (étape 4) et du `LocalSolver` (étape 5).
+- L'encodage direct (`DirectEncoding`) devient une variante de comparaison, après la boucle complète.
+
+**D3** (validée par Pascal) :
+- La contrainte de bris de symétrie du modèle MiniZinc avait été retirée parce qu'elle nuisait : CP-SAT gère les symétries mieux que nous. On n'en ajoute **aucune** au modèle envoyé au `LocalSolver`.
+- Dans l'AG, le problème est différent : c'est un problème de représentation. Deux parents équivalents mais permutés donnent, par croisement employé par employé, un enfant incohérent.
+- Premier temps : pas de normalisation. On mesure l'effet (D8) avant de compliquer.
+- Variante 1 : ordre lexicographique sur le gène complet, dans un encodage distinct (`SortedBlockEncoding`, dont le génome est défini comme la liste triée des gènes ; ce qui respecte D6). C'est une vraie forme canonique : deux horaires égaux à une permutation près donnent le même génome. Mais elle est fragile aux quasi-permutations, parce que `debut`, première clé, domine l'ordre. Le tri est un invariant du génome, à rétablir après chaque opérateur et après le `LocalSolver`. Bonus pour D8 : une diversité génotypique calculée sur génomes triés est insensible à la permutation.
+- Variante 2, en réserve : alignement des employés au moment du croisement, par affectation minimisant la distance entre quarts (au plus 8 employés). Responsabilité de l'opérateur, sans modifier les génomes.
+
+**Impact sur le TODO** : l'étape 3b porte sur `BlockEncoding` ; les tests de décodage infaisable visent Σd hors de 22..30 et un quart qui déborde ; l'étape 10 reçoit une tâche de comparaison des variantes (`DirectEncoding`, `SortedBlockEncoding`, croisement avec alignement).
+
+**Décision en suspens** : D4.
