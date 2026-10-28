@@ -167,3 +167,16 @@
 - CLAUDE.md : **architecture cible** (« où l'on va »). Elle reste dans le contexte de Claude à chaque session.
 - `docs/PROJECT_STRUCT.md` : **structure actuelle** (« où l'on est »).
 - CLAUDE.md renvoie vers `docs/PROJECT_STRUCT.md`.
+
+## 2026-10-28 — Documentation : README
+
+**Fait** : `README.md`, le point d'entrée de la documentation. Sa structure, proposée par Pascal et complétée :
+1. **Description du projet** : le problème (court résumé, puis lien vers `docs/PROBLEME.md`, à venir), l'algorithme (`docs/ALGO.md`), la structure (`docs/PROJECT_STRUCT.md`).
+2. **Je viens de cloner le dépôt** : l'environnement (Docker ou local, localisation de MiniZinc), les tests (Docker en premier puisque c'est la voie préférée, puis local), les expériences (à venir, étape 10).
+3. **Contribuer** : la méthode de travail, l'état d'avancement (`TODO.md`), les décisions de conception (`DEVLOG.md`), les conventions de code (`CLAUDE.md`).
+
+En plus : un badge CI en tête de fichier. Toutes les commandes Docker documentées ont été vérifiées, y compris le montage `-v "$PWD":/app` pour tester sans reconstruire l'image. Grâce à `PYTHONDONTWRITEBYTECODE`, ce montage ne laisse aucun cache dans le dépôt.
+
+**Choix** : `TODO.md`, `DEVLOG.md` et `CLAUDE.md` restent à la racine (CLAUDE.md doit y être, et le TODO aussi selon nos règles). Ce sont des exceptions assumées au principe « toute la doc dans `docs/` ». Le README y donne accès comme au reste.
+
+**Planifié** : `docs/PROBLEME.md` (description du problème pour un nouveau venu).
