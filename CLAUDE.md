@@ -57,7 +57,7 @@ memetic_pipeline/
 │   ├── model/                  # Modèle CP (MiniZinc) et ses règles côté Python
 │   │   ├── __init__.py
 │   │   ├── horaire.mzn         # Modèle MiniZinc fourni
-│   │   └── shift_rules.py      # Constantes du domaine : durées, écarts entre jalons, décalages des fenêtres
+│   │   └── shift_rules.py      # Constantes du domaine : noms des variables MiniZinc, durées, écarts, décalages des fenêtres
 │   ├── ga/                     # Logique de l'Algorithme Génétique (à venir)
 │   │   ├── __init__.py
 │   │   ├── chromosome.py       # Génotype : interface Encoding[G] et encodages concrets
@@ -69,7 +69,7 @@ memetic_pipeline/
 │   ├── utils/                  # Environnement, lecture de fichiers et parsing
 │   │   ├── __init__.py
 │   │   ├── minizinc_env.py     # Localisation de MiniZinc et des solveurs
-│   │   └── io.py               # Lecture des instances (à venir)
+│   │   └── io.py               # Lecture et validation des instances (ProblemInstance)
 │   └── drivers/                # Point d'entrée pour lancer les expériences (à venir)
 ├── tests/                      # Tests unittest (python -m unittest discover)
 ├── CLAUDE.md                   # Guide de développement

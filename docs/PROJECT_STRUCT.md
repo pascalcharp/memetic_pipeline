@@ -31,12 +31,15 @@ memetic_pipeline/
 │   ├── model/                  # Modèle CP (MiniZinc) et ses règles côté Python
 │   │   ├── __init__.py
 │   │   ├── horaire.mzn         # Modèle MiniZinc fourni
-│   │   └── shift_rules.py      # Constantes du domaine : durées, écarts entre jalons, décalages des fenêtres
+│   │   └── shift_rules.py      # Constantes du domaine : noms des variables MiniZinc, durées, écarts, décalages des fenêtres
 │   └── utils/                  # Utilitaires : environnement, lecture de fichiers
 │       ├── __init__.py
+│       ├── io.py               # Lecture et validation des instances (ProblemInstance, plage utile, fenêtres)
 │       └── minizinc_env.py     # Localisation de MiniZinc et des solveurs, exceptions associées
 ├── tests/                      # Tests unittest : python -m unittest discover
 │   ├── __init__.py
+│   ├── minizinc_probe.py       # Outil de test (pas un test) : sonde horaire.mzn pour vérifier la cohérence avec Python
+│   ├── test_io.py              # Lecture des instances : 5 bench, cas d'erreur, plage utile comparée à MiniZinc
 │   ├── test_minizinc_env.py    # Localisation de MiniZinc, solveurs, messages d'erreur
 │   ├── test_shift_rules.py     # Constantes du domaine et sondes de cohérence avec horaire.mzn
 │   └── test_smoke_minizinc.py  # Test de fumée : CP-SAT résout bench_1 (optimum 94)

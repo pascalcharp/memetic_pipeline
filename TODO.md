@@ -51,10 +51,10 @@ Principe : toute la documentation est dans `docs/`, et chaque document est acces
 - [x] Aucune valeur magique ailleurs dans le code ; tests vérifiant la cohérence avec `horaire.mzn` (`tests/test_shift_rules.py`, 12 tests, dont des sondes MiniZinc)
 
 ## Étape 2 — Lecture des instances (`src/utils/io.py`) **(C)**
-- [ ] Classe `Instance` (dataclass typée) : `NB_EMPLOYES`, `NB_ACTIVITES`, `NB_PERIODES`, `demande`, `surcout`, `souscout`
-- [ ] Calcul de `MIN_PERIODES` / `MAX_PERIODES` et des fenêtres dérivées (mêmes formules que le modèle)
-- [ ] Exceptions sur mesure (`InstanceError`, …) : fichier absent, champ manquant, dimensions incohérentes, valeurs négatives
-- [ ] Tests : les 5 bench se chargent ; JSON malformés ; instance où aucun quart ne rentre (ex. trop peu de périodes)
+- [x] Classe `Instance` (dataclass typée) : `NB_EMPLOYES`, `NB_ACTIVITES`, `NB_PERIODES`, `demande`, `surcout`, `souscout` — nommée `ProblemInstance` (évite la confusion avec `minizinc.Instance`), figée, matrices numpy en lecture seule
+- [x] Calcul de `MIN_PERIODES` / `MAX_PERIODES` et des fenêtres dérivées (mêmes formules que le modèle) — `first_useful_period`, `last_useful_period`, `ShiftWindows`, vérifiés contre MiniZinc
+- [x] Exceptions sur mesure (`InstanceError`, …) : fichier absent, champ manquant, dimensions incohérentes, valeurs négatives — plus types invalides, demande supérieure au nombre d'employés, plage utile vide ou trop courte (`NoShiftFitsError`)
+- [x] Tests : les 5 bench se chargent ; JSON malformés ; instance où aucun quart ne rentre (ex. trop peu de périodes) — `tests/test_io.py`, 32 tests
 
 ## Étape 3a — Phénotype `Horaire` **(C→P)**
 - [ ] Classes `Horaire` / `HoraireEmploye` (mêmes variables que `horaire.mzn`)

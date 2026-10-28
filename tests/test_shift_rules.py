@@ -1,16 +1,12 @@
 """Tests des règles structurelles d'un quart (src/model/shift_rules.py) et de leur cohérence avec horaire.mzn."""
 
-import asyncio
 import unittest
-import warnings
-from datetime import timedelta
 
 import minizinc
-from minizinc.error import MiniZincWarning
 
-from src.config import MiniZincConfig, ProjectPaths
+from src.config import ProjectPaths
 from src.model.shift_rules import ModelIndexing, ShiftGaps, ShiftStructure, WindowOffsets
-from src.utils.minizinc_env import locate_minizinc_driver, lookup_solver
+from tests.minizinc_probe import MiniZincModelProbe
 
 
 class TestValuesReadInModel(unittest.TestCase):
@@ -80,49 +76,6 @@ class TestInternalConsistency(unittest.TestCase):
                 self.assertEqual(reserved_space, shortest_sequence)
 
 
-class MiniZincModelProbe:
-    """Interroge horaire.mzn sur une instance : valeurs de paramètres dérivés et faisabilité de contraintes ajoutées."""
-
-    TIME_LIMIT: timedelta = timedelta(seconds=60)
-
-    def __init__(self, instance_file_name: str) -> None:
-        driver = locate_minizinc_driver()
-        solver = lookup_solver(MiniZincConfig.DEFAULT_SOLVER_ID, driver)
-        model = minizinc.Model(ProjectPaths.MODEL_FILE)
-        model.add_file(ProjectPaths.DATA_DIR / instance_file_name)
-        self.instance = minizinc.Instance(solver, model)
-
-    def evaluate(self, parameter_names: list[str]) -> dict[str, int]:
-        """Retourne la valeur calculée par MiniZinc pour chaque paramètre nommé."""
-        probe_variable = "probe_values"
-        with self.instance.branch() as branch:
-            branch.add_string(
-                f"array[1..{len(parameter_names)}] of var int: {probe_variable} ::add_to_output = "
-                f"[{', '.join(parameter_names)}];"
-            )
-            result = asyncio.run(self._first_result(branch))
-        return dict(zip(parameter_names, result[probe_variable]))
-
-    def status_with(self, constraint: str) -> minizinc.Status:
-        """Statut de la première réponse du solveur une fois ``constraint`` ajoutée au modèle."""
-        with self.instance.branch() as branch:
-            branch.add_string(constraint)
-            # MiniZinc avertit (« model inconsistency detected ») quand la contrainte rend le modèle infaisable :
-            # c'est précisément l'un des cas que l'on sonde.
-            with warnings.catch_warnings():
-                warnings.simplefilter("ignore", MiniZincWarning)
-                return asyncio.run(self._first_result(branch)).status
-
-    async def _first_result(self, instance: minizinc.Instance) -> minizinc.Result:
-        # Une première solution (ou une preuve d'infaisabilité) suffit : inutile d'attendre l'optimum.
-        last_result = None
-        async for result in instance.solutions(time_limit=self.TIME_LIMIT, intermediate_solutions=True):
-            last_result = result
-            if result.status.has_solution() or result.status == minizinc.Status.UNSATISFIABLE:
-                break
-        return last_result
-
-
 class TestConsistencyWithMiniZinc(unittest.TestCase):
     """Les fenêtres, écarts et durées de quart calculés en Python sont ceux que MiniZinc applique."""
 
@@ -160,8 +113,8 @@ class TestConsistencyWithMiniZinc(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        cls.short_probe = MiniZincModelProbe(cls.SHORT_INSTANCE)
-        cls.long_probe = MiniZincModelProbe(cls.LONG_INSTANCE)
+        cls.short_probe = MiniZincModelProbe(ProjectPaths.DATA_DIR / cls.SHORT_INSTANCE)
+        cls.long_probe = MiniZincModelProbe(ProjectPaths.DATA_DIR / cls.LONG_INSTANCE)
 
     def assert_feasible(self, probe: MiniZincModelProbe, constraint: str) -> None:
         self.assertTrue(probe.status_with(constraint).has_solution(), constraint)

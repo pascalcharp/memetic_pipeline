@@ -235,3 +235,36 @@ En plus : un badge CI en tête de fichier. Toutes les commandes Docker document�
 - Nouvelle **étape 8b** (`src/observability/`), avant la boucle : interfaces, destinations, configuration de `logging`, répertoire d'exécution, collecteurs.
 - Étape 9 : émission des événements, et un test de reproductibilité avec ou sans collecteurs.
 - Étape 10 : analyse qui relit `results/`.
+
+## 2026-10-28 — Étape 2 : lecture des instances
+
+**Fait** : `src/utils/io.py`.
+- `load_instance(path)` lit un fichier. `parse_instance(data, name)` valide des données déjà décodées, ce qui permet de tester sans fichier.
+- `ProblemInstance` : dataclass figée. Ses matrices `demand`, `over_cost` et `under_cost` sont des tableaux numpy en lecture seule. Elle porte aussi la plage utile (`first_useful_period`, `last_useful_period`) et les fenêtres des jalons (`ShiftWindows`, `MilestoneWindow`).
+- Exceptions, toutes sous `InstanceError` :
+  - `InstanceFileNotFoundError` ;
+  - `InstanceFormatError` : JSON invalide, champ manquant, mauvais type (y compris `true`/`false`, que Python traite comme des `int`) ;
+  - `InstanceDimensionError` ;
+  - `InstanceValueError` : compte < 1, valeur négative, demande > nombre d'employés, le domaine de `demande` dans le modèle ;
+  - `NoShiftFitsError` : plage utile vide, ou trop courte pour un quart.
+- Messages dans `InstanceMessages`, champs JSON dans `InstanceFields`, domaine des valeurs dans `InstanceDomain`.
+- `shift_rules.py` reçoit `ModelVariableNames`, les noms des variables MiniZinc (`debut`, `pause1`, …), pour ne pas les écrire en dur.
+
+**Décisions**
+- **Nom `ProblemInstance`** plutôt que `Instance`, pour éviter la confusion avec `minizinc.Instance`, utilisé dans les mêmes modules.
+- **Convention de numérotation**, validée par Pascal (elle conditionne les étapes 3 et 4) :
+  - les **numéros** de période (plage utile, fenêtres et, plus tard, jalons du phénotype) suivent MiniZinc et commencent à 1. La validation croisée avec le modèle reste ainsi directe ;
+  - les **tableaux** sont indexés à partir de 0 (numpy) : la période p se lit à l'indice `p - 1`.
+- Les champs inconnus du JSON sont ignorés.
+
+**Tests** (`tests/test_io.py`, 32 tests)
+- Les 5 bench se chargent. Les matrices sont conformes au JSON, en lecture seule, et l'instance est figée.
+- Plage utile : rognage des périodes vides aux deux bouts. Une période qui n'a qu'un coût compte comme utile.
+- `bench_2` (28 périodes) est la journée la plus courte possible : un seul début, une seule fin. Une période de moins, ou une plage utile trop courte dans une longue journée, donne `NoShiftFitsError`. Une instance entièrement nulle est rejetée.
+- **Cohérence avec MiniZinc** : sur une instance de `bench_1` complétée par 3 périodes vides au début et 2 à la fin (MiniZinc donne une plage de 4 à 35), et sur `bench_2`, la plage utile et les 5 fenêtres sont identiques à celles de `horaire.mzn`.
+- Tous les cas d'erreur, avec vérification du contenu des messages (nom de l'instance, champ, ligne, colonne, période).
+- Vérification par mutation : un décalage de 1 dans la plage utile, et `>=` à la place de `>` pour la demande, sont tous deux détectés.
+
+**Refactorisation** : la sonde MiniZinc est extraite de `test_shift_rules.py` vers `tests/minizinc_probe.py`, qui n'est pas un module de test, pour être partagée. Elle prend maintenant un chemin d'instance quelconque.
+
+Suite complète : 63 tests verts en local et dans Docker (1 ignoré sous Linux).

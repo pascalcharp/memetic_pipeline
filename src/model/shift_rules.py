@@ -23,6 +23,17 @@ class ModelIndexing:
     NO_ACTIVITY: int = 0
 
 
+class ModelVariableNames:
+    """Noms des variables de décision dans horaire.mzn, pour les échanges avec MiniZinc et les messages."""
+
+    START: str = "debut"
+    BREAK1: str = "pause1"
+    LUNCH: str = "diner"
+    BREAK2: str = "pause2"
+    END: str = "fin"
+    ACTIVITIES: str = "activites"
+
+
 class ShiftStructure:
     """Constantes de base d'un quart : durées et nombre d'activités."""
 

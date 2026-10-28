@@ -183,7 +183,7 @@ Dans cette solution, la demande n'est jamais sous-couverte. Le coût de 94 vient
 | Instance | Employés | Activités | Périodes | Remarque |
 |---|---|---|---|---|
 | `bench_1` | 3 | 1 | 32 | Optimum 94, prouvé en moins d'une seconde |
-| `bench_2` | 4 | 2 | 28 | |
+| `bench_2` | 4 | 2 | 28 | Journée la plus courte possible : un seul début (période 1) et une seule fin (période 28) |
 | `bench_3` | 6 | 3 | 48 | |
 | `bench_4` | 8 | 4 | 44 | |
 | `bench_5` | 8 | 5 | 48 | **Difficile** : environ 1 min (médiane) pour une première solution avec CP-SAT à 8 workers |
