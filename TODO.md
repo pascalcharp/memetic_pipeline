@@ -25,6 +25,11 @@ Règle : une seule étape à la fois ; on ne passe à la suivante qu'une fois le
 
 ---
 
+## Documentation (transversale) **(C)**
+Principe : toute la documentation est dans `docs/`, et chaque document est accessible depuis le `README.md` à la racine. Objectif : un coéquipier entre dans le projet sans difficulté.
+- [x] `docs/PROJECT_STRUCT.md` : arbre qui reflète **exactement** la structure actuelle du dépôt (CLAUDE.md garde l'arbre de l'**architecture cible**, avec un lien vers ce document)
+- [ ] `README.md` : point d'entrée, avec des liens vers chaque document de `docs/`
+
 ## Étape 0 — Infrastructure et environnement **(C)**
 - [x] Localisation de l'exécutable MiniZinc : variable d'environnement `MINIZINC_PATH` en priorité, sinon repli sur `minizinc.Driver.find()`, qui trouve aussi `/Applications/MiniZincIDE.app` sans `PATH` (donc pas de constante de repli). Exécutable absent ou invalide ⇒ `MiniZincNotFoundError`
 - [x] Installer `requirements.txt` dans `.venv` (minizinc 0.10.0, numpy 2.5.4, Python 3.13.3)

@@ -153,3 +153,17 @@
 - Pascal confirme que l'instance est **satisfaisable**. Avec CP-SAT, 8 workers et des graines de 1 à 20, la première solution arrive en environ 1 minute (médiane).
 - L'instance est donc difficile, pas infaisable : la contrainte « au moins 1 employé si demande > 0 » la rend très serrée.
 - Ça touchera l'étape 4 (contrainte dure ou pénalité) et l'étape 6 (générer des individus initiaux faisables). Pour les tests, il faut garder `bench_1` et `bench_3`, et réserver `bench_5` aux expériences.
+
+## 2026-10-28 — Documentation : principe et structure du projet
+
+**Principe** : toute la documentation est dans `docs/`, et chaque document est accessible depuis le `README.md` à la racine. Objectif : un coéquipier entre dans le projet sans difficulté. Une section transversale « Documentation » est ajoutée au TODO.
+
+**Fait** : `docs/PROJECT_STRUCT.md` est réécrit pour refléter **exactement** le dépôt actuel.
+- Ajouts : `.github/`, `Dockerfile`, `.dockerignore`, `.gitignore`, les 5 instances avec leurs dimensions, et chaque fichier de test avec son rôle.
+- Retraits : les fichiers prévus (renvoyés au TODO). Les répertoires encore vides sont marqués comme tels.
+- Vérifié par script : chaque fichier de `git ls-files` figure dans l'arbre, et rien d'autre.
+
+**Décision** : on garde deux arbres, qui répondent à deux questions différentes.
+- CLAUDE.md : **architecture cible** (« où l'on va »). Elle reste dans le contexte de Claude à chaque session.
+- `docs/PROJECT_STRUCT.md` : **structure actuelle** (« où l'on est »).
+- CLAUDE.md renvoie vers `docs/PROJECT_STRUCT.md`.

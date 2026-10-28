@@ -38,7 +38,11 @@ L'implémentation de fonctionnalités doit suivre une méthodologie rigoureuse �
 6. **Mise à jour du statut :** Le fichier `TODO.md` et le `DEVLOG.md` doivent être mis à jour à la fin de chaque étape validée.
 
 ## 🏗️ Architecture & Stack Technique
-Le projet est entièrement conteneurisé avec Docker. La structure suivante ne mentionne pas le dockerfile.
+Le projet est entièrement conteneurisé avec Docker.
+
+### Architecture cible
+
+L'arbre ci-dessous décrit **où l'on va** : il inclut des fichiers prévus mais pas encore créés, et omet les fichiers d'infrastructure (Docker, CI). La structure **actuelle** et exacte du dépôt est dans [`docs/PROJECT_STRUCT.md`](docs/PROJECT_STRUCT.md).
 
 ```Graph
 memetic_pipeline/
