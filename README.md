@@ -12,7 +12,7 @@ Preuve de concept : un algorithme génétique couplé à une recherche locale pa
 
 On affecte des employés à des activités sur une journée découpée en périodes de 15 minutes. Chaque quart suit une structure imposée : début, première pause, dîner, deuxième pause et fin, avec une activité entre chaque jalon. L'horaire doit suivre au mieux la demande de chaque activité à chaque période. Le coût pénalise la sur-couverture et la sous-couverture.
 
-Description détaillée : [`docs/PROBLEME.md`](docs/PROBLEME.md) *(à venir)*. En attendant, la référence est le modèle MiniZinc [`src/model/horaire.mzn`](src/model/horaire.mzn).
+Description détaillée (données, règles d'un quart, coût, exemple commenté) : [`docs/PROBLEME.md`](docs/PROBLEME.md). La référence formelle reste le modèle MiniZinc [`src/model/horaire.mzn`](src/model/horaire.mzn).
 
 ### 1.2 Algorithme employé
 

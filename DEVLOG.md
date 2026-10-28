@@ -180,3 +180,18 @@ En plus : un badge CI en tête de fichier. Toutes les commandes Docker document�
 **Choix** : `TODO.md`, `DEVLOG.md` et `CLAUDE.md` restent à la racine (CLAUDE.md doit y être, et le TODO aussi selon nos règles). Ce sont des exceptions assumées au principe « toute la doc dans `docs/` ». Le README y donne accès comme au reste.
 
 **Planifié** : `docs/PROBLEME.md` (description du problème pour un nouveau venu).
+
+## 2026-10-28 — Documentation : PROBLEME.md
+
+**Fait** : `docs/PROBLEME.md`, la description du problème pour un nouveau venu.
+- Contenu : données et format JSON (avec le piège de l'indexation 0/1), plage utile, variables de décision et périodes couvertes par chaque bloc, règles d'un quart (durées, durée du quart, écarts, fenêtres, avec renvois aux constantes de `shift_rules.py`), couverture et contrainte dure, coût, exemple commenté, instances, particularités.
+- Le README pointe maintenant vers ce document (sans la mention « à venir »), et `PROJECT_STRUCT.md` le liste.
+
+**Vérifications**
+- Exemple : la solution optimale de `bench_1` est recalculée à la main avec la formule documentée, et on retrouve bien un coût de 94 (entièrement de la sur-couverture).
+- Tous les liens relatifs du document pointent vers des fichiers existants.
+
+**Constats sur les données**, analysées pour la documentation :
+- Les sous-coûts valent 1 000 000 seulement là où la demande est positive : c'est une pénalité quasi dure. Les autres sous-coûts sont petits (0 à 3) et les sur-coûts vont de 0 à 10.
+- Dans les 5 instances, la plage utile couvre toute la journée.
+- La contrainte de bris de symétrie de `horaire.mzn` est en commentaire, donc désactivée.

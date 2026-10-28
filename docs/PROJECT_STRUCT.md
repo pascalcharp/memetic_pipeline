@@ -17,6 +17,7 @@ memetic_pipeline/
 │   └── bench_5.json            # 8 employés × 5 activités × 48 périodes (difficile : ~1 min pour une 1re solution)
 ├── docs/                       # Toute la documentation, accessible depuis README.md
 │   ├── ALGO.md                 # Pseudo-code de l'algorithme mémétique
+│   ├── PROBLEME.md             # Description du problème : données, règles d'un quart, coût, exemple
 │   └── PROJECT_STRUCT.md       # Ce document
 ├── src/                        # Code source principal
 │   ├── __init__.py
