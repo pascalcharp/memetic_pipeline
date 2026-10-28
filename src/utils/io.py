@@ -69,6 +69,23 @@ class InstanceMessages:
     NO_LOCATION: str = ""
 
 
+class InstanceDisplay:
+    """Gabarits d'affichage d'une instance (``repr`` pour le développeur, ``str`` pour un résumé lisible)."""
+
+    REPR: str = (
+        "ProblemInstance(name={name!r}, employee_count={employees}, activity_count={activities}, "
+        "period_count={periods}, useful_range={useful_range})"
+    )
+    WINDOW: str = "{earliest}..{latest}"
+
+    SUMMARY_HEADER: str = "Instance {name} — employés : {employees}, activités : {activities}, périodes : {periods}"
+    SUMMARY_USEFUL_RANGE: str = "Plage utile : périodes {first} à {last}"
+    SUMMARY_WINDOWS_TITLE: str = "Fenêtres des jalons :"
+    SUMMARY_WINDOW_LINE: str = "  {milestone:<{width}}  {window}"
+    SUMMARY_DEMAND: str = "Demande : {total} employés-périodes au total, au plus {peak} sur une activité à une période"
+    LINE_SEPARATOR: str = "\n"
+
+
 class InstanceError(Exception):
     """Erreur de base pour tout problème de lecture ou de validation d'une instance."""
 
@@ -102,6 +119,9 @@ class MilestoneWindow:
 
     def is_empty(self) -> bool:
         return self.earliest > self.latest
+
+    def __str__(self) -> str:
+        return InstanceDisplay.WINDOW.format(earliest=self.earliest, latest=self.latest)
 
 
 @dataclass(frozen=True)
@@ -142,7 +162,8 @@ class ShiftWindows:
 
 # eq=False : les tableaux numpy ne se comparent pas avec ==. Deux instances se comparent par leur contenu
 # avec numpy (voir les tests), pas par l'opérateur d'égalité.
-@dataclass(frozen=True, eq=False)
+# repr=False : le repr généré afficherait les matrices en entier ; on le remplace par un repr concis.
+@dataclass(frozen=True, eq=False, repr=False)
 class ProblemInstance:
     """Instance validée du problème d'horaire.
 
@@ -160,6 +181,38 @@ class ProblemInstance:
     first_useful_period: int
     last_useful_period: int
     windows: ShiftWindows
+
+    def __repr__(self) -> str:
+        """Représentation concise sur une ligne, pour le débogage et les journaux : dimensions, sans les matrices."""
+        useful_range = MilestoneWindow(self.first_useful_period, self.last_useful_period)
+        return InstanceDisplay.REPR.format(
+            name=self.name,
+            employees=self.employee_count,
+            activities=self.activity_count,
+            periods=self.period_count,
+            useful_range=useful_range,
+        )
+
+    def __str__(self) -> str:
+        """Résumé lisible sur plusieurs lignes : dimensions, plage utile, fenêtres des jalons et demande."""
+        windows_by_milestone = self.windows.by_milestone()
+        name_width = max(len(milestone) for milestone in windows_by_milestone)
+
+        lines = [
+            InstanceDisplay.SUMMARY_HEADER.format(
+                name=self.name,
+                employees=self.employee_count,
+                activities=self.activity_count,
+                periods=self.period_count,
+            ),
+            InstanceDisplay.SUMMARY_USEFUL_RANGE.format(first=self.first_useful_period, last=self.last_useful_period),
+            InstanceDisplay.SUMMARY_WINDOWS_TITLE,
+        ]
+        for milestone, window in windows_by_milestone.items():
+            lines.append(InstanceDisplay.SUMMARY_WINDOW_LINE.format(milestone=milestone, width=name_width, window=window))
+        lines.append(InstanceDisplay.SUMMARY_DEMAND.format(total=int(self.demand.sum()), peak=int(self.demand.max())))
+
+        return InstanceDisplay.LINE_SEPARATOR.join(lines)
 
 
 def load_instance(path: Path) -> ProblemInstance:

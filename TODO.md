@@ -55,6 +55,7 @@ Principe : toute la documentation est dans `docs/`, et chaque document est acces
 - [x] Calcul de `MIN_PERIODES` / `MAX_PERIODES` et des fenêtres dérivées (mêmes formules que le modèle) — `first_useful_period`, `last_useful_period`, `ShiftWindows`, vérifiés contre MiniZinc
 - [x] Exceptions sur mesure (`InstanceError`, …) : fichier absent, champ manquant, dimensions incohérentes, valeurs négatives — plus types invalides, demande supérieure au nombre d'employés, plage utile vide ou trop courte (`NoShiftFitsError`)
 - [x] Tests : les 5 bench se chargent ; JSON malformés ; instance où aucun quart ne rentre (ex. trop peu de périodes) — `tests/test_io.py`, 32 tests
+- [x] `__repr__` (une ligne, sans les matrices) et `__str__` (résumé lisible : dimensions, plage utile, fenêtres, demande) pour `ProblemInstance` ; `__str__` pour `MilestoneWindow` (`début..fin`)
 
 ## Étape 3a — Phénotype `Horaire` **(C→P)**
 - [ ] Classes `Horaire` / `HoraireEmploye` (mêmes variables que `horaire.mzn`)

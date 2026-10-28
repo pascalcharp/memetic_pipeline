@@ -268,3 +268,13 @@ En plus : un badge CI en tête de fichier. Toutes les commandes Docker document�
 **Refactorisation** : la sonde MiniZinc est extraite de `test_shift_rules.py` vers `tests/minizinc_probe.py`, qui n'est pas un module de test, pour être partagée. Elle prend maintenant un chemin d'instance quelconque.
 
 Suite complète : 63 tests verts en local et dans Docker (1 ignoré sous Linux).
+
+## 2026-10-28 — Étape 2 (complément) : affichage de `ProblemInstance`
+
+**Fait**, à la demande de Pascal :
+- `__repr__` : une seule ligne avec le nom, les dimensions et la plage utile, par exemple `ProblemInstance(name='bench_1', employee_count=3, activity_count=1, period_count=32, useful_range=1..32)`. Le repr généré par `dataclass` est désactivé (`repr=False`), parce qu'il afficherait les matrices numpy en entier, ce qui rend les journaux illisibles.
+- `__str__` : un résumé sur plusieurs lignes, avec les dimensions, la plage utile, les fenêtres des 5 jalons alignées, la demande totale et la demande maximale.
+- `MilestoneWindow.__str__` : `début..fin`, réutilisé par les deux.
+- Gabarits dans `InstanceDisplay`, selon la convention sur les constantes textuelles.
+
+**Tests** : 5 tests de plus dans `tests/test_io.py` (`TestDisplay`), dont un qui vérifie que le repr n'affiche pas les matrices et un autre qui vérifie que l'affichage suit le rognage de la plage utile.

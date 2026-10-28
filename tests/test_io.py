@@ -211,6 +211,47 @@ class TestConsistencyWithMiniZinc(unittest.TestCase):
         self.assert_matches_minizinc(load_instance(instance_path), instance_path)
 
 
+class TestDisplay(unittest.TestCase):
+    """repr concis sur une ligne, str lisible sur plusieurs lignes."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.instance = load_instance(benchmark_path(REFERENCE_BENCHMARK))
+
+    def test_repr_is_a_single_line_with_name_and_dimensions(self) -> None:
+        text = repr(self.instance)
+        self.assertNotIn("\n", text)
+        self.assertTrue(text.startswith(ProblemInstance.__name__))
+        for fragment in (repr(REFERENCE_BENCHMARK), "employee_count=3", "activity_count=1", "period_count=32", "1..32"):
+            with self.subTest(fragment=fragment):
+                self.assertIn(fragment, text)
+
+    def test_repr_does_not_dump_matrices(self) -> None:
+        # Le repr généré par dataclass afficherait les tableaux numpy en entier.
+        self.assertNotIn("array", repr(self.instance))
+        self.assertNotIn("demand", repr(self.instance))
+
+    def test_str_summarizes_dimensions_range_windows_and_demand(self) -> None:
+        text = str(self.instance)
+        self.assertGreater(len(text.splitlines()), 1)
+        self.assertIn(REFERENCE_BENCHMARK, text)
+        self.assertIn(str(int(self.instance.demand.sum())), text)
+        for milestone, window in self.instance.windows.by_milestone().items():
+            with self.subTest(milestone=milestone):
+                self.assertIn(milestone, text)
+                self.assertIn(str(window), text)
+
+    def test_str_reflects_trimmed_useful_range(self) -> None:
+        data = pad_with_empty_periods(reference_data(), PERIODS_BEFORE, PERIODS_AFTER)
+        instance = parse_instance(data, TEST_SOURCE_NAME)
+        first = ModelIndexing.FIRST_INDEX + PERIODS_BEFORE
+        self.assertIn(f"{first}..{instance.last_useful_period}", repr(instance))
+        self.assertIn(f"périodes {first} à {instance.last_useful_period}", str(instance))
+
+    def test_window_str_shows_inclusive_bounds(self) -> None:
+        self.assertEqual(str(MilestoneWindow(5, 15)), "5..15")
+
+
 class TestFileErrors(unittest.TestCase):
     """Erreurs liées au fichier lui-même."""
 
