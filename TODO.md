@@ -35,8 +35,8 @@ Règle : une seule étape à la fois ; on ne passe à la suivante qu'une fois le
 - [x] Harmoniser la structure réelle avec CLAUDE.md (`horaire.mzn` vs `schedule_model.mzn`, noms des instances `bench_*.json`) : la documentation a été alignée sur les fichiers réels
 
 ## Étape 1 — Constantes du domaine **(C)**
-- [ ] Classe(s) de constantes : 4 activités par quart, durées pause (1 période) / dîner (4 périodes), activité min. (4 périodes), durée de quart (27..35), décalages des fenêtres (`+4`, `-17`, `+9`, `-12`, …)
-- [ ] Aucune valeur magique ailleurs dans le code ; tests vérifiant la cohérence avec `horaire.mzn`
+- [x] Classe(s) de constantes : 4 activités par quart, durées pause (1 période) / dîner (4 périodes), activité min. (4 périodes), durée de quart (27..35), décalages des fenêtres (`+4`, `-17`, `+9`, `-12`, …) — `src/model/shift_rules.py` : `ModelIndexing`, `ShiftStructure`, `ShiftGaps`, `WindowOffsets`
+- [x] Aucune valeur magique ailleurs dans le code ; tests vérifiant la cohérence avec `horaire.mzn` (`tests/test_shift_rules.py`, 12 tests, dont des sondes MiniZinc)
 
 ## Étape 2 — Lecture des instances (`src/utils/io.py`) **(C)**
 - [ ] Classe `Instance` (dataclass typée) : `NB_EMPLOYES`, `NB_ACTIVITES`, `NB_PERIODES`, `demande`, `surcout`, `souscout`

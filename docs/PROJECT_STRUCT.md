@@ -8,8 +8,10 @@ memetic_pipeline/
 ├── src/                        # Code source principal
 │   ├── __init__.py
 │   ├── config.py               # Constantes de configuration : chemins du projet, MiniZinc
-│   ├── model/                  # Modèle CP (MiniZinc)
-│   │   └── horaire.mzn         # Modèle MiniZinc fourni
+│   ├── model/                  # Modèle CP (MiniZinc) et ses règles côté Python
+│   │   ├── __init__.py
+│   │   ├── horaire.mzn         # Modèle MiniZinc fourni
+│   │   └── shift_rules.py      # Constantes du domaine : durées, écarts entre jalons, décalages des fenêtres
 │   ├── ga/                     # Logique de l'Algorithme Génétique (à venir)
 │   │   ├── __init__.py
 │   │   ├── chromosome.py       # Génotype : interface Encoding[G] et encodages concrets

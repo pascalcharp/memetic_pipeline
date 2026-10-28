@@ -127,3 +127,29 @@
 **Choix** : les tests tournent dans l'image du projet plutôt que dans un Python installé par l'action. La CI exerce ainsi exactement l'environnement de développement (Python 3.13, MiniZinc 2.10, CP-SAT 9.15).
 
 **Étape 0 terminée** : toutes ses tâches sont validées.
+
+## 2026-10-28 — Étape 1 : constantes du domaine
+
+**Fait** : `src/model/shift_rules.py`, placé à côté de `horaire.mzn` (lien logique avec le modèle). Il contient quatre classes.
+- `ModelIndexing` : indexation à partir de 1 et valeur 0 (« aucune activité ») de la grille.
+- `ShiftStructure` : constantes de base. Périodes par heure (4), 4 activités par quart, pause 1, dîner 4, activité minimale 4, heures rémunérées 6 à 8.
+- `ShiftGaps` : écarts minimaux entre jalons consécutifs (4, 5, 8, 4), **dérivés** des durées.
+- `WindowOffsets` : décalages des fenêtres (0/27, 4/17, 9/12, 17/4, 27/0), **dérivés** des écarts.
+
+**Décision** : on garde le moins possible de constantes de base et on dérive tout le reste. Chaque nombre de `horaire.mzn` s'explique alors par une règle. Par exemple, `MAX_P1 = MAX_PERIODES - 17` parce que 17 = 5 + 8 + 4, soit les trois écarts qui suivent la première pause.
+
+**Interprétation confirmée par Pascal** : l'écart `fin - debut` de 27 à 35 est lu comme 6 à 8 heures rémunérées (dîner non rémunéré, pauses rémunérées) : 6 × 4 + 4 - 1 = 27 et 8 × 4 + 4 - 1 = 35, où le - 1 vient des bornes incluses (commentaire de `horaire.mzn`).
+
+**Tests** (`tests/test_shift_rules.py`, 12 tests, environ 7 s)
+- Valeurs attendues lues dans `horaire.mzn`, et cohérence interne des règles.
+- **Sondes MiniZinc** (`MiniZincModelProbe`), qui vérifient la cohérence avec le modèle lui-même plutôt qu'avec une copie des nombres :
+  - les fenêtres sont lues dans MiniZinc grâce à une variable `::add_to_output` qui expose `MIN_P1`, `MAX_DINER`, … ; vérifié sur `bench_1` (32 périodes) et `bench_3` (48) ;
+  - pour les écarts minimaux et la durée du quart, on fixe le premier employé exactement à la borne (faisable), puis une période au-delà (UNSAT) ;
+  - la résolution s'arrête à la première solution intermédiaire, puisqu'il est inutile d'attendre l'optimum.
+- Vérification par mutation : en faussant `BREAK_DURATION` ou `MAX_PAID_HOURS`, les sondes échouent bien (7 et 1 échecs).
+- Suite complète : 31 tests verts en local et dans Docker (1 ignoré).
+
+**Constat important pour la suite** : sur `bench_5` (8 employés × 5 activités × 48 périodes), CP-SAT ne trouve **aucune solution réalisable en 30 s**, même sans contrainte ajoutée.
+- Pascal confirme que l'instance est **satisfaisable**. Avec CP-SAT, 8 workers et des graines de 1 à 20, la première solution arrive en environ 1 minute (médiane).
+- L'instance est donc difficile, pas infaisable : la contrainte « au moins 1 employé si demande > 0 » la rend très serrée.
+- Ça touchera l'étape 4 (contrainte dure ou pénalité) et l'étape 6 (générer des individus initiaux faisables). Pour les tests, il faut garder `bench_1` et `bench_3`, et réserver `bench_5` aux expériences.
