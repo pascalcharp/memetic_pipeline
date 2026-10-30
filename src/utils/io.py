@@ -120,6 +120,11 @@ class MilestoneWindow:
     def is_empty(self) -> bool:
         return self.earliest > self.latest
 
+    def contains(self, period: int) -> bool:
+        """Vérifie que l'argument est contenu dans la fenêtre."""
+
+        return self.earliest <= period <= self.latest
+
     def __str__(self) -> str:
         return InstanceDisplay.WINDOW.format(earliest=self.earliest, latest=self.latest)
 
@@ -209,7 +214,8 @@ class ProblemInstance:
             InstanceDisplay.SUMMARY_WINDOWS_TITLE,
         ]
         for milestone, window in windows_by_milestone.items():
-            lines.append(InstanceDisplay.SUMMARY_WINDOW_LINE.format(milestone=milestone, width=name_width, window=window))
+            lines.append(
+                InstanceDisplay.SUMMARY_WINDOW_LINE.format(milestone=milestone, width=name_width, window=window))
         lines.append(InstanceDisplay.SUMMARY_DEMAND.format(total=int(self.demand.sum()), peak=int(self.demand.max())))
 
         return InstanceDisplay.LINE_SEPARATOR.join(lines)
@@ -286,7 +292,8 @@ def _read_count(data: dict, field: str, source: str) -> int:
     value = data[field]
     if not _is_integer(value):
         raise InstanceFormatError(
-            InstanceMessages.NOT_AN_INTEGER.format(source=source, field=field, value=value, location=InstanceMessages.NO_LOCATION)
+            InstanceMessages.NOT_AN_INTEGER.format(source=source, field=field, value=value,
+                                                   location=InstanceMessages.NO_LOCATION)
         )
     if value < ModelIndexing.FIRST_INDEX:
         raise InstanceValueError(InstanceMessages.COUNT_NOT_POSITIVE.format(source=source, field=field, value=value))
@@ -298,7 +305,8 @@ def _read_matrix(data: dict, field: str, row_count: int, column_count: int, sour
     rows = data[field]
     if not isinstance(rows, list):
         raise InstanceFormatError(
-            InstanceMessages.NOT_A_MATRIX.format(source=source, field=field, found=type(rows).__name__, location=InstanceMessages.NO_LOCATION)
+            InstanceMessages.NOT_A_MATRIX.format(source=source, field=field, found=type(rows).__name__,
+                                                 location=InstanceMessages.NO_LOCATION)
         )
     if len(rows) != row_count:
         raise InstanceDimensionError(
@@ -370,9 +378,9 @@ def _check_demand_within_employees(demand: np.ndarray, employee_count: int, sour
 def _useful_range(demand: np.ndarray, over_cost: np.ndarray, under_cost: np.ndarray, source: str) -> tuple[int, int]:
     """Première et dernière période dont les données ne sont pas toutes nulles (MIN_PERIODES, MAX_PERIODES)."""
     period_has_data = (
-        (demand != InstanceDomain.NO_DATA).any(axis=1)
-        | (over_cost != InstanceDomain.NO_DATA).any(axis=1)
-        | (under_cost != InstanceDomain.NO_DATA).any(axis=1)
+            (demand != InstanceDomain.NO_DATA).any(axis=1)
+            | (over_cost != InstanceDomain.NO_DATA).any(axis=1)
+            | (under_cost != InstanceDomain.NO_DATA).any(axis=1)
     )
     useful_period_indices = np.flatnonzero(period_has_data)
     if useful_period_indices.size == 0:

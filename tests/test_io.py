@@ -175,6 +175,28 @@ class TestUsefulRangeAndWindows(unittest.TestCase):
             parse_instance(data, TEST_SOURCE_NAME)
 
 
+class TestMilestoneWindowContains(unittest.TestCase):
+    """Appartenance d'une période à une fenêtre, bornes incluses."""
+
+    def test_bounds_are_included(self) -> None:
+        window = MilestoneWindow(5, 15)
+        for period, expected in ((4, False), (5, True), (10, True), (15, True), (16, False)):
+            with self.subTest(period=period):
+                self.assertEqual(window.contains(period), expected)
+
+    def test_single_period_window(self) -> None:
+        window = MilestoneWindow(7, 7)
+        self.assertTrue(window.contains(7))
+        self.assertFalse(window.contains(6))
+        self.assertFalse(window.contains(8))
+
+    def test_empty_window_contains_nothing(self) -> None:
+        window = MilestoneWindow(9, 8)
+        for period in (7, 8, 9, 10):
+            with self.subTest(period=period):
+                self.assertFalse(window.contains(period))
+
+
 class TestConsistencyWithMiniZinc(unittest.TestCase):
     """La plage utile et les fenêtres calculées en Python sont celles de horaire.mzn, y compris avec des périodes vides."""
 

@@ -69,10 +69,11 @@ Principe : toute la documentation est dans `docs/`, et chaque document est acces
 - [x] `__repr__` (une ligne, sans les matrices) et `__str__` (résumé lisible : dimensions, plage utile, fenêtres, demande) pour `ProblemInstance` ; `__str__` pour `MilestoneWindow` (`début..fin`)
 
 ## Étape 3a — Phénotype `Horaire` **(C→P)**
-- [ ] Classes `Horaire` / `HoraireEmploye` (mêmes variables que `horaire.mzn`)
-- [ ] Vérification de faisabilité structurelle (les contraintes de `horaire.mzn`), composant distinct de l'encodage **(P)**
-- [ ] Conversion vers la grille « employé × période → activité ou 0 » (même sémantique que la 2ᵉ sortie du modèle)
-- [ ] Tests : horaires valides, chaque contrainte violée isolément, bornes exactes des fenêtres
+- [x] Classes `Horaire` / `HoraireEmploye` (mêmes variables que `horaire.mzn`) — `src/model/horaire.py` : dataclasses figées, construction depuis les variables MiniZinc (`from_model_variables`), `MalformedHoraireError` pour une forme invalide (≠ 4 activités, aucun employé, variable manquante) **(C)**
+- [x] Vérification de faisabilité structurelle (les contraintes de `horaire.mzn`), composant distinct de l'encodage — `src/model/feasibility.py` : `FeasibilityChecker.violations(horaire) -> list[Violation]` (règle `StructuralRule`, employé, valeur fautive) ; un horaire infaisable n'est pas une exception (D6), un nombre d'employés différent de l'instance en est une. Scaffold **(C)**, corps des vérifications **(P)**, vérifié
+- [x] Conversion vers la grille « employé × période → activité ou 0 » (même sémantique que la 2ᵉ sortie du modèle) — `Horaire.to_grid(period_count)` **(C)**
+- [x] Tests : horaires valides, chaque contrainte violée isolément, bornes exactes des fenêtres, contraintes redondantes (fenêtres intérieures), validation croisée avec MiniZinc (verdict de faisabilité, grille de la 2ᵉ sortie) — `tests/test_horaire.py` (20), `tests/test_feasibility.py` (17) **(C)**
+- La couverture « au moins 1 employé si demande > 0 » n'est **pas** structurelle : elle relève de l'étape 4
 
 ## Étape 3b — Génotype : `Encoding[G]` et `BlockEncoding` (`src/ga/chromosome.py`) **(C→P)**
 - [x] Trancher D1 : encodage par blocs, un gène par employé

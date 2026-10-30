@@ -301,3 +301,73 @@ Suite complète : 63 tests verts en local et dans Docker (1 ignoré sous Linux).
 **Impact sur le TODO** : l'étape 3b porte sur `BlockEncoding` ; les tests de décodage infaisable visent Σd hors de 22..30 et un quart qui déborde ; l'étape 10 reçoit une tâche de comparaison des variantes (`DirectEncoding`, `SortedBlockEncoding`, croisement avec alignement).
 
 **Décision en suspens** : D4.
+
+## 2026-10-29 — Étape 3a : phénotype `Horaire` (scaffold)
+
+**Fait (C)**
+- `src/model/horaire.py` :
+  - `HoraireEmploye` : 5 jalons et 4 activités ;
+  - `Horaire` : un tuple de `HoraireEmploye` ;
+  - les deux sont des dataclasses figées, donc comparables par valeur et hachables, ce que demandent l'aller-retour `decode(encode(h)) == h` et D7 ;
+  - noms des champs en anglais (`start`, `break1`, `lunch`, `break2`, `end`, `activities`), comme `ShiftWindows`. Les noms de classes restent ceux de D5.
+- `Horaire.from_model_variables` : construction à partir des variables de `horaire.mzn` (forme des résultats de minizinc-python). Les activités sont converties en tuples.
+- `MalformedHoraireError` (sous `HoraireError`) signale une **forme** invalide : nombre d'activités différent de 4, aucun employé, variable absente ou de mauvaise longueur. Un horaire **infaisable** n'est pas une erreur (D6) : jalons dans le désordre ou quart trop court restent représentables.
+- `HoraireEmploye.activity_at(p)` et `Horaire.to_grid(period_count)` : grille numpy (employés × périodes), indexée à partir de 0. Elle reprend la cascade de conditions de la 2ᵉ sortie du modèle, dans le même ordre. Les périodes hors de `1..period_count` sont ignorées.
+- `src/model/feasibility.py` (scaffold, corps à écrire par Pascal) :
+  - `StructuralRule` : 11 règles. Fenêtre de chacun des 5 jalons, 4 écarts minimaux, durée du quart, domaine des activités ;
+  - `Violation(employee, rule, found)`, figée, avec un `__str__` diagnostique ;
+  - `FeasibilityChecker(instance)` : `violations`, `employee_violations` (à écrire) et `is_feasible` (écrite, déléguée à `violations`) ;
+  - `EmployeeCountMismatchError` (sous `FeasibilityError`) quand l'horaire et l'instance n'ont pas le même nombre d'employés : c'est une erreur de programmation, pas une infaisabilité.
+- `tests/minizinc_probe.py` : nouvelle méthode publique `first_solution()`.
+
+**Décisions**
+- **Retourner la liste des violations** plutôt qu'un booléen ou une exception. On peut ainsi tester chaque contrainte isolément, nourrir les diagnostics et collecteurs (D8) et, plus tard, guider la réparation.
+- **Couverture hors du périmètre** : « au moins 1 employé si demande > 0 » dépend de tous les employés à la fois. Elle relève de l'étape 4 (évaluation), où se décidera son traitement (infaisabilité ou pénalité).
+- **Grille et `total` peuvent diverger** pour un horaire infaisable. Si des blocs se chevauchent, `total` compte l'employé deux fois alors que la grille, dont chaque case contient une seule activité, ne le peut pas. Pour un horaire faisable, les deux coïncident. Conséquence pour l'étape 4 : le coût doit reproduire `total`, pas s'appuyer sur la grille.
+- **Contraintes redondantes** : les fenêtres de `pause1`, `diner` et `pause2` découlent des écarts, de la durée et des fenêtres de `debut` et `fin`. On les vérifie quand même, par fidélité au modèle. Elles ne peuvent pas être violées seules : les tests le documentent.
+
+**Tests**
+- `tests/test_horaire.py`, 20 tests verts :
+  - forme et égalité par valeur ;
+  - `activity_at` aux bornes de chaque bloc, avec des activités distinctes par bloc ;
+  - grille de l'optimum documenté dans `PROBLEME.md` ;
+  - quarts qui débordent de la journée ;
+  - **validation croisée** : sur bench_1 à bench_3, la grille Python est identique à la 2ᵉ sortie de MiniZinc.
+- `tests/test_feasibility.py`, 16 tests, en attente de l'implémentation :
+  - instance synthétique à demande nulle, plage utile 4..43 ;
+  - 7 quarts faisables, dont toutes les fenêtres à leur borne inférieure, toutes à leur borne supérieure, et les durées 27 et 35 ;
+  - 10 quarts qui violent une seule contrainte, d'un cran au-delà de la borne ;
+  - fenêtres redondantes, cumul de violations et numérotation des employés ;
+  - incohérence du nombre d'employés ;
+  - **validation croisée** : solutions MiniZinc de bench_1 à bench_3 jugées faisables. Et pour les 17 cas, verdict Python = verdict de `horaire.mzn` avec l'horaire fixé (demande nulle, donc MiniZinc ne juge que la structure).
+- Les tests ont été validés contre une implémentation de référence jetable, hors du dépôt : 16/16 verts.
+
+**En attente** : implémentation de `violations` et `employee_violations` par Pascal, puis vérification par Claude.
+
+## 2026-10-30 — Étape 3a validée : vérification de faisabilité (Pascal)
+
+**Fait (P)**
+- `FeasibilityChecker.violations` et `employee_violations` sont implémentées.
+- `employee_violations` délègue à trois méthodes :
+  - `time_violations_for_employee` : durée du quart et 4 écarts, seuils lus dans `ShiftGaps` ;
+  - `activity_domain_violations_for_employee` ;
+  - `window_violations_for_employee` : liste explicite de triplets (règle, jalon, fenêtre).
+- `MilestoneWindow.contains(period)` est ajoutée dans `io.py`.
+
+**Revue (C), en trois passes**
+- **Bogues corrigés** :
+  - parcours du dict des fenêtres sans `.items()` ;
+  - noms MiniZinc confondus avec les champs anglais de `HoraireEmploye` ;
+  - mauvaise règle et valeur fautive de type texte pour les fenêtres ;
+  - **seuil pause1 → diner à 3 au lieu de 5**, l'écart re-dérivé à la main avec un signe faux. La validation croisée MiniZinc l'a détecté. Leçon : lire les seuils dans `ShiftGaps` plutôt que les re-dériver ;
+  - exception relancée sans message dans `is_feasible` ;
+  - membre d'enum dont la valeur était un dict, puis membres renommés hors de l'interface convenue ;
+  - **virgules finales dans l'enum**, qui faisaient des descriptions des tuples ;
+  - `in` sur un objet qui n'a pas de `__contains__`.
+- **Nettoyage** : import `minizinc` inutile retiré, nombres magiques remplacés par `ModelIndexing.FIRST_INDEX`, méthode `get_milestone_by_name` supprimée (elle reposait sur `assert False` et une f-string).
+- **Tests ajoutés pendant la revue**, chacun parce qu'un défaut était passé inaperçu :
+  - `test_is_feasible_raises_too` vérifie maintenant le message de l'exception, pas seulement son type ;
+  - `test_every_rule_description_is_text` attrape les virgules finales ;
+  - `TestMilestoneWindowContains` (3 tests dans `test_io.py`) : bornes incluses, fenêtre d'une seule période, fenêtre vide.
+
+**Tests** : suite complète, 108 tests verts en local.

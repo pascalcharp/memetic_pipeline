@@ -30,7 +30,9 @@ memetic_pipeline/
 │   │   └── __init__.py
 │   ├── model/                  # Modèle CP (MiniZinc) et ses règles côté Python
 │   │   ├── __init__.py
+│   │   ├── feasibility.py      # Faisabilité structurelle d'un horaire (FeasibilityChecker, Violation, StructuralRule)
 │   │   ├── horaire.mzn         # Modèle MiniZinc fourni
+│   │   ├── horaire.py          # Phénotype canonique (Horaire, HoraireEmploye) et grille « employé × période »
 │   │   └── shift_rules.py      # Constantes du domaine : noms des variables MiniZinc, durées, écarts, décalages des fenêtres
 │   └── utils/                  # Utilitaires : environnement, lecture de fichiers
 │       ├── __init__.py
@@ -39,6 +41,8 @@ memetic_pipeline/
 ├── tests/                      # Tests unittest : python -m unittest discover
 │   ├── __init__.py
 │   ├── minizinc_probe.py       # Outil de test (pas un test) : sonde horaire.mzn pour vérifier la cohérence avec Python
+│   ├── test_feasibility.py     # Faisabilité structurelle : bornes exactes, violations isolées, verdict comparé à MiniZinc
+│   ├── test_horaire.py         # Phénotype : construction, forme, grille comparée à la 2ᵉ sortie de MiniZinc
 │   ├── test_io.py              # Lecture des instances : 5 bench, cas d'erreur, plage utile comparée à MiniZinc
 │   ├── test_minizinc_env.py    # Localisation de MiniZinc, solveurs, messages d'erreur
 │   ├── test_shift_rules.py     # Constantes du domaine et sondes de cohérence avec horaire.mzn

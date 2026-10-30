@@ -45,6 +45,10 @@ class MiniZincModelProbe:
                 warnings.simplefilter("ignore", MiniZincWarning)
                 return asyncio.run(self._first_result(branch)).status
 
+    def first_solution(self) -> minizinc.Result:
+        """Première solution du modèle tel quel, sans contrainte ajoutée (pas forcément optimale)."""
+        return asyncio.run(self._first_result(self.instance))
+
     async def _first_result(self, instance: minizinc.Instance) -> minizinc.Result:
         # Une première solution (ou une preuve d'infaisabilité) suffit : inutile d'attendre l'optimum.
         last_result = None
