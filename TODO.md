@@ -77,10 +77,17 @@ Principe : toute la documentation est dans `docs/`, et chaque document est acces
 
 ## Étape 3b — Génotype : `Encoding[G]` et `BlockEncoding` (`src/ga/chromosome.py`) **(C→P)**
 - [x] Trancher D1 : encodage par blocs, un gène par employé
-- [ ] Interface `Encoding[G]` : `encode(Horaire) -> G`, `decode(G) -> Horaire` (traduction pure, D6)
-- [ ] Implémentation `BlockEncoding` **(P)**
-- [ ] Classe `Individu` : génome, phénotype décodé (cache), coût
-- [ ] Tests : aller-retour `decode(encode(h)) == h`, décodage d'un génome produisant un horaire infaisable, par exemple Σd hors de 22..30 ou quart débordant la plage utile (aucune exception)
+- [~] Représentation du génome (D1, tranchée au scaffold) : dataclasses figées `ActivityBlock(activity, duration)`, `BlockGene(start, blocks)`, génome `BlockGenome = tuple[BlockGene, ...]` ; lisible, immuable (D7), hachable (D8). `MalformedGenomeError` si un gène n'a pas 4 blocs **(C)**
+- [~] Interface `Encoding[G]` : `encode(Horaire) -> G`, `decode(G) -> Horaire` (traduction pure, D6) **(C)**
+- [~] Implémentation `BlockEncoding` : `encode_shift`, `decode_gene` (un employé), `encode`, `decode` **(P)**
+- [~] Classe `Individu` (`src/ga/individual.py`) : génome, phénotype décodé à la construction (`from_genome`), coût optionnel, `with_cost` qui retourne un nouvel individu (D7) **(C)**
+- [~] Tests **(C)** :
+  - aller-retour dans les deux sens, `decode(encode(h)) == h` et `encode(decode(g)) == g`, y compris pour un horaire infaisable (jalons dans le désordre, durées négatives) ;
+  - exemple de D1 : employé 1 de l'optimum de bench_1, d = 4, 4, 6, 8 ;
+  - décodage d'un génome infaisable sans exception (Σd hors de 22..30, quart débordant la plage utile), constaté par `FeasibilityChecker` ;
+  - propriété de D1 sur des gènes tirés au hasard (graine fixe) : l'horaire décodé est faisable si et seulement si chaque `d_i ≥ 4`, `22 ≤ Σd ≤ 30`, le quart est dans la plage utile et les activités dans leur domaine ;
+  - validation croisée : aller-retour sur les solutions MiniZinc de bench_1 à bench_3 ;
+  - `Individu` testé avec un encodage factice, indépendant de `BlockEncoding`
 
 ## Étape 4 — Évaluation (fonction de coût) **(P)**
 - [ ] Calcul de `total[p, a]` puis du coût sur/sous-couverture, identique à `cout_total`

@@ -24,8 +24,10 @@ memetic_pipeline/
 │   ├── config.py               # Configuration : chemins du projet (ProjectPaths), MiniZinc (MiniZincConfig)
 │   ├── drivers/                # Points d'entrée des expériences (vide pour l'instant)
 │   │   └── __init__.py
-│   ├── ga/                     # Algorithme génétique (vide pour l'instant)
-│   │   └── __init__.py
+│   ├── ga/                     # Algorithme génétique
+│   │   ├── __init__.py
+│   │   ├── chromosome.py       # Génotype : interface Encoding[G], BlockEncoding (gènes BlockGene, ActivityBlock)
+│   │   └── individual.py       # Individu : génome, horaire décodé, coût
 │   ├── memetic/                # Couplage mémétique et recherche locale (vide pour l'instant)
 │   │   └── __init__.py
 │   ├── model/                  # Modèle CP (MiniZinc) et ses règles côté Python
@@ -41,8 +43,10 @@ memetic_pipeline/
 ├── tests/                      # Tests unittest : python -m unittest discover
 │   ├── __init__.py
 │   ├── minizinc_probe.py       # Outil de test (pas un test) : sonde horaire.mzn pour vérifier la cohérence avec Python
+│   ├── test_chromosome.py      # Génotype : allers-retours, génomes infaisables, conditions de D1, solutions MiniZinc
 │   ├── test_feasibility.py     # Faisabilité structurelle : bornes exactes, violations isolées, verdict comparé à MiniZinc
 │   ├── test_horaire.py         # Phénotype : construction, forme, grille comparée à la 2ᵉ sortie de MiniZinc
+│   ├── test_individual.py      # Individu : décodage unique, évaluation sans modification (encodage factice)
 │   ├── test_io.py              # Lecture des instances : 5 bench, cas d'erreur, plage utile comparée à MiniZinc
 │   ├── test_minizinc_env.py    # Localisation de MiniZinc, solveurs, messages d'erreur
 │   ├── test_shift_rules.py     # Constantes du domaine et sondes de cohérence avec horaire.mzn

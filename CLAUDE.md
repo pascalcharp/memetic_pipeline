@@ -63,6 +63,7 @@ memetic_pipeline/
 │   ├── ga/                     # Logique de l'Algorithme Génétique (à venir)
 │   │   ├── __init__.py
 │   │   ├── chromosome.py       # Génotype : interface Encoding[G] et encodages concrets
+│   │   ├── individual.py       # Individu : génome, horaire décodé, coût
 │   │   ├── operators.py        # Crossover, Mutation, Sélection
 │   │   └── population.py       # Gestion de la population globale
 │   ├── memetic/                # Couplage Mémétique & Réparation (à venir)

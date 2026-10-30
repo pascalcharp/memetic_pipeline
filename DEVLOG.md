@@ -371,3 +371,39 @@ Suite complète : 63 tests verts en local et dans Docker (1 ignoré sous Linux).
   - `TestMilestoneWindowContains` (3 tests dans `test_io.py`) : bornes incluses, fenêtre d'une seule période, fenêtre vide.
 
 **Tests** : suite complète, 108 tests verts en local.
+
+## 2026-10-30 — Étape 3b : génotype `Encoding[G]` et `BlockEncoding` (scaffold)
+
+**Fait (C)**
+- `src/ga/chromosome.py` :
+  - `Encoding[G]` : classe abstraite générique (syntaxe PEP 695), réduite à `encode` et `decode` (D1, D6) ;
+  - `ActivityBlock(activity, duration)` et `BlockGene(start, blocks)`, des dataclasses figées. `MalformedGenomeError` (sous `GenomeError`) si un gène n'a pas 4 blocs ;
+  - `BlockGenome = tuple[BlockGene, ...]` ;
+  - `BlockEncoding` en scaffold : `encode`, `decode`, `encode_shift`, `decode_gene` sont à écrire (P). Les formules de D1 sont dans la docstring du module.
+- `src/ga/individual.py` : `Individu[G]`, dataclass figée.
+  - `from_genome(genome, encoding)` décode une seule fois, à la construction ;
+  - `cost` vaut `None` tant que l'individu n'est pas évalué ;
+  - `with_cost` retourne une copie, sans modifier l'original (D7).
+
+**Décisions**
+- **Représentation du génome** (laissée ouverte par D1) : des dataclasses figées nommées plutôt qu'un tableau numpy. Elles sont lisibles (`gene.blocks[2].duration` plutôt que `g[6]`), immuables (D7) et hachables, ce qui sera utile pour mesurer la diversité (D8). La performance n'est pas un enjeu à ce stade : au plus 8 employés.
+- **`Individu` dans son propre module** (`individual.py`), plutôt que dans `chromosome.py`, qui reste consacré aux encodages. L'arbre cible de CLAUDE.md est mis à jour en conséquence.
+- **`cost: int | None`** pour l'instant. Il deviendra probablement `CostBreakdown` à l'étape 4 (D8).
+
+**Blocage corrigé (dans les tests)** : j'avais d'abord écrit `fin - debut = Σd + 2 pauses + dîner` (Σd + 6). Or les bornes du quart sont incluses : c'est Σd + 5, comme dans D1. La correction de bornes incluses (`INCLUSIVE_BOUNDS_CORRECTION`) s'applique ici comme dans `ShiftStructure`. C'est l'implémentation de référence qui l'a révélé.
+
+**Tests**
+- `tests/test_chromosome.py` : 17 tests, en attente de l'implémentation.
+  - forme du gène, interface abstraite ;
+  - exemple de D1 : d = 4, 4, 6, 8 ;
+  - chaque durée est la longueur de son bloc dans la grille ;
+  - génome de l'optimum de bench_1 calculé à la main ;
+  - ordre des employés conservé ;
+  - allers-retours dans les deux sens, y compris pour des horaires et génomes absurdes (200 génomes aléatoires) ;
+  - 5 génomes infaisables qui se décodent sans exception ;
+  - **propriété de D1** sur 3000 gènes aléatoires (graine fixe) : l'horaire décodé est faisable si et seulement si chaque `d_i ≥ 4`, `22 ≤ Σd ≤ 30`, le quart est dans la plage utile et les activités dans leur domaine. Au moins 50 cas de chaque verdict sont exigés ;
+  - **validation croisée** : aller-retour et conditions de D1 sur les solutions MiniZinc de bench_1 à bench_3.
+- `tests/test_individual.py` : 9 tests verts, avec un encodage factice qui compte les appels à `decode`.
+- Les tests ont été validés contre une implémentation de référence jetable, hors du dépôt : 17/17 verts. Un mutant (dîner décalé de 3 au lieu de 4) est détecté par 10 tests distincts.
+
+**En attente** : implémentation de `BlockEncoding` par Pascal, puis vérification par Claude.
