@@ -77,11 +77,11 @@ Principe : toute la documentation est dans `docs/`, et chaque document est acces
 
 ## Étape 3b — Génotype : `Encoding[G]` et `BlockEncoding` (`src/ga/chromosome.py`) **(C→P)**
 - [x] Trancher D1 : encodage par blocs, un gène par employé
-- [~] Représentation du génome (D1, tranchée au scaffold) : dataclasses figées `ActivityBlock(activity, duration)`, `BlockGene(start, blocks)`, génome `BlockGenome = tuple[BlockGene, ...]` ; lisible, immuable (D7), hachable (D8). `MalformedGenomeError` si un gène n'a pas 4 blocs **(C)**
-- [~] Interface `Encoding[G]` : `encode(Horaire) -> G`, `decode(G) -> Horaire` (traduction pure, D6) **(C)**
-- [~] Implémentation `BlockEncoding` : `encode_shift`, `decode_gene` (un employé), `encode`, `decode` **(P)**
-- [~] Classe `Individu` (`src/ga/individual.py`) : génome, phénotype décodé à la construction (`from_genome`), coût optionnel, `with_cost` qui retourne un nouvel individu (D7) **(C)**
-- [~] Tests **(C)** :
+- [x] Représentation du génome (D1, tranchée au scaffold) : dataclasses figées `ActivityBlock(activity, duration)`, `BlockGene(start, blocks)`, génome `BlockGenome = tuple[BlockGene, ...]` ; lisible, immuable (D7), hachable (D8). `MalformedGenomeError` si un gène n'a pas 4 blocs **(C)**
+- [x] Interface `Encoding[G]` : `encode(Horaire) -> G`, `decode(G) -> Horaire` (traduction pure, D6) **(C)**
+- [x] Implémentation `BlockEncoding` : `encode_shift`, `decode_gene` (un employé), `encode`, `decode` **(P)**
+- [x] Classe `Individu` (`src/ga/individual.py`) : génome, phénotype décodé à la construction (`from_genome`), coût optionnel, `with_cost` qui retourne un nouvel individu (D7) **(C)**
+- [x] Tests **(C)** :
   - aller-retour dans les deux sens, `decode(encode(h)) == h` et `encode(decode(g)) == g`, y compris pour un horaire infaisable (jalons dans le désordre, durées négatives) ;
   - exemple de D1 : employé 1 de l'optimum de bench_1, d = 4, 4, 6, 8 ;
   - décodage d'un génome infaisable sans exception (Σd hors de 22..30, quart débordant la plage utile), constaté par `FeasibilityChecker` ;

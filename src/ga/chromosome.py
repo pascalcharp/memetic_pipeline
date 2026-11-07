@@ -92,20 +92,38 @@ class BlockEncoding(Encoding[BlockGenome]):
 
     def encode(self, horaire: Horaire) -> BlockGenome:
         """Un gène par employé de ``horaire``, dans le même ordre."""
-        # À écrire (P).
-        raise NotImplementedError
+        return tuple(self.encode_shift(shift) for shift in horaire.employees)
 
     def decode(self, genome: BlockGenome) -> Horaire:
         """Un quart par gène de ``genome``, dans le même ordre."""
-        # À écrire (P).
-        raise NotImplementedError
+        return Horaire(employees=tuple(self.decode_gene(gene) for gene in genome))
 
     def encode_shift(self, shift: HoraireEmploye) -> BlockGene:
         """Gène d'un seul employé : début, puis activité et durée de chaque bloc (formules du module)."""
-        # À écrire (P).
-        raise NotImplementedError
+        activity1, activity2, activity3, activity4 = shift.activities
+        calculated_blocks = (
+            ActivityBlock(activity=activity1, duration=shift.break1 - shift.start),
+            ActivityBlock(activity=activity2, duration=shift.lunch - shift.break1 - ShiftStructure.BREAK_DURATION),
+            ActivityBlock(activity=activity3, duration=shift.break2 - shift.lunch - ShiftStructure.LUNCH_DURATION),
+            ActivityBlock(activity=activity4, duration=shift.end - shift.break2)
+        )
+        return BlockGene(start=shift.start, blocks=calculated_blocks)
 
     def decode_gene(self, gene: BlockGene) -> HoraireEmploye:
         """Quart d'un seul employé : jalons déduits du début et des durées (formules du module)."""
-        # À écrire (P).
-        raise NotImplementedError
+        block1, block2, block3, block4 = gene.blocks
+
+        start = gene.start
+        break1 = start + block1.duration
+        lunch = break1 + ShiftStructure.BREAK_DURATION + block2.duration
+        break2 = lunch + ShiftStructure.LUNCH_DURATION + block3.duration
+        end = break2 + block4.duration
+
+        return HoraireEmploye(
+            start=start,
+            break1=break1,
+            lunch=lunch,
+            break2=break2,
+            end=end,
+            activities=tuple(block.activity for block in gene.blocks)
+        )

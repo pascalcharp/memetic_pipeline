@@ -407,3 +407,20 @@ Suite complète : 63 tests verts en local et dans Docker (1 ignoré sous Linux).
 - Les tests ont été validés contre une implémentation de référence jetable, hors du dépôt : 17/17 verts. Un mutant (dîner décalé de 3 au lieu de 4) est détecté par 10 tests distincts.
 
 **En attente** : implémentation de `BlockEncoding` par Pascal, puis vérification par Claude.
+
+## 2026-11-07 — Étape 3b validée : `BlockEncoding` (Pascal)
+
+**Fait (P)** : `BlockEncoding.encode_shift`, `decode_gene`, `encode`, `decode` dans `src/ga/chromosome.py`.
+- `encode_shift` : `d1 = pause1 - debut`, `d2 = diner - pause1 - BREAK_DURATION`, `d3 = pause2 - diner - LUNCH_DURATION`, `d4 = fin - pause2` ;
+- `decode_gene` : formules de D1 dans l'autre sens ;
+- aucune vérification ni troncature : une durée négative survit à l'aller-retour (D6) ;
+- les durées de pause et de dîner viennent de `ShiftStructure`, sans nombre magique.
+
+**Revue (C)** : le fond était correct dès la première version. Retouches de forme appliquées par Pascal :
+- dépaquetage des blocs et des activités (`block1, …, block4 = gene.blocks`) plutôt que des indices `[0]` à `[3]` : plus lisible, échoue bruyamment si la forme change, et ramène les lignes sous 120 caractères ;
+- noms explicites dans les générateurs (dont `shift` dans `encode`, qui masquait le paramètre `horaire`) ;
+- restes du scaffold retirés (commentaires `# À écrire (P).`, lignes vides superflues).
+
+**Tests** : suite complète, 134 tests verts en local, dont les 17 de `test_chromosome.py` : propriété de D1 sur 3000 gènes, 200 allers-retours aléatoires et validation croisée sur les solutions MiniZinc de bench_1 à bench_3.
+
+**Suite** : étape 4, évaluation (fonction de coût).
