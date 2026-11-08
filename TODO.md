@@ -39,6 +39,14 @@ Règle : une seule étape à la fois ; on ne passe à la suivante qu'une fois le
   - une exécution = `results/<expérience>/<run_id>/` (`config.json` avec graine, commit Git et versions, `events.jsonl`, `generations.csv`, `run.log`), ignoré par Git ;
   - principes : enregistrer assez de données brutes pour recalculer plus tard ; `schema_version` et `event` dans chaque enregistrement ; un collecteur ne consomme jamais le générateur aléatoire du moteur ; événements émis par le thread principal après chaque lot (D7) ; temps marqués non déterministes ; bibliothèque standard seulement.
 - [ ] **D4 — Remplacement / convergence / restart** (avant étape 8) : élitisme (μ+λ) ? mesure de diversité ? quelle fraction conserver au restart ?
+- [ ] **D9 — Résultats d'expérience dans MongoDB** (proposition de Pascal, 2026-11-07 ; à trancher avant l'étape 8b) :
+  - se branche naturellement comme une destination de plus (`MongoSink`, patron Observateur de D8) : le moteur et les collecteurs ne changent pas ;
+  - contredit le principe « bibliothèque standard seulement » de D8 : dépendance `pymongo` à isoler (import seulement dans `MongoSink`, tests sautés si absente) ;
+  - à trancher : Atlas (nuage : identifiants hors du dépôt, accès réseau, tests sans connexion) ou conteneur `mongo` local dans un `docker-compose.yml` (pas encore créé ; seul le `Dockerfile` existe) ; garder ou non `results/` en fichiers comme copie de référence.
+- [ ] **D10 — Charge de travail cumulée du solveur** (proposition de Pascal, 2026-11-07 ; à trancher à l'étape 5) :
+  - idée : cumuler la charge de chaque appel au `LocalSolver` et la comparer à celle de MiniZinc seul, à coût égal (ou le coût atteint à charge égale) ;
+  - Python rend le temps mural peu parlant : préférer une mesure rapportée par le solveur (statistiques de `minizinc.Result.statistics` : nœuds, conflits, temps de résolution) ; à vérifier sur CP-SAT ce qui est réellement exposé et déterministe ;
+  - rejoint D7 : limiter le solveur en effort plutôt qu'en temps, pour la reproductibilité.
 
 ---
 
@@ -89,17 +97,30 @@ Principe : toute la documentation est dans `docs/`, et chaque document est acces
   - validation croisée : aller-retour sur les solutions MiniZinc de bench_1 à bench_3 ;
   - `Individu` testé avec un encodage factice, indépendant de `BlockEncoding`
 
-## Étape 4 — Évaluation (fonction de coût) **(P)**
-- [ ] Calcul de `total[p, a]` puis du coût sur/sous-couverture, identique à `cout_total`
-- [ ] L'évaluation retourne une décomposition `CostBreakdown` (sous-couverture, sur-couverture, violations de « au moins 1 », cellules à pénalité 1 000 000, total), pas seulement un scalaire (D8)
-- [ ] Traitement de la contrainte « au moins 1 employé si demande > 0 » (infaisable ou pénalité ?)
-- [ ] Tests : cas calculés à la main + **validation croisée** avec le coût renvoyé par MiniZinc sur des solutions réelles
+## Étape 4 — Évaluation (`src/model/evaluation.py`) **(C→P)**
+- [x] Trancher le traitement des violations (2026-11-07) : **pénalité**, pas d'infaisabilité ni d'exception. L'évaluation est définie pour tout horaire décodé (D6) :
+  - « au moins 1 employé si demande > 0 » (contrainte dure de `horaire.mzn`, absente de `cout_total`) : chaque cellule (période, activité) violée est comptée et pénalisée ;
+  - violations structurelles (`FeasibilityChecker`) : comptées et pénalisées elles aussi ; la couverture est calculée quand même, à partir de la grille ;
+  - poids des pénalités dans `PenaltyWeights` (dataclass figée, valeurs par défaut dans `EvaluationDefaults`), injectables pour les expériences.
+- [x] Scaffold **(C)** :
+  - `CostBreakdown` (dataclass figée, D8) : `under_coverage_cost`, `over_coverage_cost`, `quasi_hard_cells` (cellules sous-couvertes à sous-coût ≥ 1 000 000, informatif : déjà inclus dans le sous-coût), `coverage_violations`, `structural_violations`, `penalty_cost` ; propriétés `coverage_cost` (identique à `cout_total`), `total` (fitness), `is_feasible` ;
+  - `CostEvaluator(instance, weights)` : signatures et docstrings de `coverage_totals(horaire)` et `evaluate(horaire)` ;
+  - `Individu.cost` devient `CostBreakdown | None`.
+- [~] Implémentation **(P)** : `coverage_totals` (`total[p, a]` à partir de la grille, plage utile seulement, comme `horaire.mzn`), puis `evaluate`.
+- [~] Tests **(C)** — `tests/test_evaluation.py` (écrits, en attente de l'implémentation) :
+  - `CostBreakdown` : propriétés, immuabilité ;
+  - `coverage_totals` : forme, cellule par cellule sur des cas à la main, périodes hors plage utile ignorées ;
+  - cas calculés à la main sur l'instance synthétique : couverture parfaite (coût 0), sous-couverture, sur-couverture, bonne colonne d'activité, violation de « au moins 1 », cellule quasi dure, violation structurelle, poids personnalisés ;
+  - optimum de bench_1 : coût 94, aucune violation ;
+  - nombre d'employés différent de l'instance : `EmployeeCountMismatchError` (propagée depuis `FeasibilityChecker`) ;
+  - **validation croisée** : `coverage_cost` égal à l'objectif renvoyé par MiniZinc sur les solutions de bench_1 à bench_3, sans aucune violation.
 
 ## Étape 5 — Interface MiniZinc (`src/memetic/local_search.py`) **(C→P)**
 - [ ] Classe d'indirection `SolverAdapter` (interface) + `CpSatAdapter` : identifiant du solveur, options (threads, graine, limite de temps), traduction des statuts
 - [ ] Résolution complète (référence / borne pour comparer le mémétique)
 - [ ] `SolveurLocal(chromosome)` : fixer une partie des variables, résoudre sous limite de temps, reconstruire un `Chromosome`
 - [ ] Gestion des erreurs MiniZinc (timeout, UNSAT, solveur absent) via exceptions sur mesure
+- [ ] Chaque appel rend aussi ses statistiques de solveur (charge de travail, D10)
 - [ ] Tests : le résultat est faisable, son coût ≤ coût d'entrée, comportement en timeout / UNSAT
 
 ## Étape 6 — Initialisation de la population **(P)**
@@ -121,6 +142,7 @@ Principe : toute la documentation est dans `docs/`, et chaque document est acces
 - [ ] Scaffold des interfaces `SurvivorSelector`, `ConvergenceCriterion`, `RestartPolicy` **(C→P)**
 - [ ] `SelectPop` (remplacement), détection de convergence, `Restart`
 - [ ] Tests : taille conservée, meilleur individu jamais perdu (si élitiste), convergence détectée sur population homogène
+- [ ] Variante rigide « peine de mort » (remarque de Pascal, 2026-11-07) : les individus infaisables (`not cost.is_feasible`) sont éliminés d'emblée, au lieu d'être pénalisés (étape 4). À brancher comme stratégie (filtre au remplacement ou `SurvivorSelector` dédié), sans toucher à l'évaluation. Cas limite à trancher : que faire si trop peu d'enfants sont faisables pour remplir la population ?
 
 ## Étape 8b — Observabilité (`src/observability/`) **(C→P)**
 - [ ] Interfaces `MetricCollector` et `RecordSink`, catalogue des événements et schéma des enregistrements (`schema_version`, `event`) **(C)**
@@ -128,6 +150,9 @@ Principe : toute la documentation est dans `docs/`, et chaque document est acces
 - [ ] Configuration du journal de diagnostic (`logging`) : console et/ou `run.log`, niveau choisi par l'expérience **(C)**
 - [ ] Répertoire d'exécution `results/<expérience>/<run_id>/` avec `config.json` (graine, commit Git, versions) ; `results/` ajouté au `.gitignore` **(C)**
 - [ ] Collecteurs de coût (statistiques + décomposition) et de diversité (génotypique insensible à la permutation, phénotypique, des coûts) **(P)**
+- [ ] Collecteur de **taux de faisabilité** des enfants, par opérateur, avant et après le `LocalSolver` (s'appuie sur `CostBreakdown.is_feasible` et les compteurs de violations) **(P)**
+- [ ] Collecteur de **charge cumulée du solveur** (D10), émis avec `local_search_done` **(P)**
+- [ ] `MongoSink` si D9 est retenue **(C)**
 - [ ] Tests : événements reçus dans l'ordre (`MemorySink`), fichiers JSONL/CSV relisibles, collecteurs sur des populations construites à la main, mesure sans effet sur le générateur aléatoire du moteur
 
 ## Étape 9 — Boucle mémétique `Memetic(NR, NM)` **(P)**
@@ -140,9 +165,12 @@ Principe : toute la documentation est dans `docs/`, et chaque document est acces
 
 ## Étape 10 — Driver et expériences (`src/drivers/`) **(C)**
 - [ ] Point d'entrée CLI (instance, NR, NM, taille de population, graine, limite de temps)
+- [ ] **Première expérience, avant la campagne** (remarque de Pascal, 2026-11-07) : vérifier que le croisement et la mutation ne produisent pas seulement des horaires infaisables ; sinon l'AG ne vaut pas mieux qu'une marche aléatoire. Mesures : taux de faisabilité par opérateur avant réparation, apport de la réparation. Témoins : marche aléatoire, et génome aléatoire + `LocalSolver` (pour isoler l'apport des opérateurs de celui du solveur)
+- [ ] Comparer pénalité (étape 4) et peine de mort (étape 8) sur ces mêmes mesures
 - [ ] Expériences décrites par fichier de configuration (encodage, opérateurs, paramètres), résolues via le registre
 - [ ] Variantes à comparer (D1, D3) : `DirectEncoding`, `SortedBlockEncoding`, croisement avec alignement des employés
 - [ ] Campagne sur `bench_1` … `bench_5` : mémétique vs MiniZinc seul (coût, temps)
+- [ ] Dans cette campagne, comparer aussi la charge cumulée du solveur (D10) : mémétique contre MiniZinc seul
 - [ ] Export des résultats (CSV/JSON), accompagnés de la configuration complète utilisée (via les destinations de D8)
 - [ ] Scripts ou notebooks d'analyse qui relisent `results/` (évolution du coût, de la diversité, comparaison d'opérateurs)
 

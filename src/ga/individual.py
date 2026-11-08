@@ -4,6 +4,7 @@ import dataclasses
 from dataclasses import dataclass
 
 from src.ga.chromosome import Encoding
+from src.model.evaluation import CostBreakdown
 from src.model.horaire import Horaire
 
 
@@ -14,13 +15,13 @@ class Individu[G]:
     Construire un individu par ``from_genome``, qui garantit que ``horaire`` est bien le décodage de
     ``genome``. Les opérateurs ne modifient jamais un individu : ils en retournent un nouveau.
 
-    ``cost`` vaut ``None`` tant que l'individu n'a pas été évalué. Son type deviendra probablement
-    une décomposition du coût (``CostBreakdown``, D8) à l'étape 4.
+    ``cost`` vaut ``None`` tant que l'individu n'a pas été évalué. C'est une décomposition du coût (D8) ;
+    le coût à minimiser est ``cost.total``.
     """
 
     genome: G
     horaire: Horaire
-    cost: int | None = None
+    cost: CostBreakdown | None = None
 
     @classmethod
     def from_genome(cls, genome: G, encoding: Encoding[G]) -> "Individu[G]":
@@ -30,6 +31,6 @@ class Individu[G]:
     def is_evaluated(self) -> bool:
         return self.cost is not None
 
-    def with_cost(self, cost: int) -> "Individu[G]":
+    def with_cost(self, cost: CostBreakdown) -> "Individu[G]":
         """Copie de cet individu avec le coût ``cost`` ; l'individu d'origine n'est pas modifié."""
         return dataclasses.replace(self, cost=cost)

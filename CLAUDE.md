@@ -56,6 +56,7 @@ memetic_pipeline/
 │   ├── config.py               # Constantes de configuration : chemins du projet, MiniZinc
 │   ├── model/                  # Modèle CP (MiniZinc) et ses règles côté Python
 │   │   ├── __init__.py
+│   │   ├── evaluation.py       # Coût de couverture et pénalités (CostBreakdown)
 │   │   ├── feasibility.py      # Faisabilité structurelle d'un horaire
 │   │   ├── horaire.mzn         # Modèle MiniZinc fourni
 │   │   ├── horaire.py          # Phénotype canonique Horaire et grille « employé × période »

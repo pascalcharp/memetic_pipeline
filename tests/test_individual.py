@@ -5,6 +5,7 @@ import unittest
 
 from src.ga.chromosome import Encoding
 from src.ga.individual import Individu
+from src.model.evaluation import CostBreakdown
 from src.model.horaire import Horaire, HoraireEmploye
 
 # Génome factice : le numéro de début de chaque employé ; le reste du quart est fixé.
@@ -12,7 +13,25 @@ type StartGenome = tuple[int, ...]
 
 FIXED_ACTIVITIES: tuple[int, ...] = (1, 1, 1, 1)
 GENOME: StartGenome = (1, 4, 5)
-COST: int = 94
+
+
+def coverage_only_cost(over_coverage_cost: int) -> CostBreakdown:
+    """Coût d'un horaire sans violation, dont seule la sur-couverture est non nulle."""
+    return CostBreakdown(
+        under_coverage_cost=0,
+        over_coverage_cost=over_coverage_cost,
+        quasi_hard_cells=0,
+        coverage_violations=0,
+        structural_violations=0,
+        penalty_cost=0,
+    )
+
+
+# Coût de l'optimum de bench_1 (docs/PROBLEME.md), entièrement dû à la sur-couverture.
+BENCH_1_OPTIMUM_OVER_COVERAGE_COST: int = 94
+COST: CostBreakdown = coverage_only_cost(BENCH_1_OPTIMUM_OVER_COVERAGE_COST)
+ZERO_COST: CostBreakdown = coverage_only_cost(0)
+OTHER_COST: CostBreakdown = coverage_only_cost(BENCH_1_OPTIMUM_OVER_COVERAGE_COST + 1)
 
 
 class StartOnlyEncoding(Encoding[StartGenome]):
@@ -82,7 +101,7 @@ class TestWithCost(unittest.TestCase):
 
     def test_zero_cost_counts_as_evaluated(self) -> None:
         # Un coût nul est un vrai coût (solution parfaite), pas l'absence d'évaluation.
-        self.assertTrue(self.individual.with_cost(0).is_evaluated())
+        self.assertTrue(self.individual.with_cost(ZERO_COST).is_evaluated())
 
     def test_is_frozen(self) -> None:
         with self.assertRaises(dataclasses.FrozenInstanceError):
@@ -100,7 +119,7 @@ class TestEquality(unittest.TestCase):
 
     def test_different_costs_are_not_equal(self) -> None:
         individual = Individu.from_genome(GENOME, StartOnlyEncoding())
-        self.assertNotEqual(individual.with_cost(COST), individual.with_cost(COST + 1))
+        self.assertNotEqual(individual.with_cost(COST), individual.with_cost(OTHER_COST))
 
 
 if __name__ == "__main__":

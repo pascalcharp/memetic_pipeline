@@ -424,3 +424,35 @@ Suite complète : 63 tests verts en local et dans Docker (1 ignoré sous Linux).
 **Tests** : suite complète, 134 tests verts en local, dont les 17 de `test_chromosome.py` : propriété de D1 sur 3000 gènes, 200 allers-retours aléatoires et validation croisée sur les solutions MiniZinc de bench_1 à bench_3.
 
 **Suite** : étape 4, évaluation (fonction de coût).
+
+## 2026-11-07 — Étape 4 : évaluation (scaffold)
+
+**Décision (Pascal)** : les violations sont **pénalisées**, ni infaisables ni exceptions. L'évaluation est définie pour tout horaire décodé (D6).
+- « au moins 1 employé si demande > 0 » : contrainte dure dans `horaire.mzn`, absente de `cout_total`. Une violation par cellule (période, activité) de la plage utile où la demande est positive et personne ne travaille ;
+- violations structurelles : celles de `FeasibilityChecker`, comptées une à une. La couverture est calculée quand même, à partir de la grille ;
+- motif : un individu qui viole une contrainte reste comparable aux autres, ce qui garde un gradient pour l'AG. L'option « infaisable » le perdait, et « compter seulement » misait tout sur la réparation par le `LocalSolver`.
+
+**Fait (C)**
+- `src/model/evaluation.py` :
+  - `EvaluationDefaults` : poids par défaut (1 000 000 par violation, même ordre que le sous-coût quasi dur) et seuil des cellules quasi dures ;
+  - `PenaltyWeights` : dataclass figée, injectable pour les expériences ;
+  - `CostBreakdown` (D8) : sous-couverture, sur-couverture, cellules quasi dures sous-couvertes (informatif), violations de couverture, violations structurelles, coût des pénalités ; propriétés `coverage_cost` (= `cout_total`), `total` (fitness), `is_feasible` ;
+  - `CostEvaluator` en scaffold : `coverage_totals` et `evaluate` sont à écrire (P).
+- `Individu.cost` devient `CostBreakdown | None` ; `tests/test_individual.py` adapté.
+- Arbres de `CLAUDE.md` et `docs/PROJECT_STRUCT.md` mis à jour.
+
+**Décisions de forme**
+- `evaluation.py` dans `src/model/` : l'évaluation porte sur le phénotype `Horaire` et l'instance, pas sur le génome.
+- `coverage_totals` rend un tableau de la forme de `instance.demand`, à 0 hors de la plage utile, plutôt qu'un tableau restreint à la plage utile : un seul système d'indices (`[p - 1, a - 1]`).
+- Une activité hors domaine (horaire infaisable) n'est comptée dans aucune colonne. Piège noté dans la docstring et testé : une activité négative retomberait dans une colonne par l'indexation négative de numpy.
+- Pas de nouvelle exception : le nombre d'employés différent de l'instance lève déjà `EmployeeCountMismatchError` dans `FeasibilityChecker`, qu'on laisse se propager.
+
+**Tests** : `tests/test_evaluation.py`, 29 tests, en attente de l'implémentation.
+- `CostBreakdown` et `PenaltyWeights` : propriétés, valeurs par défaut, immuabilité ;
+- `coverage_totals` : cellule par cellule, employés cumulés, périodes hors plage utile ignorées, activités hors domaine (au-delà du nombre d'activités, 0, négative) ;
+- cas à la main avec des coûts distincts (sur-coût 3, sous-coût 5) : couverture parfaite, sur-couverture seule, sous-couverture sans violation, colonne d'activité respectée, violation de couverture, cellule quasi dure (découverte, sous-couverte sans violation, couverte), violations structurelles, poids personnalisés, nombre d'employés incorrect ;
+- optimum de bench_1 : coût 94, entièrement en sur-couverture ;
+- **validation croisée** : `coverage_cost` égal à l'objectif MiniZinc sur bench_1 à bench_3, sans violation.
+- Validés contre une implémentation de référence jetable, hors du dépôt : tous verts. Les 7 mutants essayés sont tous détectés : indexation négative non bornée, toutes les périodes au lieu de la plage utile, coûts permutés, quasi dur sans condition de manque, violation confondue avec sous-couverture, pénalité structurelle ignorée, mauvais poids.
+
+**En attente** : implémentation de `coverage_totals` et `evaluate` par Pascal, puis vérification par Claude.
