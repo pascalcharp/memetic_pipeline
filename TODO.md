@@ -106,10 +106,10 @@ Principe : toute la documentation est dans `docs/`, et chaque document est acces
   - `CostBreakdown` (dataclass figée, D8) : `under_coverage_cost`, `over_coverage_cost`, `quasi_hard_cells` (cellules sous-couvertes à sous-coût ≥ 1 000 000, informatif : déjà inclus dans le sous-coût), `coverage_violations`, `structural_violations`, `penalty_cost` ; propriétés `coverage_cost` (identique à `cout_total`), `total` (fitness), `is_feasible` ;
   - `CostEvaluator(instance, weights)` : signatures et docstrings de `coverage_totals(horaire)` et `evaluate(horaire)` ;
   - `Individu.cost` devient `CostBreakdown | None`.
-- [~] Implémentation **(P)** : `coverage_totals` (`total[p, a]` à partir de la grille, plage utile seulement, comme `horaire.mzn`), puis `evaluate`.
-- [~] Tests **(C)** — `tests/test_evaluation.py` (écrits, en attente de l'implémentation) :
+- [x] Implémentation **(P)** (2026-11-08) : `coverage_totals` (`total[p, a]` calculé bloc par bloc, plage utile seulement, quatre blocs testés indépendamment comme les quatre `sum` de `horaire.mzn`), puis `evaluate`.
+- [x] Tests **(C)** — `tests/test_evaluation.py`, 30 tests verts :
   - `CostBreakdown` : propriétés, immuabilité ;
-  - `coverage_totals` : forme, cellule par cellule sur des cas à la main, périodes hors plage utile ignorées ;
+  - `coverage_totals` : forme, cellule par cellule sur des cas à la main, périodes hors plage utile ignorées, blocs qui se chevauchent comptés une fois par bloc ;
   - cas calculés à la main sur l'instance synthétique : couverture parfaite (coût 0), sous-couverture, sur-couverture, bonne colonne d'activité, violation de « au moins 1 », cellule quasi dure, violation structurelle, poids personnalisés ;
   - optimum de bench_1 : coût 94, aucune violation ;
   - nombre d'employés différent de l'instance : `EmployeeCountMismatchError` (propagée depuis `FeasibilityChecker`) ;

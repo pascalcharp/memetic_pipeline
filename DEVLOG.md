@@ -456,3 +456,30 @@ Suite complète : 63 tests verts en local et dans Docker (1 ignoré sous Linux).
 - Validés contre une implémentation de référence jetable, hors du dépôt : tous verts. Les 7 mutants essayés sont tous détectés : indexation négative non bornée, toutes les périodes au lieu de la plage utile, coûts permutés, quasi dur sans condition de manque, violation confondue avec sous-couverture, pénalité structurelle ignorée, mauvais poids.
 
 **En attente** : implémentation de `coverage_totals` et `evaluate` par Pascal, puis vérification par Claude.
+
+## 2026-11-08 — Étape 4 : évaluation (implémentation et validation)
+
+**Fait (P)** : `CostEvaluator.coverage_totals` et `CostEvaluator.evaluate` dans `src/model/evaluation.py`.
+
+**Blocage : critère des cellules quasi dures.** Deux tests échouaient, `test_uncovered_quasi_hard_cell` et `test_under_covered_quasi_hard_cell_without_violation`. La première version comparait le coût *payé* par la cellule (`manque × sous-coût`) au seuil, avec `>` :
+- avec un manque de 1, le coût payé vaut exactement 1 000 000, et `1 000 000 > 1 000 000` est faux : aucune cellule n'était comptée ;
+- le produit confond deux choses : une cellule à petit sous-coût, mais très sous-couverte, pourrait franchir le seuil.
+
+**Critère retenu** : une cellule de la plage utile est quasi dure si elle est sous-couverte (`manque > 0`) **et** si son sous-coût *unitaire* dans l'instance atteint le seuil (`under_cost ≥ 1 000 000`). On compte des cellules, une fois chacune, quel que soit le manque. C'est une propriété de l'instance, filtrée par l'horaire.
+
+**Clarification : quasi dure ≠ violation de couverture.** Les deux compteurs sont indépendants :
+- cellule quasi dure : une donnée de l'instance (un sous-coût énorme, mais une contrainte molle). Elle n'ajoute rien au coût, déjà compté dans `under_coverage_cost`, et ne touche pas `is_feasible` ;
+- violation de couverture : la contrainte dure « au moins 1 employé si demande > 0 », transformée en pénalité. Elle ajoute au `penalty_cost` et rend l'horaire infaisable.
+- Dans les instances fournies, le sous-coût vaut 1 000 000 partout où la demande est positive : toute violation y est aussi une cellule quasi dure, et une cellule vide coûte environ 2 000 000. L'indépendance ne se voit que sur l'instance synthétique des tests.
+
+**Correctifs après revue (C)**
+- Un import `from tests.test_feasibility import FIRST_USEFUL_PERIOD` (inutilisé) avait été laissé dans le code de production : supprimé. Le code de `src/` ne dépend jamais de `tests/`.
+- `coverage_totals` utilisait des `elif` : pour un quart dont les blocs se chevauchent, l'employé n'était compté qu'une fois, alors que le `total` de `horaire.mzn` additionne quatre `sum` et le compterait deux fois. Les quatre blocs sont maintenant testés par des `if` indépendants : `coverage_cost` est identique à `cout_total` pour **tout** horaire, faisable ou non (D6). Docstring mise à jour.
+- La fin de pause est écrite `pause + BREAK_DURATION <= p`, au lieu du `p > pause` du modèle, qui supposait implicitement une pause d'une période.
+- Lisibilité : tranches de la plage utile nommées (`useful_demand`, `useful_coverage`, `useful_under_cost`), noms explicites (`coverage` au lieu de `underlying_coverage`, `useful_range` au lieu de `plage`).
+
+**Tests** : un 30ᵉ test, `test_overlapping_blocks_count_the_employee_once_per_block` (pause1 après le dîner : les périodes 23 et 24 sont dans les blocs 1 et 3, donc comptées 2). Mutant vérifié sur une copie du dépôt : le retour aux `elif` est détecté par ce test, et par lui seul. Suite complète : 164 tests verts.
+
+**Reporté** : `coverage_totals` est une double boucle Python (employés × périodes). C'est négligeable sur bench_5 ; on la vectorisera si le profilage du GA la désigne.
+
+**Suite** : étape 5, interface MiniZinc (`SolverAdapter`, `LocalSolver`).

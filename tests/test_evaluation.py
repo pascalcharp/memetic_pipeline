@@ -190,6 +190,21 @@ class TestCoverageTotals(unittest.TestCase):
                 self.assertEqual(cells_of(totals), expected)
                 self.assertEqual(int(totals.sum()), REFERENCE_WORKED_PERIODS - REFERENCE_BLOCK4_PERIODS)
 
+    def test_overlapping_blocks_count_the_employee_once_per_block(self) -> None:
+        # Comme les quatre ``sum`` additionnées de ``total`` dans horaire.mzn : pause1 (25) placée après le dîner (19).
+        #   bloc 1 : 10..24 (activité 1)   bloc 2 : 26..18, vide   bloc 3 : 23..27 (activité 1)   bloc 4 : 29..37
+        # Les périodes 23 et 24 sont à la fois dans le bloc 1 et dans le bloc 3 : l'employé y compte deux fois.
+        overlapping_shift = shift(10, 25, 19, 28, 37, activities=(1, 1, 1, 2))
+        totals = CostEvaluator(instance_with()).coverage_totals(single(overlapping_shift))
+
+        expected = (
+            {(period, 1): 1 for period in range(10, 28)}
+            | {(period, 1): 2 for period in (23, 24)}
+            | {(period, 2): 1 for period in range(29, 38)}
+        )
+        self.assertEqual(cells_of(totals), expected)
+        self.assertTrue(FeasibilityChecker(instance_with()).violations(single(overlapping_shift)))
+
 
 class TestEvaluateHandComputed(unittest.TestCase):
     """Cas calculés à la main, un seul employé sauf mention contraire, quart de référence (22 périodes)."""

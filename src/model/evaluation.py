@@ -94,7 +94,9 @@ class CostEvaluator:
         Tableau numpy de forme (period_count, activity_count), comme ``instance.demand`` : la cellule
         (p, a) se lit à l'indice ``[p - 1, a - 1]``. Seules les périodes de la plage utile sont comptées ;
         les autres cellules valent 0. Une activité hors de 1..activity_count (horaire infaisable) n'a pas
-        de colonne : elle n'est comptée nulle part.
+        de colonne : elle n'est comptée nulle part. Comme les quatre ``sum`` du modèle, les quatre blocs
+        sont testés indépendamment : un employé dont les blocs se chevauchent (horaire infaisable) est
+        compté une fois par bloc.
         """
         total = np.zeros((self.instance.period_count, self.instance.activity_count), dtype=int)
 
@@ -137,7 +139,6 @@ class CostEvaluator:
         shortage = np.maximum(0, diff)
         surplus = np.maximum(0, -diff)
 
-
         under_cost_matrix = shortage * useful_under_cost
         total_under_cost = int(np.sum(under_cost_matrix))
         total_over_cost = int(np.sum(surplus * self.instance.over_cost[useful_range]))
@@ -145,7 +146,7 @@ class CostEvaluator:
         zero_coverage_cases = (useful_demand > 0) & (useful_coverage == 0)
         total_coverage_violations = int(np.count_nonzero(zero_coverage_cases))
 
-        quasi_hard_cases = (shortage > 0) & (useful_under_cost >=  EvaluationDefaults.QUASI_HARD_UNDER_COST)
+        quasi_hard_cases = (shortage > 0) & (useful_under_cost >= EvaluationDefaults.QUASI_HARD_UNDER_COST)
         total_quasi_hard_cells = int(np.count_nonzero(quasi_hard_cases))
 
         penalty_cost = (
