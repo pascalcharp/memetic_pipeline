@@ -23,7 +23,6 @@ from src.model.feasibility import FeasibilityChecker
 from src.model.horaire import Horaire
 from src.model.shift_rules import ShiftStructure
 from src.utils.io import ProblemInstance
-from tests.test_feasibility import FIRST_USEFUL_PERIOD
 
 
 class EvaluationDefaults:
@@ -105,18 +104,17 @@ class CostEvaluator:
                 if employee.start <= period < employee.break1:
                     if 1 <= activity1 <= self.instance.activity_count:
                         total[period - 1, activity1 - 1] += 1
-                elif employee.break1 < period < employee.lunch:
+                if employee.break1 + ShiftStructure.BREAK_DURATION <= period < employee.lunch:
                     if 1 <= activity2 <= self.instance.activity_count:
                         total[period - 1, activity2 - 1] += 1
-                elif employee.lunch + ShiftStructure.LUNCH_DURATION <= period < employee.break2:
+                if employee.lunch + ShiftStructure.LUNCH_DURATION <= period < employee.break2:
                     if 1 <= activity3 <= self.instance.activity_count:
                         total[period - 1, activity3 - 1] += 1
-                elif employee.break2 < period <= employee.end:
+                if employee.break2 + ShiftStructure.BREAK_DURATION <= period <= employee.end:
                     if 1 <= activity4 <= self.instance.activity_count:
                         total[period - 1, activity4 - 1] += 1
 
         return total
-
 
     def evaluate(self, horaire: Horaire) -> CostBreakdown:
         """Décomposition du coût de ``horaire``, faisable ou non.
@@ -129,21 +127,26 @@ class CostEvaluator:
         # En premier, car si l'exception est levée, les autres calculs seront inutiles
         total_structural_violations = len(self.feasibility_checker.violations(horaire))
 
-        underlying_coverage = self.coverage_totals(horaire)
-        plage = slice(self.instance.first_useful_period - 1, self.instance.last_useful_period)
+        useful_range = slice(self.instance.first_useful_period - 1, self.instance.last_useful_period)
+        coverage = self.coverage_totals(horaire)
+        useful_coverage = coverage[useful_range]
+        useful_demand = self.instance.demand[useful_range]
+        useful_under_cost = self.instance.under_cost[useful_range]
 
-        diff = self.instance.demand[plage] - underlying_coverage[plage]
+        diff = useful_demand - useful_coverage
         shortage = np.maximum(0, diff)
         surplus = np.maximum(0, -diff)
 
-        under_cost_matrix = shortage * self.instance.under_cost[plage]
-        total_under_cost = int(np.sum(under_cost_matrix))
-        total_over_cost = int(np.sum(surplus * self.instance.over_cost[plage]))
 
-        zero_coverage_cases = (self.instance.demand[plage] > 0) & (underlying_coverage[plage] == 0)
+        under_cost_matrix = shortage * useful_under_cost
+        total_under_cost = int(np.sum(under_cost_matrix))
+        total_over_cost = int(np.sum(surplus * self.instance.over_cost[useful_range]))
+
+        zero_coverage_cases = (useful_demand > 0) & (useful_coverage == 0)
         total_coverage_violations = int(np.count_nonzero(zero_coverage_cases))
 
-        total_quasi_hard_cells = int(np.sum(under_cost_matrix > EvaluationDefaults.QUASI_HARD_UNDER_COST))
+        quasi_hard_cases = (shortage > 0) & (useful_under_cost >=  EvaluationDefaults.QUASI_HARD_UNDER_COST)
+        total_quasi_hard_cells = int(np.count_nonzero(quasi_hard_cases))
 
         penalty_cost = (
                 total_coverage_violations * self.weights.coverage_violation
