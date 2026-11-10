@@ -154,7 +154,7 @@ class RandomEmployeesNeighborhood(Neighborhood):
 
     def select(self, horaire: Horaire, rng: random.Random) -> frozenset[int]:
         freed = []
-        eligible = set(range(1, self.instance.employee_count + 1))
+        eligible = set(range(ModelIndexing.FIRST_INDEX, self.instance.employee_count + 1))
 
         violations = self.feasibility_checker.violations(horaire)
         for violation in violations:
@@ -233,8 +233,8 @@ class MiniZincLocalSolver(LocalSolver):
 
         Utilise ``LocalSearchConstraints.COST_BOUND`` et ``ModelObjective.TOTAL_COST``.
         """
-
         breakdown = self.evaluator.evaluate(horaire)
         if breakdown.is_feasible:
-            return [LocalSearchConstraints.COST_BOUND.format(objective=ModelObjective.TOTAL_COST, bound=breakdown.coverage_cost)]
+            return [LocalSearchConstraints.COST_BOUND.format(objective=ModelObjective.TOTAL_COST,
+                                                             bound=breakdown.coverage_cost)]
         return []

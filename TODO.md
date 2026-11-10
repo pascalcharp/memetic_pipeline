@@ -144,14 +144,14 @@ Principe : toute la documentation est dans `docs/`, et chaque document est acces
   - contrainte impossible ajoutée ⇒ `UNSATISFIABLE` ; budget minuscule sur bench_5 ⇒ `NO_SOLUTION` ;
   - statistiques présentes pour CP-SAT.
 
-### 5b — `LocalSolver` (`src/memetic/local_search.py`) **(C→P)** — Pascal, branche `etape-5b-local-solver`
+### 5b — `LocalSolver` (`src/memetic/local_search.py`) **(C→P)** — Pascal, branche `etape-5b-local-solver` — validée le 2026-11-10
 - [x] Scaffold **(C)**, dans le scaffold commun : interface `Neighborhood` (`select(horaire, rng) -> employés à libérer`), interface `LocalSolver` (`improve(horaire, rng) -> LocalSearchResult`), `LocalSearchResult` (horaire, issue, employés libérés, statistiques, figé), gabarits des contraintes MiniZinc, exceptions et messages
-- [ ] `RandomEmployeesNeighborhood(instance, size)` **(P)** : `size` employés tirés au hasard, plus les employés structurellement infaisables (`FeasibilityChecker`)
-- [ ] `MiniZincLocalSolver(instance, adapter, neighborhood, evaluator)` **(P)** :
+- [x] `RandomEmployeesNeighborhood(instance, size)` **(P)** : `size` employés tirés au hasard, plus les employés structurellement infaisables (`FeasibilityChecker`)
+- [x] `MiniZincLocalSolver(instance, adapter, neighborhood, evaluator)` **(P)** :
   - contraintes de fixation des employés non libérés (noms tirés de `ModelVariableNames`) ;
   - borne `cout_total ≤ coverage_cost` si l'entrée est faisable (`CostBreakdown.is_feasible`) ;
   - solution ⇒ `Horaire.from_model_variables` ; aucune solution ⇒ horaire d'entrée inchangé
-- [~] Tests **(C)**, écrits sur la branche de Pascal (2026-11-09, 26 tests ; validés contre une implémentation de référence jetable, en attente de l'implémentation) :
+- [x] Tests **(C)**, écrits sur la branche de Pascal (2026-11-09, 26 tests ; validés contre une implémentation de référence jetable) ; implémentation validée le 2026-11-10, suite complète verte (228 tests) :
   - les employés non libérés sont inchangés ; l'entrée n'est jamais modifiée ;
   - entrée faisable ⇒ coût de couverture du résultat ≤ celui de l'entrée ;
   - un employé infaisable est toujours libéré ; réparation d'une entrée infaisable sur bench_1 ;

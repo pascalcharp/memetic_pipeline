@@ -583,3 +583,19 @@ Question de Pascal : est-on obligés de passer par MiniZinc ? Non : OR-Tools a u
 **État de la branche** : 5 tests verts, 21 en erreur (`NotImplementedError`), comme prévu. La suite complète n'y redeviendra verte qu'avec l'implémentation ; la branche ne sera pas fusionnée avant.
 
 **Suite** : implémentation par Pascal de `fixing_constraints`, `cost_bound_constraints`, `RandomEmployeesNeighborhood.select`, puis `improve`.
+
+## 2026-11-10 — Étape 5b : `LocalSolver` validé (Pascal, revue par Claude)
+
+**Fait (P)** : `RandomEmployeesNeighborhood.select`, `MiniZincLocalSolver.improve`, `fixing_constraints` et `cost_bound_constraints` dans `src/memetic/local_search.py`.
+
+**Blocage : signification de `size`.** La première version lisait `size` comme le **total** des employés libérés, infaisables compris, et tronquait la liste à `size` éléments. `test_infeasible_employee_is_always_freed` (avec `size = 0`) échouait. Le contrat de D11 est : `size` employés tirés **parmi les faisables**, **plus** tous les infaisables. La troncature était le vrai danger : quelle que soit la lecture de `size`, un employé infaisable fixé rend le sous-problème insatisfiable d'emblée (jalons hors domaine), et le `LocalSolver` ne répare plus.
+
+**Correctifs après revue**
+- `cost_bound_constraints` : une seule évaluation ; plus de `FeasibilityChecker` en double (`CostBreakdown.is_feasible` couvre déjà les violations structurelles et la contrainte « au moins 1 ») ; borne sur `coverage_cost` plutôt que `total`. Les deux valeurs sont égales pour une entrée faisable (mutant équivalent, voir l'entrée du 2026-11-09), mais `cout_total` du modèle est exactement le coût de couverture : la borne ne doit pas dépendre du fait implicite que les pénalités sont nulles.
+- `fixing_constraints` : `ModelIndexing.FIRST_INDEX` au lieu de `1` ; `enumerate` sur les activités, sans indices ; jalons parcourus comme une séquence de paires (variable, valeur).
+- Tirage reproductible : candidats triés avant `rng.sample`, plutôt que l'ordre d'itération d'un `set`.
+- Choix de Pascal : l'expression conditionnelle qui choisit l'horaire rendu dans `improve` est gardée, son intention étant explicite sur une ligne.
+
+**Tests** : 26 tests de `tests/test_local_search.py` verts ; suite complète : 228 tests verts, y compris avec `-W error::DeprecationWarning`.
+
+**Suite** : *pull request* de `etape-5b-local-solver` vers `main`. Après la fusion, l'option `LocalSolver` de l'étape 6 (Mély) pourra être branchée sur `MiniZincLocalSolver`.
