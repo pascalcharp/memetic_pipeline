@@ -24,7 +24,7 @@ from src.memetic.solver import ModelObjective, SolveOutcome, SolverAdapter, Solv
 from src.model.evaluation import CostEvaluator
 from src.model.feasibility import FeasibilityChecker
 from src.model.horaire import Horaire
-from src.model.shift_rules import ModelVariableNames
+from src.model.shift_rules import ModelVariableNames, ShiftStructure, ModelIndexing
 from src.utils.io import ProblemInstance
 
 
@@ -153,7 +153,18 @@ class RandomEmployeesNeighborhood(Neighborhood):
         self.feasibility_checker = FeasibilityChecker(instance)
 
     def select(self, horaire: Horaire, rng: random.Random) -> frozenset[int]:
-        raise NotImplementedError  # Étape 5b (Pascal)
+        freed = []
+        eligible = set(range(ModelIndexing.FIRST_INDEX, self.instance.employee_count + 1))
+
+        violations = self.feasibility_checker.violations(horaire)
+        for violation in violations:
+            if violation.employee in eligible:
+                eligible.remove(violation.employee)
+                freed.append(violation.employee)
+
+        chosen = rng.sample(sorted(eligible), min(self.size, len(eligible)))
+        freed.extend(chosen)
+        return frozenset(freed)
 
 
 class MiniZincLocalSolver(LocalSolver):
@@ -172,7 +183,18 @@ class MiniZincLocalSolver(LocalSolver):
         self.evaluator = evaluator
 
     def improve(self, horaire: Horaire, rng: random.Random) -> LocalSearchResult:
-        raise NotImplementedError  # Étape 5b (Pascal)
+        freed_employees = self.neighborhood.select(horaire, rng)
+        additional_constraints = self.fixing_constraints(horaire, freed_employees)
+        additional_constraints.extend(self.cost_bound_constraints(horaire))
+
+        solver_run = self.adapter.solve(self.instance, additional_constraints)
+
+        return LocalSearchResult(
+            horaire=Horaire.from_model_variables(solver_run.variables) if solver_run.outcome.has_solution else horaire,
+            outcome=solver_run.outcome,
+            freed_employees=freed_employees,
+            statistics=solver_run.statistics,
+        )
 
     def fixing_constraints(self, horaire: Horaire, freed_employees: frozenset[int]) -> list[str]:
         """Contraintes MiniZinc qui fixent les cinq jalons et les quatre activités de chaque employé non libéré.
@@ -180,11 +202,39 @@ class MiniZincLocalSolver(LocalSolver):
         Utilise ``LocalSearchConstraints.FIX_MILESTONE`` et ``FIX_ACTIVITY``, avec les noms de
         ``ModelVariableNames``.
         """
-        raise NotImplementedError  # Étape 5b (Pascal)
+        constraints = []
+
+        for number, schedule in enumerate(horaire.employees, start=ModelIndexing.FIRST_INDEX):
+            if number not in freed_employees:
+                constraints.extend([
+                    LocalSearchConstraints.FIX_MILESTONE.format(variable=name, employee=number,value=value)
+                    for name, value in [(ModelVariableNames.START, schedule.start),
+                                        (ModelVariableNames.BREAK1, schedule.break1),
+                                        (ModelVariableNames.LUNCH, schedule.lunch),
+                                        (ModelVariableNames.BREAK2, schedule.break2),
+                                        (ModelVariableNames.END, schedule.end)]
+                ])
+
+                for block, activity in enumerate(schedule.activities, start=ModelIndexing.FIRST_INDEX):
+                    constraints.append(
+                        LocalSearchConstraints.FIX_ACTIVITY.format(
+                            variable=ModelVariableNames.ACTIVITIES,
+                            employee=number,
+                            block=block ,
+                            value=activity
+                        )
+                    )
+
+        return constraints
 
     def cost_bound_constraints(self, horaire: Horaire) -> list[str]:
-        """La borne ``cout_total ≤ coût de couverture de horaire`` si ``horaire`` est faisable ; sinon, aucune.
+        """La borne ``cout_total ≤ coût de couverture de horaire`` si ``horaire`` est faisable ET que la contrainte de
+        couverture non-nulle est respectée, sinon, aucune.
 
         Utilise ``LocalSearchConstraints.COST_BOUND`` et ``ModelObjective.TOTAL_COST``.
         """
-        raise NotImplementedError  # Étape 5b (Pascal)
+        breakdown = self.evaluator.evaluate(horaire)
+        if breakdown.is_feasible:
+            return [LocalSearchConstraints.COST_BOUND.format(objective=ModelObjective.TOTAL_COST,
+                                                             bound=breakdown.coverage_cost)]
+        return []

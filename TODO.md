@@ -136,6 +136,7 @@ Principe : toute la documentation est dans `docs/`, et chaque document est acces
 - [x] `CpSatAdapter` : traduction des limites (`--fzn-flags "--params max_deterministic_time:…,random_seed:…"`, ou `time_limit`), threads, solutions intermédiaires (on garde la dernière)
 - [x] Exceptions : `SolverError` (base), `UnsupportedLimitError`, `SolverFailureError` (enveloppe `minizinc.MiniZincError`) ; gabarits dans `SolverMessages`
 - [x] Résolution complète = `solve` sans contrainte ajoutée (référence pour comparer le mémétique, D10)
+- [ ] **Amélioration possible de `SolverAdapter.solve`** (relevée le 2026-11-10, à discuter en équipe : `solver.py` est un module partagé) : quand toutes les variables d'un sous-problème insatisfiable sont fixées, MiniZinc émet `MiniZincWarning: model inconsistency detected` dès l'aplatissement. Pour le mémétique, c'est une issue normale (D11) ; dans la boucle, cet avertissement apparaîtra chaque fois qu'un individu viole « au moins 1 » avec peu d'employés libérés. Piste : ignorer **seulement** cet avertissement dans `solve`, filtré par son message, sans masquer les autres avertissements de MiniZinc ; puis retirer les `warnings.catch_warnings` des tests (`test_solver.py`, `test_local_search.py`). Dans un commit à part
 - [x] Tests :
   - traduction des limites en options, sans lancer MiniZinc ; limite non supportée ⇒ `UnsupportedLimitError` ;
   - traduction de chaque `minizinc.Status` ;
@@ -144,14 +145,14 @@ Principe : toute la documentation est dans `docs/`, et chaque document est acces
   - contrainte impossible ajoutée ⇒ `UNSATISFIABLE` ; budget minuscule sur bench_5 ⇒ `NO_SOLUTION` ;
   - statistiques présentes pour CP-SAT.
 
-### 5b — `LocalSolver` (`src/memetic/local_search.py`) **(C→P)** — Pascal, branche `etape-5b-local-solver`
-- [ ] Scaffold **(C)**, dans le scaffold commun : interface `Neighborhood` (`select(horaire, rng) -> employés à libérer`), interface `LocalSolver` (`improve(horaire, rng) -> LocalSearchResult`), `LocalSearchResult` (horaire, issue, employés libérés, statistiques, figé), gabarits des contraintes MiniZinc, exceptions et messages
-- [ ] `RandomEmployeesNeighborhood(instance, size)` **(P)** : `size` employés tirés au hasard, plus les employés structurellement infaisables (`FeasibilityChecker`)
-- [ ] `MiniZincLocalSolver(instance, adapter, neighborhood, evaluator)` **(P)** :
+### 5b — `LocalSolver` (`src/memetic/local_search.py`) **(C→P)** — Pascal, branche `etape-5b-local-solver` — validée le 2026-11-10
+- [x] Scaffold **(C)**, dans le scaffold commun : interface `Neighborhood` (`select(horaire, rng) -> employés à libérer`), interface `LocalSolver` (`improve(horaire, rng) -> LocalSearchResult`), `LocalSearchResult` (horaire, issue, employés libérés, statistiques, figé), gabarits des contraintes MiniZinc, exceptions et messages
+- [x] `RandomEmployeesNeighborhood(instance, size)` **(P)** : `size` employés tirés au hasard, plus les employés structurellement infaisables (`FeasibilityChecker`)
+- [x] `MiniZincLocalSolver(instance, adapter, neighborhood, evaluator)` **(P)** :
   - contraintes de fixation des employés non libérés (noms tirés de `ModelVariableNames`) ;
   - borne `cout_total ≤ coverage_cost` si l'entrée est faisable (`CostBreakdown.is_feasible`) ;
   - solution ⇒ `Horaire.from_model_variables` ; aucune solution ⇒ horaire d'entrée inchangé
-- [ ] Tests **(C)**, écrits sur la branche de Pascal :
+- [x] Tests **(C)**, écrits sur la branche de Pascal (2026-11-09, 26 tests ; validés contre une implémentation de référence jetable) ; implémentation validée le 2026-11-10, suite complète verte (228 tests) :
   - les employés non libérés sont inchangés ; l'entrée n'est jamais modifiée ;
   - entrée faisable ⇒ coût de couverture du résultat ≤ celui de l'entrée ;
   - un employé infaisable est toujours libéré ; réparation d'une entrée infaisable sur bench_1 ;

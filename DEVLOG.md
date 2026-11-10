@@ -568,3 +568,35 @@ Question de Pascal : est-on obligés de passer par MiniZinc ? Non : OR-Tools a u
 **Tests** : 21 tests de contrat, instantanés ; suite complète : 208 tests verts, y compris avec `-W error::DeprecationWarning` comme dans la CI.
 
 **Suite** : commit du scaffold sur `main`, puis création des quatre branches.
+
+## 2026-11-09 — Étape 5b : tests du `LocalSolver` (Claude, branche `etape-5b-local-solver`)
+
+**Fait (C)** : `tests/test_local_search.py`, 26 tests, qui servent de cahier des charges à l'implémentation de Pascal.
+- Contrat du scaffold (5 tests, verts dès maintenant) : interfaces abstraites, résultat figé, gabarits des contraintes, validation de `size`.
+- `RandomEmployeesNeighborhood`, sans MiniZinc (instance synthétique, trois employés) : exactement `size` employés libérés quand tous sont faisables, numéros dans 1..n ; `size` au-delà du nombre d'employés ⇒ tous libérés ; un employé infaisable toujours libéré, **en plus** des `size` employés tirés parmi les faisables ; même graine ⇒ même sélection ; sur 200 graines, chaque employé finit par être libéré.
+- `fixing_constraints` et `cost_bound_constraints`, sans MiniZinc (optimum de bench_1) : neuf contraintes par employé fixé (cinq jalons, quatre activités) ; aucune si tout le monde est libéré ; borne = coût de couverture (94) pour une entrée faisable ; aucune borne pour une entrée structurellement infaisable, ni pour une entrée qui viole la contrainte « au moins 1 ».
+- `improve` avec un adaptateur scénarisé (`ScriptedAdapter`, sans MiniZinc) : la solution devient le résultat ; sans solution (`UNSATISFIABLE`, `NO_SOLUTION`), l'entrée est rendue telle quelle (même objet) ; issue, employés libérés et statistiques transmis ; le solveur reçoit les contraintes de fixation et la borne ; le voisinage reçoit le générateur.
+- `improve` avec CP-SAT : sur bench_1, jamais pire que l'entrée et employés non libérés inchangés ; réparation d'un employé dégénéré (résultat faisable, de coût 94) ; tout le monde libéré ⇒ optimum 94 ; trois quarts identiques avec personne de libéré ⇒ `UNSATISFIABLE` et entrée rendue ; bench_5 avec un budget de 0,5 unité ⇒ `NO_SOLUTION` et entrée rendue ; même graine ⇒ même résultat et mêmes statistiques.
+
+**Validation des tests** : sur une copie du dépôt, hors de la branche, contre une implémentation de référence jetable : 26 tests verts. Quatre mutants de la référence sont tous détectés : borne ajoutée même à une entrée infaisable, tirage parmi tous les employés au lieu des faisables, employés infaisables non libérés, fixation des employés libérés au lieu des autres. Un cinquième, une borne sur `cost.total` au lieu de `coverage_cost`, est équivalent : la borne ne s'applique qu'aux entrées faisables, dont les pénalités sont nulles.
+
+**État de la branche** : 5 tests verts, 21 en erreur (`NotImplementedError`), comme prévu. La suite complète n'y redeviendra verte qu'avec l'implémentation ; la branche ne sera pas fusionnée avant.
+
+**Suite** : implémentation par Pascal de `fixing_constraints`, `cost_bound_constraints`, `RandomEmployeesNeighborhood.select`, puis `improve`.
+
+## 2026-11-10 — Étape 5b : `LocalSolver` validé (Pascal, revue par Claude)
+
+**Fait (P)** : `RandomEmployeesNeighborhood.select`, `MiniZincLocalSolver.improve`, `fixing_constraints` et `cost_bound_constraints` dans `src/memetic/local_search.py`.
+
+**Blocage : signification de `size`.** La première version lisait `size` comme le **total** des employés libérés, infaisables compris, et tronquait la liste à `size` éléments. `test_infeasible_employee_is_always_freed` (avec `size = 0`) échouait. Le contrat de D11 est : `size` employés tirés **parmi les faisables**, **plus** tous les infaisables. La troncature était le vrai danger : quelle que soit la lecture de `size`, un employé infaisable fixé rend le sous-problème insatisfiable d'emblée (jalons hors domaine), et le `LocalSolver` ne répare plus.
+
+**Correctifs après revue**
+- `cost_bound_constraints` : une seule évaluation ; plus de `FeasibilityChecker` en double (`CostBreakdown.is_feasible` couvre déjà les violations structurelles et la contrainte « au moins 1 ») ; borne sur `coverage_cost` plutôt que `total`. Les deux valeurs sont égales pour une entrée faisable (mutant équivalent, voir l'entrée du 2026-11-09), mais `cout_total` du modèle est exactement le coût de couverture : la borne ne doit pas dépendre du fait implicite que les pénalités sont nulles.
+- `fixing_constraints` : `ModelIndexing.FIRST_INDEX` au lieu de `1` ; `enumerate` sur les activités, sans indices ; jalons parcourus comme une séquence de paires (variable, valeur).
+- Tirage reproductible : candidats triés avant `rng.sample`, plutôt que l'ordre d'itération d'un `set`.
+- Choix de Pascal : l'expression conditionnelle qui choisit l'horaire rendu dans `improve` est gardée, son intention étant explicite sur une ligne.
+
+**Tests** : 26 tests de `tests/test_local_search.py` verts ; suite complète : 228 tests verts, y compris avec `-W error::DeprecationWarning`.
+- `test_unsatisfiable_subproblem_returns_the_input` affichait `MiniZincWarning: model inconsistency detected` : toutes les variables étant fixées, MiniZinc détecte l'incohérence dès l'aplatissement. L'avertissement est attendu ; il est désormais ignoré dans ce test, comme dans `test_solver.py` (oubli de Claude). Le traitement de cet avertissement dans `SolverAdapter.solve` lui-même est noté dans TODO.md (5a), à discuter en équipe.
+
+**Suite** : *pull request* de `etape-5b-local-solver` vers `main`. Après la fusion, l'option `LocalSolver` de l'étape 6 (Mély) pourra être branchée sur `MiniZincLocalSolver`.
