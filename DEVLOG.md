@@ -568,3 +568,18 @@ Question de Pascal : est-on obligés de passer par MiniZinc ? Non : OR-Tools a u
 **Tests** : 21 tests de contrat, instantanés ; suite complète : 208 tests verts, y compris avec `-W error::DeprecationWarning` comme dans la CI.
 
 **Suite** : commit du scaffold sur `main`, puis création des quatre branches.
+
+## 2026-11-09 — Étape 5b : tests du `LocalSolver` (Claude, branche `etape-5b-local-solver`)
+
+**Fait (C)** : `tests/test_local_search.py`, 26 tests, qui servent de cahier des charges à l'implémentation de Pascal.
+- Contrat du scaffold (5 tests, verts dès maintenant) : interfaces abstraites, résultat figé, gabarits des contraintes, validation de `size`.
+- `RandomEmployeesNeighborhood`, sans MiniZinc (instance synthétique, trois employés) : exactement `size` employés libérés quand tous sont faisables, numéros dans 1..n ; `size` au-delà du nombre d'employés ⇒ tous libérés ; un employé infaisable toujours libéré, **en plus** des `size` employés tirés parmi les faisables ; même graine ⇒ même sélection ; sur 200 graines, chaque employé finit par être libéré.
+- `fixing_constraints` et `cost_bound_constraints`, sans MiniZinc (optimum de bench_1) : neuf contraintes par employé fixé (cinq jalons, quatre activités) ; aucune si tout le monde est libéré ; borne = coût de couverture (94) pour une entrée faisable ; aucune borne pour une entrée structurellement infaisable, ni pour une entrée qui viole la contrainte « au moins 1 ».
+- `improve` avec un adaptateur scénarisé (`ScriptedAdapter`, sans MiniZinc) : la solution devient le résultat ; sans solution (`UNSATISFIABLE`, `NO_SOLUTION`), l'entrée est rendue telle quelle (même objet) ; issue, employés libérés et statistiques transmis ; le solveur reçoit les contraintes de fixation et la borne ; le voisinage reçoit le générateur.
+- `improve` avec CP-SAT : sur bench_1, jamais pire que l'entrée et employés non libérés inchangés ; réparation d'un employé dégénéré (résultat faisable, de coût 94) ; tout le monde libéré ⇒ optimum 94 ; trois quarts identiques avec personne de libéré ⇒ `UNSATISFIABLE` et entrée rendue ; bench_5 avec un budget de 0,5 unité ⇒ `NO_SOLUTION` et entrée rendue ; même graine ⇒ même résultat et mêmes statistiques.
+
+**Validation des tests** : sur une copie du dépôt, hors de la branche, contre une implémentation de référence jetable : 26 tests verts. Quatre mutants de la référence sont tous détectés : borne ajoutée même à une entrée infaisable, tirage parmi tous les employés au lieu des faisables, employés infaisables non libérés, fixation des employés libérés au lieu des autres. Un cinquième, une borne sur `cost.total` au lieu de `coverage_cost`, est équivalent : la borne ne s'applique qu'aux entrées faisables, dont les pénalités sont nulles.
+
+**État de la branche** : 5 tests verts, 21 en erreur (`NotImplementedError`), comme prévu. La suite complète n'y redeviendra verte qu'avec l'implémentation ; la branche ne sera pas fusionnée avant.
+
+**Suite** : implémentation par Pascal de `fixing_constraints`, `cost_bound_constraints`, `RandomEmployeesNeighborhood.select`, puis `improve`.
