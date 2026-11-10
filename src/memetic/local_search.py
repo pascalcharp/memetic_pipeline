@@ -24,7 +24,7 @@ from src.memetic.solver import ModelObjective, SolveOutcome, SolverAdapter, Solv
 from src.model.evaluation import CostEvaluator
 from src.model.feasibility import FeasibilityChecker
 from src.model.horaire import Horaire
-from src.model.shift_rules import ModelVariableNames, ShiftStructure
+from src.model.shift_rules import ModelVariableNames, ShiftStructure, ModelIndexing
 from src.utils.io import ProblemInstance
 
 
@@ -162,7 +162,7 @@ class RandomEmployeesNeighborhood(Neighborhood):
                 eligible.remove(violation.employee)
                 freed.append(violation.employee)
 
-        chosen = rng.sample(sorted(list(eligible)), min(self.size, len(eligible)))
+        chosen = rng.sample(sorted(eligible), min(self.size, len(eligible)))
         freed.extend(chosen)
         return frozenset(freed)
 
@@ -183,7 +183,18 @@ class MiniZincLocalSolver(LocalSolver):
         self.evaluator = evaluator
 
     def improve(self, horaire: Horaire, rng: random.Random) -> LocalSearchResult:
-        raise NotImplementedError  # Étape 5b (Pascal)
+        freed_employees = self.neighborhood.select(horaire, rng)
+        additional_constraints = self.fixing_constraints(horaire, freed_employees)
+        additional_constraints.extend(self.cost_bound_constraints(horaire))
+
+        solver_run = self.adapter.solve(self.instance, additional_constraints)
+
+        return LocalSearchResult(
+            horaire=Horaire.from_model_variables(solver_run.variables) if solver_run.outcome.has_solution else horaire,
+            outcome=solver_run.outcome,
+            freed_employees=freed_employees,
+            statistics=solver_run.statistics,
+        )
 
     def fixing_constraints(self, horaire: Horaire, freed_employees: frozenset[int]) -> list[str]:
         """Contraintes MiniZinc qui fixent les cinq jalons et les quatre activités de chaque employé non libéré.
@@ -193,36 +204,37 @@ class MiniZincLocalSolver(LocalSolver):
         """
         constraints = []
 
-        for number, schedule in enumerate(horaire.employees, start=1):
+        for number, schedule in enumerate(horaire.employees, start=ModelIndexing.FIRST_INDEX):
             if number not in freed_employees:
                 constraints.extend([
-                    LocalSearchConstraints.FIX_MILESTONE.format(variable=ModelVariableNames.START, employee=number,
-                                                                value=schedule.start),
-                    LocalSearchConstraints.FIX_MILESTONE.format(variable=ModelVariableNames.BREAK1, employee=number,
-                                                                value=schedule.break1),
-                    LocalSearchConstraints.FIX_MILESTONE.format(variable=ModelVariableNames.LUNCH, employee=number,
-                                                                value=schedule.lunch),
-                    LocalSearchConstraints.FIX_MILESTONE.format(variable=ModelVariableNames.BREAK2, employee=number,
-                                                                value=schedule.break2),
-                    LocalSearchConstraints.FIX_MILESTONE.format(variable=ModelVariableNames.END, employee=number,
-                                                                value=schedule.end)
+                    LocalSearchConstraints.FIX_MILESTONE.format(variable=name, employee=number,value=value)
+                    for name, value in [(ModelVariableNames.START, schedule.start),
+                                        (ModelVariableNames.BREAK1, schedule.break1),
+                                        (ModelVariableNames.LUNCH, schedule.lunch),
+                                        (ModelVariableNames.BREAK2, schedule.break2),
+                                        (ModelVariableNames.END, schedule.end)]
                 ])
 
-                for block in range(0, ShiftStructure.ACTIVITIES_PER_SHIFT):
-                    constraints.append(LocalSearchConstraints.FIX_ACTIVITY.format(variable=ModelVariableNames.ACTIVITIES, employee=number, block=block + 1, value=schedule.activities[block]))
+                for block, activity in enumerate(schedule.activities, start=ModelIndexing.FIRST_INDEX):
+                    constraints.append(
+                        LocalSearchConstraints.FIX_ACTIVITY.format(
+                            variable=ModelVariableNames.ACTIVITIES,
+                            employee=number,
+                            block=block ,
+                            value=activity
+                        )
+                    )
 
         return constraints
 
-
-
     def cost_bound_constraints(self, horaire: Horaire) -> list[str]:
-        """La borne ``cout_total ≤ coût de couverture de horaire`` si ``horaire`` est faisable ET que la couverture
-        est complète, sinon, aucune.
+        """La borne ``cout_total ≤ coût de couverture de horaire`` si ``horaire`` est faisable ET que la contrainte de
+        couverture non-nulle est respectée, sinon, aucune.
 
         Utilise ``LocalSearchConstraints.COST_BOUND`` et ``ModelObjective.TOTAL_COST``.
         """
-        if FeasibilityChecker(self.instance).is_feasible(horaire):
-            breakdown = self.evaluator.evaluate(horaire)
-            if breakdown.is_feasible:
-                return [LocalSearchConstraints.COST_BOUND.format(objective=ModelObjective.TOTAL_COST, bound=self.evaluator.evaluate(horaire).total)]
+
+        breakdown = self.evaluator.evaluate(horaire)
+        if breakdown.is_feasible:
+            return [LocalSearchConstraints.COST_BOUND.format(objective=ModelObjective.TOTAL_COST, bound=breakdown.coverage_cost)]
         return []
