@@ -2,9 +2,10 @@
 
 Légende :
 - `[ ]` à faire · `[~]` en cours · `[x]` validé (tests verts)
-- **(C)** Claude écrit · **(P)** Pascal écrit, Claude vérifie · **(C→P)** Claude scaffolde (signatures, docstrings, tests), Pascal implémente
+- **(C)** Claude écrit · **(P)** le membre responsable écrit, Claude vérifie · **(C→P)** Claude scaffolde (signatures, docstrings, tests), le membre responsable implémente
+- Responsable : Pascal jusqu'à l'étape 5a ; depuis le 9 novembre, voir la répartition dans [`TEAM.md`](TEAM.md)
 
-Règle : une seule étape à la fois ; on ne passe à la suivante qu'une fois les tests verts (cas nominaux + cas limites).
+Règle : une seule étape à la fois **par personne et par branche** ; on ne fusionne dans `main` qu'une fois les tests verts (cas nominaux + cas limites). Seules des étapes sans dépendance entre elles avancent en parallèle.
 
 ---
 
@@ -143,33 +144,47 @@ Principe : toute la documentation est dans `docs/`, et chaque document est acces
   - contrainte impossible ajoutée ⇒ `UNSATISFIABLE` ; budget minuscule sur bench_5 ⇒ `NO_SOLUTION` ;
   - statistiques présentes pour CP-SAT.
 
-### 5b — `LocalSolver` (`src/memetic/local_search.py`) **(C→P)**
-- [ ] Scaffold **(C)** : interface `Neighborhood` (`select(horaire, rng) -> employés à libérer`), interface `LocalSolver` (`improve(horaire, rng) -> LocalSearchResult`), `LocalSearchResult` (horaire, issue, employés libérés, statistiques, figé), exceptions et messages
-- [ ] `RandomEmployeesNeighborhood(k)` **(P)** : k employés tirés au hasard, plus les employés structurellement infaisables (`FeasibilityChecker`)
+### 5b — `LocalSolver` (`src/memetic/local_search.py`) **(C→P)** — Pascal, branche `etape-5b-local-solver`
+- [ ] Scaffold **(C)**, dans le scaffold commun : interface `Neighborhood` (`select(horaire, rng) -> employés à libérer`), interface `LocalSolver` (`improve(horaire, rng) -> LocalSearchResult`), `LocalSearchResult` (horaire, issue, employés libérés, statistiques, figé), gabarits des contraintes MiniZinc, exceptions et messages
+- [ ] `RandomEmployeesNeighborhood(instance, size)` **(P)** : `size` employés tirés au hasard, plus les employés structurellement infaisables (`FeasibilityChecker`)
 - [ ] `MiniZincLocalSolver(instance, adapter, neighborhood, evaluator)` **(P)** :
   - contraintes de fixation des employés non libérés (noms tirés de `ModelVariableNames`) ;
   - borne `cout_total ≤ coverage_cost` si l'entrée est faisable (`CostBreakdown.is_feasible`) ;
   - solution ⇒ `Horaire.from_model_variables` ; aucune solution ⇒ horaire d'entrée inchangé
-- [ ] Tests **(C)** :
+- [ ] Tests **(C)**, écrits sur la branche de Pascal :
   - les employés non libérés sont inchangés ; l'entrée n'est jamais modifiée ;
   - entrée faisable ⇒ coût de couverture du résultat ≤ celui de l'entrée ;
   - un employé infaisable est toujours libéré ; réparation d'une entrée infaisable sur bench_1 ;
   - cas limites : k = 0 (seuls les infaisables sont libérés), k ≥ nombre d'employés (tout est libre), sous-problème insatisfiable ⇒ entrée rendue avec son statut ;
   - reproductibilité : même graine du RNG et même limite déterministe ⇒ même résultat.
 
-## Étape 6 — Initialisation de la population **(P)**
-- [ ] Génération aléatoire d'individus structurellement faisables (graine contrôlée)
-- [ ] Option : passer chaque individu initial au `SolveurLocal`
-- [ ] Tests : taille, faisabilité de tous les individus, reproductibilité avec la même graine
+## Travail en équipe — semaine du 9 novembre **(C)**
+Répartition et règles communes : [`TEAM.md`](TEAM.md). Les étapes 5b, 6, 7a et 7b avancent en parallèle, chacune sur sa branche.
+- [x] Répartition du travail et règles communes (`TEAM.md`) ; workflow d'équipe dans `CLAUDE.md` ; CI déclenchée aussi sur les *pull requests* vers `main`
+- [x] **Scaffold commun** (2026-11-09), en un seul commit sur `main`, avant la création des branches : interfaces, classes concrètes en squelette (`NotImplementedError`), exceptions et messages des étapes 5b, 6, 7a et 7b ; squelettes de tests (outils communs et tests de contrat des interfaces, verts sur `main`)
 
-## Étape 7 — Opérateurs génétiques (`src/ga/operators.py`) **(P)**
+## Étape 6 — Initialisation de la population (`src/ga/initialization.py`) **(C→P)** — Mély, branche `etape-6-initialisation`
+- [ ] Scaffold **(C)**, dans le scaffold commun : interface `PopulationInitializer[G]` (`initialize(size, rng) -> individus non évalués`), squelette de `RandomBlockInitializer`, exceptions et messages
+- [ ] `RandomBlockInitializer(instance, encoding, local_solver = None)` **(P)** : génomes `BlockGenome` structurellement faisables tirés au hasard (graine contrôlée) :
+  - chaque durée de bloc `d_i ≥ 4` ; `22 ≤ Σd ≤ 30` ; le quart entier dans la plage utile ; les activités dans `1..activity_count` (conditions de D1)
+- [ ] Option **(P)** : passer chaque individu initial au `LocalSolver` (écrit contre l'interface, testé avec un faux solveur ; branché sur `MiniZincLocalSolver` après la fusion de 5b)
+- [ ] Tests **(P)** : taille, faisabilité de tous les individus (`FeasibilityChecker`), reproductibilité avec la même graine, diversité (deux graines différentes ⇒ populations différentes), taille invalide, option `LocalSolver` (faux solveur appelé une fois par individu)
+
+## Étape 7 — Opérateurs génétiques
 - [x] Trancher D3 : pas de normalisation au départ ; tri lexicographique et alignement en variantes
-- [ ] Scaffold des interfaces `ParentSelector`, `Crossover[G]`, `MutableSelector`, `Mutation[G]` **(C→P)**
-- [ ] `SelectParent` (ex. tournoi)
-- [ ] `Recombine` (croisement préservant la faisabilité, ou suivi d'une réparation)
-- [ ] `SelectMutable` et `Mute` (décaler un quart, une pause, changer une activité, …)
-- [ ] Registre par nom et vérification de compatibilité opérateur / encodage (`IncompatibleOperatorError`)
-- [ ] Tests : faisabilité préservée, cas limites (population de 2, individus identiques, gènes en bordure de fenêtre)
+
+### 7a — Sélection et registre (`src/ga/selection.py`, `src/ga/registry.py`) **(C→P)** — Tristan, branche `etape-7a-selection`
+- [ ] Scaffold **(C)**, dans le scaffold commun : interfaces `ParentSelector[G]` et `MutableSelector[G]` (tirage par lot, D7), vérification commune de la population (vide, individus non évalués), squelettes de `TournamentSelector`, `UniformMutableSelector` et `OperatorRegistry`, exceptions et messages (dont `IncompatibleOperatorError`)
+- [ ] `TournamentSelector(size)` **(P)** : `SelectParent`, tournoi sur `cost.total`
+- [ ] `UniformMutableSelector` **(P)** : `SelectMutable`, tirage uniforme
+- [ ] `OperatorRegistry` **(P)** : enregistrement et création par nom, nom en double ou inconnu ⇒ exception ; vérification de compatibilité opérateur / encodage (`IncompatibleOperatorError`)
+- [ ] Tests **(P)** : individus construits à la main avec des coûts choisis ; le meilleur gagne un tournoi qui contient tout le monde ; tournoi de taille 1 = tirage uniforme ; population vide ou non évaluée ⇒ exception ; reproductibilité avec la même graine ; entrées jamais modifiées
+
+### 7b — Opérateurs de variation pour `BlockEncoding` (`src/ga/operators.py`) **(C→P)** — Xavier, branche `etape-7b-variation`
+- [ ] Scaffold **(C)**, dans le scaffold commun : interfaces `VariationOperator[G]` (encodage compatible), `Crossover[G]` (`recombine(parents, rng) -> enfants`) et `Mutation[G]` (`mutate(genome, rng) -> génome`), squelettes des opérateurs concrets, exceptions et messages
+- [ ] `Recombine` **(P)** : `UniformGeneCrossover`, échange de gènes entiers entre deux parents (préserve la faisabilité de chaque quart)
+- [ ] `Mute` **(P)** : `ShiftStartMutation` (décaler un quart), `BlockBoundaryMutation` (déplacer une frontière entre deux blocs voisins, `Σd` conservée), `ActivityMutation` (changer l'activité d'un bloc)
+- [ ] Tests **(P)** : faisabilité préservée (`FeasibilityChecker`), entrées jamais modifiées, reproductibilité, cas limites (deux parents identiques, gènes en bordure de fenêtre, blocs à la durée minimale)
 
 ## Étape 8 — Gestion de la population (`src/ga/population.py`) **(P)**
 - [ ] Trancher D4
@@ -203,6 +218,7 @@ Principe : toute la documentation est dans `docs/`, et chaque document est acces
 - [ ] Comparer pénalité (étape 4) et peine de mort (étape 8) sur ces mêmes mesures
 - [ ] Expériences décrites par fichier de configuration (encodage, opérateurs, paramètres), résolues via le registre
 - [ ] Variantes à comparer (D1, D3) : `DirectEncoding`, `SortedBlockEncoding`, croisement avec alignement des employés
+- [ ] **En fin de projet, si le besoin se fait sentir** (décision de Pascal, 2026-11-09) : parler directement à CP-SAT par l'API Python d'OR-Tools (`CpSatApiAdapter`), sans MiniZinc. Gains : pas d'aplatissement à chaque appel (environ 0,11 s sur bench_3, du même ordre que la résolution d'un sous-problème), démarrage à chaud (`AddHint`), `deterministic_time` consommé rapporté (D10). Coûts : réécrire `horaire.mzn` en `CpModel` (dont `total` par contraintes réifiées), avec une validation croisée contre le modèle MiniZinc ; dépendance `ortools` ; perte de l'indépendance du solveur (D2). Prérequis : une interface `SolverAdapter.solve` qui décrit le sous-problème (employés fixés, borne de coût) au lieu de recevoir des chaînes MiniZinc. À déclencher si les mesures montrent que l'aplatissement domine le temps du mémétique
 - [ ] Campagne sur `bench_1` … `bench_5` : mémétique vs MiniZinc seul (coût, temps)
 - [ ] Dans cette campagne, comparer aussi la charge cumulée du solveur (D10) : mémétique contre MiniZinc seul
 - [ ] Export des résultats (CSV/JSON), accompagnés de la configuration complète utilisée (via les destinations de D8)

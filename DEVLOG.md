@@ -528,3 +528,43 @@ Suite complète : 63 tests verts en local et dans Docker (1 ignoré sous Linux).
 - Suite complète : 187 tests verts.
 
 **Suite** : 5b, scaffold du `LocalSolver`.
+
+## 2026-11-09 — Discussion : parler directement à CP-SAT ?
+
+Question de Pascal : est-on obligés de passer par MiniZinc ? Non : OR-Tools a une API Python (`cp_model`).
+- Ce qui manque : le modèle réécrit en `CpModel` (le canal `total[p, a]` par contraintes réifiées, l'objectif avec `max(0, …)`), une validation croisée contre `horaire.mzn`, la dépendance `ortools` (dont la version peut différer du CP-SAT 9.15 de MiniZinc), et surtout une interface `SolverAdapter.solve` neutre : aujourd'hui, elle reçoit des chaînes MiniZinc (`extra_constraints`).
+- Gains : modèle construit une fois par instance (plus d'aplatissement à chaque appel), `AddHint` pour démarrer à chaud, `deterministic_time` consommé rapporté (D10).
+- Pertes : indépendance du solveur (D2), et deux modèles à garder identiques.
+
+**Décision (Pascal)** : on garde le cap avec MiniZinc. On refactorisera vers l'API à la fin du projet, si le besoin se fait sentir (mesures du temps d'aplatissement). Consigné dans TODO.md, étape 10. L'interface de 5a reste telle quelle pour l'instant.
+
+## 2026-11-09 — Passage au travail en équipe et scaffold commun (Claude)
+
+**Contexte** : trois membres (Mély, Tristan, Xavier) rejoignent Pascal sur le dépôt. Les étapes 5b, 6, 7a et 7b avancent en parallèle cette semaine, chacune sur sa branche.
+
+**Fait (C)**
+- `TEAM.md` : règles communes (une branche par sous-étape, fusion par *pull request* seulement avec une suite verte, relecture par un autre membre, interfaces partagées modifiées seulement après concertation, entrées du DEVLOG signées et ajoutées à la fin), puis une fiche par membre : fichiers, classes, dépendances, commande de test.
+- `CLAUDE.md` : la règle 0 (pédagogie) vaut pour chaque membre ; nouvelle règle 7 (travail en équipe) : les règles 3 et 5 s'appliquent par personne et par branche. Arbre cible : `initialization.py`, `selection.py` et `registry.py` ajoutés dans `src/ga/`.
+- `TODO.md` : légende généralisée (« le membre responsable ») ; étape 6 détaillée ; étape 7 découpée en 7a (sélection et registre) et 7b (variation) ; nouvelle section « Travail en équipe ».
+- CI : déclenchée aussi par les *pull requests* vers `main`.
+- **Scaffold commun** : interfaces, classes concrètes en squelette (`raise NotImplementedError`, suivi d'un commentaire qui nomme l'étape et le membre), exceptions et gabarits de messages :
+  - `src/memetic/local_search.py` (5b) : `Neighborhood`, `LocalSolver`, `LocalSearchResult`, `LocalSearchConstraints` (gabarits des contraintes MiniZinc), `RandomEmployeesNeighborhood` (validation de `size` écrite), `MiniZincLocalSolver` ;
+  - `src/ga/initialization.py` (6) : `PopulationInitializer[G]`, `RandomBlockInitializer` ;
+  - `src/ga/operators.py` (7b) : `VariationOperator[G]` (`encoding_type`, `is_compatible_with` écrit), `Crossover[G]`, `Mutation[G]`, `UniformGeneCrossover`, `ShiftStartMutation`, `BlockBoundaryMutation`, `ActivityMutation` ;
+  - `src/ga/selection.py` (7a) : `ParentSelector[G]`, `MutableSelector[G]`, `check_selectable` (vérifications communes, écrites), `TournamentSelector` (validation de `size` écrite), `UniformMutableSelector` ;
+  - `src/ga/registry.py` (7a) : `OperatorRegistry`, `IncompatibleOperatorError`, `DuplicateOperatorError`, `UnknownOperatorError`.
+- Tests : `tests/fixtures.py` (outil commun : `evaluated_individual`, `cost_with_total`, `reference_genome`, `FakeLocalSolver`) et un squelette de tests par module. Chaque squelette contient les tests de contrat du scaffold (verts) et, en tête de fichier, la liste des cas à couvrir.
+
+**Décisions de forme**
+- Les opérateurs de variation manipulent des **génomes**, pas des individus : le moteur construit et évalue les individus. Un opérateur ne dépend ainsi que de son encodage (D5).
+- Les sélecteurs tirent par lot (`select(population, count, rng)`, D7), avec remise, sur `cost.total`. La population doit être évaluée.
+- Un initialiseur rend des individus **non évalués** : l'évaluation reste la responsabilité du moteur.
+- La sélection est sortie de `operators.py` (`selection.py`, `registry.py`), pour que les membres des étapes 7a et 7b ne modifient jamais le même fichier.
+- `NotImplementedError` sans message : la règle « les messages sont des constantes » ne justifie pas une classe de messages pour du code temporaire.
+- Sur `main`, aucun test ne vise les squelettes : la suite reste verte. Les tests complets de 5b (C) seront écrits sur la branche de Pascal ; ceux de 6, 7a et 7b sont écrits par leurs auteurs (P), guidés par la liste en tête de chaque fichier.
+
+**Correctif** : `docs/PROJECT_STRUCT.md` ne listait pas `tests/test_solver.py`. Mon remplacement de l'étape 5a visait une ligne `├──`, alors que la dernière ligne de l'arbre commence par `└──`, et il ne l'a pas signalé. Le bloc des tests est réécrit dans l'ordre alphabétique.
+
+**Tests** : 21 tests de contrat, instantanés ; suite complète : 208 tests verts, y compris avec `-W error::DeprecationWarning` comme dans la CI.
+
+**Suite** : commit du scaffold sur `main`, puis création des quatre branches.

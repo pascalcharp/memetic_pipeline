@@ -1,10 +1,12 @@
-# Lance la suite de tests dans l'image Docker du projet à chaque push sur main.
+# Lance la suite de tests dans l'image Docker du projet à chaque push sur main et à chaque pull request vers main.
 # Les tests s'exécutent dans le même environnement que le développement (Python 3.13 + MiniZinc 2.10 + CP-SAT).
 
 name: Tests
 
 on:
   push:
+    branches: [main]
+  pull_request:
     branches: [main]
 
 jobs:
