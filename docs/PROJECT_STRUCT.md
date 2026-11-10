@@ -28,8 +28,9 @@ memetic_pipeline/
 │   │   ├── __init__.py
 │   │   ├── chromosome.py       # Génotype : interface Encoding[G], BlockEncoding (gènes BlockGene, ActivityBlock)
 │   │   └── individual.py       # Individu : génome, horaire décodé, coût
-│   ├── memetic/                # Couplage mémétique et recherche locale (vide pour l'instant)
-│   │   └── __init__.py
+│   ├── memetic/                # Couplage mémétique et recherche locale
+│   │   ├── __init__.py
+│   │   └── solver.py           # Indirection vers les solveurs : SolverAdapter, CpSatAdapter, limites d'effort, SolverRun
 │   ├── model/                  # Modèle CP (MiniZinc) et ses règles côté Python
 │   │   ├── __init__.py
 │   │   ├── evaluation.py       # Coût : couverture (cout_total) et pénalités (CostEvaluator, CostBreakdown, PenaltyWeights)

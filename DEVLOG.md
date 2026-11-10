@@ -483,3 +483,48 @@ Suite complète : 63 tests verts en local et dans Docker (1 ignoré sous Linux).
 **Reporté** : `coverage_totals` est une double boucle Python (employés × périodes). C'est négligeable sur bench_5 ; on la vectorisera si le profilage du GA la désigne.
 
 **Suite** : étape 5, interface MiniZinc (`SolverAdapter`, `LocalSolver`).
+
+## 2026-11-08 — Étape 5 : décisions D10 et D11 (planification)
+
+**Mesures préalables** (MiniZinc 2.10, CP-SAT 9.15, en local) :
+- `--fzn-flags "--params max_deterministic_time:X,random_seed:S"` avec `-p 1` : objectif, `failures` et `propagations` identiques sur deux exécutions (bench_4) ; seul `solveTime` varie. Le temps déterministe consommé n'est pas exposé dans les statistiques.
+- Avec minizinc-python, l'option s'écrit `**{"fzn-flags": "..."}` : le mot-clé `fzn_flags` est transmis tel quel (`--fzn_flags`) et refusé par MiniZinc.
+- Un budget trop faible ne rend aucune solution, même si la statistique `objective` est renseignée : bench_3 n'a aucune solution avec 1 unité déterministe ni en 1 s de temps mural ; il en faut environ 5 unités. bench_5 : aucune solution avec 30 unités (16 s).
+- Voisinage « libérer k employés » sur une solution de bench_3 (12 000 075), budget de 2 unités : k = 1 donne 8 000 056 (optimum du sous-problème prouvé, 0,4 s) ; k = 2 et k = 3 font moins bien (11 000 052 et 11 000 071), faute d'effort. Le compromis entre k et le budget sera un paramètre d'expérience.
+- Limites d'effort des autres solveurs installés : Gecode a `--node` et `--fail` ; Chuffed et HiGHS n'ont que le temps mural.
+
+**Décision (Pascal) — D10** : limite d'effort **configurable et typée**. Pascal a relevé que `max_deterministic_time` est propre à CP-SAT. Les unités d'effort ne sont pas comparables d'un solveur à l'autre : pas de limite générique, mais des types explicites (`WallTimeLimit`, `DeterministicTimeLimit`, plus tard `FailureLimit`), que chaque `SolverAdapter` déclare comprendre ou non (`UnsupportedLimitError` à la construction). Défaut de `CpSatAdapter` : déterministe, 1 thread. La charge est mesurée avec les statistiques standard de MiniZinc, en champs optionnels ; D10 compare le mémétique et MiniZinc seul avec le même solveur.
+
+**Décision (Pascal) — D11** :
+- voisinage : k employés libérés au hasard (RNG injecté), plus toujours les employés structurellement infaisables ;
+- borne `cout_total ≤ coût de l'entrée` seulement si l'entrée est faisable ; sinon le `LocalSolver` répare ;
+- aucune solution : on rend l'entrée inchangée, avec le statut ; pas d'exception.
+
+**Décision de forme** : l'étape 5 se découpe en 5a (`src/memetic/solver.py` : adaptateur, limites, statistiques, issues) et 5b (`src/memetic/local_search.py` : voisinage et `LocalSolver`). L'arbre cible de CLAUDE.md, qui mettait tout dans `local_search.py`, sera mis à jour au scaffold.
+
+**Suite** : 5a.
+
+## 2026-11-08 — Étape 5a : `SolverAdapter` (validée)
+
+**Fait (C)** : `src/memetic/solver.py`.
+- Limites d'effort typées, figées et validées (strictement positives) : `EffortLimit`, `WallTimeLimit`, `DeterministicTimeLimit` ; `SolverOptions(limit, seed, threads)`, déterministe par défaut, 1 thread.
+- `SolverAdapter` (patron Méthode modèle) : `solve(instance, extra_constraints)` est commun à tous les solveurs. Une sous-classe ne fournit que `solver_id()`, `supported_limits()` et `solver_arguments()`. La limite est vérifiée à la construction (`UnsupportedLimitError`).
+- `CpSatAdapter` : `DeterministicTimeLimit` ⇒ `--params max_deterministic_time:…,random_seed:…` ; `WallTimeLimit` ⇒ `time_limit`, graine transmise dans les deux cas.
+- `SolverRun(outcome, variables, objective, statistics)` : `variables` a la forme attendue par `Horaire.from_model_variables` ; `None` sans solution.
+- `SolveOutcome` : `OPTIMAL`, `FEASIBLE`, `UNSATISFIABLE`, `NO_SOLUTION`. `ERROR` et `UNBOUNDED` lèvent `SolverFailureError`, tout comme une `minizinc.MiniZincError` (par exemple une contrainte ajoutée mal formée).
+- `SolverStatistics` : `nodes`, `failures`, `propagations`, `solve_time`, chacun `None` s'il n'est pas rapporté (CP-SAT ne rapporte pas `nodes`).
+
+**Décisions de forme**
+- Les données sont transmises à MiniZinc depuis `ProblemInstance` (affectation des paramètres), sans fichier : l'adaptateur accepte aussi les instances synthétiques des tests.
+- Solutions intermédiaires demandées systématiquement, et on garde la dernière : la meilleure solution est récupérée quelle que soit la façon dont le solveur s'arrête (limite déterministe ou temps mural).
+- Un `minizinc.Model` est reconstruit à chaque appel (aplatissement à chaque fois, de l'ordre de 0,1 à 0,4 s) : simple et sans état partagé (D7). À optimiser seulement si le profilage le désigne.
+- `MiniZincNotFoundError` et `SolverNotAvailableError` sont propagées telles quelles depuis `minizinc_env` : ce sont des erreurs d'environnement, pas des pannes de résolution.
+- La reproductibilité sous limite déterministe suppose un seul thread : avec plusieurs threads, CP-SAT ne l'est plus. C'est documenté, pas imposé.
+
+**Tests** : `tests/test_solver.py`, 23 tests verts.
+- sans solveur : validation des limites et des options, traduction des options pour les deux limites, limite non supportée, adaptateur abstrait, traduction de chaque `minizinc.Status`, extraction des statistiques ;
+- avec CP-SAT : optimum 94 de bench_1 prouvé, sous les deux limites ; variables ⇒ `Horaire` de même coût et faisable (validation croisée avec `CostEvaluator`) ; statistiques présentes ; reproductibilité (même solution, mêmes `failures` et `propagations`) ; contrainte ajoutée respectée ; contrainte impossible ⇒ `UNSATISFIABLE` ; contrainte mal formée ⇒ `SolverFailureError` ; budget de 0,5 unité sur bench_5 ⇒ `NO_SOLUTION`.
+- Mutants vérifiés sur une copie du dépôt, tous détectés : première solution au lieu de la dernière, contraintes ajoutées ignorées, `UNKNOWN` traduit en `FEASIBLE`, graine non transmise, `MiniZincError` non enveloppée.
+- Suite complète : 187 tests verts.
+
+**Suite** : 5b, scaffold du `LocalSolver`.

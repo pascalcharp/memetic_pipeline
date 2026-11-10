@@ -69,7 +69,8 @@ memetic_pipeline/
 │   │   └── population.py       # Gestion de la population globale
 │   ├── memetic/                # Couplage Mémétique & Réparation (à venir)
 │   │   ├── __init__.py
-│   │   └── local_search.py     # LocalSolver et SolverAdapter : recherche locale et réparation par MiniZinc
+│   │   ├── local_search.py     # Neighborhood et LocalSolver : recherche locale et réparation par MiniZinc
+│   │   └── solver.py           # SolverAdapter : options, limites d'effort, issue et statistiques d'une résolution
 │   ├── utils/                  # Environnement, lecture de fichiers et parsing
 │   │   ├── __init__.py
 │   │   ├── minizinc_env.py     # Localisation de MiniZinc et des solveurs

@@ -43,10 +43,17 @@ Règle : une seule étape à la fois ; on ne passe à la suivante qu'une fois le
   - se branche naturellement comme une destination de plus (`MongoSink`, patron Observateur de D8) : le moteur et les collecteurs ne changent pas ;
   - contredit le principe « bibliothèque standard seulement » de D8 : dépendance `pymongo` à isoler (import seulement dans `MongoSink`, tests sautés si absente) ;
   - à trancher : Atlas (nuage : identifiants hors du dépôt, accès réseau, tests sans connexion) ou conteneur `mongo` local dans un `docker-compose.yml` (pas encore créé ; seul le `Dockerfile` existe) ; garder ou non `results/` en fichiers comme copie de référence.
-- [ ] **D10 — Charge de travail cumulée du solveur** (proposition de Pascal, 2026-11-07 ; à trancher à l'étape 5) :
-  - idée : cumuler la charge de chaque appel au `LocalSolver` et la comparer à celle de MiniZinc seul, à coût égal (ou le coût atteint à charge égale) ;
-  - Python rend le temps mural peu parlant : préférer une mesure rapportée par le solveur (statistiques de `minizinc.Result.statistics` : nœuds, conflits, temps de résolution) ; à vérifier sur CP-SAT ce qui est réellement exposé et déterministe ;
-  - rejoint D7 : limiter le solveur en effort plutôt qu'en temps, pour la reproductibilité.
+- [x] **D10 — Charge de travail cumulée du solveur** (proposition de Pascal, 2026-11-07 ; tranchée le 2026-11-08) :
+  - idée : cumuler la charge de chaque appel au `LocalSolver` et la comparer à celle de MiniZinc seul, **avec le même solveur**, à coût égal (ou le coût atteint à charge égale) ;
+  - **limite d'effort configurable et typée**, car chaque solveur a sa propre notion d'effort : `WallTimeLimit` (universel, non reproductible), `DeterministicTimeLimit` (CP-SAT : `max_deterministic_time`), plus tard `FailureLimit` (Gecode : `--fail`). Chuffed et HiGHS n'exposent que le temps mural. Pas de limite « générique » traduite par chaque solveur : les unités ne sont pas comparables ;
+  - chaque `SolverAdapter` déclare les types de limites qu'il comprend ; une limite non comprise lève `UnsupportedLimitError` à la construction (comme `IncompatibleOperatorError`, D5) ;
+  - défaut de `CpSatAdapter` : `DeterministicTimeLimit`, 1 thread, graine transmise. Vérifié : objectif, `failures` et `propagations` identiques d'une exécution à l'autre ; seul `solveTime` varie ;
+  - mesure de la charge : statistiques standard de MiniZinc (`nodes`, `failures`, `propagations`, `solveTime`), en champs optionnels, puisque tous les solveurs ne les rapportent pas toutes ; `solveTime` est marqué non déterministe (D8).
+- [x] **D11 — Recherche locale par MiniZinc** (tranchée le 2026-11-08) :
+  - **voisinage** : interface `Neighborhood` (Stratégie, D5) qui choisit les employés à libérer ; les autres sont fixés à leur valeur actuelle. Première implémentation : k employés tirés avec le RNG injecté, **plus toujours les employés structurellement infaisables** (fixés, ils rendraient le sous-problème insatisfiable : leurs jalons sont hors domaine) ;
+  - **borne de coût** : `cout_total ≤ coût de couverture de l'entrée` seulement si l'entrée est faisable (elle est alors elle-même solution du sous-problème : la borne est sûre et élague). Une entrée infaisable n'a pas de borne : le `LocalSolver` la répare ;
+  - **échec** (insatisfiable, ou budget épuisé sans solution) : ce n'est pas une erreur. Le `LocalSolver` rend l'horaire d'entrée inchangé, avec le statut et les statistiques. Les exceptions sur mesure sont réservées aux pannes (MiniZinc absent, erreur du solveur, limite non supportée) ;
+  - le `LocalSolver` travaille sur le phénotype `Horaire` (D5) ; le moteur ré-encode le résultat avec l'`Encoding`.
 
 ---
 
@@ -115,13 +122,40 @@ Principe : toute la documentation est dans `docs/`, et chaque document est acces
   - nombre d'employés différent de l'instance : `EmployeeCountMismatchError` (propagée depuis `FeasibilityChecker`) ;
   - **validation croisée** : `coverage_cost` égal à l'objectif renvoyé par MiniZinc sur les solutions de bench_1 à bench_3, sans aucune violation.
 
-## Étape 5 — Interface MiniZinc (`src/memetic/local_search.py`) **(C→P)**
-- [ ] Classe d'indirection `SolverAdapter` (interface) + `CpSatAdapter` : identifiant du solveur, options (threads, graine, limite de temps), traduction des statuts
-- [ ] Résolution complète (référence / borne pour comparer le mémétique)
-- [ ] `SolveurLocal(chromosome)` : fixer une partie des variables, résoudre sous limite de temps, reconstruire un `Chromosome`
-- [ ] Gestion des erreurs MiniZinc (timeout, UNSAT, solveur absent) via exceptions sur mesure
-- [ ] Chaque appel rend aussi ses statistiques de solveur (charge de travail, D10)
-- [ ] Tests : le résultat est faisable, son coût ≤ coût d'entrée, comportement en timeout / UNSAT
+## Étape 5 — Interface MiniZinc et recherche locale **(C→P)**
+- [x] Trancher D10 (limite d'effort) et D11 (voisinage, borne, échec) — 2026-11-08
+
+### 5a — `SolverAdapter` (`src/memetic/solver.py`) **(C)** — validée le 2026-11-08, 23 tests verts
+- [x] Limites d'effort, dataclasses figées : `EffortLimit` (base), `WallTimeLimit(seconds)`, `DeterministicTimeLimit(units)`
+- [x] `SolverOptions(limit, seed, threads = 1)` ; valeurs par défaut dans une classe de constantes
+- [x] `SolverStatistics` : `nodes`, `failures`, `propagations` (optionnels, déterministes), `solve_time` (optionnel, non déterministe)
+- [x] `SolveOutcome` (enum) : `OPTIMAL`, `FEASIBLE`, `UNSATISFIABLE`, `NO_SOLUTION` (budget épuisé sans solution) ; traduction des `minizinc.Status`
+- [x] `SolverRun` : issue, variables de la meilleure solution (ou `None`), objectif, statistiques
+- [x] Interface `SolverAdapter` : `solver_id`, `supported_limits`, `solve(instance, extra_constraints) -> SolverRun` ; vérification de la limite à la construction
+- [x] `CpSatAdapter` : traduction des limites (`--fzn-flags "--params max_deterministic_time:…,random_seed:…"`, ou `time_limit`), threads, solutions intermédiaires (on garde la dernière)
+- [x] Exceptions : `SolverError` (base), `UnsupportedLimitError`, `SolverFailureError` (enveloppe `minizinc.MiniZincError`) ; gabarits dans `SolverMessages`
+- [x] Résolution complète = `solve` sans contrainte ajoutée (référence pour comparer le mémétique, D10)
+- [x] Tests :
+  - traduction des limites en options, sans lancer MiniZinc ; limite non supportée ⇒ `UnsupportedLimitError` ;
+  - traduction de chaque `minizinc.Status` ;
+  - bench_1 : optimum 94 prouvé (`OPTIMAL`) ;
+  - reproductibilité : deux appels de même graine et de même limite déterministe ⇒ même objectif, mêmes `failures` et `propagations` ;
+  - contrainte impossible ajoutée ⇒ `UNSATISFIABLE` ; budget minuscule sur bench_5 ⇒ `NO_SOLUTION` ;
+  - statistiques présentes pour CP-SAT.
+
+### 5b — `LocalSolver` (`src/memetic/local_search.py`) **(C→P)**
+- [ ] Scaffold **(C)** : interface `Neighborhood` (`select(horaire, rng) -> employés à libérer`), interface `LocalSolver` (`improve(horaire, rng) -> LocalSearchResult`), `LocalSearchResult` (horaire, issue, employés libérés, statistiques, figé), exceptions et messages
+- [ ] `RandomEmployeesNeighborhood(k)` **(P)** : k employés tirés au hasard, plus les employés structurellement infaisables (`FeasibilityChecker`)
+- [ ] `MiniZincLocalSolver(instance, adapter, neighborhood, evaluator)` **(P)** :
+  - contraintes de fixation des employés non libérés (noms tirés de `ModelVariableNames`) ;
+  - borne `cout_total ≤ coverage_cost` si l'entrée est faisable (`CostBreakdown.is_feasible`) ;
+  - solution ⇒ `Horaire.from_model_variables` ; aucune solution ⇒ horaire d'entrée inchangé
+- [ ] Tests **(C)** :
+  - les employés non libérés sont inchangés ; l'entrée n'est jamais modifiée ;
+  - entrée faisable ⇒ coût de couverture du résultat ≤ celui de l'entrée ;
+  - un employé infaisable est toujours libéré ; réparation d'une entrée infaisable sur bench_1 ;
+  - cas limites : k = 0 (seuls les infaisables sont libérés), k ≥ nombre d'employés (tout est libre), sous-problème insatisfiable ⇒ entrée rendue avec son statut ;
+  - reproductibilité : même graine du RNG et même limite déterministe ⇒ même résultat.
 
 ## Étape 6 — Initialisation de la population **(P)**
 - [ ] Génération aléatoire d'individus structurellement faisables (graine contrôlée)
