@@ -136,6 +136,7 @@ Principe : toute la documentation est dans `docs/`, et chaque document est acces
 - [x] `CpSatAdapter` : traduction des limites (`--fzn-flags "--params max_deterministic_time:…,random_seed:…"`, ou `time_limit`), threads, solutions intermédiaires (on garde la dernière)
 - [x] Exceptions : `SolverError` (base), `UnsupportedLimitError`, `SolverFailureError` (enveloppe `minizinc.MiniZincError`) ; gabarits dans `SolverMessages`
 - [x] Résolution complète = `solve` sans contrainte ajoutée (référence pour comparer le mémétique, D10)
+- [ ] **Amélioration possible de `SolverAdapter.solve`** (relevée le 2026-11-10, à discuter en équipe : `solver.py` est un module partagé) : quand toutes les variables d'un sous-problème insatisfiable sont fixées, MiniZinc émet `MiniZincWarning: model inconsistency detected` dès l'aplatissement. Pour le mémétique, c'est une issue normale (D11) ; dans la boucle, cet avertissement apparaîtra chaque fois qu'un individu viole « au moins 1 » avec peu d'employés libérés. Piste : ignorer **seulement** cet avertissement dans `solve`, filtré par son message, sans masquer les autres avertissements de MiniZinc ; puis retirer les `warnings.catch_warnings` des tests (`test_solver.py`, `test_local_search.py`). Dans un commit à part
 - [x] Tests :
   - traduction des limites en options, sans lancer MiniZinc ; limite non supportée ⇒ `UnsupportedLimitError` ;
   - traduction de chaque `minizinc.Status` ;

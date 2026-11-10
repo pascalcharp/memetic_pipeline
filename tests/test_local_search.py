@@ -12,8 +12,11 @@ Employés numérotés à partir de 1, comme dans MiniZinc.
 import dataclasses
 import random
 import unittest
+import warnings
 from collections.abc import Sequence
 from typing import Any
+
+from minizinc.error import MiniZincWarning
 
 from src.memetic.local_search import (
     InvalidNeighborhoodError,
@@ -409,7 +412,11 @@ class TestImproveWithCpSat(unittest.TestCase):
         # Trois quarts identiques, structurellement faisables, mais qui laissent des cellules demandées vides.
         # Avec size = 0, personne n'est libéré : la contrainte « au moins 1 » du modèle est alors violée.
         identical = Horaire(employees=(self.optimum.employees[0],) * self.instance.employee_count)
-        result = cp_sat_solver(self.instance, size=0).improve(identical, random.Random(SEED))
+        # Toutes les variables étant fixées, MiniZinc détecte l'incohérence dès l'aplatissement et avertit
+        # (« model inconsistency detected ») : c'est précisément le cas testé.
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", MiniZincWarning)
+            result = cp_sat_solver(self.instance, size=0).improve(identical, random.Random(SEED))
         self.assertEqual(result.outcome, SolveOutcome.UNSATISFIABLE)
         self.assertEqual(result.freed_employees, frozenset())
         self.assertIs(result.horaire, identical)

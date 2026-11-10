@@ -597,5 +597,6 @@ Question de Pascal : est-on obligés de passer par MiniZinc ? Non : OR-Tools a u
 - Choix de Pascal : l'expression conditionnelle qui choisit l'horaire rendu dans `improve` est gardée, son intention étant explicite sur une ligne.
 
 **Tests** : 26 tests de `tests/test_local_search.py` verts ; suite complète : 228 tests verts, y compris avec `-W error::DeprecationWarning`.
+- `test_unsatisfiable_subproblem_returns_the_input` affichait `MiniZincWarning: model inconsistency detected` : toutes les variables étant fixées, MiniZinc détecte l'incohérence dès l'aplatissement. L'avertissement est attendu ; il est désormais ignoré dans ce test, comme dans `test_solver.py` (oubli de Claude). Le traitement de cet avertissement dans `SolverAdapter.solve` lui-même est noté dans TODO.md (5a), à discuter en équipe.
 
 **Suite** : *pull request* de `etape-5b-local-solver` vers `main`. Après la fusion, l'option `LocalSolver` de l'étape 6 (Mély) pourra être branchée sur `MiniZincLocalSolver`.
