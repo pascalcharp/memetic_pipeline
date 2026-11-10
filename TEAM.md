@@ -5,8 +5,34 @@
 ### Branches et fusion
 - **Chacun travaille sur sa propre branche**, créée à partir de `main` et nommée d'après sa sous-étape : `etape-5b-local-solver`, `etape-6-initialisation`, `etape-7a-selection`, `etape-7b-variation`.
 - **On ne fusionne dans `main` que lorsque tous les tests sont verts** : ceux de sa sous-étape et la suite complète (`python -m unittest discover`). La fusion passe par une *pull request* sur GitHub, relue par au moins un autre membre.
-- Avant d'ouvrir la *pull request*, on intègre le dernier `main` dans sa branche (`git merge main`) et on relance la suite complète.
+- Avant d'ouvrir la *pull request*, on intègre le dernier `main` dans sa branche et on relance la suite complète (voir les commandes ci-dessous).
 - Une tâche à la fois par personne. Seules des sous-étapes sans dépendance entre elles avancent en parallèle.
+
+### Commandes Git
+
+Les branches existent déjà sur GitHub. Remplacer `<branche>` par la sienne (par exemple `etape-6-initialisation`).
+
+**Pour commencer** (une seule fois, dans un clone du dépôt) :
+```bash
+git fetch origin            # récupère les branches créées sur GitHub
+git switch <branche>        # crée la branche locale, reliée à origin/<branche>
+```
+
+**En cours de travail** (aussi souvent que voulu) :
+```bash
+git add <fichiers>
+git commit -m "Étape Xy : ce qui a été fait"
+git push                    # publie la branche sur GitHub (sauvegarde, visible par l'équipe)
+```
+
+**Avant d'ouvrir la *pull request*** :
+```bash
+git fetch origin
+git merge origin/main       # intègre le main de GitHub, pas le main local, qui peut être en retard
+python -m unittest discover # la suite complète doit être verte
+git push
+```
+Puis ouvrir la *pull request* de `<branche>` vers `main` sur GitHub. La CI relance la suite complète dans Docker ; on fusionne quand elle est verte et qu'un autre membre a relu.
 
 ### Code partagé
 - Les **interfaces** (classes abstraites, signatures, docstrings) sont scaffoldées d'avance et communes à tous. On ne les modifie pas seul : un changement d'interface se discute avec les membres qui l'utilisent, puis se fait dans un commit à part.
