@@ -170,6 +170,7 @@ Répartition et règles communes : [`TEAM.md`](TEAM.md). Les étapes 5b, 6, 7a e
   - chaque durée de bloc `d_i ≥ 4` ; `22 ≤ Σd ≤ 30` ; le quart entier dans la plage utile ; les activités dans `1..activity_count` (conditions de D1)
 - [x] Option **(P)** : passer chaque individu initial au `LocalSolver` (écrit contre l'interface, testé avec un faux solveur ; branché sur `MiniZincLocalSolver` après la fusion de 5b)
 - [x] Tests **(P)** : taille, faisabilité de tous les individus (`FeasibilityChecker`), reproductibilité avec la même graine, diversité (deux graines différentes ⇒ populations différentes), taille invalide, option `LocalSolver` (faux solveur appelé une fois par individu)
+- [x] Tests d'intégration avec `MiniZincLocalSolver` + CP-SAT **(C)** — Pascal, branche `etape-6-integration-cpsat` : ré-encodage sans perte de l'horaire rendu, faisabilité structurelle, jamais pire qu'une entrée faisable, entrée gardée sans solution, reproductibilité (bench_1, bench_5)
 
 ## Étape 7 — Opérateurs génétiques
 - [x] Trancher D3 : pas de normalisation au départ ; tri lexicographique et alignement en variantes
