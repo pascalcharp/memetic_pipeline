@@ -600,3 +600,30 @@ Question de Pascal : est-on obligés de passer par MiniZinc ? Non : OR-Tools a u
 - `test_unsatisfiable_subproblem_returns_the_input` affichait `MiniZincWarning: model inconsistency detected` : toutes les variables étant fixées, MiniZinc détecte l'incohérence dès l'aplatissement. L'avertissement est attendu ; il est désormais ignoré dans ce test, comme dans `test_solver.py` (oubli de Claude). Le traitement de cet avertissement dans `SolverAdapter.solve` lui-même est noté dans TODO.md (5a), à discuter en équipe.
 
 **Suite** : *pull request* de `etape-5b-local-solver` vers `main`. Après la fusion, l'option `LocalSolver` de l'étape 6 (Mély) pourra être branchée sur `MiniZincLocalSolver`.
+
+## 2026-11-13 — Étape 6 : Initialisation de la population (Mély)
+
+**Fait (P)** : Implémentation de `RandomBlockInitializer.initialize`, `random_genome`, `random_gene`
+dans `src/ga/initialization.py`.
+
+**Génération des génomes**
+- Chaque employé possède quatre blocs d'Activités, d'une durée minimale de 4 périodes.
+- La durée totale des blocs est tirée aléatoirement entre 22 et 30 périodes, selon la plage utile disponible.
+- Les périodes restantes sont réparties aléatoirement entre les quatre blocs.
+- Les activités et la période de début sont tirées aléatoirement dans leurs domaines respectifs.
+- Le générateur `rng` est utilisé pour assurer la reproductibilité.
+
+**Option `LocalSolver`** : Si un solveur local est fourni, chaque horaire généré lui est transmis. L'horaire retourné est réencodé avec `BlockEncoding` pour construire un nouvel individu non évalué.
+
+**Tests** : 11 tests de `tests/test_initialization.py` verts ; suite complète : 236 tests verts. Vérification de la taille de population, de la faisabilité structurelle, de la reproductibilité, de la diversité, des tailles invalides et de l'intégration d'un faux solveur local. Les cinq benchmarks ont également été testés.
+
+**Suite** : Mettre à jour `TODO.md`, puis préparer la *pull request* de `etape-6-initialisation` vers `main` après validation finale.
+
+
+
+
+
+
+
+
+
