@@ -373,6 +373,9 @@ class TestInitializationWithCpSat(unittest.TestCase):
 
     def test_unrepairable_samples_enter_unchanged_on_bench_5(self) -> None:
         """bench_5, petit voisinage : le sous-problème est sans solution, l'horaire tiré est gardé tel quel."""
+        # « Sans solution » vient de la contrainte dure « au moins 1 » de horaire.mzn, alors que l'évaluation
+        # la traite comme une pénalité (étape 4). Si le LocalSolver passe à un modèle pénalisé (D12), ce test
+        # devra être revu : le sous-problème aura alors toujours une solution.
         instance = bench(5)
         population, local_solver = self.initialize(instance, size=SMALL_NEIGHBORHOOD)
 

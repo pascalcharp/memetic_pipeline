@@ -643,9 +643,10 @@ dans `src/ga/initialization.py`.
 | bench_5 | 8 (tous) | 6 × NO_SOLUTION (budget épuisé) | 0 / 6 | 25,8 s |
 
 **Constats à discuter en équipe**
-- Les horaires tirés au hasard ne sont presque jamais faisables : la contrainte « au moins 1 employé si demande > 0 » est violée. Sur bench_3 et bench_5, libérer 2 employés ne suffit pas pour réparer : le sous-problème est insatisfiable, et la population initiale entre non réparée.
-- Tout libérer sur bench_1 fait converger toute la population vers l'optimum : elle perd toute diversité dès l'initialisation. Sur bench_5, le budget de 5 unités ne suffit même pas pour trouver une première solution.
-- Pistes : voisinage plus large ou adaptatif quand l'entrée est infaisable ; réparer seulement une partie de la population ; tirage guidé par la demande. À trancher avant l'étape 8 (convergence et restart).
+- **Asymétrie pénalité / contrainte dure** (relevée par Pascal) : l'évaluation (étape 4) traite « au moins 1 employé si demande > 0 » comme une **pénalité** ; le `LocalSolver` résout `horaire.mzn`, où c'est une **contrainte dure** (ligne 154), qu'on ne peut pas relâcher en ajoutant des contraintes.
+- Les horaires tirés au hasard violent presque toujours « au moins 1 ». Sur bench_3 et bench_5, avec 2 employés libérés, les UNSATISFIABLE sont un **artefact de cette contrainte dure** : un sous-problème pénalisé aurait rendu la solution la moins pénalisée du voisinage, donc une amélioration. Ces individus ne sont pas perdus pour autant : du point de vue de l'algorithme génétique, ils ont un coût pénalisé fini (4·10⁷ à 10⁸) et participent à la sélection ; seule l'amélioration par le `LocalSolver` leur échappe. Décision D12 ajoutée à TODO.md.
+- Tout libérer sur bench_1 fait converger toute la population vers l'optimum : elle perd toute diversité dès l'initialisation. Ce constat vient de la taille du voisinage, pas de la contrainte dure. Sur bench_5, le budget de 5 unités ne suffit même pas pour trouver une première solution.
+- Pistes pour la diversité : réparer seulement une partie de la population ; voisinage plus petit à l'initialisation ; tirage guidé par la demande. À trancher avant l'étape 8 (convergence et restart).
 
 **Tests** : 15 tests de `tests/test_initialization.py` verts (environ 19 s, dont 4 qui appellent CP-SAT).
 
