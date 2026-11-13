@@ -55,6 +55,10 @@ Règle : une seule étape à la fois **par personne et par branche** ; on ne fus
   - **borne de coût** : `cout_total ≤ coût de couverture de l'entrée` seulement si l'entrée est faisable (elle est alors elle-même solution du sous-problème : la borne est sûre et élague). Une entrée infaisable n'a pas de borne : le `LocalSolver` la répare ;
   - **échec** (insatisfiable, ou budget épuisé sans solution) : ce n'est pas une erreur. Le `LocalSolver` rend l'horaire d'entrée inchangé, avec le statut et les statistiques. Les exceptions sur mesure sont réservées aux pannes (MiniZinc absent, erreur du solveur, limite non supportée) ;
   - le `LocalSolver` travaille sur le phénotype `Horaire` (D5) ; le moteur ré-encode le résultat avec l'`Encoding`.
+- [ ] **D12 — Couverture « au moins 1 » dans le `LocalSolver` : contrainte dure ou pénalité ?** (relevée par Pascal le 2026-11-13 ; à trancher en équipe avant l'étape 8, touche `src/model/` et `src/memetic/`, modules partagés) :
+  - constat : l'évaluation (étape 4) pénalise chaque cellule vide où la demande est positive, mais le sous-problème du `LocalSolver` résout `horaire.mzn`, où c'est une contrainte dure (ligne 154). Une entrée qui viole « au moins 1 » avec peu d'employés libérés donne un sous-problème insatisfiable et revient inchangée, au lieu d'être améliorée (mesures du 2026-11-13 dans DEVLOG.md : 6 cas sur 6 sur bench_3 et bench_5 avec 2 employés libérés) ;
+  - piste : une variante du modèle où la contrainte devient un terme `poids × cellules vides` dans l'objectif, avec le poids de `PenaltyWeights.coverage_violation` (même fonction de coût que `CostEvaluator.total`) ; le `LocalSolver` choisit le modèle (Stratégie, D5) ; la borne de coût porte alors sur le coût pénalisé, donc s'applique aussi aux entrées infaisables ;
+  - questions : un seul modèle paramétré ou deux fichiers ? garder la variante dure pour comparer (lien avec la variante « peine de mort », étape 8) ? effet sur la propagation et le temps de CP-SAT ?
 
 ---
 
@@ -170,6 +174,7 @@ Répartition et règles communes : [`TEAM.md`](TEAM.md). Les étapes 5b, 6, 7a e
   - chaque durée de bloc `d_i ≥ 4` ; `22 ≤ Σd ≤ 30` ; le quart entier dans la plage utile ; les activités dans `1..activity_count` (conditions de D1)
 - [x] Option **(P)** : passer chaque individu initial au `LocalSolver` (écrit contre l'interface, testé avec un faux solveur ; branché sur `MiniZincLocalSolver` après la fusion de 5b)
 - [x] Tests **(P)** : taille, faisabilité de tous les individus (`FeasibilityChecker`), reproductibilité avec la même graine, diversité (deux graines différentes ⇒ populations différentes), taille invalide, option `LocalSolver` (faux solveur appelé une fois par individu)
+- [x] Tests d'intégration avec `MiniZincLocalSolver` + CP-SAT **(C)** — Pascal, branche `etape-6-integration-cpsat` : ré-encodage sans perte de l'horaire rendu, faisabilité structurelle, jamais pire qu'une entrée faisable, entrée gardée sans solution, reproductibilité (bench_1, bench_5)
 
 ## Étape 7 — Opérateurs génétiques
 - [x] Trancher D3 : pas de normalisation au départ ; tri lexicographique et alignement en variantes

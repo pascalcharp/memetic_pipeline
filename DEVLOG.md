@@ -627,3 +627,27 @@ dans `src/ga/initialization.py`.
 
 
 
+
+## 2026-11-13 — Étape 6 : initialisation contre le vrai solveur (Pascal)
+
+**Fait (C)** : `TestInitializationWithCpSat` dans `tests/test_initialization.py`. `RandomBlockInitializer` est branché sur `MiniZincLocalSolver` (CP-SAT, `DeterministicTimeLimit(5.0)`), par l'intermédiaire d'un `RecordingLocalSolver` qui note chaque paire (horaire tiré, résultat). Invariants vérifiés pour chaque individu : faisabilité structurelle, horaire rendu ré-encodé sans perte par `BlockEncoding`, entrée gardée telle quelle si le solveur ne trouve pas de solution, coût de couverture jamais pire qu'une entrée déjà faisable.
+
+**Mesures (graine 0, 6 individus)**
+
+| Instance | Employés libérés | Issues | Individus faisables | Temps |
+|---|---|---|---|---|
+| bench_1 | 1 | 6 × OPTIMAL | 6 / 6 (coûts 116 à ≈ 2·10⁶, cellules quasi dures sous-couvertes) | 2,8 s |
+| bench_1 | 3 (tous) | 6 × OPTIMAL | 6 / 6, tous à l'optimum 94 | 4,1 s |
+| bench_3 | 2 | 6 × UNSATISFIABLE | 0 / 6 | 3,2 s |
+| bench_5 | 2 | 6 × UNSATISFIABLE | 0 / 6 | 3,9 s |
+| bench_5 | 8 (tous) | 6 × NO_SOLUTION (budget épuisé) | 0 / 6 | 25,8 s |
+
+**Constats à discuter en équipe**
+- **Asymétrie pénalité / contrainte dure** (relevée par Pascal) : l'évaluation (étape 4) traite « au moins 1 employé si demande > 0 » comme une **pénalité** ; le `LocalSolver` résout `horaire.mzn`, où c'est une **contrainte dure** (ligne 154), qu'on ne peut pas relâcher en ajoutant des contraintes.
+- Les horaires tirés au hasard violent presque toujours « au moins 1 ». Sur bench_3 et bench_5, avec 2 employés libérés, les UNSATISFIABLE sont un **artefact de cette contrainte dure** : un sous-problème pénalisé aurait rendu la solution la moins pénalisée du voisinage, donc une amélioration. Ces individus ne sont pas perdus pour autant : du point de vue de l'algorithme génétique, ils ont un coût pénalisé fini (4·10⁷ à 10⁸) et participent à la sélection ; seule l'amélioration par le `LocalSolver` leur échappe. Décision D12 ajoutée à TODO.md.
+- Tout libérer sur bench_1 fait converger toute la population vers l'optimum : elle perd toute diversité dès l'initialisation. Ce constat vient de la taille du voisinage, pas de la contrainte dure. Sur bench_5, le budget de 5 unités ne suffit même pas pour trouver une première solution.
+- Pistes pour la diversité : réparer seulement une partie de la population ; voisinage plus petit à l'initialisation ; tirage guidé par la demande. À trancher avant l'étape 8 (convergence et restart).
+
+**Tests** : 15 tests de `tests/test_initialization.py` verts (environ 19 s, dont 4 qui appellent CP-SAT).
+
+**Environnement** : `.venv` local (Python 3.14, MiniZinc 2.10 du bundle MiniZincIDE trouvé automatiquement), alors que le README demande Python 3.13.
