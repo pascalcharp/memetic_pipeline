@@ -165,11 +165,11 @@ Répartition et règles communes : [`TEAM.md`](TEAM.md). Les étapes 5b, 6, 7a e
 - [x] **Scaffold commun** (2026-11-09), en un seul commit sur `main`, avant la création des branches : interfaces, classes concrètes en squelette (`NotImplementedError`), exceptions et messages des étapes 5b, 6, 7a et 7b ; squelettes de tests (outils communs et tests de contrat des interfaces, verts sur `main`)
 
 ## Étape 6 — Initialisation de la population (`src/ga/initialization.py`) **(C→P)** — Mély, branche `etape-6-initialisation`
-- [ ] Scaffold **(C)**, dans le scaffold commun : interface `PopulationInitializer[G]` (`initialize(size, rng) -> individus non évalués`), squelette de `RandomBlockInitializer`, exceptions et messages
-- [ ] `RandomBlockInitializer(instance, encoding, local_solver = None)` **(P)** : génomes `BlockGenome` structurellement faisables tirés au hasard (graine contrôlée) :
+- [x] Scaffold **(C)**, dans le scaffold commun : interface `PopulationInitializer[G]` (`initialize(size, rng) -> individus non évalués`), squelette de `RandomBlockInitializer`, exceptions et messages
+- [x] `RandomBlockInitializer(instance, encoding, local_solver = None)` **(P)** : génomes `BlockGenome` structurellement faisables tirés au hasard (graine contrôlée) :
   - chaque durée de bloc `d_i ≥ 4` ; `22 ≤ Σd ≤ 30` ; le quart entier dans la plage utile ; les activités dans `1..activity_count` (conditions de D1)
-- [ ] Option **(P)** : passer chaque individu initial au `LocalSolver` (écrit contre l'interface, testé avec un faux solveur ; branché sur `MiniZincLocalSolver` après la fusion de 5b)
-- [ ] Tests **(P)** : taille, faisabilité de tous les individus (`FeasibilityChecker`), reproductibilité avec la même graine, diversité (deux graines différentes ⇒ populations différentes), taille invalide, option `LocalSolver` (faux solveur appelé une fois par individu)
+- [x] Option **(P)** : passer chaque individu initial au `LocalSolver` (écrit contre l'interface, testé avec un faux solveur ; branché sur `MiniZincLocalSolver` après la fusion de 5b)
+- [x] Tests **(P)** : taille, faisabilité de tous les individus (`FeasibilityChecker`), reproductibilité avec la même graine, diversité (deux graines différentes ⇒ populations différentes), taille invalide, option `LocalSolver` (faux solveur appelé une fois par individu)
 
 ## Étape 7 — Opérateurs génétiques
 - [x] Trancher D3 : pas de normalisation au départ ; tri lexicographique et alignement en variantes
