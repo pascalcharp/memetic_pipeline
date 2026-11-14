@@ -109,7 +109,12 @@ class TournamentSelector[G](ParentSelector[G]):
 
     def select(self, population: Sequence[Individu[G]], count: int, rng: random.Random) -> tuple[Individu[G], ...]:
         check_selectable(population, count)
-        return tuple(min(rng.choices(population, k=self.size),  key=lambda element: element.cost.total) for _ in range(count))
+        return tuple(self._play_tournament_round(population, rng) for _ in range(count))
+
+    def _play_tournament_round(self, population: Sequence[Individu[G]], rng: random.Random) -> Individu[G]:
+        round_population: list[Individu[G]] = rng.choices(population, k=self.size)
+        round_winner = min(round_population, key=lambda element: element.cost.total)
+        return round_winner
 
 
 class UniformMutableSelector[G](MutableSelector[G]):

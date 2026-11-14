@@ -34,8 +34,12 @@ POPULATION_TOTALS: tuple[int, ...] = (30, 10, 20)
 SEED: int = 42
 DRAW_COUNT: int = 3000
 LARGE_TOURNAMENT_SIZE: int = 100
+CONTRACT_COUNT: int = 5
+BEST_ALWAYS_WINS_COUNT: int = 20
+UNIFORM_TOLERANCE_RATIO: float = 0.15
+MIDDLE_TOTAL: int = 20
 BEST_GENOME: int = POPULATION_TOTALS.index(min(POPULATION_TOTALS))
-MIDDLE_GENOME: int = POPULATION_TOTALS.index(20)
+MIDDLE_GENOME: int = POPULATION_TOTALS.index(MIDDLE_TOTAL)
 WORST_GENOME: int = POPULATION_TOTALS.index(max(POPULATION_TOTALS))
 UNEVALUATED_GENOME: int = 99
 TIED_TOTAL: int = 10
@@ -108,9 +112,9 @@ class TestSelectionContract(unittest.TestCase):
     def test_givenAnySelector_whenSelect_thenReturnsExactlyCountIndividualsInATuple(self) -> None:
         for selector in selectors():
             with self.subTest(selector=type(selector).__name__):
-                selection = selector.select(population(), 5, random.Random(SEED))
+                selection = selector.select(population(), CONTRACT_COUNT, random.Random(SEED))
                 self.assertIsInstance(selection, tuple)
-                self.assertEqual(len(selection), 5)
+                self.assertEqual(len(selection), CONTRACT_COUNT)
 
     def test_givenAnySelector_whenSelect_thenAllIndividualsComeFromPopulation(self) -> None:
         source = population()
@@ -127,20 +131,24 @@ class TestSelectionContract(unittest.TestCase):
                 self.assertEqual(len(selection), DRAW_COUNT)
 
     def test_givenSingleIndividualPopulation_whenSelect_thenAlwaysReturnsThatIndividual(self) -> None:
-        only = evaluated_individual(0, 10)
+        genome = 0
+        total = 10
+        count = 4
+        only = evaluated_individual(genome, total)
         for selector in selectors():
             with self.subTest(selector=type(selector).__name__):
-                selection = selector.select((only,), 4, random.Random(SEED))
-                self.assertEqual(len(selection), 4)
+                selection = selector.select((only,), count, random.Random(SEED))
+                self.assertEqual(len(selection), count)
                 for individual in selection:
                     self.assertIs(individual, only)
 
     def test_givenListPopulation_whenSelect_thenPopulationIsNotModified(self) -> None:
+        count = 10
         for selector in selectors():
             with self.subTest(selector=type(selector).__name__):
                 source = list(population())
                 snapshot = list(source)
-                selector.select(source, 10, random.Random(SEED))
+                selector.select(source, count, random.Random(SEED))
                 self.assertEqual(len(source), len(snapshot))
                 for before, after in zip(snapshot, source):
                     self.assertIs(before, after)
@@ -150,17 +158,19 @@ class TestSelectionContract(unittest.TestCase):
 class TestSelectionErrors(unittest.TestCase):
 
     def test_givenEmptyPopulation_whenSelect_thenRaisesEmptyPopulationError(self) -> None:
+        count = 1
         for selector in selectors():
             with self.subTest(selector=type(selector).__name__):
                 with self.assertRaises(EmptyPopulationError):
-                    selector.select((), 1, random.Random(SEED))
+                    selector.select((), count, random.Random(SEED))
 
     def test_givenUnevaluatedIndividual_whenSelect_thenRaisesUnevaluatedIndividualError(self) -> None:
+        count = 1
         unevaluated = unevaluated_individual()
         for selector in selectors():
             with self.subTest(selector=type(selector).__name__):
                 with self.assertRaises(UnevaluatedIndividualError):
-                    selector.select(population() + (unevaluated,), 1, random.Random(SEED))
+                    selector.select(population() + (unevaluated,), count, random.Random(SEED))
 
     def test_givenInvalidCount_whenSelect_thenRaisesInvalidSelectionParameterError(self) -> None:
         for selector in selectors():
@@ -174,35 +184,42 @@ class TestTournamentSelector(unittest.TestCase):
 
     def test_givenTournamentCoveringWholePopulation_whenSelect_thenBestAlwaysWins(self) -> None:
         selector = TournamentSelector(size=LARGE_TOURNAMENT_SIZE)
-        selection = selector.select(population(), 20, random.Random(SEED))
-        self.assertEqual(genomes(selection), [BEST_GENOME] * 20)
+        selection = selector.select(population(), BEST_ALWAYS_WINS_COUNT, random.Random(SEED))
+        self.assertEqual(genomes(selection), [BEST_GENOME] * BEST_ALWAYS_WINS_COUNT)
 
     def test_givenTournamentOfSizeTwo_whenManyDraws_thenBetterIndividualsAreDrawnMoreOften(self) -> None:
-        selection = TournamentSelector(size=2).select(population(), DRAW_COUNT, random.Random(SEED))
+        size = 2
+        selection = TournamentSelector(size=size).select(population(), DRAW_COUNT, random.Random(SEED))
         drawn = Counter(genomes(selection))
         self.assertGreater(drawn[BEST_GENOME], drawn[MIDDLE_GENOME])
         self.assertGreater(drawn[MIDDLE_GENOME], drawn[WORST_GENOME])
         self.assertGreater(drawn[WORST_GENOME], 0)
 
     def test_givenTournamentOfSizeOne_whenManyDraws_thenEveryIndividualIsDrawn(self) -> None:
-        selection = TournamentSelector(size=1).select(population(), DRAW_COUNT, random.Random(SEED))
+        size = 1
+        selection = TournamentSelector(size=size).select(population(), DRAW_COUNT, random.Random(SEED))
         self.assertEqual(set(genomes(selection)), set(range(len(POPULATION_TOTALS))))
 
     def test_givenEqualCosts_whenSelect_thenSelectsFromPopulationWithoutError(self) -> None:
+        size = 2
         tied = tied_population()
-        selection = TournamentSelector(size=2).select(tied, DRAW_COUNT, random.Random(SEED))
+        selection = TournamentSelector(size=size).select(tied, DRAW_COUNT, random.Random(SEED))
         self.assertEqual(len(selection), DRAW_COUNT)
         self.assertEqual(set(genomes(selection)), set(range(TIED_COUNT)))
 
     def test_givenFixedSeed_whenSelect_thenMatchesHandRecordedWinners(self) -> None:
         # Valeur calculée une fois avec random.Random(SEED), tournois de taille 2, coûts (30, 10, 20).
+        size = 2
         expected = [1, 0, 2, 2, 1, 1, 0, 1, 1, 2]
-        selection = TournamentSelector(size=2).select(population(), 10, random.Random(SEED))
+        count = len(expected)
+        selection = TournamentSelector(size=size).select(population(), count, random.Random(SEED))
         self.assertEqual(genomes(selection), expected)
 
     def test_givenTournamentOfSizeOne_whenSelect_thenMatchesIndependentUniformDraw(self) -> None:
-        expected = random.Random(SEED).choices(range(len(POPULATION_TOTALS)), k=10)
-        selection = TournamentSelector(size=1).select(population(), 10, random.Random(SEED))
+        size = 1
+        count = 10
+        expected = random.Random(SEED).choices(range(len(POPULATION_TOTALS)), k=count)
+        selection = TournamentSelector(size=size).select(population(), count, random.Random(SEED))
         self.assertEqual(genomes(selection), expected)
 
 
@@ -217,16 +234,21 @@ class TestUniformMutableSelector(unittest.TestCase):
         drawn = Counter(genomes(selection))
         expected_share = DRAW_COUNT / len(POPULATION_TOTALS)
         for genome in range(len(POPULATION_TOTALS)):
-            self.assertAlmostEqual(drawn[genome], expected_share, delta=expected_share * 0.15)
+            self.assertAlmostEqual(drawn[genome], expected_share, delta=expected_share * UNIFORM_TOLERANCE_RATIO)
 
     def test_givenFixedSeed_whenSelect_thenMatchesIndependentUniformDraw(self) -> None:
-        expected = random.Random(SEED).choices(range(len(POPULATION_TOTALS)), k=10)
-        selection = UniformMutableSelector().select(population(), 10, random.Random(SEED))
+        count = 10
+        expected = random.Random(SEED).choices(range(len(POPULATION_TOTALS)), k=count)
+        selection = UniformMutableSelector().select(population(), count, random.Random(SEED))
         self.assertEqual(genomes(selection), expected)
 
 
 class ScriptedRandom(random.Random):
-    """RNG dont chaque appel à ``choices`` rend le tirage écrit d'avance (indices dans la population)."""
+    """RNG dont chaque appel à ``choices`` rend le tirage écrit d'avance (indices dans la population).
+
+    Note : ce double lie les tests à l'utilisation de ``rng.choices`` dans le tournoi. Passer à ``randrange``
+    ou ``sample`` les casserait, même si le comportement restait correct (compromis accepté).
+    """
 
     def __init__(self, *draws: Sequence[int]) -> None:
         super().__init__()
@@ -248,68 +270,83 @@ WINNERS_OF_ALL_ORDERED_PAIRS: list[int] = [0, 1, 2, 1, 1, 1, 2, 1, 2]
 class TestTournamentHandCrafted(unittest.TestCase):
 
     def test_givenDrawnCandidates_whenSelect_thenLowestCostAmongDrawnWins(self) -> None:
+        size, count = 2, 1
         rng = ScriptedRandom((0, 2))
-        selection = TournamentSelector(size=2).select(population(), 1, rng)
+        selection = TournamentSelector(size=size).select(population(), count, rng)
         self.assertEqual(genomes(selection), [2])  # 20 < 30
 
     def test_givenBestIndividualNotDrawn_whenSelect_thenItCannotWin(self) -> None:
+        size, count = 2, 1
         rng = ScriptedRandom((0, 2))  # le génome 1 (coût 10) n'est pas dans le tournoi
-        selection = TournamentSelector(size=2).select(population(), 1, rng)
+        selection = TournamentSelector(size=size).select(population(), count, rng)
         self.assertNotIn(BEST_GENOME, genomes(selection))
 
     def test_givenBestIndividualDrawnAmongOthers_whenSelect_thenBestWins(self) -> None:
+        size, count = 3, 1
         rng = ScriptedRandom((0, 1, 2))
-        selection = TournamentSelector(size=3).select(population(), 1, rng)
+        selection = TournamentSelector(size=size).select(population(), count, rng)
         self.assertEqual(genomes(selection), [BEST_GENOME])
 
     def test_givenSeveralParents_whenSelect_thenEachParentHasItsOwnTournament(self) -> None:
+        size, count = 2, 3
         rng = ScriptedRandom((0, 2), (0, 1), (2, 2))
-        selection = TournamentSelector(size=2).select(population(), 3, rng)
+        selection = TournamentSelector(size=size).select(population(), count, rng)
         self.assertEqual(genomes(selection), [2, 1, 2])
 
     def test_givenSameIndividualDrawnTwice_whenSelect_thenItWinsItsOwnTournament(self) -> None:
+        size, count = 2, 1
         rng = ScriptedRandom((0, 0))
-        selection = TournamentSelector(size=2).select(population(), 1, rng)
+        selection = TournamentSelector(size=size).select(population(), count, rng)
         self.assertEqual(genomes(selection), [0])
 
     def test_givenEqualCosts_whenSelect_thenFirstDrawnCandidateWins(self) -> None:
+        size, count = 3, 1
         tied = tied_population()
         rng = ScriptedRandom((2, 0, 1))  # suppose TIED_COUNT >= 3
-        selection = TournamentSelector(size=3).select(tied, 1, rng)
+        selection = TournamentSelector(size=size).select(tied, count, rng)
         self.assertEqual(genomes(selection), [2])
 
     def test_givenSizeAndCount_whenSelect_thenOneTournamentOfSizeCandidatesPerParent(self) -> None:
+        size, count = 3, 2
         rng = ScriptedRandom((0, 1, 2), (2, 1, 0))
-        TournamentSelector(size=3).select(population(), 2, rng)
-        self.assertEqual(rng.requested_sizes, [3, 3])
+        TournamentSelector(size=size).select(population(), count, rng)
+        self.assertEqual(rng.requested_sizes, [size] * count)
 
     def test_givenEveryOrderedPairDrawnOnce_whenSelectSizeTwo_thenWinnersMatchHandComputedTable(self) -> None:
+        size = 2
+        count = len(ALL_ORDERED_PAIRS)
         rng = ScriptedRandom(*ALL_ORDERED_PAIRS)
-        selection = TournamentSelector(size=2).select(population(), len(ALL_ORDERED_PAIRS), rng)
+        selection = TournamentSelector(size=size).select(population(), count, rng)
         self.assertEqual(genomes(selection), WINNERS_OF_ALL_ORDERED_PAIRS)
 
     def test_givenEveryOrderedPairDrawnOnce_whenSelectSizeTwo_thenWinCountsAreFiveThreeOne(self) -> None:
+        size = 2
+        count = len(ALL_ORDERED_PAIRS)
+        expected_wins = (5, 3, 1)  # (meilleur, moyen, pire)
         rng = ScriptedRandom(*ALL_ORDERED_PAIRS)
-        selection = TournamentSelector(size=2).select(population(), len(ALL_ORDERED_PAIRS), rng)
+        selection = TournamentSelector(size=size).select(population(), count, rng)
         drawn = Counter(genomes(selection))
-        self.assertEqual((drawn[BEST_GENOME], drawn[MIDDLE_GENOME], drawn[WORST_GENOME]), (5, 3, 1))
+        self.assertEqual((drawn[BEST_GENOME], drawn[MIDDLE_GENOME], drawn[WORST_GENOME]), expected_wins)
 
 
 class TestUniformMutableSelectorHandCrafted(unittest.TestCase):
 
     def test_givenScriptedDraw_whenSelect_thenReturnsDrawnIndividualsInOrder(self) -> None:
+        count = 4
         rng = ScriptedRandom((2, 2, 0, 1))
-        selection = UniformMutableSelector().select(population(), 4, rng)
+        selection = UniformMutableSelector().select(population(), count, rng)
         self.assertEqual(genomes(selection), [2, 2, 0, 1])
 
     def test_givenWorstIndividualDrawn_whenSelect_thenItIsKeptDespiteItsCost(self) -> None:
+        count = 2
         rng = ScriptedRandom((WORST_GENOME, WORST_GENOME))
-        selection = UniformMutableSelector().select(population(), 2, rng)
+        selection = UniformMutableSelector().select(population(), count, rng)
         self.assertEqual(genomes(selection), [WORST_GENOME, WORST_GENOME])
 
     def test_givenScriptedDraw_whenSelect_thenReturnsTheSamePopulationObjects(self) -> None:
+        count = 2
         source = population()
-        selection = UniformMutableSelector().select(source, 2, ScriptedRandom((1, 0)))
+        selection = UniformMutableSelector().select(source, count, ScriptedRandom((1, 0)))
         self.assertIs(selection[0], source[1])
         self.assertIs(selection[1], source[0])
 
