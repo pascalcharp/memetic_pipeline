@@ -651,3 +651,36 @@ dans `src/ga/initialization.py`.
 **Tests** : 15 tests de `tests/test_initialization.py` verts (environ 19 s, dont 4 qui appellent CP-SAT).
 
 **Environnement** : `.venv` local (Python 3.14, MiniZinc 2.10 du bundle MiniZincIDE trouvé automatiquement), alors que le README demande Python 3.13.
+
+
+
+
+
+
+## 2026-11-13 — Étape 7a : Sélection et registre des opérateurs (Tristan, tests générés par claude)
+
+Fait (P) : Implémentation de `TournamentSelector.select` et `UniformMutableSelector.select` dans `src/ga/selection.py`, et de `OperatorRegistry` (`register`, `names`, `create`, `check_compatibility`) avec ses trois erreurs dans `src/ga/registry.py`.
+
+Sélection
+
+* Les deux sélecteurs appellent d'abord `check_selectable` (`count` invalide, population vide, individu non évalué).
+* Tirage par lot avec remise (D7) : `select` rend un `tuple` d'exactement `count` individus tirés dans la population, sans jamais la modifier.
+* Tournoi : pour chaque parent, `size` individus sont tirés avec `rng.choices(..., k=size)`, puis on retient celui de plus faible `cost.total` (`min`). En cas d'égalité, le premier candidat tiré l'emporte. Un tournoi de taille 1 équivaut à un tirage uniforme.
+* `UniformMutableSelector` : `rng.choices(..., k=count)`, sans regard au coût.
+* Le seul aléa provient du `random.Random` passé en paramètre (D5).
+
+Registre
+
+* `register` associe un nom à une fabrique (classe ou fonction) et lève `DuplicateOperatorError` si le nom existe déjà ; le registre reste inchangé après l'erreur.
+* `names` rend les noms triés ; `create` appelle la fabrique avec `**parameters` et rend une nouvelle instance à chaque appel.
+* `check_compatibility` utilise `VariationOperator.is_compatible_with` et lève `IncompatibleOperatorError` sinon. Le registre dépend de la base commune `VariationOperator` (`src/ga/operators.py`), et non seulement de `Crossover[G]` et `Mutation[G]`.
+* Les trois erreurs construisent leur message depuis `RegistryMessages` et conservent les valeurs en attributs (`registry_name`, `operator_name`, `known` trié, `operator_class`, `expected_encoding`, `actual_encoding`).
+* Changement d'interface à signaler en revue : les erreurs scaffoldées comme classes vides ont maintenant un `__init__` avec paramètres (le site d'appel passe les données brutes, pas le message).
+
+Tests : 36 tests dans `tests/test_selection.py` et 19 dans `tests/test_registry.py`.
+
+* Sélection : contrat commun aux deux sélecteurs (taille, tuple, provenance, population d'un seul individu, population non modifiée), erreurs de `check_selectable`, tests statistiques à graine fixée (le meilleur gagne un grand tournoi, un meilleur individu est tiré plus souvent, chaque individu finit par être tiré), et tests écrits à la main avec un `ScriptedRandom` (tirages écrits d'avance : vainqueur exact de chaque tournoi, règle d'égalité, table des 9 paires ordonnées dont les victoires sont 5, 3 et 1).
+* Registre : `register` puis `create` (type, paramètres, fabrique fonction, nouvelle instance), `names` (vide, trié), doublon et nom inconnu (noms cités dans le message, noms connus triés), compatibilité avec le vrai `BlockEncoding` et un encodage factice.
+* Aucun test n'appelle `select` deux fois pour comparer les résultats ; la reproductibilité est vérifiée par une seule exécution contre une valeur attendue.
+
+Suite : Mettre à jour `TODO.md`, relancer la suite complète (`python -m unittest discover`, 286 tests, 1 ignoré, tous verts), puis préparer la pull request de `etape-7a-selection` vers `main` après validation finale.

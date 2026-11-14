@@ -9,7 +9,7 @@ Le registre vérifie aussi, à l'assemblage, qu'un opérateur de variation est c
 une incompatibilité est découverte avant l'exécution, pas au milieu (``IncompatibleOperatorError``).
 """
 
-from collections.abc import Callable
+from collections.abc import Callable, Iterable
 from typing import Any
 
 from src.ga.chromosome import Encoding
@@ -32,14 +32,36 @@ class RegistryError(Exception):
 
 class DuplicateOperatorError(RegistryError):
     """Un nom est déjà enregistré."""
+    def __init__(self, registry_name: str, operator_name: str) -> None:
+        self.registry_name = registry_name
+        self.operator_name = operator_name
+        super().__init__(RegistryMessages.DUPLICATE_NAME.format(registry=registry_name, name=operator_name))
 
 
 class UnknownOperatorError(RegistryError):
     """Aucun opérateur n'est enregistré sous ce nom."""
+    def __init__(self, registry_name: str, operator_name: str, known: Iterable[str]) -> None:
+        self.registry_name = registry_name
+        self.operator_name = operator_name
+        self.known = tuple(sorted(known))
+        super().__init__(RegistryMessages.UNKNOWN_NAME.format(
+            registry=registry_name,
+            name=operator_name,
+            known=", ".join(self.known)
+        ))
 
 
 class IncompatibleOperatorError(RegistryError):
     """L'opérateur de variation ne manipule pas les génomes de l'encodage choisi (D5)."""
+    def __init__(self, operator: VariationOperator, encoding: Encoding) -> None:
+        self.operator_class: str = operator.__class__.__name__
+        self.expected_encoding: str = operator.encoding_type().__name__
+        self.actual_encoding = encoding.__class__.__name__
+        super().__init__(RegistryMessages.INCOMPATIBLE_OPERATOR.format(
+            operator=self.operator_class,
+            expected=self.expected_encoding,
+            found=self.actual_encoding
+        ))
 
 
 class OperatorRegistry:
@@ -50,6 +72,7 @@ class OperatorRegistry:
 
     def __init__(self, name: str) -> None:
         self.name = name
+        self.operators: dict[str, type[VariationOperator]] = {}
 
     def register(self, operator_name: str, factory: Callable[..., Any]) -> None:
         """Enregistre ``factory`` sous ``operator_name``.
@@ -57,11 +80,14 @@ class OperatorRegistry:
         Raises:
             DuplicateOperatorError: si ``operator_name`` est déjà enregistré.
         """
-        raise NotImplementedError  # Étape 7a (Tristan)
+        if operator_name not in self.operators:
+            self.operators[operator_name] = factory
+        else:
+            raise DuplicateOperatorError(self.name, operator_name)
 
     def names(self) -> tuple[str, ...]:
         """Noms enregistrés, triés."""
-        raise NotImplementedError  # Étape 7a (Tristan)
+        return tuple(sorted(self.operators.keys()))
 
     def create(self, operator_name: str, **parameters: Any) -> Any:
         """Nouvel opérateur, créé par la fabrique de ``operator_name`` avec ``parameters``.
@@ -69,7 +95,9 @@ class OperatorRegistry:
         Raises:
             UnknownOperatorError: si ``operator_name`` n'est pas enregistré (les noms connus sont dans le message).
         """
-        raise NotImplementedError  # Étape 7a (Tristan)
+        if operator_name not in self.operators:
+            raise UnknownOperatorError(self.name, operator_name, self.operators.keys())
+        return self.operators[operator_name](**parameters)
 
     @staticmethod
     def check_compatibility(operator: VariationOperator, encoding: Encoding) -> None:
@@ -78,4 +106,5 @@ class OperatorRegistry:
         Raises:
             IncompatibleOperatorError: sinon ; le message nomme l'opérateur, son encodage et l'encodage reçu.
         """
-        raise NotImplementedError  # Étape 7a (Tristan)
+        if not operator.is_compatible_with(encoding):
+            raise IncompatibleOperatorError(operator, encoding)
