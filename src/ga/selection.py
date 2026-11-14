@@ -91,10 +91,6 @@ class MutableSelector[G](ABC):
         """
 
 
-# ---------------------------------------------------------------------------------------------------------------------
-# Implémentations (à écrire, étape 7a)
-# ---------------------------------------------------------------------------------------------------------------------
-
 class TournamentSelector[G](ParentSelector[G]):
     """Sélection par tournoi : pour chaque parent, tire ``size`` individus au hasard (avec remise) et retient
     celui de plus faible ``cost.total``. Un tournoi de taille 1 est un tirage uniforme.
@@ -112,11 +108,13 @@ class TournamentSelector[G](ParentSelector[G]):
         self.size = size
 
     def select(self, population: Sequence[Individu[G]], count: int, rng: random.Random) -> tuple[Individu[G], ...]:
-        raise NotImplementedError  # Étape 7a (Tristan)
+        check_selectable(population, count)
+        return tuple(min(rng.choices(population, k=self.size),  key=lambda element: element.cost.total) for _ in range(count))
 
 
 class UniformMutableSelector[G](MutableSelector[G]):
     """Tirage uniforme des individus à muter, sans regard au coût."""
 
     def select(self, population: Sequence[Individu[G]], count: int, rng: random.Random) -> tuple[Individu[G], ...]:
-        raise NotImplementedError  # Étape 7a (Tristan)
+        check_selectable(population, count)
+        return tuple(rng.choices(population, k=count))
