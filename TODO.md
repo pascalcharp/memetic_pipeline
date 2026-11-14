@@ -65,6 +65,11 @@ Règle : une seule étape à la fois **par personne et par branche** ; on ne fus
   - piste 1, constantes : une seule source, Python. Les littéraux du modèle deviennent des paramètres (`DUREE_MIN_QUART`, `ECART_DINER`…), remplis par le `SolverAdapter` à partir de `ShiftStructure` / `ShiftGaps`, comme le poids de la pénalité dans 5c ;
   - piste 2, logique : le modèle est la spécification de référence et le Python une implémentation rapide, vérifiée par une **suite de conformance** en CI. Elle génère beaucoup d'horaires (au hasard, cas limites, chaque règle violée isolément) et compare verdict et coût Python / MiniZinc **terme par terme** (sous-couverture, surcouverture, violations ; le modèle doit exposer ces termes dans sa sortie JSON). Elle généralise les sondes ponctuelles de `test_shift_rules.py`, `test_horaire.py` et `test_feasibility.py` ;
   - questions : générer les horaires au hasard à la main ou avec une bibliothèque de tests par propriétés (`hypothesis`) ? combien de cas, pour garder une CI rapide ? quand le faire : après 5c, avant l'étape 8 ?
+- [ ] **D14 — Exceptions qui construisent leur propre message** (relevée à la revue de la PR #4, 2026-11-13 ; à trancher en équipe, touche la convention de CLAUDE.md « Gestion des erreurs ») :
+  - constat : à l'étape 7a, les trois exceptions de `src/ga/registry.py` (`DuplicateOperatorError`, `UnknownOperatorError`, `IncompatibleOperatorError`) ont reçu un `__init__` qui prend les données brutes, les garde en attributs (`operator_name`, `known`…) et formate lui-même le gabarit de `RegistryMessages`. Partout ailleurs, dans `selection.py` par exemple, c'est le code qui lève l'exception qui formate le gabarit et passe une chaîne. Ce changement d'interface a été fait sans concertation, dans le même commit que l'implémentation ;
+  - pour : les attributs structurés permettent aux tests (et au code appelant) de vérifier les valeurs sans analyser le message ; le formatage est écrit une seule fois ;
+  - contre : deux conventions coexistent dans le projet, alors que CLAUDE.md demande une gestion cohérente des exceptions ;
+  - questions : adopter cette forme comme convention (et l'inscrire dans CLAUDE.md, puis l'appliquer progressivement aux autres modules) ou revenir à la forme commune dans `registry.py` ? En attendant, la version de l'étape 7a reste en place.
 
 ---
 
