@@ -180,11 +180,11 @@ Répartition et règles communes : [`TEAM.md`](TEAM.md). Les étapes 5b, 6, 7a e
 - [x] Trancher D3 : pas de normalisation au départ ; tri lexicographique et alignement en variantes
 
 ### 7a — Sélection et registre (`src/ga/selection.py`, `src/ga/registry.py`) **(C→P)** — Tristan, branche `etape-7a-selection`
-- [ ] Scaffold **(C)**, dans le scaffold commun : interfaces `ParentSelector[G]` et `MutableSelector[G]` (tirage par lot, D7), vérification commune de la population (vide, individus non évalués), squelettes de `TournamentSelector`, `UniformMutableSelector` et `OperatorRegistry`, exceptions et messages (dont `IncompatibleOperatorError`)
-- [ ] `TournamentSelector(size)` **(P)** : `SelectParent`, tournoi sur `cost.total`
-- [ ] `UniformMutableSelector` **(P)** : `SelectMutable`, tirage uniforme
-- [ ] `OperatorRegistry` **(P)** : enregistrement et création par nom, nom en double ou inconnu ⇒ exception ; vérification de compatibilité opérateur / encodage (`IncompatibleOperatorError`)
-- [ ] Tests **(P)** : individus construits à la main avec des coûts choisis ; le meilleur gagne un tournoi qui contient tout le monde ; tournoi de taille 1 = tirage uniforme ; population vide ou non évaluée ⇒ exception ; reproductibilité avec la même graine ; entrées jamais modifiées
+- [x] Scaffold **(C)**, dans le scaffold commun : interfaces `ParentSelector[G]` et `MutableSelector[G]` (tirage par lot, D7), vérification commune de la population (vide, individus non évalués), squelettes de `TournamentSelector`, `UniformMutableSelector` et `OperatorRegistry`, exceptions et messages (dont `IncompatibleOperatorError`)
+- [x] `TournamentSelector(size)` **(P)** : `SelectParent`, tournoi sur `cost.total`
+- [x] `UniformMutableSelector` **(P)** : `SelectMutable`, tirage uniforme
+- [x] `OperatorRegistry` **(P)** : enregistrement et création par nom, nom en double ou inconnu ⇒ exception ; vérification de compatibilité opérateur / encodage (`IncompatibleOperatorError`)
+- [x] Tests **(P)** : individus construits à la main avec des coûts choisis ; le meilleur gagne un tournoi qui contient tout le monde ; tournoi de taille 1 = tirage uniforme ; population vide ou non évaluée ⇒ exception ; reproductibilité avec la même graine ; entrées jamais modifiées
 
 ### 7b — Opérateurs de variation pour `BlockEncoding` (`src/ga/operators.py`) **(C→P)** — Xavier, branche `etape-7b-variation`
 - [ ] Scaffold **(C)**, dans le scaffold commun : interfaces `VariationOperator[G]` (encodage compatible), `Crossover[G]` (`recombine(parents, rng) -> enfants`) et `Mutation[G]` (`mutate(genome, rng) -> génome`), squelettes des opérateurs concrets, exceptions et messages

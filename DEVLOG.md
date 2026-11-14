@@ -652,11 +652,6 @@ dans `src/ga/initialization.py`.
 
 **Environnement** : `.venv` local (Python 3.14, MiniZinc 2.10 du bundle MiniZincIDE trouvé automatiquement), alors que le README demande Python 3.13.
 
-
-
-
-
-
 ## 2026-11-13 — Étape 7a : Sélection et registre des opérateurs (Tristan, tests générés par claude)
 
 Fait (P) : Implémentation de `TournamentSelector.select` et `UniformMutableSelector.select` dans `src/ga/selection.py`, et de `OperatorRegistry` (`register`, `names`, `create`, `check_compatibility`) avec ses trois erreurs dans `src/ga/registry.py`.
@@ -684,3 +679,30 @@ Tests : 36 tests dans `tests/test_selection.py` et 19 dans `tests/test_registry.
 * Aucun test n'appelle `select` deux fois pour comparer les résultats ; la reproductibilité est vérifiée par une seule exécution contre une valeur attendue.
 
 Suite : Mettre à jour `TODO.md`, relancer la suite complète (`python -m unittest discover`, 286 tests, 1 ignoré, tous verts), puis préparer la pull request de `etape-7a-selection` vers `main` après validation finale.
+
+## 2026-11-14 — suivi étape 7a : Sélection et registre des opérateurs (Tristan, tests générés par claude)
+
+Fait (P) : Correction d'erreurs trouvées suite au merge de la [`PR #4`](https://github.com/pascalcharp/memetic_pipeline/pull/4).
+
+Sélection
+
+* Création de `_play_tournament_round` dans `TournamentSelector` pour améliorer la lisibilité du code ; la méthode est privée (préfixe `_`).
+
+Registre
+
+* `self.operators` renommé `self._factories`, avec l'annotation `dict[str, Callable[..., Any]]` : le dictionnaire contient des fabriques (classes ou fonctions), pas des `VariationOperator`. L'attribut privé empêche de contourner le contrôle des doublons ; `names()` sert à le consulter.
+* `register` : le bloc if-else est remplacé par une clause de garde.
+
+Documentation
+
+* `TODO.md` : cases de 7a cochées
+* `TEAM.md` : ligne `Étape 7a` cochée
+* `DEVLOG.md` : cinq lignes vides retirées avant l'entrée du 2026-11-13 et saut de ligne ajouté en fin de fichier.
+
+Tests : 2 nouveaux tests dans `tests/test_registry.py` (21 au total), et nettoyage des deux fichiers de tests.
+
+* Nouveaux tests : deux registres distincts ne partagent pas leurs fabriques ; un registre vide lève `UnknownOperatorError` dont `known` est vide.
+* Le test de la valeur par défaut du tournoi compare `size` à `SelectionDefaults.TOURNAMENT_SIZE`, au lieu de construire un second `TournamentSelector()`.
+* Nombres magiques retirés. Dans `test_selection.py`, constantes de module (`CONTRACT_COUNT`, `BEST_ALWAYS_WINS_COUNT`, `UNIFORM_TOLERANCE_RATIO`, `MIDDLE_TOTAL`) et variables locales `count` / `size` dans chaque test, pour que le rôle de chaque nombre soit lisible. Dans `test_registry.py`, noms d'opérateurs en constantes et noms de classes tirés de `__name__`.
+* Les deux tests de contrat de `test_registry.py` sont renommés selon la convention given_when_then.
+* La docstring de `ScriptedRandom` note que les tests sont liés à l'emploi de `rng.choices` dans le tournoi : une réécriture avec `randrange` ou `sample` les casserait, même si le comportement restait correct (compromis accepté).

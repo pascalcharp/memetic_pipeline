@@ -72,7 +72,7 @@ class OperatorRegistry:
 
     def __init__(self, name: str) -> None:
         self.name = name
-        self.operators: dict[str, type[VariationOperator]] = {}
+        self._factories: dict[str, Callable[..., Any]] = {}
 
     def register(self, operator_name: str, factory: Callable[..., Any]) -> None:
         """Enregistre ``factory`` sous ``operator_name``.
@@ -80,14 +80,15 @@ class OperatorRegistry:
         Raises:
             DuplicateOperatorError: si ``operator_name`` est déjà enregistré.
         """
-        if operator_name not in self.operators:
-            self.operators[operator_name] = factory
-        else:
+        if operator_name in self._factories:
             raise DuplicateOperatorError(self.name, operator_name)
+        
+        self._factories[operator_name] = factory
+        
 
     def names(self) -> tuple[str, ...]:
         """Noms enregistrés, triés."""
-        return tuple(sorted(self.operators.keys()))
+        return tuple(sorted(self._factories.keys()))
 
     def create(self, operator_name: str, **parameters: Any) -> Any:
         """Nouvel opérateur, créé par la fabrique de ``operator_name`` avec ``parameters``.
@@ -95,9 +96,9 @@ class OperatorRegistry:
         Raises:
             UnknownOperatorError: si ``operator_name`` n'est pas enregistré (les noms connus sont dans le message).
         """
-        if operator_name not in self.operators:
-            raise UnknownOperatorError(self.name, operator_name, self.operators.keys())
-        return self.operators[operator_name](**parameters)
+        if operator_name not in self._factories:
+            raise UnknownOperatorError(self.name, operator_name, self._factories.keys())
+        return self._factories[operator_name](**parameters)
 
     @staticmethod
     def check_compatibility(operator: VariationOperator, encoding: Encoding) -> None:

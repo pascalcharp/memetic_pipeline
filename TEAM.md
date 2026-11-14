@@ -112,7 +112,7 @@ Avant le départ, Claude scaffolde en un seul commit sur `main` les interfaces e
 **Tests** : `python -m unittest tests.test_initialization` (sans MiniZinc).
 
 ### Tristan — Étape 7a : sélection et registre des opérateurs
-- [ ] Étape 7a
+- [x] Étape 7a
 
 **Fichiers**
 - `src/ga/selection.py`
