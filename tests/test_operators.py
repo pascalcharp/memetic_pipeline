@@ -19,6 +19,8 @@ from typing import Literal, Sequence
 import unittest
 from unittest import mock
 
+import numpy
+
 from src.ga.chromosome import ActivityBlock, BlockEncoding, BlockGene, BlockGenome, Encoding
 from src.ga.operators import (
     ActivityMutation,
@@ -37,6 +39,7 @@ from src.ga.operators import (
 )
 from src.model.horaire import Horaire
 from src.model.shift_rules import ShiftStructure
+from src.utils.io import MilestoneWindow, ProblemInstance, ShiftWindows
 from tests.fixtures import synthetic_instance
 
 
@@ -58,6 +61,7 @@ class TestScaffoldContract(unittest.TestCase):
     CROSSOVER = 0
     SHIFT_MUTAION = 1
     BLOCK_MUTAION = 2
+    ACTIVITY_MUTAION = 3
 
     def setUp(self) -> None:
         instance = self.instance = synthetic_instance()
@@ -240,7 +244,7 @@ class TestScaffoldContract(unittest.TestCase):
         with self.assertRaises(GenomeCannotMutate):
             self.block_operators[self.BLOCK_MUTAION].mutate(tuple([gene1]), rng)
 
-    def test_bblock_boundary_mutate_transfer_right_amount_from_block_1_and_2_only(self):
+    def test_block_boundary_mutate_transfer_right_amount_from_block_1_and_2_only(self):
         rng = mock.Mock()
         gene_index = 0
         rng.randint.side_effect =   [1]
@@ -255,6 +259,49 @@ class TestScaffoldContract(unittest.TestCase):
         self.assertEqual(mutated[gene_index].blocks[1].duration, block1.duration)
         self.assertEqual(mutated[gene_index].blocks[2].duration, block1.duration)
         self.assertEqual(mutated[gene_index].blocks[3].duration, block2.duration - 1)
+
+    def test_activity_mutation_does_nothing_when_only_a_single_activity(self):
+        rng = mock.Mock()
+        block1 = ActivityBlock(1, 4)
+        gene1 = BlockGene(self.instance.windows.start.earliest, (block1, block1, block1, block1))
+        test_instance_with_a_single_activity = ProblemInstance(
+            name="test",
+            employee_count=1,
+            activity_count=1,
+            period_count=20000,
+            demand=numpy.array(list()),
+            over_cost=numpy.array(list()),
+            under_cost=numpy.array(list()),
+            first_useful_period=0,
+            last_useful_period=100,
+            windows=ShiftWindows(
+                MilestoneWindow(0, 0),
+                MilestoneWindow(5, 5),
+                MilestoneWindow(10, 10),
+                MilestoneWindow(20, 20),
+                MilestoneWindow(30, 30),
+            )
+        )
+        mutation = ActivityMutation(test_instance_with_a_single_activity)
+        mutated = mutation.mutate(tuple([gene1]), rng)
+
+        for i in mutated[0].blocks:
+            self.assertEqual(i.activity, block1.activity)
+
+    def test_activity_mutation_change_a_single_activity_and_a_single_block(self):
+        rng = mock.Mock()
+        gene_index = 0
+        block_index = 0
+        new_activity = 2
+        rng.randrange.side_effect = [gene_index, block_index, new_activity]
+        block1 = ActivityBlock(1, 4)
+        gene1 = BlockGene(self.instance.windows.start.earliest, (block1, block1, block1, block1))
+
+        mutated = self.block_operators[self.ACTIVITY_MUTAION].mutate(tuple([gene1]), rng)
+
+        self.assertEqual(mutated[gene_index].blocks[block_index].activity, new_activity)
+        for i in range(1, 4):
+            self.assertEqual(mutated[gene_index].blocks[i].activity, block1.activity)
 
 
 
