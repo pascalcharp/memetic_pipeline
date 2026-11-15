@@ -15,7 +15,7 @@ Sur ``main`` : tests de contrat du scaffold seulement (verts). Cas à couvrir su
 """
 
 from random import Random
-from typing import Sequence
+from typing import Literal, Sequence
 import unittest
 from unittest import mock
 
@@ -24,6 +24,7 @@ from src.ga.operators import (
     ActivityMutation,
     BlockBoundaryMutation,
     Crossover,
+    GenomeNoGeneToMutateError,
     Mutation,
     OperatorDefaults,
     ParentLengthMismatchError,
@@ -51,13 +52,15 @@ class OtherEncoding(Encoding[str]):
 
 class TestScaffoldContract(unittest.TestCase):
 
+    CROSSOVER = 0
+    SHIFT_MUTAION = 1
+
     def setUp(self) -> None:
-        gene_1 = BlockGene(0, (ActivityBlock(1, 8), ActivityBlock(1, 8), ActivityBlock(1, 8), ActivityBlock(1, 8), ))
-        gene_2 = BlockGene(1, (ActivityBlock(1, 4), ActivityBlock(1, 4), ActivityBlock(1, 4), ActivityBlock(1, 4), ))
-        gene_3 = BlockGene(2, (ActivityBlock(2, 5), ActivityBlock(2, 5), ActivityBlock(2, 5), ActivityBlock(2, 5), ))
-        instance = synthetic_instance()
-        self.rnd = Random()
-        self.crossover = UniformGeneCrossover()
+        instance = self.instance = synthetic_instance()
+        gene_1 = BlockGene(instance.windows.start.earliest, (ActivityBlock(1, 8), ActivityBlock(1, 8), ActivityBlock(1, 8), ActivityBlock(1, 8), ))
+        gene_2 = BlockGene(instance.windows.start.earliest + 1, (ActivityBlock(1, 4), ActivityBlock(1, 4), ActivityBlock(1, 4), ActivityBlock(1, 4), ))
+        gene_3 = BlockGene(instance.windows.start.earliest + 2, (ActivityBlock(2, 5), ActivityBlock(2, 5), ActivityBlock(2, 5), ActivityBlock(2, 5), ))
+        self.rng = Random()
         self.parent_1 = tuple([gene_1])
         self.parent_2 = tuple([gene_2])
         self.parent_3 = tuple([gene_1, gene_3])
@@ -87,34 +90,33 @@ class TestScaffoldContract(unittest.TestCase):
     def test_crossover_throw_when_zero_parent_is_sent(self) -> None:
         zero_parents: Sequence[BlockGenome] = tuple()
         with self.assertRaises(WrongParentCountError):
-            self.crossover.recombine(zero_parents, self.rnd)
+            self.block_operators[self.CROSSOVER].recombine(zero_parents, self.rng)
 
     def test_crossover_throw_when_one_parent_is_sent(self) -> None:
         one_parents: Sequence[BlockGenome] = tuple(tuple())
         with self.assertRaises(WrongParentCountError):
-            self.crossover.recombine(one_parents, self.rnd)
+            self.block_operators[self.CROSSOVER].recombine(one_parents, self.rng)
 
     def test_crossover_throw_when_three_parent_is_sent(self) -> None:
         three_parents: Sequence[BlockGenome] = (tuple(), tuple(), tuple())
         with self.assertRaises(WrongParentCountError):
-            self.crossover.recombine(three_parents, self.rnd)
+            self.block_operators[self.CROSSOVER].recombine(three_parents, self.rng)
 
     def test_crossover_throw_when_two_parent_not_same_gene_number_from_parent_1(self) -> None:
         two_parents: Sequence[BlockGenome] = (self.parent_1, tuple())
         with self.assertRaises(ParentLengthMismatchError):
-            self.crossover.recombine(two_parents, self.rnd)
+            self.block_operators[self.CROSSOVER].recombine(two_parents, self.rng)
 
     def test_crossover_throw_when_two_parent_not_same_gene_number_from_parent_2(self) -> None:
         two_parents: Sequence[BlockGenome] = (tuple(), self.parent_2)
         with self.assertRaises(ParentLengthMismatchError):
-            self.crossover.recombine(two_parents, self.rnd)
-
+            self.block_operators[self.CROSSOVER].recombine(two_parents, self.rng)
 
     @mock.patch('random.choice')
     def test_crossover_when_mask_is_zero_take_default_parent_of_the_child(self, rnd: mock.Mock) -> None:
         rnd.choice.return_value = 0
         parents: Sequence[BlockGenome] = (self.parent_1, self.parent_2)
-        child_1, child_2 = self.crossover.recombine(parents, rnd)
+        child_1, child_2 = self.block_operators[self.CROSSOVER].recombine(parents, rnd)
         self.assertEqual(parents[0], child_1)
         self.assertEqual(parents[1], child_2)
 
@@ -122,7 +124,7 @@ class TestScaffoldContract(unittest.TestCase):
     def test_crossover_when_mask_is_zero_take_other_parent_of_the_child(self, rnd: mock.Mock) -> None:
         rnd.choice.return_value = 1
         parents: Sequence[BlockGenome] = (self.parent_1, self.parent_2)
-        child_1, child_2 = self.crossover.recombine(parents, rnd)
+        child_1, child_2 = self.block_operators[self.CROSSOVER].recombine(parents, rnd)
         self.assertEqual(parents[0], child_2)
         self.assertEqual(parents[1], child_1)
 
@@ -130,9 +132,53 @@ class TestScaffoldContract(unittest.TestCase):
     def test_crossover_when_mask_is_more_than_one_mask_is_respected(self, rnd: mock.Mock) -> None:
         rnd.choice.return_value = 0
         parents: Sequence[BlockGenome] = (self.parent_3, self.parent_4)
-        child_1, child_2 = self.crossover.recombine(parents, rnd)
+        child_1, child_2 = self.block_operators[self.CROSSOVER].recombine(parents, rnd)
         self.assertEqual(parents[0], child_1)
         self.assertEqual(parents[1], child_2)
+
+    def test_shift_should_throw_when_genome_does_not_have_gen(self):
+        with self.assertRaises(GenomeNoGeneToMutateError):
+            self.block_operators[self.SHIFT_MUTAION].mutate(tuple(), self.rng)
+
+    def test_shift_clamp(self):
+        def _test(value: int):
+            clamped = self.block_operators[self.SHIFT_MUTAION]._clamp(value)
+            self.assertTrue(self.instance.windows.start.earliest <= clamped <= self.instance.windows.start.latest)
+        _test(-10000)
+        _test(self.instance.windows.start.earliest)
+        _test(self.instance.windows.start.latest)
+        _test(10000)
+
+    def test_shift_mutation_should_add_day(self):
+        self._test_for_shift_mutation(
+            index=0,
+            sign=1,
+            add_or_remove=1,
+            genome=self.parent_1
+        )
+
+    def test_shift_mutation_should_remove_day(self):
+        self._test_for_shift_mutation(
+            index=0,
+            sign=-1,
+            add_or_remove=1,
+            genome=self.parent_2
+        )
+
+    def _test_for_shift_mutation(self, index: int, sign: Literal[1] | Literal[-1], add_or_remove: int, genome: BlockGenome):
+        rng = mock.Mock()
+        rng.randrange.side_effect = [index, add_or_remove]
+        rng.choice.return_value = sign
+        mutated = self.block_operators[self.SHIFT_MUTAION].mutate(genome, rng)
+        self.assertNotEqual(
+            mutated[index].start,
+            genome[index].start
+        )
+        self.assertEqual(
+            mutated[index].start,
+            max(genome[index].start + (sign * add_or_remove), 0)
+        )
+
 
 
 if __name__ == "__main__":
