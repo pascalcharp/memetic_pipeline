@@ -293,4 +293,28 @@ class ActivityMutation(Mutation[BlockGenome]):
         return BlockEncoding
 
     def mutate(self, genome: BlockGenome, rng: random.Random) -> BlockGenome:
-        raise NotImplementedError  # Étape 7b (Xavier)
+        encoding = self.encoding_type()()
+        mutated = list(encoding.clone(genome))
+        max_activity = self.instance.activity_count
+
+        if max_activity <= 1:
+            return tuple(mutated)
+
+        gene_index = rng.randrange(len(mutated))
+        old_gene = mutated[gene_index]
+
+        blocks = list(old_gene.blocks)
+
+        block_index = rng.randrange(len(blocks))
+        old_block = blocks[block_index]
+
+        new_activities = [x for x in range(1, max_activity + 1) if not x == old_block.activity]
+        new_activity = rng.randrange(len(new_activities))
+
+        blocks[block_index] = ActivityBlock(new_activity, old_block.duration)
+
+        mutated[gene_index] = BlockGene(old_gene.start, tuple(blocks))
+
+        return tuple(mutated)
+
+
