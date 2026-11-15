@@ -19,6 +19,7 @@ de faisabilité des enfants par opérateur.
 import random
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
+from typing import Generator, Literal
 
 from src.ga.chromosome import BlockEncoding, BlockGenome, Encoding
 from src.utils.io import ProblemInstance
@@ -111,7 +112,55 @@ class UniformGeneCrossover(Crossover[BlockGenome]):
         return OperatorDefaults.CROSSOVER_PARENT_COUNT
 
     def recombine(self, parents: Sequence[BlockGenome], rng: random.Random) -> tuple[BlockGenome, ...]:
-        raise NotImplementedError  # Étape 7b (Xavier)
+        encoding = self.encoding_type()()
+        def _create_mask(lenght: int) -> Generator[tuple[int, Literal[0] | Literal[1]]]:
+            """
+            Generator function to create a mask to be used to create children
+
+            From *Uniform Crossover in genetic Algorithms* Syswerda 1989
+            The generated mask is constituted of 0 and 1,
+            where 0 mean using it's parent, and 1 using the other parent.
+            Children 1 used parent 1, and Children 2 used parent 2.
+
+            Exemple:
+                Parent 1:   1, 0, 1
+                Parent 2:   0, 1, 1
+                Mask:       1, 1, 0
+                Children 1: 0, 1, 1
+                Children 2: 1, 1, 1
+            """
+            zero: Literal[0] = 0
+            one: Literal[1] = 1
+            for i in range(lenght):
+                yield i, rng.choice([zero, one])
+
+        progenitor_1, progenitor_2 = self._valid_parent(parents)
+        mask_length = len(progenitor_1)
+
+        child_1 = list(encoding.clone(progenitor_1))
+        child_2 = list(encoding.clone(progenitor_2))
+
+        for i, mask in _create_mask(mask_length):
+            if mask:
+                child_1[i] = progenitor_2[i]
+                child_2[i] = progenitor_1[i]
+
+        return tuple(child_1), tuple(child_2)
+
+    def _valid_parent(self, parents: Sequence[BlockGenome]) -> tuple[BlockGenome, BlockGenome]:
+        """
+        Validate if the parents is of valid
+        """
+        if not len(parents) == self.parent_count():
+            raise WrongParentCountError()
+
+        progenitors = (parents[0], parents[1])
+
+        if not len(progenitors[0]) == len(parents[1]):
+            raise ParentLengthMismatchError()
+
+        return progenitors
+
 
 
 class ShiftStartMutation(Mutation[BlockGenome]):
