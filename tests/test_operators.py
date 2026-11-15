@@ -24,6 +24,8 @@ from src.ga.operators import (
     ActivityMutation,
     BlockBoundaryMutation,
     Crossover,
+    GeneCannotMutateBoundryError,
+    GenomeCannotMutate,
     GenomeNoGeneToMutateError,
     Mutation,
     OperatorDefaults,
@@ -34,6 +36,7 @@ from src.ga.operators import (
     WrongParentCountError,
 )
 from src.model.horaire import Horaire
+from src.model.shift_rules import ShiftStructure
 from tests.fixtures import synthetic_instance
 
 
@@ -54,6 +57,7 @@ class TestScaffoldContract(unittest.TestCase):
 
     CROSSOVER = 0
     SHIFT_MUTAION = 1
+    BLOCK_MUTAION = 2
 
     def setUp(self) -> None:
         instance = self.instance = synthetic_instance()
@@ -178,6 +182,79 @@ class TestScaffoldContract(unittest.TestCase):
             mutated[index].start,
             max(genome[index].start + (sign * add_or_remove), 0)
         )
+
+    def test_block_mutation_throw_when_gene_is_not_valid(self) -> None:
+        block1 = ActivityBlock(2, 4)
+        block2 = ActivityBlock(2, 5)
+        block3 = ActivityBlock(2, 6)
+        gene1 = BlockGene(self.instance.windows.start.earliest + 2, (block1, block1, block1, block1))
+        gene2 = BlockGene(self.instance.windows.start.earliest + 2, (block1, block1, block1, block2))
+        gene3 = BlockGene(self.instance.windows.start.earliest + 2, (block1, block1, block1, block3))
+
+        with self.assertRaises(GeneCannotMutateBoundryError):
+            self.block_operators[self.BLOCK_MUTAION]._get_2_valid_block_to_mutate(gene1, 2, self.rng)
+
+        with self.assertRaises(GeneCannotMutateBoundryError):
+            self.block_operators[self.BLOCK_MUTAION]._get_2_valid_block_to_mutate(gene2, 2, self.rng)
+
+        with self.assertRaises(GeneCannotMutateBoundryError):
+            self.block_operators[self.BLOCK_MUTAION]._get_2_valid_block_to_mutate(gene3, 3, self.rng)
+
+    def test_block_mutation_get_random_block_does_not_select_itself(self) -> None:
+        rng = mock.Mock()
+        rng.randrange.side_effect = [3, 0, 0, 0]
+        block1 = ActivityBlock(2, 4)
+        block2 = ActivityBlock(2, ShiftStructure.MIN_ACTIVITY_DURATION + 2)
+        gene = BlockGene(self.instance.windows.start.earliest + 2, (block1, block1, block1, block2))
+        first, second = self.block_operators[self.BLOCK_MUTAION]._get_2_valid_block_to_mutate(gene, 2, rng)
+        self.assertNotEqual(first, second)
+
+    def test_block_boundary_mutate_throw_when_no_in_genome(self):
+        rng = mock.Mock()
+        rng.randint.return_value = 0
+
+        with self.assertRaises(GenomeCannotMutate):
+            self.block_operators[self.BLOCK_MUTAION].mutate(tuple(), rng)
+
+    def test_block_boundary_mutate_throw_when_no_can_mutate_when_adding_one(self):
+        rng = mock.Mock()
+        rng.randint.side_effect = [1]
+        rng.randrange.side_effect = [0, 0]
+
+        block1 = ActivityBlock(2, 4)
+        gene1 = BlockGene(self.instance.windows.start.earliest, (block1, block1, block1, block1))
+
+        with self.assertRaises(GenomeCannotMutate):
+            self.block_operators[self.BLOCK_MUTAION].mutate(tuple([gene1]), rng)
+
+    def test_block_boundary_mutate_throw_when_no_can_mutate_when_adding_two(self):
+        rng = mock.Mock()
+        rng.randint.side_effect =   [1, 2]
+        rng.randrange.side_effect = [0, 0, 0, 0]
+
+        block1 = ActivityBlock(2, 4)
+        block2 = ActivityBlock(2, 5)
+        gene1 = BlockGene(self.instance.windows.start.earliest, (block1, block1, block1, block2))
+
+        self.block_operators[self.BLOCK_MUTAION].mutate(tuple([gene1]), rng)
+        with self.assertRaises(GenomeCannotMutate):
+            self.block_operators[self.BLOCK_MUTAION].mutate(tuple([gene1]), rng)
+
+    def test_bblock_boundary_mutate_transfer_right_amount_from_block_1_and_2_only(self):
+        rng = mock.Mock()
+        gene_index = 0
+        rng.randint.side_effect =   [1]
+        rng.randrange.side_effect = [gene_index, 0, 0]
+
+        block1 = ActivityBlock(2, 4)
+        block2 = ActivityBlock(2, 5)
+        gene1 = BlockGene(self.instance.windows.start.earliest, (block1, block1, block1, block2))
+
+        mutated = self.block_operators[self.BLOCK_MUTAION].mutate(tuple([gene1]), rng)
+        self.assertEqual(mutated[gene_index].blocks[0].duration, block1.duration + 1)
+        self.assertEqual(mutated[gene_index].blocks[1].duration, block1.duration)
+        self.assertEqual(mutated[gene_index].blocks[2].duration, block1.duration)
+        self.assertEqual(mutated[gene_index].blocks[3].duration, block2.duration - 1)
 
 
 
