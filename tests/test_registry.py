@@ -46,6 +46,9 @@ class DummyEncoding(Encoding[int]):
     def decode(self, genome: int) -> Horaire:
         raise NotImplementedError
 
+    def clone(self, genome: int) -> int:
+        raise NotImplementedError
+
 
 class BlockOperator(VariationOperator[BlockGenome]):
     """Opérateur factice qui manipule les génomes de ``BlockEncoding``."""

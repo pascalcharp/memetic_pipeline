@@ -40,6 +40,9 @@ class OtherEncoding(Encoding[str]):
     def decode(self, genome: str) -> Horaire:
         raise NotImplementedError
 
+    def clone(self, genome: str) -> str:
+        raise NotImplementedError
+
 
 class TestScaffoldContract(unittest.TestCase):
 

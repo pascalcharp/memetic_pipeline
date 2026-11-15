@@ -55,6 +55,10 @@ class Encoding[G](ABC):
     def decode(self, genome: G) -> Horaire:
         """Horaire représenté par ``genome``, faisable ou non."""
 
+    @abstractmethod
+    def clone(self, genome: G) -> G:
+        """Clone un génome"""
+
 
 @dataclass(frozen=True)
 class ActivityBlock:
@@ -127,3 +131,7 @@ class BlockEncoding(Encoding[BlockGenome]):
             end=end,
             activities=tuple(block.activity for block in gene.blocks)
         )
+
+    def clone(self, genome: BlockGenome):
+        return self.encode(self.decode(genome))
+
