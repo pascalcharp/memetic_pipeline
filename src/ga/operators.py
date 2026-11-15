@@ -21,7 +21,9 @@ from abc import ABC, abstractmethod
 from collections.abc import Sequence
 from typing import Generator, Literal
 
-from src.ga.chromosome import BlockEncoding, BlockGenome, Encoding
+from numpy import sign
+
+from src.ga.chromosome import BlockEncoding, BlockGene, BlockGenome, Encoding
 from src.utils.io import ProblemInstance
 
 
@@ -49,6 +51,9 @@ class WrongParentCountError(OperatorError):
 
 class ParentLengthMismatchError(OperatorError):
     """Les parents d'un croisement n'ont pas le même nombre de gènes."""
+
+class GenomeNoGeneToMutateError(OperatorError):
+    """Le genome ne contient aucun gene à muter"""
 
 
 class VariationOperator[G](ABC):
@@ -174,7 +179,30 @@ class ShiftStartMutation(Mutation[BlockGenome]):
         return BlockEncoding
 
     def mutate(self, genome: BlockGenome, rng: random.Random) -> BlockGenome:
-        raise NotImplementedError  # Étape 7b (Xavier)
+        endoding = self.encoding_type()()
+        if len(genome) == 0:
+            raise GenomeNoGeneToMutateError()
+        return self._mutate_by(
+            index=rng.randrange(len(genome)),
+            amount=rng.choice([-1, 1]) * rng.randrange(4),
+            genome=endoding.clone(genome)
+        )
+
+    def _mutate_by(self, index: int, amount: int, genome: BlockGenome) -> BlockGenome:
+        mutated = list(genome)
+        start = self._clamp(mutated[index].start + amount)
+        mutated[index] = BlockGene(start, mutated[index].blocks)
+        return tuple(mutated)
+
+    def _clamp(self, value: int):
+        windows = self.instance.windows
+        min = windows.start.earliest
+        max = windows.start.latest
+
+        if min > value: return min
+        if max < value: return max
+        return value
+
 
 
 class BlockBoundaryMutation(Mutation[BlockGenome]):
