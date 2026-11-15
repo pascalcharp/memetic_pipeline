@@ -23,7 +23,8 @@ from typing import Generator, Literal
 
 from numpy import sign
 
-from src.ga.chromosome import BlockEncoding, BlockGene, BlockGenome, Encoding
+from src.ga.chromosome import ActivityBlock, BlockEncoding, BlockGene, BlockGenome, Encoding
+from src.model.shift_rules import ShiftStructure
 from src.utils.io import ProblemInstance
 
 
@@ -54,6 +55,12 @@ class ParentLengthMismatchError(OperatorError):
 
 class GenomeNoGeneToMutateError(OperatorError):
     """Le genome ne contient aucun gene à muter"""
+
+class GenomeCannotMutate(OperatorError):
+    """Le genome ne contient aucun gene pouvant être muté."""
+
+class GeneCannotMutateBoundryError(OperatorError):
+    """Le gene n'a aucun block valide permettant une mutation qui respectent Σd"""
 
 
 class VariationOperator[G](ABC):
@@ -215,7 +222,60 @@ class BlockBoundaryMutation(Mutation[BlockGenome]):
         return BlockEncoding
 
     def mutate(self, genome: BlockGenome, rng: random.Random) -> BlockGenome:
-        raise NotImplementedError  # Étape 7b (Xavier)
+        def validate(genes):
+            if len(genes) == 0:
+                raise GenomeCannotMutate()
+
+        encoding = self.encoding_type()()
+        # @TODO: might be interesting to calculate the max length a single activity block
+        #  can be to respect the 6-8 hours a single employe scheduel be
+        transfer = rng.randint(1, 3)
+        genes_to_try = [x for x in range(len(genome))]
+        validate(genes_to_try)
+        mutated = list(encoding.clone(genome))
+
+        while True:
+            validate(genes_to_try)
+            index = rng.randrange(len(genes_to_try))
+            try:
+                first_index, second_index = self._get_2_valid_block_to_mutate(mutated[genes_to_try[index]], transfer, rng)
+
+                original_gene = mutated[index]
+                blocks = list(original_gene.blocks)
+
+                old_first = blocks[first_index]
+                old_second = blocks[second_index]
+
+                new_first = ActivityBlock(old_first.activity, old_first.duration + transfer)
+                new_second = ActivityBlock(old_second.activity, old_second.duration - transfer)
+
+                blocks[first_index] = new_first
+                blocks[second_index] = new_second
+
+                mutated[index] = BlockGene(original_gene.start, tuple(blocks))
+                break
+            except GeneCannotMutateBoundryError:
+                del genes_to_try[index]
+
+        return tuple(mutated)
+
+    def _get_2_valid_block_to_mutate(self, gene: BlockGene, add: int, rng: random.Random):
+        minium_duration = ShiftStructure.MIN_ACTIVITY_DURATION + add
+        blocks = gene.blocks
+
+        valid_block = [x for x in range(len(blocks)) if blocks[x].duration >= minium_duration]
+        if len(valid_block) == 0:
+            raise GeneCannotMutateBoundryError()
+
+        first = rng.randrange(len(blocks))
+        second = valid_block[rng.randrange(len(valid_block))]
+
+        while first == second or blocks[second].duration < minium_duration:
+            first = rng.randrange(len(blocks))
+            second = valid_block[rng.randrange(len(valid_block))]
+
+        return first, second
+
 
 
 class ActivityMutation(Mutation[BlockGenome]):
