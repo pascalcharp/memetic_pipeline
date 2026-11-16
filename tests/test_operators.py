@@ -42,7 +42,7 @@ from src.config import ProjectPaths
 from src.ga.initialization import RandomBlockInitializer
 from src.model.shift_rules import ModelIndexing, ShiftStructure
 from src.utils.io import MilestoneWindow, ProblemInstance, ShiftWindows, load_instance
-from tests.fixtures import reference_genome, synthetic_instance
+from tests.fixtures import REFERENCE_GENE, reference_genome, synthetic_instance
 
 
 class OtherEncoding(Encoding[str]):
@@ -222,30 +222,6 @@ class TestScaffoldContract(unittest.TestCase):
         with self.assertRaises(GenomeCannotMutate):
             self.block_operators[self.BLOCK_MUTAION].mutate(tuple(), rng)
 
-    def test_block_boundary_mutate_throw_when_no_can_mutate_when_adding_one(self):
-        rng = mock.Mock()
-        rng.randint.side_effect = [1]
-        rng.randrange.side_effect = [0, 0]
-
-        block1 = ActivityBlock(2, 4)
-        gene1 = BlockGene(self.instance.windows.start.earliest, (block1, block1, block1, block1))
-
-        with self.assertRaises(GenomeCannotMutate):
-            self.block_operators[self.BLOCK_MUTAION].mutate(tuple([gene1]), rng)
-
-    def test_block_boundary_mutate_throw_when_no_can_mutate_when_adding_two(self):
-        rng = mock.Mock()
-        rng.randint.side_effect =   [1, 2]
-        rng.randrange.side_effect = [0, 0, 0, 0]
-
-        block1 = ActivityBlock(2, 4)
-        block2 = ActivityBlock(2, 5)
-        gene1 = BlockGene(self.instance.windows.start.earliest, (block1, block1, block1, block2))
-
-        self.block_operators[self.BLOCK_MUTAION].mutate(tuple([gene1]), rng)
-        with self.assertRaises(GenomeCannotMutate):
-            self.block_operators[self.BLOCK_MUTAION].mutate(tuple([gene1]), rng)
-
     def test_block_boundary_mutate_transfer_right_amount_from_block_1_and_2_only(self):
         rng = mock.Mock()
         gene_index = 0
@@ -371,6 +347,119 @@ class TestActivityMutationWithRealRandom(unittest.TestCase):
         first = mutation.mutate(genome, Random(ACTIVITY_SEED))
         second = mutation.mutate(genome, Random(ACTIVITY_SEED))
         self.assertEqual(first, second)
+
+
+# Propriétés de BlockBoundaryMutation vérifiées avec un vrai générateur aléatoire (pas de mock).
+BOUNDARY_SEED: int = 11
+BOUNDARY_DRAW_COUNT: int = 300
+BOUNDARY_GENOME_COUNT: int = 50
+BOUNDARY_BENCH_FILE: str = "bench_5.json"
+# Gène dont tous les blocs sont à la durée minimale : aucun bloc ne peut céder de périodes, le gène doit être écarté.
+MINIMAL_BLOCK_COUNT: int = 4
+MINIMAL_GENE: BlockGene = BlockGene(
+    REFERENCE_GENE.start,
+    tuple(ActivityBlock(block.activity, ShiftStructure.MIN_ACTIVITY_DURATION) for block in REFERENCE_GENE.blocks),
+)
+# Gène faisable aux blocs courts : durées 6, 6, 5, 5 (Σd = 22, minimum de 6 heures rémunérées). Aucun bloc ne peut
+# céder plus de SHORT_BLOCKS_MAX_DURATION - MIN_ACTIVITY_DURATION périodes.
+SHORT_BLOCKS_DURATIONS: tuple[int, ...] = (6, 6, 5, 5)
+SHORT_BLOCKS_MAX_DURATION: int = max(SHORT_BLOCKS_DURATIONS)
+SHORT_BLOCKS_GENE: BlockGene = BlockGene(
+    REFERENCE_GENE.start,
+    tuple(
+        ActivityBlock(block.activity, duration)
+        for block, duration in zip(REFERENCE_GENE.blocks, SHORT_BLOCKS_DURATIONS)
+    ),
+)
+
+
+def total_duration(gene: BlockGene) -> int:
+    """Σd d'un gène."""
+    return sum(block.duration for block in gene.blocks)
+
+
+class TestBlockBoundaryMutationWithRealRandom(unittest.TestCase):
+    """``BlockBoundaryMutation`` : un seul gène change, Σd est conservée et chaque durée reste au moins minimale."""
+
+    def assert_valid_boundary_move(self, original: BlockGenome, mutated: BlockGenome) -> None:
+        """Vérifie qu'un seul gène a changé, seulement par ses durées, avec Σd conservée et des durées valides."""
+        self.assertEqual(len(mutated), len(original))
+        changed_genes = [index for index in range(len(original)) if original[index] != mutated[index]]
+        self.assertEqual(len(changed_genes), 1, "un seul gène doit changer")
+        original_gene = original[changed_genes[0]]
+        mutated_gene = mutated[changed_genes[0]]
+        self.assertEqual(mutated_gene.start, original_gene.start)
+        self.assertEqual(
+            [block.activity for block in mutated_gene.blocks],
+            [block.activity for block in original_gene.blocks],
+        )
+        self.assertEqual(total_duration(mutated_gene), total_duration(original_gene))
+        for block in mutated_gene.blocks:
+            self.assertGreaterEqual(block.duration, ShiftStructure.MIN_ACTIVITY_DURATION)
+
+    def test_givenMinimalGeneBeforeMutableGene_whenMutateManyTimes_thenOnlyTheMutableGeneChanges(self) -> None:
+        # Le gène minimal (indice 0) est écarté quand il est tiré ; la mutation doit alors porter sur le gène
+        # de référence (indice 1), jamais sur le gène minimal.
+        genome: BlockGenome = (MINIMAL_GENE, REFERENCE_GENE)
+        mutation = BlockBoundaryMutation()
+        rng = Random(BOUNDARY_SEED)
+        for draw in range(BOUNDARY_DRAW_COUNT):
+            with self.subTest(draw=draw):
+                mutated = mutation.mutate(genome, rng)
+                self.assertEqual(mutated[0], MINIMAL_GENE, "le gène minimal ne peut pas muter")
+                self.assert_valid_boundary_move(genome, mutated)
+
+    def test_givenBenchGenomes_whenMutate_thenEachMutationIsAValidBoundaryMove(self) -> None:
+        instance = load_instance(ProjectPaths.DATA_DIR / BOUNDARY_BENCH_FILE)
+        population = RandomBlockInitializer(instance, BlockEncoding()).initialize(
+            BOUNDARY_GENOME_COUNT, Random(BOUNDARY_SEED)
+        )
+        mutation = BlockBoundaryMutation()
+        rng = Random(BOUNDARY_SEED)
+        for index, individual in enumerate(population):
+            with self.subTest(genome_index=index):
+                self.assert_valid_boundary_move(individual.genome, mutation.mutate(individual.genome, rng))
+
+    def test_givenGenome_whenMutate_thenInputIsNotModified(self) -> None:
+        genome: BlockGenome = (MINIMAL_GENE, REFERENCE_GENE)
+        snapshot = tuple(genome)
+        BlockBoundaryMutation().mutate(genome, Random(BOUNDARY_SEED))
+        self.assertEqual(genome, snapshot)
+
+    def test_givenSameSeed_whenMutate_thenSameResult(self) -> None:
+        genome: BlockGenome = (MINIMAL_GENE, REFERENCE_GENE)
+        mutation = BlockBoundaryMutation()
+        first = mutation.mutate(genome, Random(BOUNDARY_SEED))
+        second = mutation.mutate(genome, Random(BOUNDARY_SEED))
+        self.assertEqual(first, second)
+
+    # Bogue 3 : quand aucun gène ne peut céder le transfert tiré, la mutation ne doit pas lever d'exception en pleine
+    # exécution ; elle rend le génome inchangé (même convention que ActivityMutation sur une instance à une activité).
+
+    def test_givenOnlyMinimalGenes_whenMutateManyTimes_thenGenomeIsReturnedUnchanged(self) -> None:
+        genome: BlockGenome = (MINIMAL_GENE, MINIMAL_GENE)
+        mutation = BlockBoundaryMutation()
+        rng = Random(BOUNDARY_SEED)
+        for draw in range(BOUNDARY_DRAW_COUNT):
+            with self.subTest(draw=draw):
+                self.assertEqual(mutation.mutate(genome, rng), genome)
+
+    def test_givenFeasibleGeneWithShortBlocks_whenMutateManyTimes_thenNeverRaisesAndMoveIsValidOrNone(self) -> None:
+        # Σd = 22 (6 heures rémunérées, quart faisable) et aucun bloc ne dépasse SHORT_BLOCKS_MAX_DURATION : certains
+        # transferts tirés sont trop grands pour tous les blocs, d'autres sont possibles.
+        genome: BlockGenome = (SHORT_BLOCKS_GENE, SHORT_BLOCKS_GENE)
+        mutation = BlockBoundaryMutation()
+        rng = Random(BOUNDARY_SEED)
+        unchanged_count = 0
+        for draw in range(BOUNDARY_DRAW_COUNT):
+            with self.subTest(draw=draw):
+                mutated = mutation.mutate(genome, rng)
+                if mutated == genome:
+                    unchanged_count += 1
+                else:
+                    self.assert_valid_boundary_move(genome, mutated)
+        self.assertGreater(unchanged_count, 0, "certains transferts tirés doivent être impossibles")
+        self.assertLess(unchanged_count, BOUNDARY_DRAW_COUNT, "certains transferts tirés doivent être possibles")
 
 
 if __name__ == "__main__":

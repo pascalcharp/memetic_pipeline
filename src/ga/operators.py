@@ -226,23 +226,21 @@ class BlockBoundaryMutation(Mutation[BlockGenome]):
             if len(genes) == 0:
                 raise GenomeCannotMutate()
 
-        encoding = self.encoding_type()()
-        # @TODO: might be interesting to calculate the max length a single activity block
-        #  can be to respect the 6-8 hours a single employe scheduel be
         transfer = rng.randint(1, 3)
         genes_to_try = [x for x in range(len(genome))]
         validate(genes_to_try)
-        mutated = list(encoding.clone(genome))
+        mutated = list(genome)
 
         while True:
-            validate(genes_to_try)
+            if not genes_to_try:
+                return genome
             index = rng.randrange(len(genes_to_try))
             try:
-                first_index, second_index = self._get_2_valid_block_to_mutate(mutated[genes_to_try[index]], transfer, rng)
+                gene_index = genes_to_try[index]
+                mutated_gene = mutated[gene_index]
+                first_index, second_index = self._get_2_valid_block_to_mutate(mutated_gene, transfer, rng)
 
-                original_gene = mutated[index]
-                blocks = list(original_gene.blocks)
-
+                blocks = list(mutated_gene.blocks)
                 old_first = blocks[first_index]
                 old_second = blocks[second_index]
 
@@ -252,7 +250,7 @@ class BlockBoundaryMutation(Mutation[BlockGenome]):
                 blocks[first_index] = new_first
                 blocks[second_index] = new_second
 
-                mutated[index] = BlockGene(original_gene.start, tuple(blocks))
+                mutated[gene_index] = BlockGene(mutated_gene.start, tuple(blocks))
                 break
             except GeneCannotMutateBoundryError:
                 del genes_to_try[index]

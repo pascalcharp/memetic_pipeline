@@ -191,6 +191,11 @@ Répartition et règles communes : [`TEAM.md`](TEAM.md). Les étapes 5b, 6, 7a e
 - [ ] `Recombine` **(P)** : `UniformGeneCrossover`, échange de gènes entiers entre deux parents (préserve la faisabilité de chaque quart)
 - [ ] `Mute` **(P)** : `ShiftStartMutation` (décaler un quart), `BlockBoundaryMutation` (déplacer une frontière entre deux blocs voisins, `Σd` conservée), `ActivityMutation` (changer l'activité d'un bloc)
 - [ ] Tests **(P)** : faisabilité préservée (`FeasibilityChecker`), entrées jamais modifiées, reproductibilité, cas limites (deux parents identiques, gènes en bordure de fenêtre, blocs à la durée minimale)
+- [ ] Amélioration possible de `BlockBoundaryMutation` (suggestion de Xavier, notée en commentaire dans le code, reportée ici le 2026-11-16) : calculer l'amplitude du transfert à partir des contraintes du quart, au lieu de la tirer dans un intervalle fixe (`rng.randint(1, 3)`) :
+  - le bloc qui cède peut donner au plus `durée − ShiftStructure.MIN_ACTIVITY_DURATION` périodes ; tirer le transfert dans `1..marge` garantit des durées valides et supprime le cas « aucun gène ne peut céder » (bogue 3 de la revue de la PR #7) ;
+  - Σd étant conservée, la borne de 6 à 8 heures rémunérées reste respectée d'elle-même. Un bloc ne peut donc pas dépasser `Σd − 3 × MIN_ACTIVITY_DURATION` périodes (au plus 30 − 12 = 18) ;
+  - à étudier : tenir compte aussi des fenêtres des jalons (pause, dîner), pour que le déplacement de frontière garde le quart faisable ; plafonner le transfert (constante dans `OperatorDefaults`) pour garder une mutation locale ;
+  - à mesurer à l'étape 10 : effet sur le taux de faisabilité des enfants de cet opérateur.
 
 ## Étape 8 — Gestion de la population (`src/ga/population.py`) **(P)**
 - [ ] Trancher D4
