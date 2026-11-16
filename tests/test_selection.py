@@ -15,6 +15,7 @@ import unittest
 import random
 from collections.abc import Sequence
 from collections import Counter
+from statistics import median
 from src.ga.individual import Individu
 from src.ga.selection import (
     EmptyPopulationError,
@@ -37,7 +38,7 @@ LARGE_TOURNAMENT_SIZE: int = 100
 CONTRACT_COUNT: int = 5
 BEST_ALWAYS_WINS_COUNT: int = 20
 UNIFORM_TOLERANCE_RATIO: float = 0.15
-MIDDLE_TOTAL: int = 20
+MIDDLE_TOTAL: int = median(POPULATION_TOTALS)
 BEST_GENOME: int = POPULATION_TOTALS.index(min(POPULATION_TOTALS))
 MIDDLE_GENOME: int = POPULATION_TOTALS.index(MIDDLE_TOTAL)
 WORST_GENOME: int = POPULATION_TOTALS.index(max(POPULATION_TOTALS))

@@ -82,9 +82,8 @@ class OperatorRegistry:
         """
         if operator_name in self._factories:
             raise DuplicateOperatorError(self.name, operator_name)
-        
+
         self._factories[operator_name] = factory
-        
 
     def names(self) -> tuple[str, ...]:
         """Noms enregistrés, triés."""
