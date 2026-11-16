@@ -309,7 +309,7 @@ class ActivityMutation(Mutation[BlockGenome]):
         old_block = blocks[block_index]
 
         new_activities = [x for x in range(1, max_activity + 1) if not x == old_block.activity]
-        new_activity = rng.randrange(len(new_activities))
+        new_activity = rng.choice(new_activities)
 
         blocks[block_index] = ActivityBlock(new_activity, old_block.duration)
 

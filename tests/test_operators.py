@@ -38,9 +38,11 @@ from src.ga.operators import (
     WrongParentCountError,
 )
 from src.model.horaire import Horaire
-from src.model.shift_rules import ShiftStructure
-from src.utils.io import MilestoneWindow, ProblemInstance, ShiftWindows
-from tests.fixtures import synthetic_instance
+from src.config import ProjectPaths
+from src.ga.initialization import RandomBlockInitializer
+from src.model.shift_rules import ModelIndexing, ShiftStructure
+from src.utils.io import MilestoneWindow, ProblemInstance, ShiftWindows, load_instance
+from tests.fixtures import reference_genome, synthetic_instance
 
 
 class OtherEncoding(Encoding[str]):
@@ -288,21 +290,87 @@ class TestScaffoldContract(unittest.TestCase):
         for i in mutated[0].blocks:
             self.assertEqual(i.activity, block1.activity)
 
-    def test_activity_mutation_change_a_single_activity_and_a_single_block(self):
-        rng = mock.Mock()
-        gene_index = 0
-        block_index = 0
-        new_activity = 2
-        rng.randrange.side_effect = [gene_index, block_index, new_activity]
-        block1 = ActivityBlock(1, 4)
-        gene1 = BlockGene(self.instance.windows.start.earliest, (block1, block1, block1, block1))
 
-        mutated = self.block_operators[self.ACTIVITY_MUTAION].mutate(tuple([gene1]), rng)
+# Propriétés de ActivityMutation vérifiées avec un vrai générateur aléatoire (pas de mock) : un mock rend la valeur
+# que le test attend et peut masquer un indice pris pour une activité.
+ACTIVITY_SEED: int = 7
+ACTIVITY_DRAW_COUNT: int = 300
+ACTIVITY_GENOME_COUNT: int = 50
+ACTIVITY_BENCH_FILE: str = "bench_5.json"  # 5 activités : plusieurs activités de remplacement possibles
+SYNTHETIC_EMPLOYEE_COUNT: int = 3
 
-        self.assertEqual(mutated[gene_index].blocks[block_index].activity, new_activity)
-        for i in range(1, 4):
-            self.assertEqual(mutated[gene_index].blocks[i].activity, block1.activity)
 
+def changed_blocks(original: BlockGenome, mutated: BlockGenome) -> list[tuple[ActivityBlock, ActivityBlock]]:
+    """Paires (bloc d'origine, bloc muté) qui diffèrent, tous gènes confondus."""
+    return [
+        (original_block, mutated_block)
+        for original_gene, mutated_gene in zip(original, mutated)
+        for original_block, mutated_block in zip(original_gene.blocks, mutated_gene.blocks)
+        if original_block != mutated_block
+    ]
+
+
+class TestActivityMutationWithRealRandom(unittest.TestCase):
+    """``ActivityMutation`` : activité de remplacement valide et différente, tirée parmi toutes les autres."""
+
+    def assert_single_valid_activity_change(
+            self, instance: ProblemInstance, original: BlockGenome, mutated: BlockGenome
+    ) -> ActivityBlock:
+        """Vérifie qu'un seul bloc a changé, seulement d'activité, vers une activité valide et différente ;
+        rend le bloc muté."""
+        self.assertEqual(len(mutated), len(original))
+        for original_gene, mutated_gene in zip(original, mutated):
+            self.assertEqual(mutated_gene.start, original_gene.start)
+        changes = changed_blocks(original, mutated)
+        self.assertEqual(len(changes), 1, "un seul bloc doit changer")
+        original_block, mutated_block = changes[0]
+        self.assertEqual(mutated_block.duration, original_block.duration)
+        self.assertNotEqual(mutated_block.activity, original_block.activity)
+        self.assertGreaterEqual(mutated_block.activity, ModelIndexing.FIRST_INDEX)
+        self.assertLessEqual(mutated_block.activity, instance.activity_count)
+        return mutated_block
+
+    def test_givenSyntheticInstance_whenMutateManyTimes_thenEachMutationChangesOneBlockToAnotherValidActivity(
+            self) -> None:
+        instance = synthetic_instance(SYNTHETIC_EMPLOYEE_COUNT)
+        genome = reference_genome(SYNTHETIC_EMPLOYEE_COUNT)
+        mutation = ActivityMutation(instance)
+        rng = Random(ACTIVITY_SEED)
+        for draw in range(ACTIVITY_DRAW_COUNT):
+            with self.subTest(draw=draw):
+                self.assert_single_valid_activity_change(instance, genome, mutation.mutate(genome, rng))
+
+    def test_givenBenchGenomes_whenMutateManyTimes_thenEveryOtherActivityIsEventuallyDrawn(self) -> None:
+        instance = load_instance(ProjectPaths.DATA_DIR / ACTIVITY_BENCH_FILE)
+        population = RandomBlockInitializer(instance, BlockEncoding()).initialize(
+            ACTIVITY_GENOME_COUNT, Random(ACTIVITY_SEED)
+        )
+        mutation = ActivityMutation(instance)
+        rng = Random(ACTIVITY_SEED)
+        drawn_activities: set[int] = set()
+        for index, individual in enumerate(population):
+            with self.subTest(genome_index=index):
+                mutated_block = self.assert_single_valid_activity_change(
+                    instance, individual.genome, mutation.mutate(individual.genome, rng)
+                )
+                drawn_activities.add(mutated_block.activity)
+        all_activities = set(range(ModelIndexing.FIRST_INDEX, instance.activity_count + ModelIndexing.FIRST_INDEX))
+        self.assertEqual(drawn_activities, all_activities)
+
+    def test_givenGenome_whenMutate_thenInputIsNotModified(self) -> None:
+        instance = synthetic_instance(SYNTHETIC_EMPLOYEE_COUNT)
+        genome = reference_genome(SYNTHETIC_EMPLOYEE_COUNT)
+        snapshot = tuple(genome)
+        ActivityMutation(instance).mutate(genome, Random(ACTIVITY_SEED))
+        self.assertEqual(genome, snapshot)
+
+    def test_givenSameSeed_whenMutate_thenSameResult(self) -> None:
+        instance = synthetic_instance(SYNTHETIC_EMPLOYEE_COUNT)
+        genome = reference_genome(SYNTHETIC_EMPLOYEE_COUNT)
+        mutation = ActivityMutation(instance)
+        first = mutation.mutate(genome, Random(ACTIVITY_SEED))
+        second = mutation.mutate(genome, Random(ACTIVITY_SEED))
+        self.assertEqual(first, second)
 
 
 if __name__ == "__main__":
