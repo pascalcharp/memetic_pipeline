@@ -206,37 +206,12 @@ class TestScaffoldContract(unittest.TestCase):
         with self.assertRaises(GeneCannotMutateBoundryError):
             self.block_operators[self.BLOCK_MUTAION]._get_2_valid_block_to_mutate(gene3, 3, self.rng)
 
-    def test_block_mutation_get_random_block_does_not_select_itself(self) -> None:
-        rng = mock.Mock()
-        rng.randrange.side_effect = [3, 0, 0, 0]
-        block1 = ActivityBlock(2, 4)
-        block2 = ActivityBlock(2, ShiftStructure.MIN_ACTIVITY_DURATION + 2)
-        gene = BlockGene(self.instance.windows.start.earliest + 2, (block1, block1, block1, block2))
-        first, second = self.block_operators[self.BLOCK_MUTAION]._get_2_valid_block_to_mutate(gene, 2, rng)
-        self.assertNotEqual(first, second)
-
     def test_block_boundary_mutate_throw_when_no_in_genome(self):
         rng = mock.Mock()
         rng.randint.return_value = 0
 
         with self.assertRaises(GenomeCannotMutate):
             self.block_operators[self.BLOCK_MUTAION].mutate(tuple(), rng)
-
-    def test_block_boundary_mutate_transfer_right_amount_from_block_1_and_2_only(self):
-        rng = mock.Mock()
-        gene_index = 0
-        rng.randint.side_effect =   [1]
-        rng.randrange.side_effect = [gene_index, 0, 0]
-
-        block1 = ActivityBlock(2, 4)
-        block2 = ActivityBlock(2, 5)
-        gene1 = BlockGene(self.instance.windows.start.earliest, (block1, block1, block1, block2))
-
-        mutated = self.block_operators[self.BLOCK_MUTAION].mutate(tuple([gene1]), rng)
-        self.assertEqual(mutated[gene_index].blocks[0].duration, block1.duration + 1)
-        self.assertEqual(mutated[gene_index].blocks[1].duration, block1.duration)
-        self.assertEqual(mutated[gene_index].blocks[2].duration, block1.duration)
-        self.assertEqual(mutated[gene_index].blocks[3].duration, block2.duration - 1)
 
     def test_activity_mutation_does_nothing_when_only_a_single_activity(self):
         rng = mock.Mock()
@@ -354,6 +329,9 @@ BOUNDARY_SEED: int = 11
 BOUNDARY_DRAW_COUNT: int = 300
 BOUNDARY_GENOME_COUNT: int = 50
 BOUNDARY_BENCH_FILE: str = "bench_5.json"
+# Un déplacement de frontière change exactement deux blocs, d'indices consécutifs.
+BOUNDARY_CHANGED_BLOCK_COUNT: int = 2
+NEIGHBOR_INDEX_GAP: int = 1
 # Gène dont tous les blocs sont à la durée minimale : aucun bloc ne peut céder de périodes, le gène doit être écarté.
 MINIMAL_BLOCK_COUNT: int = 4
 MINIMAL_GENE: BlockGene = BlockGene(
@@ -460,6 +438,36 @@ class TestBlockBoundaryMutationWithRealRandom(unittest.TestCase):
                     self.assert_valid_boundary_move(genome, mutated)
         self.assertGreater(unchanged_count, 0, "certains transferts tirés doivent être impossibles")
         self.assertLess(unchanged_count, BOUNDARY_DRAW_COUNT, "certains transferts tirés doivent être possibles")
+
+    def test_givenAnyGenome_whenGetTransferBounds_thenReturnsTheFixedDefaultBounds(self) -> None:
+        for genome in ((REFERENCE_GENE,), (MINIMAL_GENE, SHORT_BLOCKS_GENE)):
+            with self.subTest(genome=genome):
+                self.assertEqual(
+                    BlockBoundaryMutation().get_transfer_bounds(genome),
+                    (OperatorDefaults.MIN_BOUNDARY_TRANSFER, OperatorDefaults.MAX_BOUNDARY_TRANSFER),
+                )
+
+    # Bogue 4 : la mutation déplace la frontière entre deux blocs VOISINS (docstring, TODO.md 7b). Les deux blocs
+    # dont la durée change doivent donc avoir des indices consécutifs.
+
+    def test_givenReferenceGenome_whenMutateManyTimes_thenTheTwoChangedBlocksAreNeighbors(self) -> None:
+        genome: BlockGenome = reference_genome(SYNTHETIC_EMPLOYEE_COUNT)
+        mutation = BlockBoundaryMutation()
+        rng = Random(BOUNDARY_SEED)
+        for draw in range(BOUNDARY_DRAW_COUNT):
+            with self.subTest(draw=draw):
+                mutated = mutation.mutate(genome, rng)
+                changed_indices = [
+                    block_index
+                    for original_gene, mutated_gene in zip(genome, mutated)
+                    for block_index, (original_block, mutated_block)
+                    in enumerate(zip(original_gene.blocks, mutated_gene.blocks))
+                    if original_block != mutated_block
+                ]
+                self.assertEqual(len(changed_indices), BOUNDARY_CHANGED_BLOCK_COUNT)
+                first_index, second_index = changed_indices
+                self.assertEqual(second_index - first_index, NEIGHBOR_INDEX_GAP,
+                                 "les deux blocs modifiés doivent être voisins")
 
 
 if __name__ == "__main__":

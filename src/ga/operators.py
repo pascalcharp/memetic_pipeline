@@ -34,6 +34,11 @@ class OperatorDefaults:
     # Les croisements de ce module prennent deux parents.
     CROSSOVER_PARENT_COUNT: int = 2
 
+    # BlockBoundaryMutation : nombre de périodes déplacées d'un bloc à l'autre, tiré dans cet intervalle (bornes
+    # incluses). Une petite amplitude garde la mutation locale (voir TODO.md, 7b, pour une amplitude calculée).
+    MIN_BOUNDARY_TRANSFER: int = 1
+    MAX_BOUNDARY_TRANSFER: int = 3
+
 
 class OperatorMessages:
     """Gabarits des messages d'erreur des opérateurs de variation."""
@@ -226,7 +231,8 @@ class BlockBoundaryMutation(Mutation[BlockGenome]):
             if len(genes) == 0:
                 raise GenomeCannotMutate()
 
-        transfer = rng.randint(1, 3)
+        min_transfer, max_transfer = self.get_transfer_bounds(genome)
+        transfer = rng.randint(min_transfer, max_transfer)
         genes_to_try = [x for x in range(len(genome))]
         validate(genes_to_try)
         mutated = list(genome)
@@ -257,23 +263,30 @@ class BlockBoundaryMutation(Mutation[BlockGenome]):
 
         return tuple(mutated)
 
+    def get_transfer_bounds(self, genome: BlockGenome) -> tuple[int, int]:
+        """Bornes (incluses) du nombre de périodes que ``mutate`` peut déplacer d'un bloc à l'autre dans ``genome``.
+
+        Politique actuelle : bornes fixes, ``OperatorDefaults.MIN_BOUNDARY_TRANSFER`` et
+        ``OperatorDefaults.MAX_BOUNDARY_TRANSFER``, quel que soit le génome. Le paramètre ``genome`` prépare une
+        politique calculée à partir des durées des blocs (voir TODO.md, 7b).
+        """
+        return OperatorDefaults.MIN_BOUNDARY_TRANSFER, OperatorDefaults.MAX_BOUNDARY_TRANSFER
+
     def _get_2_valid_block_to_mutate(self, gene: BlockGene, add: int, rng: random.Random):
         minium_duration = ShiftStructure.MIN_ACTIVITY_DURATION + add
         blocks = gene.blocks
 
-        valid_block = [x for x in range(len(blocks)) if blocks[x].duration >= minium_duration]
-        if len(valid_block) == 0:
+        valid_pairs = []
+        for i in range(len(blocks) - 1):
+            if blocks[i].duration >= minium_duration:
+                valid_pairs.append((i + 1, i))
+            if blocks[i + 1].duration >= minium_duration:
+                valid_pairs.append((i, i + 1))
+
+        if not valid_pairs:
             raise GeneCannotMutateBoundryError()
 
-        first = rng.randrange(len(blocks))
-        second = valid_block[rng.randrange(len(valid_block))]
-
-        while first == second or blocks[second].duration < minium_duration:
-            first = rng.randrange(len(blocks))
-            second = valid_block[rng.randrange(len(valid_block))]
-
-        return first, second
-
+        return rng.choice(valid_pairs)
 
 
 class ActivityMutation(Mutation[BlockGenome]):
