@@ -35,6 +35,68 @@ class RecordNames:
     SOLVER_EFFORT: str = "solver_effort"
 
 
+class Scopes:
+    """Portée des valeurs d'un enregistrement de ``FeasibilityRateCollector`` ou de ``SolverEffortCollector``."""
+
+    # Valeurs de la seule génération qui vient de finir (enregistrement émis à GenerationEnded).
+    GENERATION: str = "generation"
+    # Valeurs de toute l'exécution (enregistrement émis à RunEnded).
+    CUMULATIVE: str = "cumulative"
+
+
+class RecordFields:
+    """Champs communs aux enregistrements des collecteurs."""
+
+    GENERATION: str = "generation"
+    SCOPE: str = "scope"
+
+
+class CostStatisticsFields:
+    """Champs de ``RecordNames.COST_STATISTICS``."""
+
+    SIZE: str = "size"
+    FEASIBLE_COUNT: str = "feasible_count"
+    TOTAL_MIN: str = "total_min"
+    TOTAL_MEAN: str = "total_mean"
+    TOTAL_MEDIAN: str = "total_median"
+    TOTAL_MAX: str = "total_max"
+    TOTAL_STDEV: str = "total_stdev"
+    UNDER_COVERAGE_MEAN: str = "under_coverage_mean"
+    OVER_COVERAGE_MEAN: str = "over_coverage_mean"
+    COVERAGE_VIOLATIONS_MEAN: str = "coverage_violations_mean"
+    QUASI_HARD_CELLS_MEAN: str = "quasi_hard_cells_mean"
+
+
+class DiversityFields:
+    """Champs de ``RecordNames.DIVERSITY``."""
+
+    GENOTYPIC: str = "genotypic_diversity"
+    PHENOTYPIC: str = "phenotypic_diversity"
+    DISTINCT_COSTS: str = "distinct_costs"
+
+
+class FeasibilityFields:
+    """Champs de ``RecordNames.FEASIBILITY_RATES``."""
+
+    ORIGIN: str = "origin"
+    OPERATOR: str = "operator"
+    COUNT: str = "count"
+    FEASIBLE_BEFORE: str = "feasible_before"
+    FEASIBLE_AFTER: str = "feasible_after"
+    RATE_BEFORE: str = "rate_before"
+    RATE_AFTER: str = "rate_after"
+
+
+class SolverEffortFields:
+    """Champs de ``RecordNames.SOLVER_EFFORT``."""
+
+    CALLS: str = "calls"
+    NODES: str = "nodes"
+    FAILURES: str = "failures"
+    PROPAGATIONS: str = "propagations"
+    SOLVE_TIME_SECONDS: str = "solve_time_seconds"
+
+
 class CollectorMessages:
     """Gabarits des messages d'erreur des collecteurs."""
 
@@ -71,19 +133,29 @@ class MetricCollector(ABC):
 # ---------------------------------------------------------------------------------------------------------------------
 
 class CostStatisticsCollector(MetricCollector):
-    """À chaque ``GenerationEnded`` : un enregistrement ``RecordNames.COST_STATISTICS`` avec la génération,
-    les statistiques de ``cost.total`` (min, moyenne, médiane, max, écart-type) et le coût décomposé de la
-    population (sous-couverture, sur-couverture, violations « au moins 1 », cellules quasi dures)."""
+    """À chaque ``GenerationEnded`` : un enregistrement ``RecordNames.COST_STATISTICS`` ; rien pour les autres
+    événements.
+
+    Champs (``RecordFields``, ``CostStatisticsFields``) : ``generation`` ; ``size`` (taille de la population) ;
+    ``feasible_count`` (individus dont ``cost.is_feasible``) ; ``total_min``, ``total_mean``, ``total_median``,
+    ``total_max``, ``total_stdev`` de ``cost.total`` (écart-type de population, ``statistics.pstdev`` : 0 pour un
+    seul individu) ; moyennes du coût décomposé : ``under_coverage_mean``, ``over_coverage_mean``,
+    ``coverage_violations_mean``, ``quasi_hard_cells_mean``. Les moyennes et l'écart-type sont des ``float``."""
 
     def on_event(self, event: Event) -> list[Record]:
         raise NotImplementedError  # Étape 8b (Mély)
 
 
 class DiversityCollector(MetricCollector):
-    """Toutes les ``every`` générations (``GenerationEnded``) : un enregistrement ``RecordNames.DIVERSITY`` avec
-    la diversité génotypique insensible à la permutation des employés (par exemple la proportion de génomes
-    distincts une fois les gènes triés), phénotypique (proportion de grilles « employé × période » distinctes,
-    ``Horaire.to_grid(period_count)``) et des coûts (nombre de ``cost.total`` distincts)."""
+    """À chaque ``GenerationEnded`` dont la génération est un multiple de ``every`` (la génération 0 comprise) :
+    un enregistrement ``RecordNames.DIVERSITY`` ; rien pour les autres événements.
+
+    Champs (``RecordFields``, ``DiversityFields``) : ``generation`` ;
+        - ``genotypic_diversity`` : nombre de génomes distincts une fois les gènes triés (insensible à la
+          permutation des employés), divisé par la taille de la population (``float`` dans ]0, 1]) ;
+        - ``phenotypic_diversity`` : nombre de grilles « employé × période » distinctes
+          (``Horaire.to_grid(period_count)``), divisé par la taille de la population ;
+        - ``distinct_costs`` : nombre de valeurs distinctes de ``cost.total``."""
 
     def __init__(self, period_count: int, every: int = CollectorDefaults.DIVERSITY_EVERY_GENERATIONS) -> None:
         """
@@ -102,19 +174,39 @@ class DiversityCollector(MetricCollector):
 
 
 class FeasibilityRateCollector(MetricCollector):
-    """Taux de faisabilité (``cost.is_feasible``) des nouveaux individus, par origine et par opérateur, avant et
-    après le ``LocalSolver`` (``LocalSearchDone.cost_before`` et ``cost_after``). Un enregistrement
-    ``RecordNames.FEASIBILITY_RATES`` à chaque ``GenerationEnded`` (taux de la génération) et à ``RunEnded``
-    (taux cumulés). C'est la mesure de la première expérience de l'étape 10."""
+    """Taux de faisabilité (``cost.is_feasible``) avant et après le ``LocalSolver``, par groupe (origine, opérateur),
+    à partir des ``LocalSearchDone`` (``cost_before``, ``cost_after``). C'est la mesure de la première expérience
+    de l'étape 10.
+
+    Un enregistrement ``RecordNames.FEASIBILITY_RATES`` par groupe vu :
+        - à chaque ``GenerationEnded`` : ``scope`` = ``Scopes.GENERATION``, les appels de cette génération
+          seulement ; ``generation`` = celle de l'événement ;
+        - à ``RunEnded`` : ``scope`` = ``Scopes.CUMULATIVE``, tous les appels de l'exécution ;
+          ``generation`` = ``RunEnded.generations``.
+    Un groupe sans appel dans la portée ne produit pas d'enregistrement (pas de division par zéro).
+
+    Champs (``RecordFields``, ``FeasibilityFields``) : ``generation``, ``scope``, ``origin``, ``operator`` (``None``
+    pour l'initialisation et le restart), ``count`` (nombre d'appels), ``feasible_before``, ``feasible_after``
+    (nombres de faisables), ``rate_before``, ``rate_after`` (``float`` dans [0, 1])."""
 
     def on_event(self, event: Event) -> list[Record]:
         raise NotImplementedError  # Étape 8b (Mély)
 
 
 class SolverEffortCollector(MetricCollector):
-    """Charge cumulée du solveur (D10) : somme des statistiques de ``LocalSearchDone.result.statistics``
-    (``nodes``, ``failures``, ``propagations`` ; ``solve_time``, non déterministe, à part) et nombre d'appels.
-    Un enregistrement ``RecordNames.SOLVER_EFFORT`` à chaque ``GenerationEnded`` et à ``RunEnded``."""
+    """Charge du solveur (D10), à partir de ``LocalSearchDone.result.statistics``.
+
+    Un enregistrement ``RecordNames.SOLVER_EFFORT`` :
+        - à chaque ``GenerationEnded`` : ``scope`` = ``Scopes.GENERATION``, les appels de cette génération
+          seulement (``calls`` = 0 s'il n'y en a eu aucun) ;
+        - à ``RunEnded`` : ``scope`` = ``Scopes.CUMULATIVE``, la charge cumulée de toute l'exécution ;
+          ``generation`` = ``RunEnded.generations``.
+
+    Champs (``RecordFields``, ``SolverEffortFields``) : ``generation``, ``scope``, ``calls`` ; ``nodes``,
+    ``failures``, ``propagations`` : somme des valeurs rapportées (une statistique ``None`` n'est pas comptée ;
+    ``None`` si aucun appel de la portée ne l'a rapportée) ; ``solve_time_seconds`` : somme des ``solve_time`` en
+    secondes (``float``), même règle pour ``None``. ``solve_time`` n'est pas déterministe (D8) ; les trois autres
+    le sont sous limite déterministe."""
 
     def on_event(self, event: Event) -> list[Record]:
         raise NotImplementedError  # Étape 8b (Mély)
