@@ -187,10 +187,15 @@ Répartition et règles communes : [`TEAM.md`](TEAM.md). Les étapes 5b, 6, 7a e
 - [x] Tests **(P)** : individus construits à la main avec des coûts choisis ; le meilleur gagne un tournoi qui contient tout le monde ; tournoi de taille 1 = tirage uniforme ; population vide ou non évaluée ⇒ exception ; reproductibilité avec la même graine ; entrées jamais modifiées
 
 ### 7b — Opérateurs de variation pour `BlockEncoding` (`src/ga/operators.py`) **(C→P)** — Xavier, branche `etape-7b-variation`
-- [ ] Scaffold **(C)**, dans le scaffold commun : interfaces `VariationOperator[G]` (encodage compatible), `Crossover[G]` (`recombine(parents, rng) -> enfants`) et `Mutation[G]` (`mutate(genome, rng) -> génome`), squelettes des opérateurs concrets, exceptions et messages
-- [ ] `Recombine` **(P)** : `UniformGeneCrossover`, échange de gènes entiers entre deux parents (préserve la faisabilité de chaque quart)
-- [ ] `Mute` **(P)** : `ShiftStartMutation` (décaler un quart), `BlockBoundaryMutation` (déplacer une frontière entre deux blocs voisins, `Σd` conservée), `ActivityMutation` (changer l'activité d'un bloc)
-- [ ] Tests **(P)** : faisabilité préservée (`FeasibilityChecker`), entrées jamais modifiées, reproductibilité, cas limites (deux parents identiques, gènes en bordure de fenêtre, blocs à la durée minimale)
+- [x] Scaffold **(C)**, dans le scaffold commun : interfaces `VariationOperator[G]` (encodage compatible), `Crossover[G]` (`recombine(parents, rng) -> enfants`) et `Mutation[G]` (`mutate(genome, rng) -> génome`), squelettes des opérateurs concrets, exceptions et messages
+- [x] `Recombine` **(P)** : `UniformGeneCrossover`, échange de gènes entiers entre deux parents (préserve la faisabilité de chaque quart)
+- [x] `Mute` **(P)** : `ShiftStartMutation` (décaler un quart), `BlockBoundaryMutation` (déplacer une frontière entre deux blocs voisins, `Σd` conservée), `ActivityMutation` (changer l'activité d'un bloc)
+- [x] Tests **(P)** : faisabilité préservée (`FeasibilityChecker`), entrées jamais modifiées, reproductibilité, cas limites (deux parents identiques, gènes en bordure de fenêtre, blocs à la durée minimale) — validés le 2026-11-16 après la revue de la PR #7 (Pascal), 41 tests, suite complète verte (326 tests)
+- [ ] Amélioration possible de `BlockBoundaryMutation` (suggestion de Xavier, notée en commentaire dans le code, reportée ici le 2026-11-16) : calculer l'amplitude du transfert à partir des contraintes du quart, au lieu de la tirer dans un intervalle fixe (`OperatorDefaults.MIN_BOUNDARY_TRANSFER..MAX_BOUNDARY_TRANSFER`, soit 1..3). Le point d'entrée existe déjà : `BlockBoundaryMutation.get_transfer_bounds(genome)`, qui rend pour l'instant ces bornes fixes :
+  - le bloc qui cède peut donner au plus `durée − ShiftStructure.MIN_ACTIVITY_DURATION` périodes ; tirer le transfert dans `1..marge` garantit des durées valides et supprime le cas « aucun gène ne peut céder » (bogue 3 de la revue de la PR #7) ;
+  - Σd étant conservée, la borne de 6 à 8 heures rémunérées reste respectée d'elle-même. Un bloc ne peut donc pas dépasser `Σd − 3 × MIN_ACTIVITY_DURATION` périodes (au plus 30 − 12 = 18) ;
+  - à étudier : tenir compte aussi des fenêtres des jalons (pause, dîner), pour que le déplacement de frontière garde le quart faisable ; plafonner le transfert (constante dans `OperatorDefaults`) pour garder une mutation locale ;
+  - à mesurer à l'étape 10 : effet sur le taux de faisabilité des enfants de cet opérateur.
 
 ## Étape 8 — Gestion de la population (`src/ga/population.py`) **(P)**
 - [ ] Trancher D4

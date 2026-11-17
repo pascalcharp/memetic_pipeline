@@ -706,3 +706,39 @@ Tests : 2 nouveaux tests dans `tests/test_registry.py` (21 au total), et nettoya
 * Nombres magiques retirés. Dans `test_selection.py`, constantes de module (`CONTRACT_COUNT`, `BEST_ALWAYS_WINS_COUNT`, `UNIFORM_TOLERANCE_RATIO`, `MIDDLE_TOTAL`) et variables locales `count` / `size` dans chaque test, pour que le rôle de chaque nombre soit lisible. Dans `test_registry.py`, noms d'opérateurs en constantes et noms de classes tirés de `__name__`.
 * Les deux tests de contrat de `test_registry.py` sont renommés selon la convention given_when_then.
 * La docstring de `ScriptedRandom` note que les tests sont liés à l'emploi de `rng.choices` dans le tournoi : une réécriture avec `randrange` ou `sample` les casserait, même si le comportement restait correct (compromis accepté).
+
+## 2026-11-16 — Étape 7b : opérateurs de variation pour `BlockEncoding` (Xavier ; revue et corrections avec Pascal)
+
+Fait (P), par Xavier, branche `feature/block-encoding` (PR #7) : `UniformGeneCrossover` (masque uniforme gène par gène, d'après Syswerda 1989), `ShiftStartMutation`, `BlockBoundaryMutation` et `ActivityMutation` dans `src/ga/operators.py`, avec leurs tests ; un `.editorconfig` (indentation Python à 4 espaces).
+
+Revue (Pascal, 2026-11-16). La CI était verte, mais les tests remplaçaient le générateur aléatoire par des `mock`, qui rendaient la valeur attendue et masquaient des bogues. Appliquées avec un vrai `random.Random` à 200 génomes faisables de bench_5, les mutations donnaient : `ActivityMutation`, 52 activités invalides ; `ShiftStartMutation`, 59 génomes inchangés et 8 infaisables ; `BlockBoundaryMutation`, 2 blocs de moins de 4 périodes. Corrections faites par Pascal sur la branche de Xavier, avec son accord, une à une : un test qui échoue d'abord (écrit par Claude), puis la correction.
+
+Bogues corrigés
+
+* `ActivityMutation` tirait un indice dans la liste des activités de remplacement au lieu d'une activité (`randrange(len(...))`) : activité 0 inexistante, activité d'origine retirée par hasard, activité la plus haute jamais tirée. Correction : `rng.choice(new_activities)`.
+* `BlockBoundaryMutation` modifiait le mauvais gène dès qu'un gène avait été écarté : les blocs étaient choisis dans `genes_to_try[index]`, mais écrits dans `mutated[index]`.
+* `BlockBoundaryMutation` levait `GenomeCannotMutate` en pleine exécution quand aucun gène ne pouvait céder le transfert tiré (par exemple un quart faisable de durées 6, 6, 5, 5 avec un transfert de 3). Elle rend maintenant le génome inchangé, comme `ActivityMutation` sur une instance à une seule activité.
+* `BlockBoundaryMutation` déplaçait du temps entre deux blocs quelconques, au lieu de deux blocs voisins comme le demandent la docstring et le plan. Correction : tirage parmi les paires (bloc qui reçoit, bloc qui cède) de blocs consécutifs, dans les deux sens, où le bloc qui cède a assez de marge.
+* `ShiftStartMutation` tirait un décalage nul une fois sur quatre (`randrange(4)`), et ne ramenait le début que dans la fenêtre de début : un quart long pouvait finir après la fenêtre de fin (toutes les violations observées étaient des `END_WINDOW`). Le début est maintenant ramené entre `windows.start.earliest` et `min(windows.start.latest, windows.end.latest − longueur du quart)`, la longueur valant `Σd + 2 × BREAK_DURATION + LUNCH_DURATION − INCLUSIVE_BOUNDS_CORRECTION`.
+
+Décisions et nettoyage
+
+* « If it works, don't fix it » : la logique de Xavier est gardée (boucle de `BlockBoundaryMutation` qui écarte les gènes un à un, masque généré du croisement) ; seuls les défauts ont été corrigés.
+* `Encoding.clone` retiré (interface et implémentations) : `src/ga/chromosome.py` est un module partagé validé, et les génomes sont immuables (D7), donc partageables sans copie. `encode(decode(g))` ne garantissait pas non plus de rendre le même génome pour un génome infaisable. `chromosome.py` et `tests/test_individual.py` sont revenus à leur état de `main`.
+* Nombres magiques déplacés dans `OperatorDefaults` : `MIN/MAX_BOUNDARY_TRANSFER`, `MIN/MAX_SHIFT_AMPLITUDE`, `SHIFT_DIRECTIONS`, `MIN_ACTIVITY_COUNT_TO_MUTATE` ; indices d'activité à partir de `ModelIndexing.FIRST_INDEX`. Nouvelle méthode `BlockBoundaryMutation.get_transfer_bounds(genome)`, qui rend pour l'instant les bornes fixes et prépare une amplitude calculée (suggestion de Xavier, reportée dans TODO.md, 7b).
+* Messages d'erreur : toutes les exceptions sont levées avec un gabarit de `OperatorMessages` (`WRONG_PARENT_COUNT`, `PARENT_LENGTH_MISMATCH`, `EMPTY_GENOME`, `GENE_CANNOT_GIVE`), formaté par le code qui lève l'exception (convention commune, comme `selection.py` ; la forme du registre attend D14).
+* `GenomeNoGeneToMutateError` et `GenomeCannotMutate` réunies en `EmptyGenomeError`, levée par les trois mutations pour un génome vide (erreur d'appel). `ActivityMutation` levait jusque-là une `ValueError` de Python.
+* Fautes de frappe et noms corrigés (`GeneCannotMutateBoundaryError`, `length`, `minimum_duration`, `*_MUTATION`, neuf noms de tests). Le franglais des noms de variables est toléré pour l'instant.
+
+Tests : 41 tests dans `tests/test_operators.py` (tests écrits par Claude pour les corrections).
+
+* Nouveaux tests avec un vrai `Random` à graine fixée, qui vérifient des propriétés sur beaucoup de mutations, sur des génomes construits à la main et sur 50 génomes faisables de bench_5 tirés par `RandomBlockInitializer` : activité valide et différente, toutes les activités tirées ; un seul gène modifié, Σd conservée, durées ≥ 4, blocs voisins ; décalage jamais nul, quart décalé faisable selon `FeasibilityChecker` (qui sert d'oracle : les tests ne recalculent pas les fenêtres) ; génome rendu inchangé quand rien n'est mutable ; entrées jamais modifiées ; reproductibilité.
+* Cas construits pour révéler les bogues : gène dont tous les blocs sont à la durée minimale placé avant un gène mutable (bogue du mauvais gène) ; quart de 8 heures au début faisable le plus tardif (fenêtre de fin).
+* Supprimés, car ils décrivaient les comportements fautifs ou testaient une méthode privée devenue obsolète : six tests à base de mock. Les autres tests de Xavier sont gardés, deux avec un mock adapté (`rng.randint`).
+* Messages : un test par exception vérifie que le message contient l'information utile (opérateur, nombres reçus et attendus, longueurs, transfert).
+
+Leçon : un mock du générateur aléatoire rend la valeur que le test attend ; il peut cacher un indice pris pour une valeur (bogue 1) ou ne jamais emprunter le chemin fautif (bogue 2, invisible sur des génomes d'un seul gène). Les propriétés vérifiées avec un vrai générateur ont trouvé les quatre bogues.
+
+Suite complète : 326 tests, tous verts.
+
+Reste avant la fusion : relecture par Xavier ; `git push` ; description de la PR #7 (elle recopie l'énoncé de la tâche) ; la branche s'appelle `feature/block-encoding` au lieu de `etape-7b-variation`. TEAM.md sera coché à la fusion.
