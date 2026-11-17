@@ -29,13 +29,19 @@ memetic_pipeline/
 │   │   ├── chromosome.py       # Génotype : interface Encoding[G], BlockEncoding (gènes BlockGene, ActivityBlock)
 │   │   ├── individual.py       # Individu : génome, horaire décodé, coût
 │   │   ├── initialization.py   # Initialisation : PopulationInitializer, RandomBlockInitializer (scaffold, étape 6)
-│   │   ├── operators.py        # Variation : Crossover[G], Mutation[G], opérateurs de BlockEncoding (scaffold, étape 7b)
-│   │   ├── registry.py         # Registre des opérateurs par nom, IncompatibleOperatorError (scaffold, étape 7a)
-│   │   └── selection.py        # Sélection : ParentSelector, MutableSelector, TournamentSelector (scaffold, étape 7a)
-│   ├── memetic/                # Couplage mémétique et recherche locale
+│   │   ├── operators.py        # Variation : Crossover[G], Mutation[G], opérateurs de BlockEncoding (étape 7b)
+│   │   ├── population.py       # SelectPop, convergence, restart : SurvivorSelector, ConvergenceCriterion, RestartPolicy (scaffold, étape 8)
+│   │   ├── registry.py         # Registre des opérateurs par nom, IncompatibleOperatorError (étape 7a)
+│   │   └── selection.py        # Sélection : ParentSelector, MutableSelector, TournamentSelector (étape 7a)
+│   ├── memetic/                # Couplage mémétique, recherche locale et moteur
 │   │   ├── __init__.py
-│   │   ├── local_search.py     # Recherche locale : Neighborhood, LocalSolver, MiniZincLocalSolver (scaffold, étape 5b)
-│   │   └── solver.py           # Indirection vers les solveurs : SolverAdapter, CpSatAdapter, limites d'effort, SolverRun
+│   │   ├── config.py           # MemeticConfig : stratégies et paramètres d'une exécution (scaffold, étape 9)
+│   │   ├── engine.py           # Moteur Memetic(NR, NM) et MemeticResult (scaffold, étape 9)
+│   │   ├── executor.py         # Exécution des lots : Executor, SequentialExecutor (D7)
+│   │   ├── local_search.py     # Recherche locale : Neighborhood, LocalSolver, MiniZincLocalSolver (étape 5b)
+│   │   ├── seeds.py            # Graines dérivées par tâche : derive_task_seeds, SeedStreams (scaffold, étape 9)
+│   │   ├── solver.py           # Indirection vers les solveurs : SolverAdapter, CpSatAdapter, limites d'effort, SolverRun
+│   │   └── termination.py      # Critère d'arrêt : TerminationCriterion, GenerationLimit (scaffold, étape 9)
 │   ├── model/                  # Modèle CP (MiniZinc) et ses règles côté Python
 │   │   ├── __init__.py
 │   │   ├── evaluation.py       # Coût : couverture (cout_total) et pénalités (CostEvaluator, CostBreakdown, PenaltyWeights)
@@ -43,16 +49,27 @@ memetic_pipeline/
 │   │   ├── horaire.mzn         # Modèle MiniZinc fourni
 │   │   ├── horaire.py          # Phénotype canonique (Horaire, HoraireEmploye) et grille « employé × période »
 │   │   └── shift_rules.py      # Constantes du domaine : noms des variables MiniZinc, durées, écarts, décalages des fenêtres
+│   ├── observability/          # Observabilité (D8) : événements, collecteurs, destinations, journal, répertoire d'exécution
+│   │   ├── __init__.py
+│   │   ├── collectors.py       # MetricCollector et collecteurs de mesures (scaffold, étape 8b)
+│   │   ├── events.py           # Catalogue des événements du moteur, schéma des enregistrements (make_record)
+│   │   ├── hub.py              # ObservationHub : diffuse les événements aux collecteurs, écrit dans les destinations
+│   │   ├── logging_config.py   # Journal de diagnostic : configure_logging, get_logger
+│   │   ├── run_directory.py    # Répertoire results/<expérience>/<run_id>/ et config.json
+│   │   └── sinks.py            # Destinations : RecordSink, NullSink, MemorySink, ConsoleSink, JsonlSink, CsvSink
 │   └── utils/                  # Utilitaires : environnement, lecture de fichiers
 │       ├── __init__.py
 │       ├── io.py               # Lecture et validation des instances (ProblemInstance, plage utile, fenêtres)
 │       └── minizinc_env.py     # Localisation de MiniZinc et des solveurs, exceptions associées
 ├── tests/                      # Tests unittest : python -m unittest discover
 │   ├── __init__.py
-│   ├── fixtures.py             # Outil de test (pas un test) : individus aux coûts choisis, génome de référence, faux LocalSolver
+│   ├── fixtures.py             # Outil de test (pas un test) : individus aux coûts choisis, génome de référence, faux objets (LocalSolver, opérateurs, stratégies de population, collecteur)
 │   ├── minizinc_probe.py       # Outil de test (pas un test) : sonde horaire.mzn pour vérifier la cohérence avec Python
 │   ├── test_chromosome.py      # Génotype : allers-retours, génomes infaisables, conditions de D1, solutions MiniZinc
+│   ├── test_collectors.py      # Collecteurs (étape 8b) : contrat du scaffold, cas à couvrir en tête de fichier
+│   ├── test_engine.py          # Moteur (étape 9) : contrat du scaffold, configuration factice, cas à couvrir en tête de fichier
 │   ├── test_evaluation.py      # Évaluation : cas à la main, totaux de couverture, pénalités, coût comparé à MiniZinc
+│   ├── test_executor.py        # Exécution des lots : SequentialExecutor
 │   ├── test_feasibility.py     # Faisabilité structurelle : bornes exactes, violations isolées, verdict comparé à MiniZinc
 │   ├── test_horaire.py         # Phénotype : construction, forme, grille comparée à la 2ᵉ sortie de MiniZinc
 │   ├── test_individual.py      # Individu : décodage unique, évaluation sans modification (encodage factice)
@@ -60,7 +77,9 @@ memetic_pipeline/
 │   ├── test_io.py              # Lecture des instances : 5 bench, cas d'erreur, plage utile comparée à MiniZinc
 │   ├── test_local_search.py    # Recherche locale (étape 5b) : contrat du scaffold, cas à couvrir en tête de fichier
 │   ├── test_minizinc_env.py    # Localisation de MiniZinc, solveurs, messages d'erreur
-│   ├── test_operators.py       # Variation (étape 7b) : contrat du scaffold, cas à couvrir en tête de fichier
+│   ├── test_observability.py   # Observabilité : schéma, destinations, ObservationHub, journal, répertoire d'exécution
+│   ├── test_operators.py       # Variation (étape 7b) : propriétés avec un vrai Random, cas limites, messages
+│   ├── test_population.py      # Population (étape 8) : contrat du scaffold, cas à couvrir en tête de fichier
 │   ├── test_registry.py        # Registre (étape 7a) : contrat du scaffold, cas à couvrir en tête de fichier
 │   ├── test_selection.py       # Sélection (étape 7a) : check_selectable, contrat du scaffold, cas à couvrir
 │   ├── test_shift_rules.py     # Constantes du domaine et sondes de cohérence avec horaire.mzn
@@ -77,4 +96,4 @@ memetic_pipeline/
 └── requirements.txt            # Dépendances Python (minizinc, numpy)
 ```
 
-Non suivis par Git : `.venv/` (environnement virtuel local), `.idea/` (PyCharm) et les caches `__pycache__/`.
+Non suivis par Git : `.venv/` (environnement virtuel local), `.idea/` (PyCharm), les caches `__pycache__/` et `results/` (résultats des exécutions, D8).

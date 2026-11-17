@@ -742,3 +742,23 @@ Leçon : un mock du générateur aléatoire rend la valeur que le test attend ; 
 Suite complète : 326 tests, tous verts.
 
 Reste avant la fusion : relecture par Xavier ; `git push` ; description de la PR #7 (elle recopie l'énoncé de la tâche) ; la branche s'appelle `feature/block-encoding` au lieu de `etape-7b-variation`. TEAM.md sera coché à la fusion.
+
+## 2026-11-16 — Planification de la semaine du 16 novembre, D4 et scaffold commun des étapes 8, 8b et 9 (Pascal et Claude)
+
+**D4 tranchée** (Pascal et Claude) : remplacement (μ+λ) sans doublons ; convergence par stagnation du meilleur pendant G générations ; restart en gardant une élite de k individus et en régénérant le reste avec l'initialiseur de l'étape 6 ; variante « peine de mort » complétée par les meilleurs infaisables quand les faisables manquent. Valeurs par défaut : G = 10, k = 1. Ajout de Claude, à confirmer en équipe : s'il y a moins de μ génomes distincts, on complète avec des doublons dans l'ordre des coûts. Détail dans TODO.md (D4).
+
+**Répartition** (TEAM.md, semaine du 16 novembre) : Pascal, 5c (D12) puis 9-intégration ; Tristan, 8 ; Mély, 8b (collecteurs) ; Xavier, 9. D13, D14 et l'entrée 5c, jusque-là seulement sur la branche `etape-5c-couverture-souple`, arrivent sur `main` avec la planification. TEAM.md : lignes 5b, 6, 7b et D4 cochées.
+
+**Scaffold commun** (Claude), en un seul commit sur `main`, avant la création des branches :
+- étape 8 (`src/ga/population.py`) : interfaces `SurvivorSelector`, `ConvergenceCriterion`, `RestartPolicy` ; squelettes de `PlusSurvivorSelector`, `DeathPenaltySurvivorSelector`, `StagnationCriterion`, `EliteRestart` (validation des paramètres écrite) ; `PopulationDefaults`, messages, exceptions ;
+- étape 8b (`src/observability/`) : infrastructure écrite et testée — événements typés de D8 et `make_record` (`events.py`), destinations (`sinks.py`), `ObservationHub` (`hub.py`), `configure_logging` et `get_logger` (`logging_config.py`), `RunDirectory` et `config.json` (`run_directory.py`) ; `results/` ajouté au `.gitignore`. Dans `collectors.py` : interface `MetricCollector` et squelettes des quatre collecteurs ;
+- étape 9 (`src/memetic/`) : `Executor` et `SequentialExecutor` écrits et testés (`executor.py`) ; `TerminationCriterion` et squelette de `GenerationLimit` (`termination.py`) ; `SeedStreams` et squelette de `derive_task_seeds` (`seeds.py`) ; champs de `MemeticConfig` et squelette de `validate` (`config.py`) ; `MemeticResult` et squelette de `Memetic`, dont la docstring décrit le déroulement attendu et les points d'émission des événements (`engine.py`) ;
+- tests : contrats des scaffolds (`test_population.py`, `test_collectors.py`, `test_engine.py`, avec les cas à couvrir en tête de fichier), infrastructure (`test_observability.py`, `test_executor.py`) ; faux objets du moteur ajoutés à `tests/fixtures.py`.
+
+**Choix de conception du scaffold** :
+- les événements sont des dataclasses figées, une par type (`RunStarted`, `LocalSearchDone`, …), qui portent des objets du domaine ; les enregistrements sont des dictionnaires de valeurs simples, construits par les collecteurs. Ainsi le moteur n'a rien à sérialiser, et les collecteurs choisissent ce qu'ils mesurent ;
+- `LocalSearchDone` porte le coût avant et après la recherche locale, et le nom de l'opérateur : de quoi mesurer le taux de faisabilité par opérateur avant et après réparation (première expérience de l'étape 10) ;
+- les destinations refusent les types numpy (`json` de la bibliothèque standard) au lieu de les convertir en silence ;
+- les exceptions suivent la convention commune (le code qui lève formate le gabarit), en attendant D14.
+
+Suite complète verte.

@@ -57,7 +57,7 @@ Puis ouvrir la *pull request* de `<branche>` vers `main` sur GitHub. La CI relan
 Avant le départ, Claude scaffolde en un seul commit sur `main` les interfaces et les squelettes de tests des quatre sous-étapes. Chacun crée ensuite sa branche à partir de ce commit. Les noms de classes ci-dessous sont ceux du plan ; le scaffold peut les préciser.
 
 ### Pascal — Étape 5b : recherche locale par MiniZinc
-- [ ] Étape 5b
+- [x] Étape 5b
 
 **Fichiers**
 - `src/memetic/local_search.py`
@@ -82,7 +82,7 @@ Avant le départ, Claude scaffolde en un seul commit sur `main` les interfaces e
 **Tests** : `python -m unittest tests.test_local_search` (appelle MiniZinc).
 
 ### Mély — Étape 6 : initialisation de la population
-- [ ] Étape 6
+- [x] Étape 6
 
 **Fichiers**
 - `src/ga/initialization.py`
@@ -138,7 +138,7 @@ Avant le départ, Claude scaffolde en un seul commit sur `main` les interfaces e
 **Tests** : `python -m unittest tests.test_selection tests.test_registry` (sans MiniZinc). Les individus de test sont construits à la main, avec des coûts choisis.
 
 ### Xavier — Étape 7b : opérateurs de variation pour `BlockEncoding`
-- [ ] Étape 7b
+- [x] Étape 7b
 
 **Fichiers**
 - `src/ga/operators.py`
@@ -166,4 +166,127 @@ Avant le départ, Claude scaffolde en un seul commit sur `main` les interfaces e
 **Tests** : `python -m unittest tests.test_operators` (sans MiniZinc). Cas limites : population de deux individus identiques, gènes en bordure de fenêtre, blocs à la durée minimale.
 
 ### En équipe, pendant la semaine
-- [ ] Trancher **D4** (remplacement, convergence, restart ; voir TODO.md), pour que l'étape 8 démarre la semaine suivante.
+- [x] Trancher **D4** (remplacement, convergence, restart ; voir TODO.md), pour que l'étape 8 démarre la semaine suivante. Tranchée le 2026-11-16 (Pascal et Claude).
+
+---
+
+## Semaine du 16 novembre
+
+Avant le départ, Claude scaffolde en un seul commit sur `main` les interfaces, l'infrastructure d'observabilité et les squelettes de tests des étapes 8, 8b et 9. Chacun crée ensuite sa branche à partir de ce commit (Pascal garde la sienne, déjà créée, et y intègre `main`). Les noms de classes ci-dessous sont ceux du plan ; le scaffold peut les préciser.
+
+Les quatre sous-étapes avancent en parallèle : chacune ne dépend que d'interfaces scaffoldées ou déjà sur `main`, et se teste avec des faux objets. Seule la sous-étape **9-intégration** (Pascal) attend la fusion des autres.
+
+Rappel : les tests peuvent être écrits par un agent de codage (règle 0 de CLAUDE.md, PR #5) ; les méthodes et algorithmes de sa sous-étape, chacun les écrit lui-même. Préférer un vrai `random.Random` à graine fixée et des propriétés vérifiées sur beaucoup de tirages plutôt qu'un mock du générateur (leçon de la revue de 7b, DEVLOG du 2026-11-16).
+
+### Pascal — Étape 5c : couverture « au moins 1 » en pénalité dans `horaire.mzn` (D12), puis 9-intégration
+- [ ] Étape 5c
+- [ ] Étape 9-intégration (après la fusion de 5c, 8, 8b et 9) : exécution complète sur `bench_1` avec les vrais composants (`MiniZincLocalSolver` + CP-SAT limité en effort déterministe), coût du meilleur monotone non croissant, reproductibilité avec et sans collecteurs, événements reçus dans l'ordre ; `tests/test_engine_integration.py` (appelle MiniZinc)
+
+**Fichiers**
+- `src/model/horaire.mzn`
+- `src/memetic/solver.py`, `src/memetic/local_search.py`
+- `tests/test_smoke_minizinc.py`, `tests/test_solver.py`, `tests/test_local_search.py`, et un test de validation croisée Python / MiniZinc
+
+**À faire** (détail dans TODO.md, 5c)
+- Trancher D12 en équipe d'abord : `src/model/` et `src/memetic/` sont des modules partagés.
+- Modèle : la contrainte « au moins 1 » devient un compteur `violations_couverture`, et l'objectif devient `cout_penalise = cout_total + POIDS_COUVERTURE × violations_couverture`, avec le poids passé par Python (`PenaltyWeights.coverage_violation`).
+- `SolverAdapter` : passe le poids au modèle ; nouveau nom d'objectif dans `ModelObjective`.
+- `MiniZincLocalSolver` : la borne porte sur le coût pénalisé, posée dès que l'entrée n'a aucune violation structurelle.
+
+**Dépendances**
+- `src/model/evaluation.py` : `PenaltyWeights`, `CostEvaluator.total` (même fonction de coût que le modèle)
+- `src/model/feasibility.py` : `FeasibilityChecker` (violations structurelles)
+
+**Décisions de référence** : D10, D11, D12 ; D13 (redondance modèle / pipeline) à garder en tête.
+
+**Tests** : `python -m unittest tests.test_smoke_minizinc tests.test_solver tests.test_local_search` (appellent MiniZinc).
+
+### Tristan — Étape 8 : gestion de la population
+- [ ] Étape 8
+
+**Fichiers**
+- `src/ga/population.py`
+- `tests/test_population.py`
+
+**Classes à écrire**
+- `PlusSurvivorSelector` : implémente `SurvivorSelector` ; `SelectPop` en (μ+λ) sans doublons : tri stable par `cost.total` croissant, un seul exemplaire de chaque génome identique, les μ meilleurs ; s'il y a moins de μ génomes distincts, complète avec des doublons dans l'ordre des coûts.
+- `DeathPenaltySurvivorSelector` : implémente `SurvivorSelector` ; les faisables (`cost.is_feasible`) d'abord, sans doublons, puis les meilleurs infaisables selon `cost.total` pour compléter à μ.
+- `StagnationCriterion(generations)` : implémente `ConvergenceCriterion` ; convergence quand le coût du meilleur n'a pas baissé depuis `generations` générations ; `reset()` après un restart.
+- `EliteRestart(elite_count, initializer, evaluator)` : implémente `RestartPolicy` ; garde les `elite_count` meilleurs, régénère le reste avec le `PopulationInitializer`, évalue les nouveaux individus.
+
+**Scaffoldé d'avance** : interfaces `SurvivorSelector[G]`, `ConvergenceCriterion[G]`, `RestartPolicy[G]`, classe de constantes (G = 10, k = 1), exceptions et messages.
+
+**Dépendances**
+- `src/ga/individual.py` : `Individu`, `genome` (comparaison des génomes pour les doublons), `cost`, `with_cost`
+- `src/model/evaluation.py` : `CostBreakdown.total`, `CostBreakdown.is_feasible`, `CostEvaluator.evaluate`
+- `src/ga/initialization.py` : interface `PopulationInitializer` (restart)
+- `src/ga/selection.py` : `check_selectable` (population vide, individus non évalués), si utile
+- `random.Random`, injecté (D5)
+
+**Décisions de référence** : D4 (tranchée le 2026-11-16), D5, D7 (individus immuables, entrées jamais modifiées).
+
+**Tests** : `python -m unittest tests.test_population` (sans MiniZinc). Individus construits à la main avec des coûts choisis (`tests/fixtures.py`) ; faux `PopulationInitializer` pour le restart. Cas : taille conservée, meilleur jamais perdu, doublons éliminés, moins de μ génomes distincts, peine de mort avec trop peu de faisables, stagnation détectée après exactement G générations puis remise à zéro, élite conservée au restart.
+
+### Mély — Étape 8b : collecteurs de l'observabilité
+- [ ] Étape 8b
+
+**Fichiers**
+- `src/observability/collectors.py`
+- `tests/test_collectors.py`
+
+**Classes à écrire**
+- `CostStatisticsCollector` : à chaque fin de génération, statistiques de `cost.total` (min, moyenne, médiane, max, écart-type) et coût décomposé (sous-couverture, sur-couverture, violations « au moins 1 », cellules quasi dures).
+- `DiversityCollector` : diversité génotypique insensible à la permutation des employés (par exemple la proportion de génomes distincts une fois les gènes triés), phénotypique (proportion de grilles « employé × période » distinctes) et des coûts (nombre de coûts distincts) ; fréquence configurable.
+- `FeasibilityRateCollector` : taux de faisabilité des nouveaux individus par opérateur, avant et après le `LocalSolver`.
+- `SolverEffortCollector` : charge cumulée du solveur (D10), à partir des statistiques des `local_search_done`.
+
+**Scaffoldé d'avance** (par Claude, marqué (C) dans TODO.md, écrit et testé dans `tests/test_observability.py`) : catalogue des événements de D8 et schéma des enregistrements (`events.py` : `make_record`, `RunStarted`, `LocalSearchDone`, `IndividualCreated`, `GenerationEnded`, `Converged`, `Restarted`, `RunEnded`) ; interface `RecordSink` et les destinations `MemorySink`, `NullSink`, `ConsoleSink`, `JsonlSink`, `CsvSink` (`sinks.py`) ; diffusion `ObservationHub` (`hub.py`) ; configuration de `logging` (`logging_config.py`) ; répertoire d'exécution `results/<expérience>/<run_id>/` (`run_directory.py`). Dans `collectors.py` : interface `MetricCollector`, `RecordNames`, constantes, exceptions et squelettes des quatre collecteurs.
+
+**Dépendances**
+- `src/ga/individual.py` : `Individu`
+- `src/model/evaluation.py` : `CostBreakdown` (total, termes, compteurs de violations, `is_feasible`)
+- `src/model/horaire.py` : `Horaire.to_grid` (diversité phénotypique)
+- `src/ga/chromosome.py` : `BlockGenome` (diversité génotypique)
+- `src/memetic/solver.py` : `SolverStatistics` ; `src/memetic/local_search.py` : `LocalSearchResult`
+- les événements scaffoldés de `src/observability/`
+
+**Décisions de référence** : D8 (un collecteur ne consomme jamais le générateur aléatoire du moteur ; bibliothèque standard seulement), D10. D9 (MongoDB) : proposition de la reporter.
+
+**Tests** : `python -m unittest tests.test_collectors` (sans MiniZinc). Populations construites à la main, résultats lus dans un `MemorySink`.
+
+### Xavier — Étape 9 : boucle mémétique
+- [ ] Étape 9
+
+**Fichiers**
+- `src/memetic/engine.py` (moteur `Memetic`), `src/memetic/config.py` (`MemeticConfig.validate`), `src/memetic/seeds.py` (`derive_task_seeds`), `src/memetic/termination.py` (`GenerationLimit`)
+- `tests/test_engine.py`
+
+**Classes à écrire**
+- `Memetic` : la boucle du pseudo-code de CLAUDE.md. Tirage par lot des parents (NR) et des individus à muter (NM), variation, `LocalSolver`, ré-encodage de l'horaire réparé (`encoding.encode`), évaluation, `SelectPop`, convergence et restart, critère d'arrêt ; émission des événements de D8 après chaque lot.
+- `MemeticConfig.validate` : la dataclass figée des stratégies et des paramètres scalaires (NR, NM, taille de population, graine maître) est scaffoldée ; reste sa validation (bornes de `MemeticDefaults`, compatibilité des opérateurs avec l'encodage).
+- `derive_task_seeds(master_seed, generation, stream, task_count)` : dérivation des graines par tâche à partir de la graine maître (D7) ; les lots sont identifiés par `SeedStreams`.
+- `GenerationLimit(generations)` : implémente `TerminationCriterion`.
+
+**Scaffoldé d'avance** : `Executor` et `SequentialExecutor` (écrits et testés), interface `TerminationCriterion`, champs de `MemeticConfig`, `MemeticResult`, squelette de `Memetic` (le déroulement attendu est décrit dans la docstring de `engine.py`), `SeedStreams`, constantes, exceptions et messages ; faux objets communs dans `tests/fixtures.py` (`FakeCrossover`, `FakeMutation`, `FakeLocalSolver`, `FakeSurvivorSelector`, `FakeConvergenceCriterion`, `FakeRestartPolicy`, `RecordingCollector`) et une configuration factice complète dans `tests/test_engine.py`.
+
+**Dépendances** (interfaces seulement ; le moteur ne connaît aucune classe concrète)
+- `src/ga/initialization.py` : `PopulationInitializer` (étape 6)
+- `src/ga/selection.py` : `ParentSelector`, `MutableSelector` (7a)
+- `src/ga/operators.py` : `Crossover[G]`, `Mutation[G]` (7b)
+- `src/memetic/local_search.py` : `LocalSolver`, `LocalSearchResult` (5b)
+- `src/model/evaluation.py` : `CostEvaluator` (4)
+- `src/ga/chromosome.py` : `Encoding[G]` (`encode`, `decode`) ; `src/ga/individual.py` : `Individu.from_genome`, `with_cost`
+- `src/ga/population.py` : `SurvivorSelector`, `ConvergenceCriterion`, `RestartPolicy` (8, interfaces scaffoldées)
+- `src/observability/` : `ObservationHub` (diffusion des événements), événements de `events.py`, `MetricCollector`, `RecordSink` (8b, scaffoldés)
+- `src/memetic/executor.py` : `Executor`, `SequentialExecutor`
+
+**Décisions de référence** : D5, D7 (lots, individus immuables, graines dérivées, `Executor`), D8 (événements), D10 (limite d'effort déterministe pour la reproductibilité).
+
+**Tests** : `python -m unittest tests.test_engine` (sans MiniZinc, avec les faux objets) : terminaison, coût du meilleur monotone non croissant, reproductibilité (même graine ⇒ même historique, avec ou sans collecteurs), entrées des opérateurs jamais modifiées, événements reçus dans l'ordre. L'intégration avec les vrais composants (9-intégration) est faite par Pascal après les fusions.
+
+### En équipe, pendant la semaine
+- [ ] Trancher **D12** (couverture dure ou pénalisée), avant que Pascal modifie les modules partagés.
+- [ ] Trancher **D14** (forme des exceptions), avant que les nouveaux modules en écrivent.
+- [ ] Trancher **D9** (MongoDB) ; proposition : reportée, les fichiers de `results/` suffisent pour le POC.
+- [ ] Relire et fusionner la PR #5 (règle des tests par agent dans CLAUDE.md).
+- [ ] **D13** (redondance modèle / pipeline) : à discuter après 5c.

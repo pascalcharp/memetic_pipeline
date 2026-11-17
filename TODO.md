@@ -39,7 +39,12 @@ Règle : une seule étape à la fois **par personne et par branche** ; on ne fus
   - statistiques : coût (min, moyenne, médiane, max, écart-type), **coût décomposé** (sous-couverture, sur-couverture, violations de la contrainte « au moins 1 », cellules à 1 000 000), diversité (génotypique insensible à la permutation des employés, phénotypique, des coûts ; fréquence configurable ou échantillonnage), efficacité des opérateurs, apport de la recherche locale ;
   - une exécution = `results/<expérience>/<run_id>/` (`config.json` avec graine, commit Git et versions, `events.jsonl`, `generations.csv`, `run.log`), ignoré par Git ;
   - principes : enregistrer assez de données brutes pour recalculer plus tard ; `schema_version` et `event` dans chaque enregistrement ; un collecteur ne consomme jamais le générateur aléatoire du moteur ; événements émis par le thread principal après chaque lot (D7) ; temps marqués non déterministes ; bibliothèque standard seulement.
-- [ ] **D4 — Remplacement / convergence / restart** (avant étape 8) : élitisme (μ+λ) ? mesure de diversité ? quelle fraction conserver au restart ?
+- [x] **D4 — Remplacement / convergence / restart** (tranchée le 2026-11-16, Pascal et Claude) :
+  - **remplacement (`SelectPop`)** : (μ+λ) sans doublons. Parents et nouveaux individus sont triés par `cost.total` croissant (tri stable) ; on garde les μ meilleurs en ne retenant qu'un exemplaire de chaque génome identique. Élitiste : le meilleur individu n'est jamais perdu. L'élimination des doublons empêche les copies produites par le `LocalSolver` (plusieurs individus réparés vers la même solution) d'envahir la population. S'il y a moins de μ génomes distincts, on complète avec des doublons, dans l'ordre des coûts, pour garder la taille μ. Limite connue : deux génomes égaux à une permutation des employés près (D3) ne sont pas des doublons ;
+  - **convergence** : stagnation du meilleur. La population a convergé quand le coût du meilleur individu n'a pas baissé depuis G générations (G configurable). La diversité (8b) est mesurée pour l'observation, pas pour décider ;
+  - **restart** : élite k + réinitialisation. On garde les k meilleurs individus (k petit, 1 par défaut) et on régénère le reste avec le `PopulationInitializer` de l'étape 6 (avec son option `LocalSolver`), puis on évalue. Le critère de convergence repart de zéro ;
+  - **variante « peine de mort »** : au remplacement, les individus faisables (`cost.is_feasible`) passent d'abord, sans doublons ; s'il en reste moins de μ, on complète avec les meilleurs infaisables selon `cost.total`. La population garde sa taille, et la variante se dégrade doucement vers la pénalité quand les faisables manquent ;
+  - valeurs par défaut proposées (classe de constantes de `src/ga/population.py`) : G = 10 générations, k = 1.
 - [ ] **D9 — Résultats d'expérience dans MongoDB** (proposition de Pascal, 2026-11-07 ; à trancher avant l'étape 8b) :
   - se branche naturellement comme une destination de plus (`MongoSink`, patron Observateur de D8) : le moteur et les collecteurs ne changent pas ;
   - contredit le principe « bibliothèque standard seulement » de D8 : dépendance `pymongo` à isoler (import seulement dans `MongoSink`, tests sautés si absente) ;
@@ -237,31 +242,32 @@ Répartition et règles communes : [`TEAM.md`](TEAM.md). Les étapes 5b, 6, 7a e
   - à étudier : tenir compte aussi des fenêtres des jalons (pause, dîner), pour que le déplacement de frontière garde le quart faisable ; plafonner le transfert (constante dans `OperatorDefaults`) pour garder une mutation locale ;
   - à mesurer à l'étape 10 : effet sur le taux de faisabilité des enfants de cet opérateur.
 
-## Étape 8 — Gestion de la population (`src/ga/population.py`) **(P)**
-- [ ] Trancher D4
-- [ ] Scaffold des interfaces `SurvivorSelector`, `ConvergenceCriterion`, `RestartPolicy` **(C→P)**
-- [ ] `SelectPop` (remplacement), détection de convergence, `Restart`
+## Étape 8 — Gestion de la population (`src/ga/population.py`) **(C→P)** — Tristan, branche `etape-8-population`
+- [x] Trancher D4 (2026-11-16, voir la décision)
+- [x] Scaffold **(C)**, dans le scaffold commun de la semaine du 16 novembre : interfaces `SurvivorSelector[G]`, `ConvergenceCriterion[G]`, `RestartPolicy[G]`, squelettes des classes concrètes, constantes, exceptions et messages — Tristan écrit les classes concrètes, branche `etape-8-population`
+- [ ] **(P)** `SelectPop` : `PlusSurvivorSelector` ((μ+λ) sans doublons) ; convergence : `StagnationCriterion(generations)` ; `Restart` : `EliteRestart(elite_count, initializer, evaluator)`
 - [ ] Tests : taille conservée, meilleur individu jamais perdu (si élitiste), convergence détectée sur population homogène
-- [ ] Variante rigide « peine de mort » (remarque de Pascal, 2026-11-07) : les individus infaisables (`not cost.is_feasible`) sont éliminés d'emblée, au lieu d'être pénalisés (étape 4). À brancher comme stratégie (filtre au remplacement ou `SurvivorSelector` dédié), sans toucher à l'évaluation. Cas limite à trancher : que faire si trop peu d'enfants sont faisables pour remplir la population ?
+- [ ] **(P)** `DeathPenaltySurvivorSelector` : variante rigide « peine de mort » (remarque de Pascal, 2026-11-07 ; cas limite tranché par D4 : compléter avec les meilleurs infaisables) : les individus infaisables (`not cost.is_feasible`) sont éliminés d'emblée, au lieu d'être pénalisés (étape 4). À brancher comme stratégie (filtre au remplacement ou `SurvivorSelector` dédié), sans toucher à l'évaluation. Cas limite à trancher : que faire si trop peu d'enfants sont faisables pour remplir la population ?
 
-## Étape 8b — Observabilité (`src/observability/`) **(C→P)**
-- [ ] Interfaces `MetricCollector` et `RecordSink`, catalogue des événements et schéma des enregistrements (`schema_version`, `event`) **(C)**
-- [ ] Destinations `ConsoleSink`, `JsonlSink`, `CsvSink`, `MemorySink`, `NullSink` **(C)**
-- [ ] Configuration du journal de diagnostic (`logging`) : console et/ou `run.log`, niveau choisi par l'expérience **(C)**
-- [ ] Répertoire d'exécution `results/<expérience>/<run_id>/` avec `config.json` (graine, commit Git, versions) ; `results/` ajouté au `.gitignore` **(C)**
+## Étape 8b — Observabilité (`src/observability/`) **(C→P)** — infrastructure par Claude dans le scaffold commun ; collecteurs par Mély, branche `etape-8b-observabilite`
+- [x] Interfaces `MetricCollector` et `RecordSink`, catalogue des événements et schéma des enregistrements (`schema_version`, `event`) **(C)** ; diffusion `ObservationHub` (scaffold du 2026-11-16)
+- [x] Destinations `ConsoleSink`, `JsonlSink`, `CsvSink`, `MemorySink`, `NullSink` **(C)**
+- [x] Configuration du journal de diagnostic (`logging`) : console et/ou `run.log`, niveau choisi par l'expérience **(C)**
+- [x] Répertoire d'exécution `results/<expérience>/<run_id>/` avec `config.json` (graine, commit Git, versions) ; `results/` ajouté au `.gitignore` **(C)**
 - [ ] Collecteurs de coût (statistiques + décomposition) et de diversité (génotypique insensible à la permutation, phénotypique, des coûts) **(P)**
 - [ ] Collecteur de **taux de faisabilité** des enfants, par opérateur, avant et après le `LocalSolver` (s'appuie sur `CostBreakdown.is_feasible` et les compteurs de violations) **(P)**
 - [ ] Collecteur de **charge cumulée du solveur** (D10), émis avec `local_search_done` **(P)**
-- [ ] `MongoSink` si D9 est retenue **(C)**
+- [ ] `MongoSink` si D9 est retenue **(C)** — proposition pour la rencontre : reportée, les fichiers de `results/` suffisent pour le POC
 - [ ] Tests : événements reçus dans l'ordre (`MemorySink`), fichiers JSONL/CSV relisibles, collecteurs sur des populations construites à la main, mesure sans effet sur le générateur aléatoire du moteur
 
-## Étape 9 — Boucle mémétique `Memetic(NR, NM)` **(P)**
+## Étape 9 — Boucle mémétique `Memetic(NR, NM)` **(C→P)** — interfaces par Claude dans le scaffold commun ; moteur par Xavier, branche `etape-9-boucle`
 - [ ] `MemeticConfig` (dataclass) : stratégies choisies + paramètres scalaires (NR, NM, taille, graine)
-- [ ] Interface `Executor` + `SequentialExecutor` ; le moteur passe par `executor.map` pour traiter chaque lot (D7)
+- [ ] Interface `Executor` + `SequentialExecutor` (écrits par Claude dans le scaffold) ; le moteur passe par `executor.map` pour traiter chaque lot (D7)
 - [ ] Dérivation des graines par tâche à partir de la graine maître (D7)
 - [ ] Assemblage selon le pseudo-code de CLAUDE.md ; le moteur ne dépend que des interfaces ; critère `terminé(P)` via `TerminationCriterion`
 - [ ] Émission des événements de D8 aux points prévus ; collecteurs et destinations choisis dans `MemeticConfig`
-- [ ] Tests : terminaison, coût du meilleur monotone non croissant, exécution complète sur `bench_1`, moteur exercé avec des opérateurs factices, reproductibilité (même graine ⇒ même historique, avec ou sans collecteurs ; solveur limité en effort plutôt qu'en temps), entrées des opérateurs jamais modifiées
+- [ ] Tests (sans MiniZinc, avec des faux objets) : terminaison, coût du meilleur monotone non croissant, moteur exercé avec des opérateurs factices, reproductibilité (même graine ⇒ même historique, avec ou sans collecteurs ; solveur limité en effort plutôt qu'en temps), entrées des opérateurs jamais modifiées
+- [ ] **9-intégration** (Pascal, après la fusion de 5c, 8, 8b et 9) : exécution complète sur `bench_1` avec les vrais composants (`MiniZincLocalSolver` + CP-SAT limité en effort déterministe), coût du meilleur monotone non croissant, reproductibilité avec et sans collecteurs, événements reçus dans l'ordre
 
 ## Étape 10 — Driver et expériences (`src/drivers/`) **(C)**
 - [ ] Point d'entrée CLI (instance, NR, NM, taille de population, graine, limite de temps)
