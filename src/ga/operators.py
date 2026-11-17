@@ -21,8 +21,6 @@ from abc import ABC, abstractmethod
 from collections.abc import Sequence
 from typing import Generator, Literal
 
-from numpy import sign
-
 from src.ga.chromosome import ActivityBlock, BlockEncoding, BlockGene, BlockGenome, Encoding
 from src.model.shift_rules import ModelIndexing, ShiftStructure
 from src.utils.io import ProblemInstance
@@ -54,6 +52,8 @@ class OperatorMessages:
 
     WRONG_PARENT_COUNT: str = "Le croisement {operator} attend {expected} parents ; reçu {found}."
     PARENT_LENGTH_MISMATCH: str = "Les parents du croisement {operator} n'ont pas le même nombre de gènes : {lengths}."
+    EMPTY_GENOME: str = "La mutation {operator} a reçu un génome sans aucun gène."
+    GENE_CANNOT_GIVE: str = "Aucun bloc du gène ne peut céder {transfer} périodes à un voisin sans descendre sous {minimum}."
 
 
 class OperatorError(Exception):
@@ -67,11 +67,8 @@ class WrongParentCountError(OperatorError):
 class ParentLengthMismatchError(OperatorError):
     """Les parents d'un croisement n'ont pas le même nombre de gènes."""
 
-class GenomeNoGeneToMutateError(OperatorError):
-    """Le genome ne contient aucun gene à muter"""
-
-class GenomeCannotMutate(OperatorError):
-    """Le genome ne contient aucun gene pouvant être muté."""
+class EmptyGenomeError(OperatorError):
+    """La mutation a reçu un génome sans aucun gène : c'est une erreur d'appel, pas un cas de l'exécution."""
 
 class GeneCannotMutateBoundryError(OperatorError):
     """Le gene n'a aucun block valide permettant une mutation qui respectent Σd"""
@@ -138,7 +135,6 @@ class UniformGeneCrossover(Crossover[BlockGenome]):
         return OperatorDefaults.CROSSOVER_PARENT_COUNT
 
     def recombine(self, parents: Sequence[BlockGenome], rng: random.Random) -> tuple[BlockGenome, ...]:
-        encoding = self.encoding_type()()
         def _create_mask(lenght: int) -> Generator[tuple[int, Literal[0] | Literal[1]]]:
             """
             Generator function to create a mask to be used to create children
@@ -163,8 +159,8 @@ class UniformGeneCrossover(Crossover[BlockGenome]):
         progenitor_1, progenitor_2 = self._valid_parent(parents)
         mask_length = len(progenitor_1)
 
-        child_1 = list(encoding.clone(progenitor_1))
-        child_2 = list(encoding.clone(progenitor_2))
+        child_1 = list(progenitor_1)
+        child_2 = list(progenitor_2)
 
         for i, mask in _create_mask(mask_length):
             if mask:
@@ -178,12 +174,16 @@ class UniformGeneCrossover(Crossover[BlockGenome]):
         Validate if the parents is of valid
         """
         if not len(parents) == self.parent_count():
-            raise WrongParentCountError()
+            raise WrongParentCountError(OperatorMessages.WRONG_PARENT_COUNT.format(
+                operator=type(self).__name__, expected=self.parent_count(), found=len(parents)
+            ))
 
         progenitors = (parents[0], parents[1])
 
         if not len(progenitors[0]) == len(parents[1]):
-            raise ParentLengthMismatchError()
+            raise ParentLengthMismatchError(OperatorMessages.PARENT_LENGTH_MISMATCH.format(
+                operator=type(self).__name__, lengths=[len(parent) for parent in progenitors]
+            ))
 
         return progenitors
 
@@ -200,14 +200,13 @@ class ShiftStartMutation(Mutation[BlockGenome]):
         return BlockEncoding
 
     def mutate(self, genome: BlockGenome, rng: random.Random) -> BlockGenome:
-        endoding = self.encoding_type()()
         if len(genome) == 0:
-            raise GenomeNoGeneToMutateError()
+            raise EmptyGenomeError(OperatorMessages.EMPTY_GENOME.format(operator=type(self).__name__))
         return self._mutate_by(
             index=rng.randrange(len(genome)),
             amount=rng.choice(OperatorDefaults.SHIFT_DIRECTIONS)
                    * rng.randint(OperatorDefaults.MIN_SHIFT_AMPLITUDE, OperatorDefaults.MAX_SHIFT_AMPLITUDE),
-            genome=endoding.clone(genome)
+            genome=genome
         )
 
     def _mutate_by(self, index: int, amount: int, genome: BlockGenome) -> BlockGenome:
@@ -244,7 +243,7 @@ class BlockBoundaryMutation(Mutation[BlockGenome]):
     def mutate(self, genome: BlockGenome, rng: random.Random) -> BlockGenome:
         def validate(genes):
             if len(genes) == 0:
-                raise GenomeCannotMutate()
+                raise EmptyGenomeError(OperatorMessages.EMPTY_GENOME.format(operator=type(self).__name__))
 
         min_transfer, max_transfer = self.get_transfer_bounds(genome)
         transfer = rng.randint(min_transfer, max_transfer)
@@ -299,7 +298,9 @@ class BlockBoundaryMutation(Mutation[BlockGenome]):
                 valid_pairs.append((i, i + 1))
 
         if not valid_pairs:
-            raise GeneCannotMutateBoundryError()
+            raise GeneCannotMutateBoundryError(OperatorMessages.GENE_CANNOT_GIVE.format(
+                transfer=add, minimum=ShiftStructure.MIN_ACTIVITY_DURATION
+            ))
 
         return rng.choice(valid_pairs)
 
@@ -319,8 +320,7 @@ class ActivityMutation(Mutation[BlockGenome]):
         return BlockEncoding
 
     def mutate(self, genome: BlockGenome, rng: random.Random) -> BlockGenome:
-        encoding = self.encoding_type()()
-        mutated = list(encoding.clone(genome))
+        mutated = list(genome)
         max_activity = self.instance.activity_count
 
         if max_activity < OperatorDefaults.MIN_ACTIVITY_COUNT_TO_MUTATE:

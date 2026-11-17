@@ -59,9 +59,6 @@ class StartOnlyEncoding(Encoding[StartGenome]):
             )
         )
 
-    def clone(self, genome: StartGenome) -> StartGenome:
-        return self.encode(self.decode(genome))
-
 
 class TestFromGenome(unittest.TestCase):
     """Construction d'un individu à partir d'un génome."""

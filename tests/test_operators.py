@@ -26,9 +26,8 @@ from src.ga.operators import (
     ActivityMutation,
     BlockBoundaryMutation,
     Crossover,
+    EmptyGenomeError,
     GeneCannotMutateBoundryError,
-    GenomeCannotMutate,
-    GenomeNoGeneToMutateError,
     Mutation,
     OperatorDefaults,
     ParentLengthMismatchError,
@@ -53,9 +52,6 @@ class OtherEncoding(Encoding[str]):
         raise NotImplementedError
 
     def decode(self, genome: str) -> Horaire:
-        raise NotImplementedError
-
-    def clone(self, genome: str) -> str:
         raise NotImplementedError
 
 
@@ -148,7 +144,7 @@ class TestScaffoldContract(unittest.TestCase):
         self.assertEqual(parents[1], child_2)
 
     def test_shift_should_throw_when_genome_does_not_have_gen(self):
-        with self.assertRaises(GenomeNoGeneToMutateError):
+        with self.assertRaises(EmptyGenomeError):
             self.block_operators[self.SHIFT_MUTAION].mutate(tuple(), self.rng)
 
     def test_shift_mutation_should_add_day(self):
@@ -203,7 +199,7 @@ class TestScaffoldContract(unittest.TestCase):
         rng = mock.Mock()
         rng.randint.return_value = 0
 
-        with self.assertRaises(GenomeCannotMutate):
+        with self.assertRaises(EmptyGenomeError):
             self.block_operators[self.BLOCK_MUTAION].mutate(tuple(), rng)
 
     def test_activity_mutation_does_nothing_when_only_a_single_activity(self):
@@ -463,6 +459,13 @@ class TestBlockBoundaryMutationWithRealRandom(unittest.TestCase):
                                  "les deux blocs modifiés doivent être voisins")
 
 
+# Messages d'erreur des opérateurs.
+ERRORS_SEED: int = 17
+THREE_PARENTS: int = 3
+SHORT_PARENT_LENGTH: int = 2
+LONG_PARENT_LENGTH: int = 5
+REFERENCE_GENOME_FOR_ERRORS: BlockGenome = reference_genome(SHORT_PARENT_LENGTH)
+
 # Propriétés de ShiftStartMutation vérifiées avec un vrai générateur aléatoire (pas de mock). La faisabilité est
 # jugée par FeasibilityChecker, qui sert d'oracle : les tests ne recalculent pas eux-mêmes les fenêtres des jalons.
 SHIFT_SEED: int = 13
@@ -564,6 +567,49 @@ class TestShiftStartMutationWithRealRandom(unittest.TestCase):
         first = mutation.mutate(genome, Random(SHIFT_SEED))
         second = mutation.mutate(genome, Random(SHIFT_SEED))
         self.assertEqual(first, second)
+
+
+
+class TestOperatorErrorMessages(unittest.TestCase):
+    """Les exceptions des opérateurs portent un message utile au diagnostic (nom de l'opérateur, valeurs reçues)."""
+
+    def test_givenThreeParents_whenRecombine_thenMessageNamesOperatorAndCounts(self) -> None:
+        crossover = UniformGeneCrossover()
+        parents = (REFERENCE_GENOME_FOR_ERRORS,) * THREE_PARENTS
+        with self.assertRaises(WrongParentCountError) as context:
+            crossover.recombine(parents, Random(ERRORS_SEED))
+        message = str(context.exception)
+        self.assertIn(UniformGeneCrossover.__name__, message)
+        self.assertIn(str(crossover.parent_count()), message)
+        self.assertIn(str(THREE_PARENTS), message)
+
+    def test_givenParentsOfDifferentLengths_whenRecombine_thenMessageGivesBothLengths(self) -> None:
+        short_parent = reference_genome(SHORT_PARENT_LENGTH)
+        long_parent = reference_genome(LONG_PARENT_LENGTH)
+        with self.assertRaises(ParentLengthMismatchError) as context:
+            UniformGeneCrossover().recombine((short_parent, long_parent), Random(ERRORS_SEED))
+        message = str(context.exception)
+        self.assertIn(UniformGeneCrossover.__name__, message)
+        self.assertIn(str(SHORT_PARENT_LENGTH), message)
+        self.assertIn(str(LONG_PARENT_LENGTH), message)
+
+    def test_givenEmptyGenome_whenShiftStartMutate_thenMessageNamesOperator(self) -> None:
+        with self.assertRaises(EmptyGenomeError) as context:
+            ShiftStartMutation(synthetic_instance()).mutate((), Random(ERRORS_SEED))
+        self.assertIn(ShiftStartMutation.__name__, str(context.exception))
+
+    def test_givenEmptyGenome_whenBlockBoundaryMutate_thenMessageNamesOperator(self) -> None:
+        with self.assertRaises(EmptyGenomeError) as context:
+            BlockBoundaryMutation().mutate((), Random(ERRORS_SEED))
+        self.assertIn(BlockBoundaryMutation.__name__, str(context.exception))
+
+    def test_givenMinimalGene_whenLookingForBlocksToMove_thenMessageGivesTransferAndMinimum(self) -> None:
+        transfer = OperatorDefaults.MAX_BOUNDARY_TRANSFER
+        with self.assertRaises(GeneCannotMutateBoundryError) as context:
+            BlockBoundaryMutation()._get_2_valid_block_to_mutate(MINIMAL_GENE, transfer, Random(ERRORS_SEED))
+        message = str(context.exception)
+        self.assertIn(str(transfer), message)
+        self.assertIn(str(ShiftStructure.MIN_ACTIVITY_DURATION), message)
 
 
 if __name__ == "__main__":
