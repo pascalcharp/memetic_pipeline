@@ -176,6 +176,8 @@ Avant le départ, Claude scaffolde en un seul commit sur `main` les interfaces, 
 
 Les quatre sous-étapes avancent en parallèle : chacune ne dépend que d'interfaces scaffoldées ou déjà sur `main`, et se teste avec des faux objets. Seule la sous-étape **9-intégration** (Pascal) attend la fusion des autres.
 
+**Les tests à faire passer attendent déjà sur chaque branche** (`etape-8-population`, `etape-8b-observabilite`, `etape-9-boucle`) : écrits par Claude, ils sont rouges tant que la sous-étape n'est pas écrite, et ont été validés contre une implémentation de référence jetable, qui n'est pas dans le dépôt. Pour commencer : `git fetch origin`, puis `git switch <sa branche>`. Si un test semble contredire ce qu'il faudrait faire, on en discute avant de le modifier.
+
 Rappel : les tests peuvent être écrits par un agent de codage (règle 0 de CLAUDE.md, PR #5) ; les méthodes et algorithmes de sa sous-étape, chacun les écrit lui-même. Préférer un vrai `random.Random` à graine fixée et des propriétés vérifiées sur beaucoup de tirages plutôt qu'un mock du générateur (leçon de la revue de 7b, DEVLOG du 2026-11-16).
 
 ### Pascal — Étape 5c : couverture « au moins 1 » en pénalité dans `horaire.mzn` (D12), puis 9-intégration
