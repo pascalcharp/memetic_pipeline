@@ -70,8 +70,8 @@ class ParentLengthMismatchError(OperatorError):
 class EmptyGenomeError(OperatorError):
     """La mutation a reçu un génome sans aucun gène : c'est une erreur d'appel, pas un cas de l'exécution."""
 
-class GeneCannotMutateBoundryError(OperatorError):
-    """Le gene n'a aucun block valide permettant une mutation qui respectent Σd"""
+class GeneCannotMutateBoundaryError(OperatorError):
+    """Le gène n'a aucun bloc valide permettant une mutation qui respecte Σd."""
 
 
 class VariationOperator[G](ABC):
@@ -135,16 +135,16 @@ class UniformGeneCrossover(Crossover[BlockGenome]):
         return OperatorDefaults.CROSSOVER_PARENT_COUNT
 
     def recombine(self, parents: Sequence[BlockGenome], rng: random.Random) -> tuple[BlockGenome, ...]:
-        def _create_mask(lenght: int) -> Generator[tuple[int, Literal[0] | Literal[1]]]:
+        def _create_mask(length: int) -> Generator[tuple[int, Literal[0] | Literal[1]]]:
             """
             Generator function to create a mask to be used to create children
 
             From *Uniform Crossover in genetic Algorithms* Syswerda 1989
             The generated mask is constituted of 0 and 1,
-            where 0 mean using it's parent, and 1 using the other parent.
-            Children 1 used parent 1, and Children 2 used parent 2.
+            where 0 means using its parent, and 1 using the other parent.
+            Child 1 uses parent 1, and child 2 uses parent 2.
 
-            Exemple:
+            Example:
                 Parent 1:   1, 0, 1
                 Parent 2:   0, 1, 1
                 Mask:       1, 1, 0
@@ -153,7 +153,7 @@ class UniformGeneCrossover(Crossover[BlockGenome]):
             """
             zero: Literal[0] = 0
             one: Literal[1] = 1
-            for i in range(lenght):
+            for i in range(length):
                 yield i, rng.choice([zero, one])
 
         progenitor_1, progenitor_2 = self._valid_parent(parents)
@@ -171,7 +171,7 @@ class UniformGeneCrossover(Crossover[BlockGenome]):
 
     def _valid_parent(self, parents: Sequence[BlockGenome]) -> tuple[BlockGenome, BlockGenome]:
         """
-        Validate if the parents is of valid
+        Validates the parents: their number and their lengths.
         """
         if not len(parents) == self.parent_count():
             raise WrongParentCountError(OperatorMessages.WRONG_PARENT_COUNT.format(
@@ -272,7 +272,7 @@ class BlockBoundaryMutation(Mutation[BlockGenome]):
 
                 mutated[gene_index] = BlockGene(mutated_gene.start, tuple(blocks))
                 break
-            except GeneCannotMutateBoundryError:
+            except GeneCannotMutateBoundaryError:
                 del genes_to_try[index]
 
         return tuple(mutated)
@@ -287,18 +287,18 @@ class BlockBoundaryMutation(Mutation[BlockGenome]):
         return OperatorDefaults.MIN_BOUNDARY_TRANSFER, OperatorDefaults.MAX_BOUNDARY_TRANSFER
 
     def _get_2_valid_block_to_mutate(self, gene: BlockGene, add: int, rng: random.Random):
-        minium_duration = ShiftStructure.MIN_ACTIVITY_DURATION + add
+        minimum_duration = ShiftStructure.MIN_ACTIVITY_DURATION + add
         blocks = gene.blocks
 
         valid_pairs = []
         for i in range(len(blocks) - 1):
-            if blocks[i].duration >= minium_duration:
+            if blocks[i].duration >= minimum_duration:
                 valid_pairs.append((i + 1, i))
-            if blocks[i + 1].duration >= minium_duration:
+            if blocks[i + 1].duration >= minimum_duration:
                 valid_pairs.append((i, i + 1))
 
         if not valid_pairs:
-            raise GeneCannotMutateBoundryError(OperatorMessages.GENE_CANNOT_GIVE.format(
+            raise GeneCannotMutateBoundaryError(OperatorMessages.GENE_CANNOT_GIVE.format(
                 transfer=add, minimum=ShiftStructure.MIN_ACTIVITY_DURATION
             ))
 
@@ -310,6 +310,9 @@ class ActivityMutation(Mutation[BlockGenome]):
 
     Cas limite : une instance à une seule activité (bench_1) n'offre aucune autre activité ; le génome est
     alors rendu inchangé.
+
+    Raises (``mutate``):
+        EmptyGenomeError: si le génome ne contient aucun gène.
     """
 
     def __init__(self, instance: ProblemInstance) -> None:
@@ -320,6 +323,9 @@ class ActivityMutation(Mutation[BlockGenome]):
         return BlockEncoding
 
     def mutate(self, genome: BlockGenome, rng: random.Random) -> BlockGenome:
+        if len(genome) == 0:
+            raise EmptyGenomeError(OperatorMessages.EMPTY_GENOME.format(operator=type(self).__name__))
+
         mutated = list(genome)
         max_activity = self.instance.activity_count
 

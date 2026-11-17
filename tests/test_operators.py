@@ -27,7 +27,7 @@ from src.ga.operators import (
     BlockBoundaryMutation,
     Crossover,
     EmptyGenomeError,
-    GeneCannotMutateBoundryError,
+    GeneCannotMutateBoundaryError,
     Mutation,
     OperatorDefaults,
     ParentLengthMismatchError,
@@ -58,9 +58,9 @@ class OtherEncoding(Encoding[str]):
 class TestScaffoldContract(unittest.TestCase):
 
     CROSSOVER = 0
-    SHIFT_MUTAION = 1
-    BLOCK_MUTAION = 2
-    ACTIVITY_MUTAION = 3
+    SHIFT_MUTATION = 1
+    BLOCK_MUTATION = 2
+    ACTIVITY_MUTATION = 3
 
     def setUp(self) -> None:
         instance = self.instance = synthetic_instance()
@@ -94,7 +94,7 @@ class TestScaffoldContract(unittest.TestCase):
     def test_crossover_takes_two_parents(self) -> None:
         self.assertEqual(UniformGeneCrossover().parent_count(), OperatorDefaults.CROSSOVER_PARENT_COUNT)
 
-    def test_crossover_throw_when_zero_parent_is_sent(self) -> None:
+    def test_crossover_throw_when_zero_parents_are_sent(self) -> None:
         zero_parents: Sequence[BlockGenome] = tuple()
         with self.assertRaises(WrongParentCountError):
             self.block_operators[self.CROSSOVER].recombine(zero_parents, self.rng)
@@ -104,17 +104,17 @@ class TestScaffoldContract(unittest.TestCase):
         with self.assertRaises(WrongParentCountError):
             self.block_operators[self.CROSSOVER].recombine(one_parents, self.rng)
 
-    def test_crossover_throw_when_three_parent_is_sent(self) -> None:
+    def test_crossover_throw_when_three_parents_are_sent(self) -> None:
         three_parents: Sequence[BlockGenome] = (tuple(), tuple(), tuple())
         with self.assertRaises(WrongParentCountError):
             self.block_operators[self.CROSSOVER].recombine(three_parents, self.rng)
 
-    def test_crossover_throw_when_two_parent_not_same_gene_number_from_parent_1(self) -> None:
+    def test_crossover_throw_when_two_parents_not_same_gene_number_from_parent_1(self) -> None:
         two_parents: Sequence[BlockGenome] = (self.parent_1, tuple())
         with self.assertRaises(ParentLengthMismatchError):
             self.block_operators[self.CROSSOVER].recombine(two_parents, self.rng)
 
-    def test_crossover_throw_when_two_parent_not_same_gene_number_from_parent_2(self) -> None:
+    def test_crossover_throw_when_two_parents_not_same_gene_number_from_parent_2(self) -> None:
         two_parents: Sequence[BlockGenome] = (tuple(), self.parent_2)
         with self.assertRaises(ParentLengthMismatchError):
             self.block_operators[self.CROSSOVER].recombine(two_parents, self.rng)
@@ -128,7 +128,7 @@ class TestScaffoldContract(unittest.TestCase):
         self.assertEqual(parents[1], child_2)
 
     @mock.patch('random.choice')
-    def test_crossover_when_mask_is_zero_take_other_parent_of_the_child(self, rnd: mock.Mock) -> None:
+    def test_crossover_when_mask_is_one_take_other_parent_of_the_child(self, rnd: mock.Mock) -> None:
         rnd.choice.return_value = 1
         parents: Sequence[BlockGenome] = (self.parent_1, self.parent_2)
         child_1, child_2 = self.block_operators[self.CROSSOVER].recombine(parents, rnd)
@@ -143,11 +143,11 @@ class TestScaffoldContract(unittest.TestCase):
         self.assertEqual(parents[0], child_1)
         self.assertEqual(parents[1], child_2)
 
-    def test_shift_should_throw_when_genome_does_not_have_gen(self):
+    def test_shift_should_throw_when_genome_does_not_have_gene(self):
         with self.assertRaises(EmptyGenomeError):
-            self.block_operators[self.SHIFT_MUTAION].mutate(tuple(), self.rng)
+            self.block_operators[self.SHIFT_MUTATION].mutate(tuple(), self.rng)
 
-    def test_shift_mutation_should_add_day(self):
+    def test_shift_mutation_should_add_periods(self):
         self._test_for_shift_mutation(
             index=0,
             sign=1,
@@ -155,7 +155,7 @@ class TestScaffoldContract(unittest.TestCase):
             genome=self.parent_1
         )
 
-    def test_shift_mutation_should_remove_day(self):
+    def test_shift_mutation_should_remove_periods(self):
         self._test_for_shift_mutation(
             index=0,
             sign=-1,
@@ -168,7 +168,7 @@ class TestScaffoldContract(unittest.TestCase):
         rng.randrange.return_value = index
         rng.randint.return_value = add_or_remove
         rng.choice.return_value = sign
-        mutated = self.block_operators[self.SHIFT_MUTAION].mutate(genome, rng)
+        mutated = self.block_operators[self.SHIFT_MUTATION].mutate(genome, rng)
         self.assertNotEqual(
             mutated[index].start,
             genome[index].start
@@ -186,21 +186,21 @@ class TestScaffoldContract(unittest.TestCase):
         gene2 = BlockGene(self.instance.windows.start.earliest + 2, (block1, block1, block1, block2))
         gene3 = BlockGene(self.instance.windows.start.earliest + 2, (block1, block1, block1, block3))
 
-        with self.assertRaises(GeneCannotMutateBoundryError):
-            self.block_operators[self.BLOCK_MUTAION]._get_2_valid_block_to_mutate(gene1, 2, self.rng)
+        with self.assertRaises(GeneCannotMutateBoundaryError):
+            self.block_operators[self.BLOCK_MUTATION]._get_2_valid_block_to_mutate(gene1, 2, self.rng)
 
-        with self.assertRaises(GeneCannotMutateBoundryError):
-            self.block_operators[self.BLOCK_MUTAION]._get_2_valid_block_to_mutate(gene2, 2, self.rng)
+        with self.assertRaises(GeneCannotMutateBoundaryError):
+            self.block_operators[self.BLOCK_MUTATION]._get_2_valid_block_to_mutate(gene2, 2, self.rng)
 
-        with self.assertRaises(GeneCannotMutateBoundryError):
-            self.block_operators[self.BLOCK_MUTAION]._get_2_valid_block_to_mutate(gene3, 3, self.rng)
+        with self.assertRaises(GeneCannotMutateBoundaryError):
+            self.block_operators[self.BLOCK_MUTATION]._get_2_valid_block_to_mutate(gene3, 3, self.rng)
 
-    def test_block_boundary_mutate_throw_when_no_in_genome(self):
+    def test_block_boundary_mutate_throw_when_genome_is_empty(self):
         rng = mock.Mock()
         rng.randint.return_value = 0
 
         with self.assertRaises(EmptyGenomeError):
-            self.block_operators[self.BLOCK_MUTAION].mutate(tuple(), rng)
+            self.block_operators[self.BLOCK_MUTATION].mutate(tuple(), rng)
 
     def test_activity_mutation_does_nothing_when_only_a_single_activity(self):
         rng = mock.Mock()
@@ -603,9 +603,14 @@ class TestOperatorErrorMessages(unittest.TestCase):
             BlockBoundaryMutation().mutate((), Random(ERRORS_SEED))
         self.assertIn(BlockBoundaryMutation.__name__, str(context.exception))
 
+    def test_givenEmptyGenome_whenActivityMutate_thenMessageNamesOperator(self) -> None:
+        with self.assertRaises(EmptyGenomeError) as context:
+            ActivityMutation(synthetic_instance()).mutate((), Random(ERRORS_SEED))
+        self.assertIn(ActivityMutation.__name__, str(context.exception))
+
     def test_givenMinimalGene_whenLookingForBlocksToMove_thenMessageGivesTransferAndMinimum(self) -> None:
         transfer = OperatorDefaults.MAX_BOUNDARY_TRANSFER
-        with self.assertRaises(GeneCannotMutateBoundryError) as context:
+        with self.assertRaises(GeneCannotMutateBoundaryError) as context:
             BlockBoundaryMutation()._get_2_valid_block_to_mutate(MINIMAL_GENE, transfer, Random(ERRORS_SEED))
         message = str(context.exception)
         self.assertIn(str(transfer), message)
