@@ -24,7 +24,7 @@ from typing import Generator, Literal
 from numpy import sign
 
 from src.ga.chromosome import ActivityBlock, BlockEncoding, BlockGene, BlockGenome, Encoding
-from src.model.shift_rules import ShiftStructure
+from src.model.shift_rules import ModelIndexing, ShiftStructure
 from src.utils.io import ProblemInstance
 
 
@@ -38,6 +38,15 @@ class OperatorDefaults:
     # incluses). Une petite amplitude garde la mutation locale (voir TODO.md, 7b, pour une amplitude calculée).
     MIN_BOUNDARY_TRANSFER: int = 1
     MAX_BOUNDARY_TRANSFER: int = 3
+
+    # ShiftStartMutation : amplitude du décalage du début, en périodes, tirée dans cet intervalle (bornes incluses),
+    # puis appliquée dans l'une des deux directions (vers le plus tôt, vers le plus tard). Jamais nulle.
+    MIN_SHIFT_AMPLITUDE: int = 1
+    MAX_SHIFT_AMPLITUDE: int = 3
+    SHIFT_DIRECTIONS: tuple[int, int] = (-1, 1)
+
+    # ActivityMutation : il faut au moins deux activités pour qu'un bloc puisse en changer.
+    MIN_ACTIVITY_COUNT_TO_MUTATE: int = 2
 
 
 class OperatorMessages:
@@ -196,24 +205,30 @@ class ShiftStartMutation(Mutation[BlockGenome]):
             raise GenomeNoGeneToMutateError()
         return self._mutate_by(
             index=rng.randrange(len(genome)),
-            amount=rng.choice([-1, 1]) * rng.randrange(4),
+            amount=rng.choice(OperatorDefaults.SHIFT_DIRECTIONS)
+                   * rng.randint(OperatorDefaults.MIN_SHIFT_AMPLITUDE, OperatorDefaults.MAX_SHIFT_AMPLITUDE),
             genome=endoding.clone(genome)
         )
 
     def _mutate_by(self, index: int, amount: int, genome: BlockGenome) -> BlockGenome:
         mutated = list(genome)
-        start = self._clamp(mutated[index].start + amount)
+        start = self._clamp(mutated[index], amount)
         mutated[index] = BlockGene(start, mutated[index].blocks)
         return tuple(mutated)
 
-    def _clamp(self, value: int):
+    def _clamp(self, gene: BlockGene, value: int):
         windows = self.instance.windows
-        min = windows.start.earliest
-        max = windows.start.latest
+        debut_min = windows.start.earliest
 
-        if min > value: return min
-        if max < value: return max
-        return value
+        longueur = sum(block.duration for block in gene.blocks)
+        longueur += (ShiftStructure.BREAK_DURATION + ShiftStructure.BREAK_DURATION
+                + ShiftStructure.LUNCH_DURATION - ShiftStructure.INCLUSIVE_BOUNDS_CORRECTION)
+        debut_maximal = min(windows.start.latest, windows.end.latest - longueur)
+
+        nouveau_debut = gene.start + value
+        if debut_min > nouveau_debut: return debut_min
+        if debut_maximal < nouveau_debut: return debut_maximal
+        return nouveau_debut
 
 
 
@@ -308,7 +323,7 @@ class ActivityMutation(Mutation[BlockGenome]):
         mutated = list(encoding.clone(genome))
         max_activity = self.instance.activity_count
 
-        if max_activity <= 1:
+        if max_activity < OperatorDefaults.MIN_ACTIVITY_COUNT_TO_MUTATE:
             return tuple(mutated)
 
         gene_index = rng.randrange(len(mutated))
@@ -319,7 +334,8 @@ class ActivityMutation(Mutation[BlockGenome]):
         block_index = rng.randrange(len(blocks))
         old_block = blocks[block_index]
 
-        new_activities = [x for x in range(1, max_activity + 1) if not x == old_block.activity]
+        all_activities = range(ModelIndexing.FIRST_INDEX, max_activity + ModelIndexing.FIRST_INDEX)
+        new_activities = [x for x in all_activities if not x == old_block.activity]
         new_activity = rng.choice(new_activities)
 
         blocks[block_index] = ActivityBlock(new_activity, old_block.duration)

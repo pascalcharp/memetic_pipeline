@@ -37,6 +37,7 @@ from src.ga.operators import (
     VariationOperator,
     WrongParentCountError,
 )
+from src.model.feasibility import FeasibilityChecker
 from src.model.horaire import Horaire
 from src.config import ProjectPaths
 from src.ga.initialization import RandomBlockInitializer
@@ -150,15 +151,6 @@ class TestScaffoldContract(unittest.TestCase):
         with self.assertRaises(GenomeNoGeneToMutateError):
             self.block_operators[self.SHIFT_MUTAION].mutate(tuple(), self.rng)
 
-    def test_shift_clamp(self):
-        def _test(value: int):
-            clamped = self.block_operators[self.SHIFT_MUTAION]._clamp(value)
-            self.assertTrue(self.instance.windows.start.earliest <= clamped <= self.instance.windows.start.latest)
-        _test(-10000)
-        _test(self.instance.windows.start.earliest)
-        _test(self.instance.windows.start.latest)
-        _test(10000)
-
     def test_shift_mutation_should_add_day(self):
         self._test_for_shift_mutation(
             index=0,
@@ -177,7 +169,8 @@ class TestScaffoldContract(unittest.TestCase):
 
     def _test_for_shift_mutation(self, index: int, sign: Literal[1] | Literal[-1], add_or_remove: int, genome: BlockGenome):
         rng = mock.Mock()
-        rng.randrange.side_effect = [index, add_or_remove]
+        rng.randrange.return_value = index
+        rng.randint.return_value = add_or_remove
         rng.choice.return_value = sign
         mutated = self.block_operators[self.SHIFT_MUTAION].mutate(genome, rng)
         self.assertNotEqual(
@@ -468,6 +461,109 @@ class TestBlockBoundaryMutationWithRealRandom(unittest.TestCase):
                 first_index, second_index = changed_indices
                 self.assertEqual(second_index - first_index, NEIGHBOR_INDEX_GAP,
                                  "les deux blocs modifiés doivent être voisins")
+
+
+# Propriétés de ShiftStartMutation vérifiées avec un vrai générateur aléatoire (pas de mock). La faisabilité est
+# jugée par FeasibilityChecker, qui sert d'oracle : les tests ne recalculent pas eux-mêmes les fenêtres des jalons.
+SHIFT_SEED: int = 13
+SHIFT_DRAW_COUNT: int = 300
+SHIFT_GENOME_COUNT: int = 50
+SHIFT_BENCH_FILE: str = "bench_5.json"
+# Quart le plus long : Σd = 30 (8 heures rémunérées). Ses jalons tardifs (fin, pause 2) le bornent bien avant
+# la fin de la fenêtre de début.
+LONG_SHIFT_DURATIONS: tuple[int, ...] = (8, 8, 7, 7)
+LONG_SHIFT_BLOCKS: tuple[ActivityBlock, ...] = tuple(
+    ActivityBlock(block.activity, duration) for block, duration in zip(REFERENCE_GENE.blocks, LONG_SHIFT_DURATIONS)
+)
+
+
+def feasible_starts(instance: ProblemInstance, blocks: tuple[ActivityBlock, ...]) -> list[int]:
+    """Débuts pour lesquels un quart de ces blocs est structurellement faisable, selon FeasibilityChecker.
+
+    Le génome testé donne ce quart à chacun des employés de l'instance (le vérificateur exige le bon nombre).
+    """
+    checker = FeasibilityChecker(instance)
+    encoding = BlockEncoding()
+    candidate_starts = range(instance.first_useful_period, instance.last_useful_period + ModelIndexing.FIRST_INDEX)
+    return [
+        start for start in candidate_starts
+        if not checker.violations(encoding.decode(tuple(BlockGene(start, blocks) for _ in range(instance.employee_count))))
+    ]
+
+
+class TestShiftStartMutationWithRealRandom(unittest.TestCase):
+    """``ShiftStartMutation`` : un seul début change, les blocs non, et le quart décalé reste faisable."""
+
+    def assert_valid_shift(self, instance: ProblemInstance, original: BlockGenome, mutated: BlockGenome) -> None:
+        """Vérifie qu'au plus un gène a changé, seulement par son début, et que le génome muté est faisable."""
+        self.assertEqual(len(mutated), len(original))
+        changed_genes = [index for index in range(len(original)) if original[index] != mutated[index]]
+        self.assertLessEqual(len(changed_genes), 1, "un seul gène peut changer")
+        for index in changed_genes:
+            self.assertEqual(mutated[index].blocks, original[index].blocks)
+        violations = FeasibilityChecker(instance).violations(BlockEncoding().decode(mutated))
+        self.assertEqual(violations, [], "le quart décalé doit rester faisable")
+
+    def test_givenGeneWithRoomOnBothSides_whenMutateManyTimes_thenStartAlwaysMoves(self) -> None:
+        instance = synthetic_instance(SYNTHETIC_EMPLOYEE_COUNT)
+        genome = reference_genome(SYNTHETIC_EMPLOYEE_COUNT)
+        starts = feasible_starts(instance, REFERENCE_GENE.blocks)
+        room = min(REFERENCE_GENE.start - starts[0], starts[-1] - REFERENCE_GENE.start)
+        self.assertGreaterEqual(room, OperatorDefaults.MAX_SHIFT_AMPLITUDE, "cas utile : le gène peut bouger dans les deux sens")
+        mutation = ShiftStartMutation(instance)
+        rng = Random(SHIFT_SEED)
+        for draw in range(SHIFT_DRAW_COUNT):
+            with self.subTest(draw=draw):
+                mutated = mutation.mutate(genome, rng)
+                self.assertNotEqual(mutated, genome, "un décalage nul n'est pas une mutation")
+                self.assert_valid_shift(instance, genome, mutated)
+
+    def test_givenLongShiftAtLatestFeasibleStart_whenMutateManyTimes_thenAlwaysFeasible(self) -> None:
+        instance = synthetic_instance()
+        latest_start = feasible_starts(instance, LONG_SHIFT_BLOCKS)[-1]
+        self.assertLess(latest_start, instance.windows.start.latest, "cas utile : borne plus serrée que la fenêtre")
+        genome: BlockGenome = (BlockGene(latest_start, LONG_SHIFT_BLOCKS),)
+        mutation = ShiftStartMutation(instance)
+        rng = Random(SHIFT_SEED)
+        for draw in range(SHIFT_DRAW_COUNT):
+            with self.subTest(draw=draw):
+                self.assert_valid_shift(instance, genome, mutation.mutate(genome, rng))
+
+    def test_givenGeneAtEarliestFeasibleStart_whenMutateManyTimes_thenAlwaysFeasible(self) -> None:
+        instance = synthetic_instance()
+        earliest_start = feasible_starts(instance, REFERENCE_GENE.blocks)[0]
+        genome: BlockGenome = (BlockGene(earliest_start, REFERENCE_GENE.blocks),)
+        mutation = ShiftStartMutation(instance)
+        rng = Random(SHIFT_SEED)
+        for draw in range(SHIFT_DRAW_COUNT):
+            with self.subTest(draw=draw):
+                self.assert_valid_shift(instance, genome, mutation.mutate(genome, rng))
+
+    def test_givenBenchGenomes_whenMutate_thenEachMutationIsAValidShift(self) -> None:
+        instance = load_instance(ProjectPaths.DATA_DIR / SHIFT_BENCH_FILE)
+        population = RandomBlockInitializer(instance, BlockEncoding()).initialize(
+            SHIFT_GENOME_COUNT, Random(SHIFT_SEED)
+        )
+        mutation = ShiftStartMutation(instance)
+        rng = Random(SHIFT_SEED)
+        for index, individual in enumerate(population):
+            with self.subTest(genome_index=index):
+                self.assert_valid_shift(instance, individual.genome, mutation.mutate(individual.genome, rng))
+
+    def test_givenGenome_whenMutate_thenInputIsNotModified(self) -> None:
+        instance = synthetic_instance(SYNTHETIC_EMPLOYEE_COUNT)
+        genome = reference_genome(SYNTHETIC_EMPLOYEE_COUNT)
+        snapshot = tuple(genome)
+        ShiftStartMutation(instance).mutate(genome, Random(SHIFT_SEED))
+        self.assertEqual(genome, snapshot)
+
+    def test_givenSameSeed_whenMutate_thenSameResult(self) -> None:
+        instance = synthetic_instance(SYNTHETIC_EMPLOYEE_COUNT)
+        genome = reference_genome(SYNTHETIC_EMPLOYEE_COUNT)
+        mutation = ShiftStartMutation(instance)
+        first = mutation.mutate(genome, Random(SHIFT_SEED))
+        second = mutation.mutate(genome, Random(SHIFT_SEED))
+        self.assertEqual(first, second)
 
 
 if __name__ == "__main__":
