@@ -14,9 +14,9 @@ Collecteurs prévus (étape 8b, Mély) : coût, diversité, taux de faisabilité
 """
 
 from abc import ABC, abstractmethod
-
-from src.observability.events import Event, Record
-
+from statistics import mean, median, pstdev
+from src.observability.events import (Event, GenerationEnded, Record, make_record, LocalSearchDone, RunEnded)
+from src.ga.chromosome import BlockGene
 
 class CollectorDefaults:
     """Paramètres par défaut des collecteurs."""
@@ -143,7 +143,48 @@ class CostStatisticsCollector(MetricCollector):
     ``coverage_violations_mean``, ``quasi_hard_cells_mean``. Les moyennes et l'écart-type sont des ``float``."""
 
     def on_event(self, event: Event) -> list[Record]:
-        raise NotImplementedError  # Étape 8b (Mély)
+        # On calcule les statistiques seulement à la fin d'une génération.
+        if not isinstance(event, GenerationEnded):
+            return []
+
+        population = event.population
+        costs = [individu.cost for individu in population]
+
+        # La population doit être non vide et évaluée.
+        if not costs or any(cost is None for cost in costs):
+            raise ValueError("La population doit être non vide et évaluée.")
+
+        totals = [float(cost.total) for cost in costs]
+
+        record = make_record(
+            RecordNames.COST_STATISTICS,
+            **{
+                RecordFields.GENERATION: int(event.generation),
+                CostStatisticsFields.SIZE: len(population),
+                CostStatisticsFields.FEASIBLE_COUNT: sum(
+                    1 for cost in costs if cost.is_feasible
+                ),
+                CostStatisticsFields.TOTAL_MIN: min(totals),
+                CostStatisticsFields.TOTAL_MEAN: float(mean(totals)),
+                CostStatisticsFields.TOTAL_MEDIAN: float(median(totals)),
+                CostStatisticsFields.TOTAL_MAX: max(totals),
+                CostStatisticsFields.TOTAL_STDEV: float(pstdev(totals)),
+                CostStatisticsFields.UNDER_COVERAGE_MEAN: float(
+                    mean(cost.under_coverage_cost for cost in costs)
+                ),
+                CostStatisticsFields.OVER_COVERAGE_MEAN: float(
+                    mean(cost.over_coverage_cost for cost in costs)
+                ),
+                CostStatisticsFields.COVERAGE_VIOLATIONS_MEAN: float(
+                    mean(cost.coverage_violations for cost in costs)
+                ),
+                CostStatisticsFields.QUASI_HARD_CELLS_MEAN: float(
+                    mean(cost.quasi_hard_cells for cost in costs)
+                ),
+            },
+        )
+
+        return [record] # Étape 8b (Mély)
 
 
 class DiversityCollector(MetricCollector):
@@ -170,7 +211,64 @@ class DiversityCollector(MetricCollector):
         self.every = every
 
     def on_event(self, event: Event) -> list[Record]:
-        raise NotImplementedError  # Étape 8b (Mély)
+        # On mesure la diversité uniquement à la fin des générations prévues.
+        if not isinstance(event, GenerationEnded):
+            return []
+
+        if event.generation % self.every != 0:
+            return []
+
+        population = event.population
+        if not population:
+            return []
+
+        # Représentation canonique d'un gène, comparable et triable.
+        def gene_key(gene: BlockGene) -> tuple:
+            return (
+                int(gene.start),
+                tuple(
+                    (int(block.activity), int(block.duration))
+                    for block in gene.blocks
+                ),
+            )
+
+        # Diversité génotypique : l'ordre des employés ne compte pas.
+        genotypes = set()
+        for individu in population:
+            canonical_genome = tuple(
+                sorted(gene_key(gene) for gene in individu.genome)
+            )
+            genotypes.add(canonical_genome)
+
+        # Diversité phénotypique : comparaison des grilles employé × période.
+        phenotypes = set()
+        for individu in population:
+            grid = individu.horaire.to_grid(self.period_count)
+            canonical_grid = tuple(
+                tuple(int(value) for value in row)
+                for row in grid
+            )
+            phenotypes.add(canonical_grid)
+
+        # Nombre de coûts totaux distincts.
+        distinct_costs = len({
+            int(individu.cost.total)
+            for individu in population
+        })
+
+        size = len(population)
+
+        return [
+            make_record(
+                RecordNames.DIVERSITY,
+                **{
+                    RecordFields.GENERATION: int(event.generation),
+                    DiversityFields.GENOTYPIC: float(len(genotypes) / size),
+                    DiversityFields.PHENOTYPIC: float(len(phenotypes) / size),
+                    DiversityFields.DISTINCT_COSTS: int(distinct_costs),
+                },
+            )
+        ] # Étape 8b (Mély)
 
 
 class FeasibilityRateCollector(MetricCollector):
@@ -189,8 +287,69 @@ class FeasibilityRateCollector(MetricCollector):
     pour l'initialisation et le restart), ``count`` (nombre d'appels), ``feasible_before``, ``feasible_after``
     (nombres de faisables), ``rate_before``, ``rate_after`` (``float`` dans [0, 1])."""
 
+    def __init__(self) -> None:
+        # Statistiques par génération et pour toute l'exécution.
+        self._generation_stats = {}
+        self._cumulative_stats = {}
+
+    @staticmethod
+    def _update(stats, event: LocalSearchDone) -> None:
+        key = (event.origin, event.operator)
+
+        if key not in stats:
+            stats[key] = [0, 0, 0]
+
+        stats[key][0] += 1
+        stats[key][1] += int(event.cost_before.is_feasible)
+        stats[key][2] += int(event.cost_after.is_feasible)
+
+    @staticmethod
+    def _make_records(stats, generation: int, scope: str) -> list[Record]:
+        records = []
+
+        for (origin, operator), (count, before, after) in stats.items():
+            records.append(
+                make_record(
+                    RecordNames.FEASIBILITY_RATES,
+                    **{
+                        RecordFields.GENERATION: int(generation),
+                        RecordFields.SCOPE: scope,
+                        FeasibilityFields.ORIGIN: origin,
+                        FeasibilityFields.OPERATOR: operator,
+                        FeasibilityFields.COUNT: int(count),
+                        FeasibilityFields.FEASIBLE_BEFORE: int(before),
+                        FeasibilityFields.FEASIBLE_AFTER: int(after),
+                        FeasibilityFields.RATE_BEFORE: float(before / count),
+                        FeasibilityFields.RATE_AFTER: float(after / count),
+                    },
+                )
+            )
+
+        return records
+
     def on_event(self, event: Event) -> list[Record]:
-        raise NotImplementedError  # Étape 8b (Mély)
+        if isinstance(event, LocalSearchDone):
+            self._update(self._generation_stats, event)
+            self._update(self._cumulative_stats, event)
+            return []
+
+        if isinstance(event, GenerationEnded):
+            records = self._make_records(
+                self._generation_stats,
+                event.generation,
+                Scopes.GENERATION,
+            )
+            self._generation_stats.clear()
+            return records
+
+        if isinstance(event, RunEnded):
+            return self._make_records(
+                self._cumulative_stats,
+                event.generations,
+                Scopes.CUMULATIVE,
+            )
+
+        return [] # Étape 8b (Mély)
 
 
 class SolverEffortCollector(MetricCollector):
@@ -208,5 +367,67 @@ class SolverEffortCollector(MetricCollector):
     secondes (``float``), même règle pour ``None``. ``solve_time`` n'est pas déterministe (D8) ; les trois autres
     le sont sous limite déterministe."""
 
+    def __init__(self) -> None:
+        # Statistiques de la génération et de toute l'exécution.
+        self._generation_stats = []
+        self._cumulative_stats = []
+
+    @staticmethod
+    def _make_record(statistics, generation: int, scope: str) -> Record:
+        # Additionne une statistique, en ignorant les valeurs None.
+        # Si aucune valeur n'est rapportée, le résultat reste None.
+        def total(attribute: str):
+            values = [
+                getattr(stat, attribute)
+                for stat in statistics
+                if getattr(stat, attribute) is not None
+            ]
+            return int(sum(values)) if values else None
+
+        # Le temps est un timedelta : conversion en secondes.
+        times = [
+            stat.solve_time.total_seconds()
+            for stat in statistics
+            if stat.solve_time is not None
+        ]
+
+        return make_record(
+            RecordNames.SOLVER_EFFORT,
+            **{
+                RecordFields.GENERATION: int(generation),
+                RecordFields.SCOPE: scope,
+                SolverEffortFields.CALLS: int(len(statistics)),
+                SolverEffortFields.NODES: total("nodes"),
+                SolverEffortFields.FAILURES: total("failures"),
+                SolverEffortFields.PROPAGATIONS: total("propagations"),
+                SolverEffortFields.SOLVE_TIME_SECONDS: (
+                    float(sum(times)) if times else None
+                ),
+            },
+        )
+
     def on_event(self, event: Event) -> list[Record]:
-        raise NotImplementedError  # Étape 8b (Mély)
+        if isinstance(event, LocalSearchDone):
+            self._generation_stats.append(event.result.statistics)
+            self._cumulative_stats.append(event.result.statistics)
+            return []
+
+        if isinstance(event, GenerationEnded):
+            record = self._make_record(
+                self._generation_stats,
+                event.generation,
+                Scopes.GENERATION,
+            )
+            self._generation_stats.clear()
+            return [record]
+
+        if isinstance(event, RunEnded):
+            return [
+                self._make_record(
+                    self._cumulative_stats,
+                    event.generations,
+                    Scopes.CUMULATIVE,
+                )
+            ]
+
+        return [] # Étape 8b (Mély)
