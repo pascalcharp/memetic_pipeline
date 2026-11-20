@@ -39,9 +39,13 @@ from src.utils.minizinc_env import locate_minizinc_driver, lookup_solver
 from tests.test_feasibility import REFERENCE_SHIFT, single, synthetic_data
 from tests.test_local_search import BENCH_1_OPTIMUM, bench, bench_1_optimum, expected_fixing_constraints, with_employee
 
-# Empreinte SHA-256 de horaire.mzn, le modèle original fourni (D12 : gardé inchangé comme référence).
-# Une modification voulue du modèle de référence se décide en équipe, puis met à jour cette empreinte.
-REFERENCE_MODEL_SHA256: str = "ba6ba10d0b8cf2826958a84f1ee5d068a60ac72cbcd562027cef7016f9609c88"
+# Empreinte SHA-256 de horaire.mzn, le modèle original fourni (D12 : gardé inchangé comme référence), calculée
+# sur le texte aux fins de ligne Unix : Git stocke le fichier ainsi, mais une copie de travail peut avoir des fins
+# de ligne Windows (core.autocrlf). Une modification voulue du modèle de référence se décide en équipe, puis met à
+# jour cette empreinte.
+REFERENCE_MODEL_SHA256: str = "8930e4025f0d3b46fa29c93dfc28f4c0d7f0dbec68d507c76413b08938182086"
+WINDOWS_LINE_ENDING: bytes = b"\r\n"
+UNIX_LINE_ENDING: bytes = b"\n"
 
 GENEROUS_UNITS: float = 5.0
 TIME_LIMIT: timedelta = timedelta(seconds=60)
@@ -121,7 +125,8 @@ class TestModelFiles(unittest.TestCase):
                 self.assertTrue(variant.path.is_file(), variant.path)
 
     def test_reference_model_is_unchanged(self) -> None:
-        digest = hashlib.sha256(ProjectPaths.REFERENCE_MODEL_FILE.read_bytes()).hexdigest()
+        content = ProjectPaths.REFERENCE_MODEL_FILE.read_bytes().replace(WINDOWS_LINE_ENDING, UNIX_LINE_ENDING)
+        digest = hashlib.sha256(content).hexdigest()
         self.assertEqual(digest, REFERENCE_MODEL_SHA256)
 
     def test_relaxed_model_is_a_distinct_file(self) -> None:

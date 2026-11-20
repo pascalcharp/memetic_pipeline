@@ -918,3 +918,11 @@ Même protocole que le 2026-11-13 : graine 0, 6 horaires tirés au hasard par `R
 - Coût : chaque appel utilise maintenant son budget (environ 4 s pour 5 unités), au lieu d'échouer en quelques millisecondes. Le budget par appel devient un vrai paramètre d'expérience (étape 10), à mettre en balance avec le nombre d'appels par génération (NR, NM).
 
 Toutes les cases de 5c sont cochées, sauf le suivi de la documentation.
+
+## 2026-11-20 — Étape 5c : empreinte de `horaire.mzn` indépendante des fins de ligne (Claude)
+
+**Blocage** : la CI de la PR #9 a échoué sur `test_reference_model_is_unchanged` (empreinte `8930e402…` au lieu de `ba6ba10d…`). Le modèle n'avait pas changé : la copie de travail de Pascal a des fins de ligne Windows (CRLF), alors que Git stocke le fichier en fins de ligne Unix (`core.autocrlf=input`), et l'empreinte du test avait été calculée sur la copie locale.
+
+**Correctif** : le test remplace les CRLF par des LF avant de calculer l'empreinte, qui est maintenant celle du fichier tel que Git le stocke. Il passe sur la copie CRLF comme sur une copie LF (la CI).
+
+**Leçon** : une empreinte de fichier dans un test se calcule sur un contenu normalisé, ou sur le blob Git (`git show HEAD:<fichier>`), jamais sur la seule copie de travail.
