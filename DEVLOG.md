@@ -898,3 +898,23 @@ Suite complète verte : 417 tests en 67 s (116 s avant la révision du test, 56 
 Sortie JSON du modèle assoupli : `violations_couverture` et `cout_penalise` ajoutés (Pascal) ; correctif après revue, les virgules entre les champs, que `json.loads` refusait (minizinc-python n'utilise pas cet item `output`, les tests ne pouvaient pas le voir). Vérifiée sur bench_1 : `Cout` = 94, `violations_couverture` = 0, `cout_penalise` = 94. L'en-tête du fichier, qui liste les changements de 5c, est gardé tel quel.
 
 **Reste pour 5c** : la même mesure sur bench_3 ; suivi (`docs/PROBLEME.md`, `docs/PROJECT_STRUCT.md`, arbre de CLAUDE.md).
+
+## 2026-11-20 — Étape 5c : mesure du `LocalSolver` sur bench_3 (Claude)
+
+Même protocole que le 2026-11-13 : graine 0, 6 horaires tirés au hasard par `RandomBlockInitializer`, 2 employés libérés, CP-SAT 1 thread, 5 unités déterministes par appel. Les deux modèles sur les mêmes horaires tirés.
+
+| Appel | Coût total tiré (violations) | Référence | Assoupli : coût après (violations) | Baisse |
+|---|---|---|---|---|
+| 1 | 40 000 090 (16) | UNSAT | 25 000 085 (9) | 37 % |
+| 2 | 45 000 067 (19) | UNSAT | 31 000 054 (9) | 31 % |
+| 3 | 99 000 051 (39) | UNSAT | 51 000 047 (17) | 48 % |
+| 4 | 57 000 114 (23) | UNSAT | 37 000 068 (11) | 35 % |
+| 5 | 88 000 123 (39) | UNSAT | 47 000 097 (20) | 47 % |
+| 6 | 83 000 110 (35) | UNSAT | 51 000 090 (22) | 39 % |
+
+- Modèle de référence : 6 UNSAT sur 6, comme le 2026-11-13 (2,5 s en tout).
+- Modèle assoupli : 6 solutions sur 6 (budget épuisé, optimalité non prouvée), coût total en baisse de 31 à 48 %, violations de couverture divisées par deux environ ; aucune violation structurelle (24,4 s en tout, 3,3 à 4,0 s par appel).
+- Avec bench_5 (5 améliorations sur 6, un budget épuisé sans solution), D12 atteint son objectif : le `LocalSolver` améliore les horaires qui violent « au moins 1 », au lieu de les rendre inchangés.
+- Coût : chaque appel utilise maintenant son budget (environ 4 s pour 5 unités), au lieu d'échouer en quelques millisecondes. Le budget par appel devient un vrai paramètre d'expérience (étape 10), à mettre en balance avec le nombre d'appels par génération (NR, NM).
+
+Toutes les cases de 5c sont cochées, sauf le suivi de la documentation.

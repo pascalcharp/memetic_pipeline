@@ -202,7 +202,7 @@ Décision D12 (2026-11-20) : deux fichiers. `horaire.mzn` reste **inchangé** (r
   - variante assouplie : borne `cout_penalise ≤ CostEvaluator.total(entrée)`, posée dès que l'entrée n'a **aucune violation structurelle** (elle est alors une solution du sous-problème), même si elle viole « au moins 1 » ;
   - variante de référence : règle actuelle (borne sur `cout_total` seulement si l'entrée est faisable) ;
   - mettre à jour la docstring du module et la règle de D11 (« une entrée infaisable n'a pas de borne »).
-- [~] **Tests** (tous verts le 2026-11-20 ; reste la mesure sur bench_3) :
+- [x] **Tests** (tous verts et mesures faites le 2026-11-20) :
   - `horaire.mzn` inchangé (empreinte du fichier) ; les deux fichiers existent ;
   - validation croisée Python / MiniZinc : pour des horaires fixés à la main, dont certains qui violent « au moins 1 », `cout_penalise` du modèle assoupli = `CostEvaluator.total`, et `violations_couverture` = `coverage_violations` ;
   - instance construite pour que « au moins 1 » soit impossible à respecter ⇒ solution rendue par le modèle assoupli (plus d'UNSAT), avec le bon nombre de violations ; le modèle de référence donne UNSAT ;
