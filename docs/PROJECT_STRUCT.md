@@ -21,7 +21,7 @@ memetic_pipeline/
 │   └── PROJECT_STRUCT.md       # Ce document
 ├── src/                        # Code source principal
 │   ├── __init__.py
-│   ├── config.py               # Configuration : chemins du projet (ProjectPaths), MiniZinc (MiniZincConfig)
+│   ├── config.py               # Configuration : chemins du projet et des deux modèles (ProjectPaths), MiniZinc (MiniZincConfig)
 │   ├── drivers/                # Points d'entrée des expériences (vide pour l'instant)
 │   │   └── __init__.py
 │   ├── ga/                     # Algorithme génétique
@@ -38,15 +38,16 @@ memetic_pipeline/
 │   │   ├── config.py           # MemeticConfig : stratégies et paramètres d'une exécution (scaffold, étape 9)
 │   │   ├── engine.py           # Moteur Memetic(NR, NM) et MemeticResult (scaffold, étape 9)
 │   │   ├── executor.py         # Exécution des lots : Executor, SequentialExecutor (D7)
-│   │   ├── local_search.py     # Recherche locale : Neighborhood, LocalSolver, MiniZincLocalSolver (étape 5b)
+│   │   ├── local_search.py     # Recherche locale : Neighborhood, LocalSolver, MiniZincLocalSolver, borne selon le modèle (étapes 5b, 5c)
 │   │   ├── seeds.py            # Graines dérivées par tâche : derive_task_seeds, SeedStreams (scaffold, étape 9)
-│   │   ├── solver.py           # Indirection vers les solveurs : SolverAdapter, CpSatAdapter, limites d'effort, SolverRun
+│   │   ├── solver.py           # Indirection vers les solveurs : SolverAdapter, CpSatAdapter, ModelVariant, limites d'effort, SolverRun
 │   │   └── termination.py      # Critère d'arrêt : TerminationCriterion, GenerationLimit (scaffold, étape 9)
 │   ├── model/                  # Modèle CP (MiniZinc) et ses règles côté Python
 │   │   ├── __init__.py
 │   │   ├── evaluation.py       # Coût : couverture (cout_total) et pénalités (CostEvaluator, CostBreakdown, PenaltyWeights)
 │   │   ├── feasibility.py      # Faisabilité structurelle d'un horaire (FeasibilityChecker, Violation, StructuralRule)
-│   │   ├── horaire.mzn         # Modèle MiniZinc fourni
+│   │   ├── horaire.mzn         # Modèle MiniZinc fourni, couverture dure : référence, gardé inchangé (D12)
+│   │   ├── horaire_assoupli.mzn # Modèle du pipeline : couverture « au moins 1 » en pénalité (D12, étape 5c)
 │   │   ├── horaire.py          # Phénotype canonique (Horaire, HoraireEmploye) et grille « employé × période »
 │   │   └── shift_rules.py      # Constantes du domaine : noms des variables MiniZinc, durées, écarts, décalages des fenêtres
 │   ├── observability/          # Observabilité (D8) : événements, collecteurs, destinations, journal, répertoire d'exécution
@@ -73,18 +74,19 @@ memetic_pipeline/
 │   ├── test_feasibility.py     # Faisabilité structurelle : bornes exactes, violations isolées, verdict comparé à MiniZinc
 │   ├── test_horaire.py         # Phénotype : construction, forme, grille comparée à la 2ᵉ sortie de MiniZinc
 │   ├── test_individual.py      # Individu : décodage unique, évaluation sans modification (encodage factice)
-│   ├── test_initialization.py  # Initialisation (étape 6) : contrat du scaffold, cas à couvrir en tête de fichier
+│   ├── test_initialization.py  # Initialisation (étape 6) : faux solveur, puis CP-SAT sur bench_1 et bench_5 avec les deux modèles
 │   ├── test_io.py              # Lecture des instances : 5 bench, cas d'erreur, plage utile comparée à MiniZinc
-│   ├── test_local_search.py    # Recherche locale (étape 5b) : contrat du scaffold, cas à couvrir en tête de fichier
+│   ├── test_local_search.py    # Recherche locale (étapes 5b, 5c) : voisinage, fixation, bornes des deux modèles, CP-SAT
 │   ├── test_minizinc_env.py    # Localisation de MiniZinc, solveurs, messages d'erreur
+│   ├── test_relaxed_model.py   # Modèle assoupli (étape 5c) : référence inchangée, mêmes optimums, validation croisée Python / MiniZinc
 │   ├── test_observability.py   # Observabilité : schéma, destinations, ObservationHub, journal, répertoire d'exécution
 │   ├── test_operators.py       # Variation (étape 7b) : propriétés avec un vrai Random, cas limites, messages
 │   ├── test_population.py      # Population (étape 8) : contrat du scaffold, cas à couvrir en tête de fichier
 │   ├── test_registry.py        # Registre (étape 7a) : contrat du scaffold, cas à couvrir en tête de fichier
 │   ├── test_selection.py       # Sélection (étape 7a) : check_selectable, contrat du scaffold, cas à couvrir
 │   ├── test_shift_rules.py     # Constantes du domaine et sondes de cohérence avec horaire.mzn
-│   ├── test_smoke_minizinc.py  # Test de fumée : CP-SAT résout bench_1 (optimum 94)
-│   └── test_solver.py          # Solveurs : traduction des options et des statuts, reproductibilité, issues sans solution
+│   ├── test_smoke_minizinc.py  # Test de fumée : CP-SAT résout horaire.mzn sur bench_1 (optimum 94)
+│   └── test_solver.py          # Solveurs : options, modèles (ModelVariant), traduction des statuts, reproductibilité, issues
 ├── .dockerignore
 ├── .gitignore
 ├── CLAUDE.md                   # Guide de développement (méthode, architecture, style), lu par Claude Code

@@ -210,7 +210,7 @@ Décision D12 (2026-11-20) : deux fichiers. `horaire.mzn` reste **inchangé** (r
   - `SolverAdapter` : le poids n'est passé qu'au modèle assoupli (sans MiniZinc si possible) ;
   - `LocalSolver` : bornes des deux variantes, sans MiniZinc ; une entrée structurellement faisable qui viole « au moins 1 », avec 2 employés libérés ⇒ plus d'UNSAT, et `total` du résultat ≤ `total` de l'entrée ;
   - refaire les mesures du 2026-11-13 (bench_3 et bench_5, 2 employés libérés, 6 cas sur 6 en UNSAT) avec les deux modèles et consigner les résultats dans DEVLOG.md.
-- [ ] **Suivi** :
+- [~] **Suivi** (documentation faite le 2026-11-20) :
   - `docs/PROBLEME.md` (« au moins 1 » est une pénalité dans le modèle du pipeline) ; `docs/PROJECT_STRUCT.md` et l'arbre de CLAUDE.md (nouveau fichier) ;
   - revoir l'amélioration possible de `SolverAdapter.solve` (5a, avertissement `model inconsistency detected`), qui devrait devenir rare ;
   - D13 : la redondance concerne maintenant deux modèles ; à reprendre après 5c.

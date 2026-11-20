@@ -63,7 +63,8 @@ memetic_pipeline/
 │   │   ├── __init__.py
 │   │   ├── evaluation.py       # Coût de couverture et pénalités (CostBreakdown)
 │   │   ├── feasibility.py      # Faisabilité structurelle d'un horaire
-│   │   ├── horaire.mzn         # Modèle MiniZinc fourni
+│   │   ├── horaire.mzn         # Modèle MiniZinc fourni, couverture dure : référence (D12)
+│   │   ├── horaire_assoupli.mzn # Modèle du pipeline : couverture « au moins 1 » en pénalité (D12)
 │   │   ├── horaire.py          # Phénotype canonique Horaire et grille « employé × période »
 │   │   └── shift_rules.py      # Constantes du domaine : noms des variables MiniZinc, durées, écarts, décalages des fenêtres
 │   ├── ga/                     # Logique de l'Algorithme Génétique (à venir)
@@ -78,7 +79,7 @@ memetic_pipeline/
 │   ├── memetic/                # Couplage Mémétique & Réparation (à venir)
 │   │   ├── __init__.py
 │   │   ├── local_search.py     # Neighborhood et LocalSolver : recherche locale et réparation par MiniZinc
-│   │   └── solver.py           # SolverAdapter : options, limites d'effort, issue et statistiques d'une résolution
+│   │   └── solver.py           # SolverAdapter : modèle résolu (ModelVariant), options, limites d'effort, issue et statistiques
 │   ├── utils/                  # Environnement, lecture de fichiers et parsing
 │   │   ├── __init__.py
 │   │   ├── minizinc_env.py     # Localisation de MiniZinc et des solveurs
