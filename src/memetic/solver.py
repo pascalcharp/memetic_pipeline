@@ -21,11 +21,13 @@ from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
 from datetime import timedelta
 from enum import Enum
+from pathlib import Path
 from typing import Any
 
 import minizinc
 
 from src.config import ProjectPaths
+from src.model.evaluation import PenaltyWeights
 from src.model.shift_rules import ModelVariableNames
 from src.utils.io import InstanceFields, ProblemInstance
 from src.utils.minizinc_env import locate_minizinc_driver, lookup_solver
@@ -57,9 +59,22 @@ class SolverDefaults:
 
 
 class ModelObjective:
-    """Nom de la variable objectif de ``horaire.mzn``."""
+    """Noms des variables objectif des modèles (D12)."""
 
+    # Coût de couverture : objectif de horaire.mzn (référence) ; aussi défini dans horaire_assoupli.mzn.
     TOTAL_COST: str = "cout_total"
+    # cout_total + POIDS_COUVERTURE × violations_couverture : objectif de horaire_assoupli.mzn.
+    PENALIZED_COST: str = "cout_penalise"
+
+
+class RelaxedModelNames:
+    """Noms propres au modèle assoupli ``horaire_assoupli.mzn`` (D12)."""
+
+    # Paramètre : poids d'une violation de « au moins 1 », fourni par Python (PenaltyWeights.coverage_violation).
+    COVERAGE_WEIGHT: str = "POIDS_COUVERTURE"
+    # Variable : nombre de cellules de la plage utile où la demande est positive et personne n'est affecté.
+    # Annotée ``::add_to_output`` dans le modèle, pour que minizinc-python la rende avec la solution.
+    COVERAGE_VIOLATIONS: str = "violations_couverture"
 
 
 class MiniZincStatisticNames:
@@ -181,6 +196,55 @@ class SolverOptions:
 
 
 # ---------------------------------------------------------------------------------------------------------------------
+# Modèle résolu (D12)
+# ---------------------------------------------------------------------------------------------------------------------
+
+@dataclass(frozen=True)
+class ModelVariant:
+    """Un modèle MiniZinc que le ``SolverAdapter`` peut résoudre (Stratégie, D5 ; décision D12).
+
+    ``objective`` est le nom de la variable minimisée par le modèle : c'est sur elle que porte une borne de coût
+    ajoutée (``LocalSearchConstraints.COST_BOUND``). ``penalizes_coverage`` est vrai si la couverture
+    « au moins 1 » est une pénalité dans l'objectif plutôt qu'une contrainte dure ; le modèle attend alors le
+    paramètre ``RelaxedModelNames.COVERAGE_WEIGHT``.
+    """
+
+    name: str
+    path: Path
+    objective: str
+    penalizes_coverage: bool
+
+    def parameters(self, weights: PenaltyWeights) -> dict[str, int]:
+        """Paramètres propres à ce modèle, à transmettre à MiniZinc en plus des données de l'instance.
+
+        ``{RelaxedModelNames.COVERAGE_WEIGHT: weights.coverage_violation}`` si ``penalizes_coverage``, sinon un
+        dictionnaire vide : MiniZinc refuse une valeur pour un paramètre que le modèle ne déclare pas.
+        """
+        if self.penalizes_coverage:
+            return {RelaxedModelNames.COVERAGE_WEIGHT: weights.coverage_violation}
+        return {}
+
+
+class ModelVariants:
+    """Les deux modèles du projet (D12)."""
+
+    # Modèle original fourni, couverture dure. Référence : résolution complète, comparaisons, « peine de mort ».
+    REFERENCE: ModelVariant = ModelVariant(
+        name="reference",
+        path=ProjectPaths.REFERENCE_MODEL_FILE,
+        objective=ModelObjective.TOTAL_COST,
+        penalizes_coverage=False,
+    )
+    # Modèle du pipeline : même fonction de coût que CostEvaluator.total.
+    RELAXED: ModelVariant = ModelVariant(
+        name="relaxed",
+        path=ProjectPaths.RELAXED_MODEL_FILE,
+        objective=ModelObjective.PENALIZED_COST,
+        penalizes_coverage=True,
+    )
+
+
+# ---------------------------------------------------------------------------------------------------------------------
 # Résultat d'une résolution
 # ---------------------------------------------------------------------------------------------------------------------
 
@@ -233,10 +297,14 @@ class SolverRun:
 # ---------------------------------------------------------------------------------------------------------------------
 
 class SolverAdapter(ABC):
-    """Indirection vers un solveur MiniZinc (D2) : traduit les options, lance ``horaire.mzn``, traduit le résultat.
+    """Indirection vers un solveur MiniZinc (D2) : traduit les options, lance le modèle, traduit le résultat.
 
     Patron Méthode modèle : ``solve`` est commun à tous les solveurs ; une sous-classe ne fournit que son
     identifiant, les limites qu'elle comprend et la traduction des options en arguments de minizinc-python.
+
+    Le modèle résolu est une ``ModelVariant`` (D12) : ``ModelVariants.RELAXED`` par défaut, le modèle du pipeline ;
+    ``ModelVariants.REFERENCE`` pour le modèle original, à couverture dure. ``weights`` fournit le poids de la
+    pénalité de couverture au modèle qui l'attend.
     """
 
     # Variables de décision récupérées dans chaque solution, une liste indexée par employé.
@@ -249,7 +317,12 @@ class SolverAdapter(ABC):
         ModelVariableNames.ACTIVITIES,
     )
 
-    def __init__(self, options: SolverOptions = SolverOptions()) -> None:
+    def __init__(
+            self,
+            options: SolverOptions = SolverOptions(),
+            model: ModelVariant = ModelVariants.RELAXED,
+            weights: PenaltyWeights = PenaltyWeights(),
+    ) -> None:
         """Vérifie que la limite est comprise, puis localise MiniZinc et le solveur.
 
         Raises:
@@ -264,6 +337,8 @@ class SolverAdapter(ABC):
                 )
             )
         self.options = options
+        self.model = model
+        self.weights = weights
         self.solver = lookup_solver(self.solver_id(), locate_minizinc_driver())
 
     @classmethod
@@ -281,15 +356,19 @@ class SolverAdapter(ABC):
         """Arguments de ``minizinc.Instance.solve`` qui traduisent ``self.options`` pour ce solveur."""
 
     def solve(self, instance: ProblemInstance, extra_constraints: Sequence[str] = ()) -> SolverRun:
-        """Résout ``horaire.mzn`` sur ``instance``, avec en plus les contraintes MiniZinc ``extra_constraints``.
+        """Résout le modèle ``self.model`` sur ``instance``, avec en plus les contraintes MiniZinc ``extra_constraints``.
 
         Chaque élément de ``extra_constraints`` est un item MiniZinc complet (ex. ``"constraint debut[1] = 4;"``).
-        Sans contrainte ajoutée, c'est la résolution complète du modèle (référence de D10).
+        Sans contrainte ajoutée, c'est la résolution complète du modèle (référence de D10). Les paramètres propres
+        au modèle (``self.model.parameters(self.weights)``) sont transmis avec les données de l'instance.
+        ``SolverRun.objective`` est la valeur de ``self.model.objective``.
 
         Raises:
             SolverFailureError: si MiniZinc échoue (contrainte mal formée, statut ERROR ou inattendu).
         """
-        minizinc_instance = minizinc.Instance(self.solver, minizinc.Model(ProjectPaths.MODEL_FILE))
+        minizinc_instance = minizinc.Instance(self.solver, minizinc.Model(self.model.path))
+        for name, value in self.model.parameters(self.weights).items():
+            minizinc_instance[name] = value
         self._assign_instance_data(minizinc_instance, instance)
         for constraint in extra_constraints:
             minizinc_instance.add_string(constraint)

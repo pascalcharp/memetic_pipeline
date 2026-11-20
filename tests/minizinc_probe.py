@@ -20,7 +20,7 @@ class MiniZincModelProbe:
     def __init__(self, instance_path: Path) -> None:
         driver = locate_minizinc_driver()
         solver = lookup_solver(MiniZincConfig.DEFAULT_SOLVER_ID, driver)
-        model = minizinc.Model(ProjectPaths.MODEL_FILE)
+        model = minizinc.Model(ProjectPaths.REFERENCE_MODEL_FILE)
         model.add_file(instance_path)
         self.instance = minizinc.Instance(solver, model)
 

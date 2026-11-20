@@ -9,7 +9,10 @@ class ProjectPaths:
     ROOT: Path = Path(__file__).resolve().parent.parent
     DATA_DIR: Path = ROOT / "data"
     MODEL_DIR: Path = ROOT / "src" / "model"
-    MODEL_FILE: Path = MODEL_DIR / "horaire.mzn"
+    # Modèle original fourni, couverture « au moins 1 » dure ; gardé inchangé comme référence (D12).
+    REFERENCE_MODEL_FILE: Path = MODEL_DIR / "horaire.mzn"
+    # Modèle du pipeline : « au moins 1 » pénalisée, même fonction de coût que CostEvaluator.total (D12).
+    RELAXED_MODEL_FILE: Path = MODEL_DIR / "horaire_assoupli.mzn"
 
 
 class MiniZincConfig:

@@ -19,7 +19,8 @@ Les tests utilisent FakeLocalSolver et ne nécessitent
 pas l'exécution du solveur MiniZinc.
 
 Seule exception : ``TestInitializationWithCpSat`` (ajout de Pascal) branche l'initialiseur sur
-``MiniZincLocalSolver`` avec CP-SAT (bench_1 et bench_5, quelques secondes).
+``MiniZincLocalSolver`` avec CP-SAT (bench_1 et bench_5, quelques secondes), avec le modèle assoupli du pipeline
+et, pour comparaison, le modèle de référence à couverture dure (D12, étape 5c).
 """
 
 import random
@@ -35,7 +36,11 @@ from src.memetic.local_search import (
     MiniZincLocalSolver,
     RandomEmployeesNeighborhood,
 )
-from src.memetic.solver import CpSatAdapter, DeterministicTimeLimit, SolverOptions
+import warnings
+
+from minizinc.error import MiniZincWarning
+
+from src.memetic.solver import CpSatAdapter, DeterministicTimeLimit, ModelVariant, ModelVariants, SolveOutcome, SolverOptions
 from src.model.evaluation import CostEvaluator
 from src.model.horaire import Horaire
 from tests.fixtures import FakeLocalSolver, synthetic_instance
@@ -270,8 +275,15 @@ GENEROUS_UNITS: float = 5.0
 # Optimum de bench_1, prouvé par CP-SAT (étape 0).
 BENCH_1_OPTIMUM: int = 94
 
-# Taille de voisinage trop petite pour réparer un horaire tiré au hasard sur bench_5 (mesure du 2026-11-13).
+# Petit voisinage sur bench_5 : avec le modèle de référence, le sous-problème est insatisfiable (mesure du
+# 2026-11-13, 6 cas sur 6) ; avec le modèle assoupli, il a toujours une solution (D12, mesure du 2026-11-20).
 SMALL_NEIGHBORHOOD: int = 2
+
+# bench_5 : petite population et petit budget, pour garder le test à quelques secondes. Mesure du 2026-11-20 :
+# avec 1 unité, le modèle assoupli améliore les trois horaires tirés (3,5 s) ; le modèle de référence rend trois
+# UNSAT (1,4 s). Avec la population et le budget du reste de la classe, le test prenait 55 s.
+BENCH_5_POPULATION_SIZE: int = 3
+BENCH_5_UNITS: float = 1.0
 
 
 class RecordingLocalSolver(LocalSolver):
@@ -291,11 +303,16 @@ def bench(number: int) -> ProblemInstance:
     return load_instance(ProjectPaths.DATA_DIR / f"bench_{number}.json")
 
 
-def recording_cp_sat_solver(instance: ProblemInstance, size: int) -> RecordingLocalSolver:
+def recording_cp_sat_solver(
+    instance: ProblemInstance,
+    size: int,
+    model: ModelVariant = ModelVariants.RELAXED,
+    units: float = GENEROUS_UNITS,
+) -> RecordingLocalSolver:
     return RecordingLocalSolver(
         MiniZincLocalSolver(
             instance,
-            CpSatAdapter(SolverOptions(limit=DeterministicTimeLimit(GENEROUS_UNITS))),
+            CpSatAdapter(SolverOptions(limit=DeterministicTimeLimit(units)), model=model),
             RandomEmployeesNeighborhood(instance, size=size),
             CostEvaluator(instance),
         )
@@ -306,11 +323,20 @@ class TestInitializationWithCpSat(unittest.TestCase):
     """L'initialiseur branché sur ``MiniZincLocalSolver`` : ce que le faux solveur ne peut pas vérifier."""
 
     def initialize(
-        self, instance: ProblemInstance, size: int, seed: int = SEED
+        self,
+        instance: ProblemInstance,
+        size: int,
+        seed: int = SEED,
+        model: ModelVariant = ModelVariants.RELAXED,
+        population_size: int = INTEGRATION_POPULATION_SIZE,
+        units: float = GENEROUS_UNITS,
     ) -> tuple[tuple[Individu[BlockGenome], ...], RecordingLocalSolver]:
-        local_solver = recording_cp_sat_solver(instance, size)
+        local_solver = recording_cp_sat_solver(instance, size, model, units)
         initializer = RandomBlockInitializer(instance, BlockEncoding(), local_solver=local_solver)
-        population = initializer.initialize(INTEGRATION_POPULATION_SIZE, random.Random(seed))
+        # Le modèle de référence avertit (« model inconsistency detected ») sur un sous-problème insatisfiable.
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", MiniZincWarning)
+            population = initializer.initialize(population_size, random.Random(seed))
         return population, local_solver
 
     def assert_common_invariants(
@@ -318,13 +344,14 @@ class TestInitializationWithCpSat(unittest.TestCase):
         instance: ProblemInstance,
         population: tuple[Individu[BlockGenome], ...],
         local_solver: RecordingLocalSolver,
+        model: ModelVariant = ModelVariants.RELAXED,
     ) -> None:
         """Invariants valables quelle que soit l'issue de chaque résolution."""
         encoding = BlockEncoding()
         evaluator = CostEvaluator(instance)
         checker = FeasibilityChecker(instance)
 
-        self.assertEqual(len(local_solver.calls), INTEGRATION_POPULATION_SIZE)
+        self.assertEqual(len(local_solver.calls), len(population))
 
         for index, (individu, (sampled, result)) in enumerate(zip(population, local_solver.calls)):
             with self.subTest(individu=index, outcome=result.outcome):
@@ -339,11 +366,13 @@ class TestInitializationWithCpSat(unittest.TestCase):
                     # Sans solution, l'horaire tiré au hasard entre tel quel dans la population.
                     self.assertEqual(individu.horaire, sampled)
 
+                # Borne de coût (5b, D12) : jamais pire que l'horaire tiré, s'il est une solution du sous-problème.
                 sampled_cost = evaluator.evaluate(sampled)
-                if sampled_cost.is_feasible:
-                    # Borne de coût de 5b : jamais pire qu'un horaire tiré déjà faisable.
-                    self.assertLessEqual(evaluator.evaluate(individu.horaire).coverage_cost,
-                                         sampled_cost.coverage_cost)
+                result_cost = evaluator.evaluate(individu.horaire)
+                if model.penalizes_coverage and sampled_cost.structural_violations == 0:
+                    self.assertLessEqual(result_cost.total, sampled_cost.total)
+                if not model.penalizes_coverage and sampled_cost.is_feasible:
+                    self.assertLessEqual(result_cost.coverage_cost, sampled_cost.coverage_cost)
 
     def test_small_neighborhood_repairs_bench_1(self) -> None:
         """bench_1, un seul employé libéré : chaque horaire tiré est réparé en un horaire faisable."""
@@ -371,18 +400,39 @@ class TestInitializationWithCpSat(unittest.TestCase):
                 self.assertTrue(cost.is_feasible)
                 self.assertEqual(cost.coverage_cost, BENCH_1_OPTIMUM)
 
-    def test_unrepairable_samples_enter_unchanged_on_bench_5(self) -> None:
-        """bench_5, petit voisinage : le sous-problème est sans solution, l'horaire tiré est gardé tel quel."""
-        # « Sans solution » vient de la contrainte dure « au moins 1 » de horaire.mzn, alors que l'évaluation
-        # la traite comme une pénalité (étape 4). Si le LocalSolver passe à un modèle pénalisé (D12), ce test
-        # devra être revu : le sous-problème aura alors toujours une solution.
+    def initialize_bench_5(self, model: ModelVariant) -> tuple[ProblemInstance, tuple[Individu[BlockGenome], ...],
+                                                               RecordingLocalSolver]:
         instance = bench(5)
-        population, local_solver = self.initialize(instance, size=SMALL_NEIGHBORHOOD)
+        population, local_solver = self.initialize(
+            instance, size=SMALL_NEIGHBORHOOD, model=model,
+            population_size=BENCH_5_POPULATION_SIZE, units=BENCH_5_UNITS,
+        )
+        self.assert_common_invariants(instance, population, local_solver, model)
+        return instance, population, local_solver
 
-        self.assert_common_invariants(instance, population, local_solver)
+    def test_reference_model_leaves_unrepairable_samples_unchanged_on_bench_5(self) -> None:
+        """bench_5, petit voisinage, modèle de référence : la contrainte dure « au moins 1 » rend le sous-problème
+        insatisfiable, et l'horaire tiré est gardé tel quel (le constat de 2026-11-13 qui a mené à D12)."""
+        _, _, local_solver = self.initialize_bench_5(ModelVariants.REFERENCE)
 
         # Le test n'a de sens que si la branche « sans solution » est effectivement exercée.
-        self.assertTrue(any(not result.outcome.has_solution for _, result in local_solver.calls))
+        self.assertTrue(any(result.outcome == SolveOutcome.UNSATISFIABLE for _, result in local_solver.calls))
+
+    def test_relaxed_model_improves_samples_on_bench_5(self) -> None:
+        """bench_5, petit voisinage, modèle assoupli (D12) : jamais d'UNSAT, et les horaires tirés sont améliorés."""
+        instance, population, local_solver = self.initialize_bench_5(ModelVariants.RELAXED)
+
+        for index, (_, result) in enumerate(local_solver.calls):
+            with self.subTest(individu=index):
+                self.assertNotEqual(result.outcome, SolveOutcome.UNSATISFIABLE)
+
+        # Au moins un horaire strictement amélioré : le sous-problème n'est pas seulement satisfiable, il sert.
+        evaluator = CostEvaluator(instance)
+        improvements = [
+            evaluator.evaluate(individu.horaire).total < evaluator.evaluate(sampled).total
+            for individu, (sampled, _) in zip(population, local_solver.calls)
+        ]
+        self.assertTrue(any(improvements))
 
     def test_same_seed_same_population(self) -> None:
         """Même graine ⇒ même population, solveur réel compris (limite d'effort déterministe)."""

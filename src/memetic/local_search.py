@@ -6,9 +6,13 @@ de son ``SolverAdapter`` (D10).
 
     - Les employés structurellement infaisables sont toujours libérés : fixés, ils rendraient le sous-problème
       insatisfiable, puisque leurs jalons sont hors domaine.
-    - Si l'entrée est faisable, elle est elle-même une solution du sous-problème : on ajoute la borne
+    - Cas du modèle de référence:
+      Si l'entrée est faisable, elle est elle-même une solution du sous-problème : on ajoute la borne
       ``cout_total ≤ coût de couverture de l'entrée``, qui garantit un résultat au moins aussi bon et élague.
-      Une entrée infaisable n'a pas de borne : le ``LocalSolver`` la répare.
+    - Cas du modèle assoupli:
+      Si l'entrée n'a pas de violation structurelle elle peut être améliorée avec la borne:
+      cout_penalise <= CostEvaluator.total(entrée)
+
     - Sans solution (insatisfiable, ou budget épuisé), on rend l'entrée inchangée, avec l'issue : ce n'est pas
       une erreur.
 
@@ -228,13 +232,24 @@ class MiniZincLocalSolver(LocalSolver):
         return constraints
 
     def cost_bound_constraints(self, horaire: Horaire) -> list[str]:
-        """La borne ``cout_total ≤ coût de couverture de horaire`` si ``horaire`` est faisable ET que la contrainte de
-        couverture non-nulle est respectée, sinon, aucune.
+        """La borne de coût du sous-problème, sur l'objectif du modèle résolu (``self.adapter.model``, D12).
 
-        Utilise ``LocalSearchConstraints.COST_BOUND`` et ``ModelObjective.TOTAL_COST``.
+        Une borne n'est sûre que si ``horaire`` est lui-même une solution du sous-problème :
+            - modèle assoupli (``model.penalizes_coverage``) : ``cout_penalise ≤ CostEvaluator.total(horaire)``
+              dès que ``horaire`` n'a aucune violation structurelle, même s'il viole « au moins 1 » ;
+            - modèle de référence : ``cout_total ≤ coût de couverture de horaire`` seulement si ``horaire`` est
+              faisable (aucune violation structurelle ni de couverture) ;
+            - sinon, aucune borne (liste vide).
+
+        Utilise ``LocalSearchConstraints.COST_BOUND`` et ``self.adapter.model.objective``.
         """
         breakdown = self.evaluator.evaluate(horaire)
-        if breakdown.is_feasible:
-            return [LocalSearchConstraints.COST_BOUND.format(objective=ModelObjective.TOTAL_COST,
-                                                             bound=breakdown.coverage_cost)]
+        if self.adapter.model.penalizes_coverage:
+            if breakdown.structural_violations == 0:
+                return [LocalSearchConstraints.COST_BOUND.format(objective=self.adapter.model.objective,
+                                                                 bound=breakdown.total)]
+        else:
+            if breakdown.is_feasible:
+                return [LocalSearchConstraints.COST_BOUND.format(objective=self.adapter.model.objective,
+                                                                 bound=breakdown.total)]
         return []

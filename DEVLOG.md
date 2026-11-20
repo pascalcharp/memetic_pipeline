@@ -804,3 +804,125 @@ Seconde relecture de la PR #8 après les corrections de Mély (commit `56f823f`)
 - Détails mineurs laissés à sa discrétion, sans bloquer la fusion : espaces en fin de ligne dans les imports de `collectors.py`, lignes vides entre les classes, message `INVALID_POPULATION` sans espace réservé (par exemple `{generation}`) pour le diagnostic, `96` et `42` écrits en dur dans les nouveaux tests.
 
 Suite complète verte sur `main` après la fusion.
+
+## 2026-11-20 — Étape 5c : D12 tranchée, plan du modèle assoupli (Pascal et Claude)
+
+**Décision D12 : deux fichiers.**
+- `src/model/horaire_assoupli.mzn` (nouveau) : la couverture « au moins 1 » devient le compteur `violations_couverture`, et l'objectif `cout_penalise = cout_total + POIDS_COUVERTURE × violations_couverture`. C'est le modèle du pipeline : il minimise la même fonction de coût que `CostEvaluator.total`, avec le poids fourni par Python (`PenaltyWeights.coverage_violation`).
+- `src/model/horaire.mzn` : le modèle original fourni, gardé **inchangé** comme référence (couverture dure). Il sert aux comparaisons (résolution complète, variante « peine de mort ») et reste la spécification d'origine du problème.
+
+**Pourquoi deux fichiers plutôt qu'un modèle paramétré (`COUVERTURE_DURE: bool`)** : le modèle fourni reste intact et lisible tel quel, et chaque fichier a un seul objectif. Le prix : la logique commune existe en deux copies MiniZinc, à garder alignées (lien avec D13, à reprendre après 5c).
+
+**Conséquence sur l'architecture** : le `SolverAdapter` reçoit le modèle à résoudre (Stratégie, D5) ; une variante décrit le fichier, le nom de son objectif et si elle attend le poids de la pénalité. La borne de coût du `LocalSolver` dépend de la variante : avec le modèle assoupli, elle porte sur `cout_penalise` et se pose dès que l'entrée n'a aucune violation structurelle.
+
+Plan détaillé dans TODO.md, 5c. Prochaine tâche : scaffold et tests (Claude), puis le modèle, l'adaptateur et la borne (Pascal).
+
+## 2026-11-20 — Étape 5c : scaffold et tests du modèle assoupli (Claude)
+
+**Fait (C)**, branche `etape-5c-couverture-souple` :
+- `ProjectPaths` : `REFERENCE_MODEL_FILE` (`horaire.mzn`) et `RELAXED_MODEL_FILE` (`horaire_assoupli.mzn`) remplacent `MODEL_FILE` (sonde MiniZinc et test de fumée : modèle de référence).
+- `solver.py` : `ModelVariant` (nom, fichier, objectif, `penalizes_coverage`) avec `parameters(weights)` en squelette ; `ModelVariants.REFERENCE` et `ModelVariants.RELAXED` ; `ModelObjective.PENALIZED_COST` ; `RelaxedModelNames` (`POIDS_COUVERTURE`, `violations_couverture`). Le `SolverAdapter` reçoit `model` (`RELAXED` par défaut) et `weights` ; `solve` résout encore le modèle de référence, en attendant l'implémentation.
+- `local_search.py` : contrat de `cost_bound_constraints` selon la variante (docstring) ; le corps garde la règle d'avant 5c.
+- `horaire_assoupli.mzn` : copie exacte de `horaire.mzn`, avec en tête la liste des changements à faire.
+- Tests : `tests/test_relaxed_model.py` (nouveau, appelle MiniZinc : empreinte de `horaire.mzn`, optimum de bench_1 avec les deux modèles, validation croisée terme par terme sur quatre horaires fixés dont trois qui violent « au moins 1 », instance à couverture impossible, poids transmis par Python) ; `test_solver.py` (variantes et paramètres, sans MiniZinc ; modèle et poids de l'adaptateur) ; `test_local_search.py` (bornes du modèle assoupli, sans MiniZinc ; CP-SAT : plus d'UNSAT avec le modèle assoupli, l'ancien cas UNSAT passe au modèle de référence).
+
+**État** : 12 tests rouges (7 échecs, 5 erreurs), tous les autres verts. Validés contre une implémentation de référence jetable, hors du dépôt : suite complète verte (416 tests).
+
+**Découverte en validant** : dès qu'une variable porte `::add_to_output`, minizinc-python ne rend plus que les variables annotées. Le modèle assoupli doit donc annoter aussi les six variables de décision, sinon le `SolverAdapter` échoue (`'Solution' object has no attribute 'debut'`). Ajouté à l'en-tête du modèle et à TODO.md.
+
+**À surveiller** : avec l'implémentation jetable, la suite complète a pris environ deux fois plus de temps (116 s au lieu de 56 s), le modèle assoupli devenant celui du pipeline. C'est le point « effet du poids sur la propagation et le temps de CP-SAT » du plan : à mesurer par module.
+
+**Limite connue** : `test_relaxed_model_improves_a_coverage_violation_with_two_freed_employees` passe déjà avec le modèle de référence sur bench_1 (deux employés libérés sur trois suffisent à couvrir). Le cas qui distingue vraiment les deux modèles (bench_3 et bench_5, 6 cas sur 6 en UNSAT le 2026-11-13) relève des mesures prévues au plan.
+
+## 2026-11-20 — Étape 5c : modèle assoupli comparé au modèle de référence en résolution complète (Pascal et Claude)
+
+**Fait (P)** : `horaire_assoupli.mzn` écrit par Pascal (paramètre `POIDS_COUVERTURE`, compteur `violations_couverture`, objectif `cout_penalise`, annotations `::add_to_output`). Correctif après revue : l'annotation se place avant le `=` (`var int: x :: add_to_output = expr;`) ; placée après l'expression, elle annote l'expression, MiniZinc l'accepte sans rien dire et la variable n'est pas rendue. La validation croisée Python / MiniZinc (`TestCrossValidation`) est verte : mêmes `violations_couverture`, `cout_total` et `cout_penalise` que `CostEvaluator` sur les quatre horaires.
+
+**Mesures (C)** : résolution complète des deux modèles sur les cinq bench, CP-SAT, poids de 1 000 000. Scripts jetables, hors du dépôt.
+
+Série 1 — 1 thread, graine 0, 120 unités déterministes (les conditions du pipeline, D7 et D10) :
+
+| Bench | Référence : objectif (violations) | Assoupli : objectif (violations) |
+|---|---|---|
+| bench_1 | 94, optimum prouvé (0) | 94, optimum prouvé (0) |
+| bench_2 | 38 (0) | 38 (0) |
+| bench_3 | 9 000 080 (0) | 93 000 118 (45) |
+| bench_4 | aucune solution (budget épuisé, statut `UNKNOWN`, pas un UNSAT) | 154 000 178 (73) |
+| bench_5 | 32 000 343 (0) | 151 000 463 (96) |
+
+Série 2 — 8 threads, au plus 180 s de temps mural ; tous les optimums sont prouvés :
+
+| Bench | Optimum | Référence : 1ʳᵉ solution / optimum prouvé | Assoupli : 1ʳᵉ solution / optimum prouvé |
+|---|---|---|---|
+| bench_1 | 94 | 0,16 s / 0,18 s | 0,14 s / 0,16 s |
+| bench_2 | 38 | 0,14 s / 1,1 s | 0,16 s / 0,9 s |
+| bench_3 | 16 | 0,45 s / 2,0 s | 0,41 s / 1,5 s |
+| bench_4 | 10 | 0,55 s / 1,6 s | 0,58 s / 2,0 s |
+| bench_5 | 267 | 0,77 s / 48,9 s | 0,83 s / 40,7 s |
+
+**Conclusions**
+- Le modèle assoupli prouve les mêmes optimums que le modèle de référence, sans violation à l'optimum. En multithread, les temps sont équivalents : écarts de −20 % à +25 % dans les deux sens, sur une seule mesure chacun, donc du bruit.
+- En monothread et à budget égal, l'assoupli est nettement moins bon sur bench_3 à bench_5 : la contrainte dure élimine d'emblée les horaires qui laissent une cellule vide, la pénalité ne propage rien. Ses premières solutions ont beaucoup de violations (88 000 097 contre 21 000 083 sur bench_3, en multithread aussi) ; avec 8 threads, CP-SAT les élimine en moins d'une seconde, avec 1 thread il n'y arrive pas en 120 unités. En contrepartie, il trouve toujours une solution (bench_4 : aucune avec la contrainte dure).
+- Le modèle de référence reste le bon outil pour une résolution complète ; il est gardé pour cela (D12).
+- La mesure décisive reste celle du `LocalSolver` (1 thread, 2 employés libérés, bench_3 et bench_5 ; 6 cas sur 6 en UNSAT avec la contrainte dure le 2026-11-13), où la borne de coût élague dès le départ. À faire quand `solve` et la borne seront écrits.
+- Ne pas baisser le poids pour compenser : la lenteur vient de l'absence de propagation, pas de la taille du poids ; un poids plus faible ferait seulement préférer des violations à une sous-couverture coûteuse.
+
+## 2026-11-20 — Étape 5c : `SolverAdapter` et borne du `LocalSolver` validés ; mesure sur bench_5 (Pascal, revue par Claude)
+
+**Fait (P)** : `ModelVariant.parameters`, `SolverAdapter.solve` (résout `self.model.path`, transmet `POIDS_COUVERTURE`), `MiniZincLocalSolver.cost_bound_constraints` selon la variante, docstring du module.
+
+**Correctifs après revue**
+- `solve` : le poids était ajouté au modèle comme une nouvelle déclaration (`add_string("var int POIDS_COUVERTURE = …")`) : erreur de syntaxe, et, corrigée, une double déclaration d'une variable de décision. Le paramètre déjà déclaré reçoit une valeur, comme les données de l'instance : `minizinc_instance[name] = value`.
+- Borne : d'abord posée seulement pour une entrée faisable, avec `coverage_cost`, puis conditionnée à `coverage_violations == 0`. La règle de D12 est `structural_violations == 0`, avec `total` comme borne : une entrée qui viole « au moins 1 » est une solution du sous-problème assoupli, et `coverage_cost` seul (160 au lieu de 21 000 160 dans le test) rendrait ce sous-problème insatisfiable. L'objectif vient de `self.adapter.model.objective`, plus de nom écrit en dur.
+
+**Mesure décisive (C) : le `LocalSolver` sur bench_5**, le cas qui a motivé D12. Initialisation de 6 individus tirés au hasard, 2 employés libérés, 1 thread, 5 unités par appel (ancien `test_unrepairable_samples_enter_unchanged_on_bench_5`) :
+
+| Appel | Issue | Coût total avant (violations) | Coût total après (violations) |
+|---|---|---|---|
+| 1 | solution | 101 000 373 (54) | 86 000 396 (47) |
+| 2 | solution | 86 000 399 (55) | 71 000 398 (44) |
+| 3 | solution | 84 000 362 (40) | 55 000 387 (30) |
+| 4 | budget épuisé | 80 000 359 (45) | inchangé |
+| 5 | solution | 83 000 362 (43) | 64 000 375 (29) |
+| 6 | solution | 76 000 396 (44) | 66 000 411 (46) |
+
+Avec la contrainte dure : 6 UNSAT sur 6 (2026-11-13). Avec le modèle assoupli : 5 améliorations sur 6, coût total en baisse de 12 à 35 %, plus aucun UNSAT. L'appel 6 finit avec deux violations de plus mais un coût total plus bas : c'est bien le coût pénalisé qui est minimisé. L'appel 4 épuise son budget sans solution alors que l'entrée en est une : CP-SAT ne la reçoit pas comme point de départ. Piste pour plus tard : la lui fournir comme indice (*warm start*).
+
+**Test d'initialisation revu (C)** : le test bench_5 de `TestInitializationWithCpSat` prenait 55 s, parce que les sous-problèmes autrefois insatisfiables dès l'aplatissement sont maintenant vraiment résolus. Son idée de départ (sans solution à cause de la contrainte dure) ne tenait plus ; il passait encore seulement grâce à l'appel 4. Remplacé par deux tests, sur 3 individus et 1 unité :
+- `test_reference_model_leaves_unrepairable_samples_unchanged_on_bench_5` : avec le modèle de référence, au moins un UNSAT, l'horaire tiré gardé tel quel (1,4 s) ;
+- `test_relaxed_model_improves_samples_on_bench_5` : avec le modèle assoupli, aucun UNSAT et au moins un horaire strictement amélioré (3,5 s ; les trois le sont).
+- `assert_common_invariants` vérifie la borne selon la variante : `total` jamais pire dès que l'horaire tiré n'a pas de violation structurelle (assoupli), `coverage_cost` jamais pire s'il est faisable (référence).
+
+Suite complète verte : 417 tests en 67 s (116 s avant la révision du test, 56 s avant 5c).
+
+Sortie JSON du modèle assoupli : `violations_couverture` et `cout_penalise` ajoutés (Pascal) ; correctif après revue, les virgules entre les champs, que `json.loads` refusait (minizinc-python n'utilise pas cet item `output`, les tests ne pouvaient pas le voir). Vérifiée sur bench_1 : `Cout` = 94, `violations_couverture` = 0, `cout_penalise` = 94. L'en-tête du fichier, qui liste les changements de 5c, est gardé tel quel.
+
+**Reste pour 5c** : la même mesure sur bench_3 ; suivi (`docs/PROBLEME.md`, `docs/PROJECT_STRUCT.md`, arbre de CLAUDE.md).
+
+## 2026-11-20 — Étape 5c : mesure du `LocalSolver` sur bench_3 (Claude)
+
+Même protocole que le 2026-11-13 : graine 0, 6 horaires tirés au hasard par `RandomBlockInitializer`, 2 employés libérés, CP-SAT 1 thread, 5 unités déterministes par appel. Les deux modèles sur les mêmes horaires tirés.
+
+| Appel | Coût total tiré (violations) | Référence | Assoupli : coût après (violations) | Baisse |
+|---|---|---|---|---|
+| 1 | 40 000 090 (16) | UNSAT | 25 000 085 (9) | 37 % |
+| 2 | 45 000 067 (19) | UNSAT | 31 000 054 (9) | 31 % |
+| 3 | 99 000 051 (39) | UNSAT | 51 000 047 (17) | 48 % |
+| 4 | 57 000 114 (23) | UNSAT | 37 000 068 (11) | 35 % |
+| 5 | 88 000 123 (39) | UNSAT | 47 000 097 (20) | 47 % |
+| 6 | 83 000 110 (35) | UNSAT | 51 000 090 (22) | 39 % |
+
+- Modèle de référence : 6 UNSAT sur 6, comme le 2026-11-13 (2,5 s en tout).
+- Modèle assoupli : 6 solutions sur 6 (budget épuisé, optimalité non prouvée), coût total en baisse de 31 à 48 %, violations de couverture divisées par deux environ ; aucune violation structurelle (24,4 s en tout, 3,3 à 4,0 s par appel).
+- Avec bench_5 (5 améliorations sur 6, un budget épuisé sans solution), D12 atteint son objectif : le `LocalSolver` améliore les horaires qui violent « au moins 1 », au lieu de les rendre inchangés.
+- Coût : chaque appel utilise maintenant son budget (environ 4 s pour 5 unités), au lieu d'échouer en quelques millisecondes. Le budget par appel devient un vrai paramètre d'expérience (étape 10), à mettre en balance avec le nombre d'appels par génération (NR, NM).
+
+Toutes les cases de 5c sont cochées, sauf le suivi de la documentation.
+
+## 2026-11-20 — Étape 5c : empreinte de `horaire.mzn` indépendante des fins de ligne (Claude)
+
+**Blocage** : la CI de la PR #9 a échoué sur `test_reference_model_is_unchanged` (empreinte `8930e402…` au lieu de `ba6ba10d…`). Le modèle n'avait pas changé : la copie de travail de Pascal a des fins de ligne Windows (CRLF), alors que Git stocke le fichier en fins de ligne Unix (`core.autocrlf=input`), et l'empreinte du test avait été calculée sur la copie locale.
+
+**Correctif** : le test remplace les CRLF par des LF avant de calculer l'empreinte, qui est maintenant celle du fichier tel que Git le stocke. Il passe sur la copie CRLF comme sur une copie LF (la CI).
+
+**Leçon** : une empreinte de fichier dans un test se calcule sur un contenu normalisé, ou sur le blob Git (`git show HEAD:<fichier>`), jamais sur la seule copie de travail.
