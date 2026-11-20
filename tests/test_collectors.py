@@ -32,6 +32,7 @@ from src.observability.collectors import (
     FeasibilityFields,
     FeasibilityRateCollector,
     InvalidCollectorParameterError,
+    InvalidPopulationError,
     MetricCollector,
     RecordFields,
     RecordNames,
@@ -232,6 +233,8 @@ class TestCostStatisticsCollector(unittest.TestCase):
         self.assertEqual(record[CostStatisticsFields.SIZE], 4)
         self.assertEqual(record[CostStatisticsFields.TOTAL_MIN], 10)
         self.assertEqual(record[CostStatisticsFields.TOTAL_MAX], 40)
+        self.assertIs(type(record[CostStatisticsFields.TOTAL_MIN]), int)
+        self.assertIs(type(record[CostStatisticsFields.TOTAL_MAX]), int)
         self.assertAlmostEqual(record[CostStatisticsFields.TOTAL_MEAN], 25.0, places=PLACES)
         self.assertAlmostEqual(record[CostStatisticsFields.TOTAL_MEDIAN], 25.0, places=PLACES)
         self.assertAlmostEqual(record[CostStatisticsFields.TOTAL_STDEV], math.sqrt(125.0), places=PLACES)
@@ -375,6 +378,42 @@ class TestFeasibilityRateCollector(unittest.TestCase):
         self.assertIsNone(records[0][FeasibilityFields.OPERATOR])
         self.assertEqual(records[0][FeasibilityFields.ORIGIN], Origins.INITIALIZATION)
 
+    def test_givenRunStarted_whenNewRunBegins_thenFeasibilityCountsAreReset(self) -> None:
+        collector = FeasibilityRateCollector()
+        population = (labeled_individual("A", FEASIBLE_COST),)
+
+        # Première exécution : un croisement infaisable devient faisable.
+        collector.on_event(
+            local_search_done(1, Origins.CROSSOVER, CROSSOVER_NAME, False, True)
+        )
+        collector.on_event(GenerationEnded(generation=1, population=population))
+
+        # Début d'une nouvelle exécution avec le même collecteur.
+        collector.on_event(
+            RunStarted(
+                master_seed=42,
+                population_size=1,
+                crossover_count=1,
+                mutation_count=0,
+            )
+        )
+
+        # Deuxième exécution : une mutation faisable reste faisable.
+        collector.on_event(
+            local_search_done(1, Origins.MUTATION, MUTATION_NAME, True, True)
+        )
+        collector.on_event(GenerationEnded(generation=1, population=population))
+        records = collector.on_event(RunEnded(generations=1, best=population[0]))
+
+        # Le cumul ne doit contenir que la deuxième exécution.
+        self.assertEqual(len(records), 1)
+        record = records[0]
+        self.assertEqual(record[RecordFields.SCOPE], Scopes.CUMULATIVE)
+        self.assertEqual(record[FeasibilityFields.ORIGIN], Origins.MUTATION)
+        self.assertEqual(record[FeasibilityFields.COUNT], 1)
+        self.assertEqual(record[FeasibilityFields.FEASIBLE_BEFORE], 1)
+        self.assertEqual(record[FeasibilityFields.FEASIBLE_AFTER], 1)
+
 
 # ---------------------------------------------------------------------------------------------------------------------
 # Charge du solveur
@@ -433,6 +472,100 @@ class TestSolverEffortCollector(unittest.TestCase):
         self.assertEqual(record[SolverEffortFields.FAILURES], 9)
         self.assertEqual(record[SolverEffortFields.PROPAGATIONS], 150)
         self.assertAlmostEqual(record[SolverEffortFields.SOLVE_TIME_SECONDS], 0.75, places=PLACES)
+
+
+    def test_givenRunStarted_whenNewRunBegins_thenSolverEffortIsReset(self) -> None:
+        collector = SolverEffortCollector()
+        population = (labeled_individual("A", FEASIBLE_COST),)
+
+        # Première exécution : 5 échecs rapportés.
+        collector.on_event(
+            local_search_done(
+                1,
+                Origins.CROSSOVER,
+                CROSSOVER_NAME,
+                statistics=SolverStatistics(
+                    failures=5,
+                    propagations=100,
+                    solve_time=timedelta(seconds=0.5),
+                ),
+            )
+        )
+
+        # Début d'une nouvelle exécution.
+        collector.on_event(
+            RunStarted(
+                master_seed=42,
+                population_size=1,
+                crossover_count=1,
+                mutation_count=0,
+            )
+        )
+
+        # Deuxième exécution : seulement 2 échecs.
+        collector.on_event(
+            local_search_done(
+                1,
+                Origins.MUTATION,
+                MUTATION_NAME,
+                statistics=SolverStatistics(
+                    failures=2,
+                    propagations=20,
+                    solve_time=timedelta(seconds=0.25),
+                ),
+            )
+        )
+
+        generation_records = collector.on_event(
+            GenerationEnded(generation=1, population=population)
+        )
+        cumulative_records = collector.on_event(
+            RunEnded(generations=1, best=population[0])
+        )
+
+        # Les statistiques de la première exécution doivent être oubliées.
+        self.assertEqual(len(generation_records), 1)
+        self.assertEqual(len(cumulative_records), 1)
+
+        for record in generation_records + cumulative_records:
+            self.assertEqual(record[SolverEffortFields.CALLS], 1)
+            self.assertEqual(record[SolverEffortFields.FAILURES], 2)
+            self.assertEqual(record[SolverEffortFields.PROPAGATIONS], 20)
+            self.assertAlmostEqual(
+                record[SolverEffortFields.SOLVE_TIME_SECONDS],
+                0.25,
+                places=PLACES,
+            )
+
+class TestInvalidCollectorPopulation(unittest.TestCase):
+    """Vérifie que les collecteurs refusent les populations invalides."""
+
+    def test_givenEmptyPopulation_whenGenerationEnded_thenBothCollectorsRaise(self):
+        event = GenerationEnded(generation=0, population=[])
+
+        collectors = [
+            CostStatisticsCollector(),
+            DiversityCollector(period_count=96),
+        ]
+
+        for collector in collectors:
+            with self.subTest(collector=type(collector).__name__):
+                with self.assertRaises(InvalidPopulationError):
+                    collector.on_event(event)
+
+    def test_givenUnevaluatedPopulation_whenGenerationEnded_thenBothCollectorsRaise(self):
+        individual = Individu.from_genome((GENE_A,), BlockEncoding())
+        event = GenerationEnded(generation=0, population=[individual])
+
+        collectors = [
+            CostStatisticsCollector(),
+            DiversityCollector(period_count=96),
+        ]
+
+        for collector in collectors:
+            with self.subTest(collector=type(collector).__name__):
+                with self.assertRaises(InvalidPopulationError):
+                    collector.on_event(event)
 
 
 if __name__ == "__main__":

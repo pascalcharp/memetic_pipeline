@@ -14,9 +14,21 @@ Collecteurs prévus (étape 8b, Mély) : coût, diversité, taux de faisabilité
 """
 
 from abc import ABC, abstractmethod
+from collections import Counter
+from dataclasses import dataclass
 from statistics import mean, median, pstdev
-from src.observability.events import (Event, GenerationEnded, Record, make_record, LocalSearchDone, RunEnded)
-from src.ga.chromosome import BlockGene
+
+from src.memetic.solver import SolverStatistics
+from src.observability.events import (
+    Event, 
+    GenerationEnded,  
+    LocalSearchDone,
+    Record,
+    RunEnded, 
+    RunStarted,
+    make_record,
+)
+
 
 class CollectorDefaults:
     """Paramètres par défaut des collecteurs."""
@@ -103,7 +115,9 @@ class CollectorMessages:
     INVALID_DIVERSITY_EVERY: str = (
         "La diversité se mesure toutes les N générations, N au moins {minimum} ; trouvé {value}."
     )
-
+    INVALID_POPULATION: str = (
+        "La population doit être non vide et tous ses individus doivent être évalués."
+    )
 
 class CollectorError(Exception):
     """Erreur de base des collecteurs."""
@@ -112,6 +126,8 @@ class CollectorError(Exception):
 class InvalidCollectorParameterError(CollectorError):
     """Un paramètre de collecteur est hors de son domaine."""
 
+class InvalidPopulationError(CollectorError):
+    """Une population est vide ou contient un individu non évalué."""
 
 # ---------------------------------------------------------------------------------------------------------------------
 # Interface
@@ -152,9 +168,9 @@ class CostStatisticsCollector(MetricCollector):
 
         # La population doit être non vide et évaluée.
         if not costs or any(cost is None for cost in costs):
-            raise ValueError("La population doit être non vide et évaluée.")
+            raise InvalidPopulationError(CollectorMessages.INVALID_POPULATION)
 
-        totals = [float(cost.total) for cost in costs]
+        totals = [int(cost.total) for cost in costs]
 
         record = make_record(
             RecordNames.COST_STATISTICS,
@@ -184,7 +200,7 @@ class CostStatisticsCollector(MetricCollector):
             },
         )
 
-        return [record] # Étape 8b (Mély)
+        return [record]
 
 
 class DiversityCollector(MetricCollector):
@@ -219,35 +235,20 @@ class DiversityCollector(MetricCollector):
             return []
 
         population = event.population
-        if not population:
-            return []
-
-        # Représentation canonique d'un gène, comparable et triable.
-        def gene_key(gene: BlockGene) -> tuple:
-            return (
-                int(gene.start),
-                tuple(
-                    (int(block.activity), int(block.duration))
-                    for block in gene.blocks
-                ),
-            )
+        if not population or any(individu.cost is None for individu in population):
+            raise InvalidPopulationError(CollectorMessages.INVALID_POPULATION)
 
         # Diversité génotypique : l'ordre des employés ne compte pas.
-        genotypes = set()
-        for individu in population:
-            canonical_genome = tuple(
-                sorted(gene_key(gene) for gene in individu.genome)
-            )
-            genotypes.add(canonical_genome)
+        genotypes: set[frozenset[tuple[object, int]]] = {
+            frozenset(Counter(individu.genome).items())
+            for individu in population
+}
 
         # Diversité phénotypique : comparaison des grilles employé × période.
-        phenotypes = set()
+        phenotypes: set[tuple[tuple[int, ...], ...]] = set()
         for individu in population:
             grid = individu.horaire.to_grid(self.period_count)
-            canonical_grid = tuple(
-                tuple(int(value) for value in row)
-                for row in grid
-            )
+            canonical_grid = tuple(tuple(row) for row in grid.tolist())
             phenotypes.add(canonical_grid)
 
         # Nombre de coûts totaux distincts.
@@ -268,8 +269,14 @@ class DiversityCollector(MetricCollector):
                     DiversityFields.DISTINCT_COSTS: int(distinct_costs),
                 },
             )
-        ] # Étape 8b (Mély)
+        ]
 
+@dataclass
+class _FeasibilityCounts:
+    """Compteurs de faisabilité pour un groupe (origine, opérateur)."""
+    count: int = 0
+    feasible_before: int = 0
+    feasible_after: int = 0
 
 class FeasibilityRateCollector(MetricCollector):
     """Taux de faisabilité (``cost.is_feasible``) avant et après le ``LocalSolver``, par groupe (origine, opérateur),
@@ -286,28 +293,33 @@ class FeasibilityRateCollector(MetricCollector):
     Champs (``RecordFields``, ``FeasibilityFields``) : ``generation``, ``scope``, ``origin``, ``operator`` (``None``
     pour l'initialisation et le restart), ``count`` (nombre d'appels), ``feasible_before``, ``feasible_after``
     (nombres de faisables), ``rate_before``, ``rate_after`` (``float`` dans [0, 1])."""
-
     def __init__(self) -> None:
-        # Statistiques par génération et pour toute l'exécution.
-        self._generation_stats = {}
-        self._cumulative_stats = {}
+        self._generation_stats: dict[tuple[str, str | None], _FeasibilityCounts] = {}
+        self._cumulative_stats: dict[tuple[str, str | None], _FeasibilityCounts] = {}
 
     @staticmethod
-    def _update(stats, event: LocalSearchDone) -> None:
+    def _update(
+        stats: dict[tuple[str, str | None], _FeasibilityCounts],
+        event: LocalSearchDone,
+    ) -> None:
         key = (event.origin, event.operator)
 
         if key not in stats:
-            stats[key] = [0, 0, 0]
+            stats[key] = _FeasibilityCounts()
 
-        stats[key][0] += 1
-        stats[key][1] += int(event.cost_before.is_feasible)
-        stats[key][2] += int(event.cost_after.is_feasible)
+        stats[key].count += 1
+        stats[key].feasible_before += int(event.cost_before.is_feasible)
+        stats[key].feasible_after += int(event.cost_after.is_feasible)
 
     @staticmethod
-    def _make_records(stats, generation: int, scope: str) -> list[Record]:
-        records = []
+    def _make_records(
+        stats: dict[tuple[str, str | None], _FeasibilityCounts],
+        generation: int,
+        scope: str,
+    ) -> list[Record]:
+        records: list[Record] = []
 
-        for (origin, operator), (count, before, after) in stats.items():
+        for (origin, operator), counts in stats.items():
             records.append(
                 make_record(
                     RecordNames.FEASIBILITY_RATES,
@@ -316,18 +328,27 @@ class FeasibilityRateCollector(MetricCollector):
                         RecordFields.SCOPE: scope,
                         FeasibilityFields.ORIGIN: origin,
                         FeasibilityFields.OPERATOR: operator,
-                        FeasibilityFields.COUNT: int(count),
-                        FeasibilityFields.FEASIBLE_BEFORE: int(before),
-                        FeasibilityFields.FEASIBLE_AFTER: int(after),
-                        FeasibilityFields.RATE_BEFORE: float(before / count),
-                        FeasibilityFields.RATE_AFTER: float(after / count),
+                        FeasibilityFields.COUNT: counts.count,
+                        FeasibilityFields.FEASIBLE_BEFORE: counts.feasible_before,
+                        FeasibilityFields.FEASIBLE_AFTER: counts.feasible_after,
+                        FeasibilityFields.RATE_BEFORE: float(
+                            counts.feasible_before / counts.count
+                        ),
+                        FeasibilityFields.RATE_AFTER: float(
+                            counts.feasible_after / counts.count
+                        ),
                     },
                 )
             )
 
         return records
 
+
     def on_event(self, event: Event) -> list[Record]:
+        if isinstance(event, RunStarted):
+            self._generation_stats.clear()
+            self._cumulative_stats.clear()
+            return []
         if isinstance(event, LocalSearchDone):
             self._update(self._generation_stats, event)
             self._update(self._cumulative_stats, event)
@@ -349,7 +370,39 @@ class FeasibilityRateCollector(MetricCollector):
                 Scopes.CUMULATIVE,
             )
 
-        return [] # Étape 8b (Mély)
+        return []
+
+
+@dataclass
+class _SolverEffortCounts:
+    """Statistiques cumulées des appels au solveur."""
+
+    calls: int = 0
+    nodes: int | None = None
+    failures: int | None = None
+    propagations: int | None = None
+    solve_time_seconds: float | None = None
+
+    def add(self, statistics: SolverStatistics) -> None:
+        """Additionne les statistiques rapportées par un appel."""
+        self.calls += 1
+
+        if statistics.nodes is not None:
+            self.nodes = (self.nodes or 0) + statistics.nodes
+
+        if statistics.failures is not None:
+            self.failures = (self.failures or 0) + statistics.failures
+
+        if statistics.propagations is not None:
+            self.propagations = (
+                (self.propagations or 0) + statistics.propagations
+            )
+
+        if statistics.solve_time is not None:
+            seconds = statistics.solve_time.total_seconds()
+            self.solve_time_seconds = (
+                (self.solve_time_seconds or 0.0) + seconds
+            )
 
 
 class SolverEffortCollector(MetricCollector):
@@ -368,48 +421,38 @@ class SolverEffortCollector(MetricCollector):
     le sont sous limite déterministe."""
 
     def __init__(self) -> None:
-        # Statistiques de la génération et de toute l'exécution.
-        self._generation_stats = []
-        self._cumulative_stats = []
+        self._generation_stats: _SolverEffortCounts = _SolverEffortCounts()
+        self._cumulative_stats: _SolverEffortCounts = _SolverEffortCounts()
 
     @staticmethod
-    def _make_record(statistics, generation: int, scope: str) -> Record:
-        # Additionne une statistique, en ignorant les valeurs None.
-        # Si aucune valeur n'est rapportée, le résultat reste None.
-        def total(attribute: str):
-            values = [
-                getattr(stat, attribute)
-                for stat in statistics
-                if getattr(stat, attribute) is not None
-            ]
-            return int(sum(values)) if values else None
-
-        # Le temps est un timedelta : conversion en secondes.
-        times = [
-            stat.solve_time.total_seconds()
-            for stat in statistics
-            if stat.solve_time is not None
-        ]
-
+    def _make_record(
+        statistics: _SolverEffortCounts,
+        generation: int,
+        scope: str,
+    ) -> Record:
         return make_record(
             RecordNames.SOLVER_EFFORT,
             **{
-                RecordFields.GENERATION: int(generation),
+                RecordFields.GENERATION: generation,
                 RecordFields.SCOPE: scope,
-                SolverEffortFields.CALLS: int(len(statistics)),
-                SolverEffortFields.NODES: total("nodes"),
-                SolverEffortFields.FAILURES: total("failures"),
-                SolverEffortFields.PROPAGATIONS: total("propagations"),
-                SolverEffortFields.SOLVE_TIME_SECONDS: (
-                    float(sum(times)) if times else None
-                ),
+                SolverEffortFields.CALLS: statistics.calls,
+                SolverEffortFields.NODES: statistics.nodes,
+                SolverEffortFields.FAILURES: statistics.failures,
+                SolverEffortFields.PROPAGATIONS: statistics.propagations,
+                SolverEffortFields.SOLVE_TIME_SECONDS: statistics.solve_time_seconds,
             },
         )
 
     def on_event(self, event: Event) -> list[Record]:
+        if isinstance(event, RunStarted):
+            self._generation_stats = _SolverEffortCounts()
+            self._cumulative_stats = _SolverEffortCounts()
+            return []
         if isinstance(event, LocalSearchDone):
-            self._generation_stats.append(event.result.statistics)
-            self._cumulative_stats.append(event.result.statistics)
+            statistics = event.result.statistics
+
+            self._generation_stats.add(statistics)
+            self._cumulative_stats.add(statistics)
             return []
 
         if isinstance(event, GenerationEnded):
@@ -418,7 +461,8 @@ class SolverEffortCollector(MetricCollector):
                 event.generation,
                 Scopes.GENERATION,
             )
-            self._generation_stats.clear()
+
+            self._generation_stats = _SolverEffortCounts()
             return [record]
 
         if isinstance(event, RunEnded):
@@ -430,4 +474,4 @@ class SolverEffortCollector(MetricCollector):
                 )
             ]
 
-        return [] # Étape 8b (Mély)
+        return []
