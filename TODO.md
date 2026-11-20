@@ -190,19 +190,19 @@ Décision D12 (2026-11-20) : deux fichiers. `horaire.mzn` reste **inchangé** (r
   - `ProjectPaths` : `REFERENCE_MODEL_FILE` (`horaire.mzn`) et `RELAXED_MODEL_FILE` (`horaire_assoupli.mzn`), à la place de `MODEL_FILE` ;
   - `solver.py` : description d'un modèle (`ModelVariant` : fichier, nom de l'objectif, pénalité de couverture ou non) et les deux variantes (`ModelVariants.REFERENCE`, `ModelVariants.RELAXED`) ; noms des nouvelles variables (`violations_couverture`, `cout_penalise`, paramètre `POIDS_COUVERTURE`) ; le `SolverAdapter` reçoit la variante et les poids, `RELAXED` par défaut ;
   - tests rouges qui servent de cahier des charges (liste ci-dessous).
-- [ ] **Modèle** `horaire_assoupli.mzn` **(P)**, copie de `horaire.mzn` :
+- [x] **Modèle** `horaire_assoupli.mzn` **(P)**, copie de `horaire.mzn` (écrit et validé le 2026-11-20) :
   - paramètre `int: POIDS_COUVERTURE`, fourni par Python ;
   - la contrainte « au moins 1 » devient un compteur `violations_couverture` (cellules de `RPER × RACT` où `demande > 0` et `total = 0`), sur les mêmes cellules que `CostEvaluator` (plage utile) ;
   - nouvel objectif `cout_penalise = cout_total + POIDS_COUVERTURE × violations_couverture`, et `solve minimize cout_penalise` ; `cout_total` reste défini, pour la décomposition du coût ;
   - `violations_couverture` et `cout_penalise` dans la sortie JSON ;
   - `violations_couverture`, `cout_total` et les six variables de décision annotés `::add_to_output` (sinon minizinc-python ne rend plus les variables de décision) ;
   - vérifier l'effet du poids de 1 000 000 sur la propagation et le temps de CP-SAT ; débordement : au plus 48 × 5 = 240 cellules, donc au plus 2,4 × 10⁸ de pénalité, sous 2³¹.
-- [ ] **`SolverAdapter`** (`solver.py`) **(P)** : résout le fichier de la variante ; passe `POIDS_COUVERTURE` seulement à une variante qui a la pénalité. Résolution complète (D10) : sur les bench actuels, l'optimum ne change pas, puisqu'ils respectent « au moins 1 » à l'optimum.
-- [ ] **`MiniZincLocalSolver`** (`local_search.py`) **(P)** :
+- [x] **`SolverAdapter`** (`solver.py`) **(P)** : résout le fichier de la variante ; passe `POIDS_COUVERTURE` seulement à une variante qui a la pénalité. Résolution complète (D10) : sur les bench actuels, l'optimum ne change pas, puisqu'ils respectent « au moins 1 » à l'optimum.
+- [x] **`MiniZincLocalSolver`** (`local_search.py`) **(P)** :
   - variante assouplie : borne `cout_penalise ≤ CostEvaluator.total(entrée)`, posée dès que l'entrée n'a **aucune violation structurelle** (elle est alors une solution du sous-problème), même si elle viole « au moins 1 » ;
   - variante de référence : règle actuelle (borne sur `cout_total` seulement si l'entrée est faisable) ;
   - mettre à jour la docstring du module et la règle de D11 (« une entrée infaisable n'a pas de borne »).
-- [ ] **Tests** :
+- [~] **Tests** (tous verts le 2026-11-20 ; reste la mesure sur bench_3) :
   - `horaire.mzn` inchangé (empreinte du fichier) ; les deux fichiers existent ;
   - validation croisée Python / MiniZinc : pour des horaires fixés à la main, dont certains qui violent « au moins 1 », `cout_penalise` du modèle assoupli = `CostEvaluator.total`, et `violations_couverture` = `coverage_violations` ;
   - instance construite pour que « au moins 1 » soit impossible à respecter ⇒ solution rendue par le modèle assoupli (plus d'UNSAT), avec le bon nombre de violations ; le modèle de référence donne UNSAT ;
