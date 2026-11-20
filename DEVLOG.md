@@ -793,3 +793,14 @@ Tests
 - Les tests spécifiques aux populations invalides et à la remise à zéro entre deux exécutions restent à ajouter.
 
 Reste avant la fusion : ajouter les tests spécifiques manquants, compléter `TODO.md` et `TEAM.md`, relancer la suite complète et faire réviser les corrections dans la Pull Request.
+
+## 2026-11-20 — Étape 8b : seconde revue et fusion de la PR #8 (Pascal et Claude)
+
+Seconde relecture de la PR #8 après les corrections de Mély (commit `56f823f`), puis fusion dans `main` (`979fd57`).
+
+- Les points « à corriger » de la première revue (2026-11-19, commentaire sur la PR) sont tous réglés : `InvalidPopulationError` avec son gabarit dans `CollectorMessages`, même règle dans les deux collecteurs qui lisent la population ; `total_min` et `total_max` en `int` ; dataclasses `_FeasibilityCounts` et `_SolverEffortCounts` à la place des indices et des `getattr` ; remise à zéro au `RunStarted`.
+- Les tests annoncés comme « restant à ajouter » dans l'entrée du 2026-11-19 ont été écrits sur la branche avant la fusion : populations vides ou non évaluées (les deux collecteurs) et remise à zéro entre deux exécutions (les deux collecteurs avec état). `tests.test_collectors` compte maintenant 28 tests.
+- Les journaux de Mély avaient été poussés directement sur `main` (`0df9f44`, `3d65b08`) avant la fin de la PR ; ce commit les complète (cases de TODO.md et de TEAM.md) sans modifier son entrée.
+- Détails mineurs laissés à sa discrétion, sans bloquer la fusion : espaces en fin de ligne dans les imports de `collectors.py`, lignes vides entre les classes, message `INVALID_POPULATION` sans espace réservé (par exemple `{generation}`) pour le diagnostic, `96` et `42` écrits en dur dans les nouveaux tests.
+
+Suite complète verte sur `main` après la fusion.

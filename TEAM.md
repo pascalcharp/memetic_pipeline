@@ -230,7 +230,7 @@ Rappel : les tests peuvent être écrits par un agent de codage (règle 0 de CLA
 **Tests** : `python -m unittest tests.test_population` (sans MiniZinc). Individus construits à la main avec des coûts choisis (`tests/fixtures.py`) ; faux `PopulationInitializer` pour le restart. Cas : taille conservée, meilleur jamais perdu, doublons éliminés, moins de μ génomes distincts, peine de mort avec trop peu de faisables, stagnation détectée après exactement G générations puis remise à zéro, élite conservée au restart.
 
 ### Mély — Étape 8b : collecteurs de l'observabilité
-- [ ] Étape 8b
+- [x] Étape 8b
 
 **Fichiers**
 - `src/observability/collectors.py`

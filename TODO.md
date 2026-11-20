@@ -258,8 +258,8 @@ Répartition et règles communes : [`TEAM.md`](TEAM.md). Les étapes 5b, 6, 7a e
 - [x] Collecteur de **taux de faisabilité** des enfants, par opérateur, avant et après le `LocalSolver` (s'appuie sur `CostBreakdown.is_feasible` et les compteurs de violations) **(P)**
 - [x] Collecteur de **charge cumulée du solveur** (D10), émis avec `local_search_done` **(P)**
 - [ ] `MongoSink` si D9 est retenue **(C)** — proposition pour la rencontre : reportée, les fichiers de `results/` suffisent pour le POC
-- [ ] Tests : événements reçus dans l'ordre (`MemorySink`), fichiers JSONL/CSV relisibles, collecteurs sur des populations construites à la main, mesure sans effet sur le générateur aléatoire du moteur
-- [ ] Tests supplémentaires : populations vides ou non évaluées et remise à zéro des compteurs à RunStarted
+- [x] Tests : événements reçus dans l'ordre (`MemorySink`), fichiers JSONL/CSV relisibles, collecteurs sur des populations construites à la main, mesure sans effet sur le générateur aléatoire du moteur
+- [x] Tests supplémentaires : populations vides ou non évaluées et remise à zéro des compteurs à RunStarted
 
 ## Étape 9 — Boucle mémétique `Memetic(NR, NM)` **(C→P)** — interfaces par Claude dans le scaffold commun ; moteur par Xavier, branche `etape-9-boucle`
 - [ ] `MemeticConfig` (dataclass) : stratégies choisies + paramètres scalaires (NR, NM, taille, graine)
