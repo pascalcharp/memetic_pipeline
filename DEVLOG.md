@@ -804,3 +804,15 @@ Seconde relecture de la PR #8 après les corrections de Mély (commit `56f823f`)
 - Détails mineurs laissés à sa discrétion, sans bloquer la fusion : espaces en fin de ligne dans les imports de `collectors.py`, lignes vides entre les classes, message `INVALID_POPULATION` sans espace réservé (par exemple `{generation}`) pour le diagnostic, `96` et `42` écrits en dur dans les nouveaux tests.
 
 Suite complète verte sur `main` après la fusion.
+
+## 2026-11-20 — Étape 5c : D12 tranchée, plan du modèle assoupli (Pascal et Claude)
+
+**Décision D12 : deux fichiers.**
+- `src/model/horaire_assoupli.mzn` (nouveau) : la couverture « au moins 1 » devient le compteur `violations_couverture`, et l'objectif `cout_penalise = cout_total + POIDS_COUVERTURE × violations_couverture`. C'est le modèle du pipeline : il minimise la même fonction de coût que `CostEvaluator.total`, avec le poids fourni par Python (`PenaltyWeights.coverage_violation`).
+- `src/model/horaire.mzn` : le modèle original fourni, gardé **inchangé** comme référence (couverture dure). Il sert aux comparaisons (résolution complète, variante « peine de mort ») et reste la spécification d'origine du problème.
+
+**Pourquoi deux fichiers plutôt qu'un modèle paramétré (`COUVERTURE_DURE: bool`)** : le modèle fourni reste intact et lisible tel quel, et chaque fichier a un seul objectif. Le prix : la logique commune existe en deux copies MiniZinc, à garder alignées (lien avec D13, à reprendre après 5c).
+
+**Conséquence sur l'architecture** : le `SolverAdapter` reçoit le modèle à résoudre (Stratégie, D5) ; une variante décrit le fichier, le nom de son objectif et si elle attend le poids de la pénalité. La borne de coût du `LocalSolver` dépend de la variante : avec le modèle assoupli, elle porte sur `cout_penalise` et se pose dès que l'entrée n'a aucune violation structurelle.
+
+Plan détaillé dans TODO.md, 5c. Prochaine tâche : scaffold et tests (Claude), puis le modèle, l'adaptateur et la borne (Pascal).

@@ -60,10 +60,11 @@ Règle : une seule étape à la fois **par personne et par branche** ; on ne fus
   - **borne de coût** : `cout_total ≤ coût de couverture de l'entrée` seulement si l'entrée est faisable (elle est alors elle-même solution du sous-problème : la borne est sûre et élague). Une entrée infaisable n'a pas de borne : le `LocalSolver` la répare ;
   - **échec** (insatisfiable, ou budget épuisé sans solution) : ce n'est pas une erreur. Le `LocalSolver` rend l'horaire d'entrée inchangé, avec le statut et les statistiques. Les exceptions sur mesure sont réservées aux pannes (MiniZinc absent, erreur du solveur, limite non supportée) ;
   - le `LocalSolver` travaille sur le phénotype `Horaire` (D5) ; le moteur ré-encode le résultat avec l'`Encoding`.
-- [ ] **D12 — Couverture « au moins 1 » dans le `LocalSolver` : contrainte dure ou pénalité ?** (relevée par Pascal le 2026-11-13 ; à trancher en équipe avant l'étape 8, touche `src/model/` et `src/memetic/`, modules partagés) :
+- [x] **D12 — Couverture « au moins 1 » dans le `LocalSolver` : contrainte dure ou pénalité ?** (relevée par Pascal le 2026-11-13 ; à trancher en équipe avant l'étape 8, touche `src/model/` et `src/memetic/`, modules partagés) :
   - constat : l'évaluation (étape 4) pénalise chaque cellule vide où la demande est positive, mais le sous-problème du `LocalSolver` résout `horaire.mzn`, où c'est une contrainte dure (ligne 154). Une entrée qui viole « au moins 1 » avec peu d'employés libérés donne un sous-problème insatisfiable et revient inchangée, au lieu d'être améliorée (mesures du 2026-11-13 dans DEVLOG.md : 6 cas sur 6 sur bench_3 et bench_5 avec 2 employés libérés) ;
   - piste : une variante du modèle où la contrainte devient un terme `poids × cellules vides` dans l'objectif, avec le poids de `PenaltyWeights.coverage_violation` (même fonction de coût que `CostEvaluator.total`) ; le `LocalSolver` choisit le modèle (Stratégie, D5) ; la borne de coût porte alors sur le coût pénalisé, donc s'applique aussi aux entrées infaisables ;
   - questions : un seul modèle paramétré ou deux fichiers ? garder la variante dure pour comparer (lien avec la variante « peine de mort », étape 8) ? effet sur la propagation et le temps de CP-SAT ?
+  - **décision (2026-11-20) : deux fichiers.** `horaire_assoupli.mzn`, où « au moins 1 » est une pénalité, est le modèle du pipeline : il minimise la même fonction de coût que `CostEvaluator.total`. `horaire.mzn`, le modèle original fourni (couverture dure), est gardé tel quel comme référence (résolution complète, comparaisons, variante « peine de mort »). Le `SolverAdapter` reçoit le modèle à résoudre (Stratégie, D5) ; le poids de la pénalité vient de `PenaltyWeights.coverage_violation`, jamais écrit dans le modèle.
 - [ ] **D13 — Redondance entre `horaire.mzn` et le pipeline Python** (relevée par Pascal le 2026-11-13 ; à discuter en équipe, touche `src/model/` et `src/memetic/solver.py`, modules partagés) :
   - constat : les règles du problème existent deux fois. Les **constantes** (durées et écarts du quart : 27, 35, 4, 5, 8…) sont écrites en dur dans `horaire.mzn` et dans `shift_rules.py`. La **logique** (contraintes structurelles, fonction de coût) est dans le modèle et dans `feasibility.py` / `evaluation.py`. Les deux copies peuvent diverger : c'est arrivé avec D12 (couverture pénalisée à l'étape 4, mais encore dure dans le modèle, découvert seulement aux tests d'intégration de l'étape 6) ;
   - limite : la redondance de la logique ne peut pas disparaître entièrement. Évaluer chaque individu avec MiniZinc (toutes les variables fixées) coûte au moins quelques dixièmes de seconde par appel, juste pour la mise à plat, ce qui est beaucoup trop lent pour la boucle génétique. Générer le modèle et le Python à partir d'un langage commun serait trop lourd pour un proof of concept ;
@@ -179,34 +180,39 @@ Principe : toute la documentation est dans `docs/`, et chaque document est acces
   - cas limites : k = 0 (seuls les infaisables sont libérés), k ≥ nombre d'employés (tout est libre), sous-problème insatisfiable ⇒ entrée rendue avec son statut ;
   - reproductibilité : même graine du RNG et même limite déterministe ⇒ même résultat.
 
-### 5c — Couverture « au moins 1 » en pénalité dans `horaire.mzn` (D12) **(P)** — Pascal, branche `etape-5c-couverture-souple`
+### 5c — Couverture « au moins 1 » en pénalité : modèle assoupli `horaire_assoupli.mzn` (D12) **(P)** — Pascal, branche `etape-5c-couverture-souple`
 Constat (tests d'intégration de l'étape 6, 2026-11-13) : `horaire.mzn` impose « au moins 1 employé si demande > 0 » en contrainte dure (ligne 154), alors que `CostEvaluator` la pénalise (étape 4). Une entrée qui viole cette contrainte avec peu d'employés libérés donne un sous-problème insatisfiable : le `LocalSolver` la rend inchangée au lieu de l'améliorer. Objectif : que MiniZinc et le pipeline minimisent **la même fonction de coût**.
 
-Modules partagés touchés : `src/model/horaire.mzn`, `src/memetic/solver.py`, `src/memetic/local_search.py`. Il faut en parler avec l'équipe (TEAM.md) et trancher D12 avant de coder.
+Décision D12 (2026-11-20) : deux fichiers. `horaire.mzn` reste **inchangé** (référence) ; le nouveau `horaire_assoupli.mzn` est le modèle du pipeline. Modules partagés touchés : `src/config.py`, `src/model/` (nouveau fichier seulement), `src/memetic/solver.py`, `src/memetic/local_search.py`.
 
-- [ ] **Trancher D12** (en équipe) :
-  - un seul modèle paramétré (ex. `COUVERTURE_DURE: bool`) ou deux fichiers ?
-  - garder la variante dure pour comparer (lien avec la variante « peine de mort » de l'étape 8) ?
-  - le poids de la pénalité est passé par Python (`PenaltyWeights.coverage_violation`), jamais codé en dur dans le modèle : une seule source de vérité.
-- [ ] **Modèle** `horaire.mzn` :
-  - remplacer la contrainte de la ligne 154 par un compteur `violations_couverture` (cellules de `RPER × RACT` où `demande > 0` et `total = 0`), sur les mêmes cellules que `CostEvaluator` (plage utile) ;
+- [x] **Trancher D12** : deux fichiers, la variante dure gardée comme référence, le poids passé par Python (voir D12).
+- [ ] **Scaffold et tests** **(C)** :
+  - `ProjectPaths` : `REFERENCE_MODEL_FILE` (`horaire.mzn`) et `RELAXED_MODEL_FILE` (`horaire_assoupli.mzn`), à la place de `MODEL_FILE` ;
+  - `solver.py` : description d'un modèle (`ModelVariant` : fichier, nom de l'objectif, pénalité de couverture ou non) et les deux variantes (`ModelVariants.REFERENCE`, `ModelVariants.RELAXED`) ; noms des nouvelles variables (`violations_couverture`, `cout_penalise`, paramètre `POIDS_COUVERTURE`) ; le `SolverAdapter` reçoit la variante et les poids, `RELAXED` par défaut ;
+  - tests rouges qui servent de cahier des charges (liste ci-dessous).
+- [ ] **Modèle** `horaire_assoupli.mzn` **(P)**, copie de `horaire.mzn` :
+  - paramètre `int: POIDS_COUVERTURE`, fourni par Python ;
+  - la contrainte « au moins 1 » devient un compteur `violations_couverture` (cellules de `RPER × RACT` où `demande > 0` et `total = 0`), sur les mêmes cellules que `CostEvaluator` (plage utile) ;
   - nouvel objectif `cout_penalise = cout_total + POIDS_COUVERTURE × violations_couverture`, et `solve minimize cout_penalise` ; `cout_total` reste défini, pour la décomposition du coût ;
-  - ajouter `violations_couverture` et `cout_penalise` à la sortie JSON ;
-  - vérifier l'effet du poids de 1 000 000 sur la propagation et le temps de CP-SAT, et l'absence de débordement des entiers.
-- [ ] **`SolverAdapter`** (`solver.py`) : passer le poids au modèle ; `ModelObjective` reçoit le nom du nouvel objectif. Résolution complète (D10) : sur les bench actuels, l'optimum ne doit pas changer, puisqu'ils respectent « au moins 1 » à l'optimum.
-- [ ] **`MiniZincLocalSolver`** (`local_search.py`) :
-  - la borne porte sur `cout_penalise ≤ coverage_cost + pénalité de couverture de l'entrée`, posée dès que l'entrée n'a **aucune violation structurelle** (elle est alors une solution du sous-problème), même si elle viole « au moins 1 » ;
+  - `violations_couverture` et `cout_penalise` dans la sortie JSON ;
+  - vérifier l'effet du poids de 1 000 000 sur la propagation et le temps de CP-SAT ; débordement : au plus 48 × 5 = 240 cellules, donc au plus 2,4 × 10⁸ de pénalité, sous 2³¹.
+- [ ] **`SolverAdapter`** (`solver.py`) **(P)** : résout le fichier de la variante ; passe `POIDS_COUVERTURE` seulement à une variante qui a la pénalité. Résolution complète (D10) : sur les bench actuels, l'optimum ne change pas, puisqu'ils respectent « au moins 1 » à l'optimum.
+- [ ] **`MiniZincLocalSolver`** (`local_search.py`) **(P)** :
+  - variante assouplie : borne `cout_penalise ≤ CostEvaluator.total(entrée)`, posée dès que l'entrée n'a **aucune violation structurelle** (elle est alors une solution du sous-problème), même si elle viole « au moins 1 » ;
+  - variante de référence : règle actuelle (borne sur `cout_total` seulement si l'entrée est faisable) ;
   - mettre à jour la docstring du module et la règle de D11 (« une entrée infaisable n'a pas de borne »).
 - [ ] **Tests** :
-  - validation croisée Python / MiniZinc : pour des horaires fixés à la main, dont certains qui violent « au moins 1 », `cout_penalise` de MiniZinc = `CostEvaluator.total` ;
-  - instance construite pour que « au moins 1 » soit impossible à respecter ⇒ solution rendue (plus d'UNSAT), avec le bon nombre de violations ;
-  - optimum de `bench_1` inchangé (94, `tests/test_smoke_minizinc.py`) ;
-  - `LocalSolver` : une entrée structurellement faisable qui viole « au moins 1 », avec 2 employés libérés ⇒ plus d'UNSAT, et `total` du résultat ≤ `total` de l'entrée ;
-  - refaire les mesures du 2026-11-13 (bench_3 et bench_5, 2 employés libérés, 6 cas sur 6 en UNSAT) et consigner les nouveaux résultats dans DEVLOG.md ;
-  - si la variante dure est gardée : elle donne encore UNSAT sur ces cas.
+  - `horaire.mzn` inchangé (empreinte du fichier) ; les deux fichiers existent ;
+  - validation croisée Python / MiniZinc : pour des horaires fixés à la main, dont certains qui violent « au moins 1 », `cout_penalise` du modèle assoupli = `CostEvaluator.total`, et `violations_couverture` = `coverage_violations` ;
+  - instance construite pour que « au moins 1 » soit impossible à respecter ⇒ solution rendue par le modèle assoupli (plus d'UNSAT), avec le bon nombre de violations ; le modèle de référence donne UNSAT ;
+  - optimum de `bench_1` inchangé (94) avec les deux modèles (`tests/test_smoke_minizinc.py`) ;
+  - `SolverAdapter` : le poids n'est passé qu'au modèle assoupli (sans MiniZinc si possible) ;
+  - `LocalSolver` : bornes des deux variantes, sans MiniZinc ; une entrée structurellement faisable qui viole « au moins 1 », avec 2 employés libérés ⇒ plus d'UNSAT, et `total` du résultat ≤ `total` de l'entrée ;
+  - refaire les mesures du 2026-11-13 (bench_3 et bench_5, 2 employés libérés, 6 cas sur 6 en UNSAT) avec les deux modèles et consigner les résultats dans DEVLOG.md.
 - [ ] **Suivi** :
-  - D12 cochée, avec la décision ; `docs/PROBLEME.md` (la contrainte « au moins 1 » devient une pénalité) ;
-  - revoir l'amélioration possible de `SolverAdapter.solve` (5a, avertissement `model inconsistency detected`), qui devrait devenir rare.
+  - `docs/PROBLEME.md` (« au moins 1 » est une pénalité dans le modèle du pipeline) ; `docs/PROJECT_STRUCT.md` et l'arbre de CLAUDE.md (nouveau fichier) ;
+  - revoir l'amélioration possible de `SolverAdapter.solve` (5a, avertissement `model inconsistency detected`), qui devrait devenir rare ;
+  - D13 : la redondance concerne maintenant deux modèles ; à reprendre après 5c.
 
 ## Travail en équipe — semaine du 9 novembre **(C)**
 Répartition et règles communes : [`TEAM.md`](TEAM.md). Les étapes 5b, 6, 7a et 7b avancent en parallèle, chacune sur sa branche.

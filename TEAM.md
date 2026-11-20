@@ -287,7 +287,7 @@ Rappel : les tests peuvent être écrits par un agent de codage (règle 0 de CLA
 **Tests** : `python -m unittest tests.test_engine` (sans MiniZinc, avec les faux objets) : terminaison, coût du meilleur monotone non croissant, reproductibilité (même graine ⇒ même historique, avec ou sans collecteurs), entrées des opérateurs jamais modifiées, événements reçus dans l'ordre. L'intégration avec les vrais composants (9-intégration) est faite par Pascal après les fusions.
 
 ### En équipe, pendant la semaine
-- [ ] Trancher **D12** (couverture dure ou pénalisée), avant que Pascal modifie les modules partagés.
+- [x] Trancher **D12** (couverture dure ou pénalisée), avant que Pascal modifie les modules partagés : deux fichiers, `horaire_assoupli.mzn` pour le pipeline, `horaire.mzn` gardé en référence (2026-11-20).
 - [ ] Trancher **D14** (forme des exceptions), avant que les nouveaux modules en écrivent.
 - [ ] Trancher **D9** (MongoDB) ; proposition : reportée, les fichiers de `results/` suffisent pour le POC.
 - [ ] Relire et fusionner la PR #5 (règle des tests par agent dans CLAUDE.md).
