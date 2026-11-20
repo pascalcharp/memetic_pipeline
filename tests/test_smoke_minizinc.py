@@ -30,12 +30,12 @@ class TestSmokeMiniZinc(unittest.TestCase):
 
         driver = locate_minizinc_driver()
         solver = lookup_solver(MiniZincConfig.DEFAULT_SOLVER_ID, driver)
-        model = minizinc.Model(ProjectPaths.MODEL_FILE)
+        model = minizinc.Model(ProjectPaths.REFERENCE_MODEL_FILE)
         model.add_file(instance_path)
         cls.result = minizinc.Instance(solver, model).solve(time_limit=cls.TIME_LIMIT)
 
     def test_model_file_exists(self) -> None:
-        self.assertTrue(ProjectPaths.MODEL_FILE.is_file())
+        self.assertTrue(ProjectPaths.REFERENCE_MODEL_FILE.is_file())
 
     def test_solver_proves_optimality(self) -> None:
         self.assertEqual(self.result.status, minizinc.Status.OPTIMAL_SOLUTION)

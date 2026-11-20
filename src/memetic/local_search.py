@@ -228,11 +228,18 @@ class MiniZincLocalSolver(LocalSolver):
         return constraints
 
     def cost_bound_constraints(self, horaire: Horaire) -> list[str]:
-        """La borne ``cout_total ≤ coût de couverture de horaire`` si ``horaire`` est faisable ET que la contrainte de
-        couverture non-nulle est respectée, sinon, aucune.
+        """La borne de coût du sous-problème, sur l'objectif du modèle résolu (``self.adapter.model``, D12).
 
-        Utilise ``LocalSearchConstraints.COST_BOUND`` et ``ModelObjective.TOTAL_COST``.
+        Une borne n'est sûre que si ``horaire`` est lui-même une solution du sous-problème :
+            - modèle assoupli (``model.penalizes_coverage``) : ``cout_penalise ≤ CostEvaluator.total(horaire)``
+              dès que ``horaire`` n'a aucune violation structurelle, même s'il viole « au moins 1 » ;
+            - modèle de référence : ``cout_total ≤ coût de couverture de horaire`` seulement si ``horaire`` est
+              faisable (aucune violation structurelle ni de couverture) ;
+            - sinon, aucune borne (liste vide).
+
+        Utilise ``LocalSearchConstraints.COST_BOUND`` et ``self.adapter.model.objective``.
         """
+        # Étape 5c (Pascal) : borne selon self.adapter.model ; ci-dessous, la règle d'avant 5c (modèle de référence).
         breakdown = self.evaluator.evaluate(horaire)
         if breakdown.is_feasible:
             return [LocalSearchConstraints.COST_BOUND.format(objective=ModelObjective.TOTAL_COST,

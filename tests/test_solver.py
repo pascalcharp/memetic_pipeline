@@ -16,6 +16,9 @@ from src.memetic.solver import (
     EffortLimit,
     InvalidSolverOptionsError,
     MiniZincPythonArguments,
+    ModelObjective,
+    ModelVariants,
+    RelaxedModelNames,
     SolveOutcome,
     SolverAdapter,
     SolverDefaults,
@@ -26,7 +29,7 @@ from src.memetic.solver import (
     UnsupportedLimitError,
     WallTimeLimit,
 )
-from src.model.evaluation import CostEvaluator
+from src.model.evaluation import CostEvaluator, PenaltyWeights
 from src.model.horaire import Horaire
 from src.model.shift_rules import ModelVariableNames
 from src.utils.io import load_instance
@@ -53,6 +56,8 @@ SOME_SEED: int = 7
 SOME_UNITS: float = 2.5
 SOME_SECONDS: float = 3.0
 SOME_THREADS: int = 4
+SOME_WEIGHT: int = 123
+OTHER_WEIGHT: int = 456
 
 # Contraintes ajoutées au modèle.
 FIXED_START: int = 4
@@ -100,6 +105,37 @@ class TestSolverOptions(unittest.TestCase):
         self.assertIn("0", str(context.exception))
 
 
+class TestModelVariants(unittest.TestCase):
+    """Les deux modèles (D12) et leurs paramètres propres ; sans MiniZinc."""
+
+    def test_reference_variant(self) -> None:
+        self.assertEqual(ModelVariants.REFERENCE.path, ProjectPaths.REFERENCE_MODEL_FILE)
+        self.assertEqual(ModelVariants.REFERENCE.objective, ModelObjective.TOTAL_COST)
+        self.assertFalse(ModelVariants.REFERENCE.penalizes_coverage)
+
+    def test_relaxed_variant(self) -> None:
+        self.assertEqual(ModelVariants.RELAXED.path, ProjectPaths.RELAXED_MODEL_FILE)
+        self.assertEqual(ModelVariants.RELAXED.objective, ModelObjective.PENALIZED_COST)
+        self.assertTrue(ModelVariants.RELAXED.penalizes_coverage)
+
+    def test_variants_are_frozen(self) -> None:
+        with self.assertRaises(dataclasses.FrozenInstanceError):
+            ModelVariants.RELAXED.objective = ModelObjective.TOTAL_COST  # type: ignore[misc]
+
+    def test_reference_model_has_no_parameter(self) -> None:
+        self.assertEqual(ModelVariants.REFERENCE.parameters(PenaltyWeights()), {})
+
+    def test_relaxed_model_receives_the_coverage_weight(self) -> None:
+        self.assertEqual(
+            ModelVariants.RELAXED.parameters(PenaltyWeights()),
+            {RelaxedModelNames.COVERAGE_WEIGHT: PenaltyWeights().coverage_violation},
+        )
+
+    def test_relaxed_model_receives_a_custom_weight(self) -> None:
+        weights = PenaltyWeights(coverage_violation=SOME_WEIGHT, structural_violation=OTHER_WEIGHT)
+        self.assertEqual(ModelVariants.RELAXED.parameters(weights), {RelaxedModelNames.COVERAGE_WEIGHT: SOME_WEIGHT})
+
+
 class TestCpSatAdapterConfiguration(unittest.TestCase):
     """Traduction des options en arguments de minizinc-python, sans lancer le solveur."""
 
@@ -128,6 +164,17 @@ class TestCpSatAdapterConfiguration(unittest.TestCase):
             CpSatAdapter(SolverOptions(limit=FakeLimit()))
         self.assertIn(SolverIds.CP_SAT, str(context.exception))
         self.assertIn(FakeLimit.__name__, str(context.exception))
+
+    def test_relaxed_model_and_default_weights_by_default(self) -> None:
+        adapter = CpSatAdapter()
+        self.assertEqual(adapter.model, ModelVariants.RELAXED)
+        self.assertEqual(adapter.weights, PenaltyWeights())
+
+    def test_model_and_weights_are_kept(self) -> None:
+        weights = PenaltyWeights(coverage_violation=SOME_WEIGHT)
+        adapter = CpSatAdapter(model=ModelVariants.REFERENCE, weights=weights)
+        self.assertEqual(adapter.model, ModelVariants.REFERENCE)
+        self.assertEqual(adapter.weights, weights)
 
     def test_adapter_is_abstract(self) -> None:
         with self.assertRaises(TypeError):

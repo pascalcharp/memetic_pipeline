@@ -186,7 +186,7 @@ Constat (tests d'intégration de l'étape 6, 2026-11-13) : `horaire.mzn` impose 
 Décision D12 (2026-11-20) : deux fichiers. `horaire.mzn` reste **inchangé** (référence) ; le nouveau `horaire_assoupli.mzn` est le modèle du pipeline. Modules partagés touchés : `src/config.py`, `src/model/` (nouveau fichier seulement), `src/memetic/solver.py`, `src/memetic/local_search.py`.
 
 - [x] **Trancher D12** : deux fichiers, la variante dure gardée comme référence, le poids passé par Python (voir D12).
-- [ ] **Scaffold et tests** **(C)** :
+- [x] **Scaffold et tests** **(C)** (2026-11-20 ; 12 tests rouges, validés contre une implémentation de référence jetable) :
   - `ProjectPaths` : `REFERENCE_MODEL_FILE` (`horaire.mzn`) et `RELAXED_MODEL_FILE` (`horaire_assoupli.mzn`), à la place de `MODEL_FILE` ;
   - `solver.py` : description d'un modèle (`ModelVariant` : fichier, nom de l'objectif, pénalité de couverture ou non) et les deux variantes (`ModelVariants.REFERENCE`, `ModelVariants.RELAXED`) ; noms des nouvelles variables (`violations_couverture`, `cout_penalise`, paramètre `POIDS_COUVERTURE`) ; le `SolverAdapter` reçoit la variante et les poids, `RELAXED` par défaut ;
   - tests rouges qui servent de cahier des charges (liste ci-dessous).
@@ -195,6 +195,7 @@ Décision D12 (2026-11-20) : deux fichiers. `horaire.mzn` reste **inchangé** (r
   - la contrainte « au moins 1 » devient un compteur `violations_couverture` (cellules de `RPER × RACT` où `demande > 0` et `total = 0`), sur les mêmes cellules que `CostEvaluator` (plage utile) ;
   - nouvel objectif `cout_penalise = cout_total + POIDS_COUVERTURE × violations_couverture`, et `solve minimize cout_penalise` ; `cout_total` reste défini, pour la décomposition du coût ;
   - `violations_couverture` et `cout_penalise` dans la sortie JSON ;
+  - `violations_couverture`, `cout_total` et les six variables de décision annotés `::add_to_output` (sinon minizinc-python ne rend plus les variables de décision) ;
   - vérifier l'effet du poids de 1 000 000 sur la propagation et le temps de CP-SAT ; débordement : au plus 48 × 5 = 240 cellules, donc au plus 2,4 × 10⁸ de pénalité, sous 2³¹.
 - [ ] **`SolverAdapter`** (`solver.py`) **(P)** : résout le fichier de la variante ; passe `POIDS_COUVERTURE` seulement à une variante qui a la pénalité. Résolution complète (D10) : sur les bench actuels, l'optimum ne change pas, puisqu'ils respectent « au moins 1 » à l'optimum.
 - [ ] **`MiniZincLocalSolver`** (`local_search.py`) **(P)** :

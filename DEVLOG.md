@@ -816,3 +816,20 @@ Suite complète verte sur `main` après la fusion.
 **Conséquence sur l'architecture** : le `SolverAdapter` reçoit le modèle à résoudre (Stratégie, D5) ; une variante décrit le fichier, le nom de son objectif et si elle attend le poids de la pénalité. La borne de coût du `LocalSolver` dépend de la variante : avec le modèle assoupli, elle porte sur `cout_penalise` et se pose dès que l'entrée n'a aucune violation structurelle.
 
 Plan détaillé dans TODO.md, 5c. Prochaine tâche : scaffold et tests (Claude), puis le modèle, l'adaptateur et la borne (Pascal).
+
+## 2026-11-20 — Étape 5c : scaffold et tests du modèle assoupli (Claude)
+
+**Fait (C)**, branche `etape-5c-couverture-souple` :
+- `ProjectPaths` : `REFERENCE_MODEL_FILE` (`horaire.mzn`) et `RELAXED_MODEL_FILE` (`horaire_assoupli.mzn`) remplacent `MODEL_FILE` (sonde MiniZinc et test de fumée : modèle de référence).
+- `solver.py` : `ModelVariant` (nom, fichier, objectif, `penalizes_coverage`) avec `parameters(weights)` en squelette ; `ModelVariants.REFERENCE` et `ModelVariants.RELAXED` ; `ModelObjective.PENALIZED_COST` ; `RelaxedModelNames` (`POIDS_COUVERTURE`, `violations_couverture`). Le `SolverAdapter` reçoit `model` (`RELAXED` par défaut) et `weights` ; `solve` résout encore le modèle de référence, en attendant l'implémentation.
+- `local_search.py` : contrat de `cost_bound_constraints` selon la variante (docstring) ; le corps garde la règle d'avant 5c.
+- `horaire_assoupli.mzn` : copie exacte de `horaire.mzn`, avec en tête la liste des changements à faire.
+- Tests : `tests/test_relaxed_model.py` (nouveau, appelle MiniZinc : empreinte de `horaire.mzn`, optimum de bench_1 avec les deux modèles, validation croisée terme par terme sur quatre horaires fixés dont trois qui violent « au moins 1 », instance à couverture impossible, poids transmis par Python) ; `test_solver.py` (variantes et paramètres, sans MiniZinc ; modèle et poids de l'adaptateur) ; `test_local_search.py` (bornes du modèle assoupli, sans MiniZinc ; CP-SAT : plus d'UNSAT avec le modèle assoupli, l'ancien cas UNSAT passe au modèle de référence).
+
+**État** : 12 tests rouges (7 échecs, 5 erreurs), tous les autres verts. Validés contre une implémentation de référence jetable, hors du dépôt : suite complète verte (416 tests).
+
+**Découverte en validant** : dès qu'une variable porte `::add_to_output`, minizinc-python ne rend plus que les variables annotées. Le modèle assoupli doit donc annoter aussi les six variables de décision, sinon le `SolverAdapter` échoue (`'Solution' object has no attribute 'debut'`). Ajouté à l'en-tête du modèle et à TODO.md.
+
+**À surveiller** : avec l'implémentation jetable, la suite complète a pris environ deux fois plus de temps (116 s au lieu de 56 s), le modèle assoupli devenant celui du pipeline. C'est le point « effet du poids sur la propagation et le temps de CP-SAT » du plan : à mesurer par module.
+
+**Limite connue** : `test_relaxed_model_improves_a_coverage_violation_with_two_freed_employees` passe déjà avec le modèle de référence sur bench_1 (deux employés libérés sur trois suffisent à couvrir). Le cas qui distingue vraiment les deux modèles (bench_3 et bench_5, 6 cas sur 6 en UNSAT le 2026-11-13) relève des mesures prévues au plan.

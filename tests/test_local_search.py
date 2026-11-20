@@ -1,4 +1,4 @@
-"""Tests de la recherche locale (src/memetic/local_search.py) — étape 5b, Pascal.
+"""Tests de la recherche locale (src/memetic/local_search.py) — étape 5b, Pascal ; modèle assoupli, étape 5c (D12).
 
 Trois niveaux :
     - contrat du scaffold (interfaces, résultat figé, gabarits des contraintes) ;
@@ -33,6 +33,8 @@ from src.memetic.solver import (
     DeterministicTimeLimit,
     EffortLimit,
     ModelObjective,
+    ModelVariant,
+    ModelVariants,
     SolveOutcome,
     SolverAdapter,
     SolverOptions,
@@ -40,7 +42,7 @@ from src.memetic.solver import (
     SolverStatistics,
 )
 from src.config import ProjectPaths
-from src.model.evaluation import CostEvaluator
+from src.model.evaluation import CostEvaluator, PenaltyWeights
 from src.model.feasibility import FeasibilityChecker
 from src.model.horaire import Horaire, HoraireEmploye
 from src.model.shift_rules import ModelIndexing, ModelVariableNames
@@ -129,9 +131,11 @@ SOME_STATISTICS: SolverStatistics = SolverStatistics(failures=3, propagations=5)
 class ScriptedAdapter(SolverAdapter):
     """Adaptateur sans MiniZinc : rend ``run`` à chaque appel et note les contraintes reçues."""
 
-    def __init__(self, run: SolverRun) -> None:
+    def __init__(self, run: SolverRun, model: ModelVariant = ModelVariants.RELAXED) -> None:
         # Pas d'appel à super().__init__ : il localiserait MiniZinc.
         self.run = run
+        self.model = model
+        self.weights = PenaltyWeights()
         self.received_constraints: list[list[str]] = []
 
     @classmethod
@@ -162,10 +166,15 @@ class FixedNeighborhood(Neighborhood):
         return self.freed
 
 
-def cp_sat_solver(instance: ProblemInstance, size: int, units: float = GENEROUS_UNITS) -> MiniZincLocalSolver:
+def cp_sat_solver(
+        instance: ProblemInstance,
+        size: int,
+        units: float = GENEROUS_UNITS,
+        model: ModelVariant = ModelVariants.RELAXED,
+) -> MiniZincLocalSolver:
     return MiniZincLocalSolver(
         instance,
-        CpSatAdapter(SolverOptions(limit=DeterministicTimeLimit(units))),
+        CpSatAdapter(SolverOptions(limit=DeterministicTimeLimit(units)), model=model),
         RandomEmployeesNeighborhood(instance, size=size),
         CostEvaluator(instance),
     )
@@ -268,16 +277,26 @@ class TestRandomEmployeesNeighborhood(unittest.TestCase):
 # Contraintes ajoutées au sous-problème
 # ---------------------------------------------------------------------------------------------------------------------
 
+def scripted_solver(instance: ProblemInstance, model: ModelVariant) -> MiniZincLocalSolver:
+    """``LocalSolver`` sans MiniZinc, qui résout (en apparence) le modèle ``model``."""
+    return MiniZincLocalSolver(
+        instance, ScriptedAdapter(SolverRun(SolveOutcome.NO_SOLUTION, None, None, SolverStatistics()), model),
+        FixedNeighborhood(frozenset()), CostEvaluator(instance),
+    )
+
+
+def identical_shifts(horaire: Horaire) -> Horaire:
+    """Tous les employés reçoivent le quart du premier : structurellement faisable, mais viole « au moins 1 »."""
+    return Horaire(employees=(horaire.employees[0],) * horaire.employee_count)
+
+
 class TestSubproblemConstraints(unittest.TestCase):
-    """Contraintes de fixation et borne de coût, sur l'optimum de bench_1 ; sans MiniZinc."""
+    """Contraintes de fixation et borne de coût du modèle de référence, sur l'optimum de bench_1 ; sans MiniZinc."""
 
     def setUp(self) -> None:
         self.instance = bench("bench_1")
         self.optimum = bench_1_optimum()
-        self.solver = MiniZincLocalSolver(
-            self.instance, ScriptedAdapter(SolverRun(SolveOutcome.NO_SOLUTION, None, None, SolverStatistics())),
-            FixedNeighborhood(frozenset()), CostEvaluator(self.instance),
-        )
+        self.solver = scripted_solver(self.instance, ModelVariants.REFERENCE)
 
     def test_non_freed_employees_are_fixed(self) -> None:
         constraints = self.solver.fixing_constraints(self.optimum, frozenset({2}))
@@ -302,11 +321,39 @@ class TestSubproblemConstraints(unittest.TestCase):
         self.assertEqual(self.solver.cost_bound_constraints(infeasible), [])
 
     def test_coverage_violation_gets_no_bound(self) -> None:
-        identical = Horaire(employees=(self.optimum.employees[0],) * self.instance.employee_count)
+        identical = identical_shifts(self.optimum)
         cost = CostEvaluator(self.instance).evaluate(identical)
         self.assertEqual(cost.structural_violations, 0)
         self.assertGreater(cost.coverage_violations, 0)
         self.assertEqual(self.solver.cost_bound_constraints(identical), [])
+
+
+class TestRelaxedCostBound(unittest.TestCase):
+    """Borne de coût du modèle assoupli (D12) : sur ``cout_penalise``, dès que l'entrée est structurellement
+    faisable ; sans MiniZinc."""
+
+    def setUp(self) -> None:
+        self.instance = bench("bench_1")
+        self.optimum = bench_1_optimum()
+        self.evaluator = CostEvaluator(self.instance)
+        self.solver = scripted_solver(self.instance, ModelVariants.RELAXED)
+
+    def test_feasible_input_gets_its_total_as_bound(self) -> None:
+        expected = LocalSearchConstraints.COST_BOUND.format(objective=ModelObjective.PENALIZED_COST,
+                                                            bound=BENCH_1_OPTIMUM)
+        self.assertEqual(self.solver.cost_bound_constraints(self.optimum), [expected])
+
+    def test_coverage_violation_gets_its_penalized_total_as_bound(self) -> None:
+        identical = identical_shifts(self.optimum)
+        cost = self.evaluator.evaluate(identical)
+        self.assertEqual(cost.structural_violations, 0)
+        self.assertGreater(cost.coverage_violations, 0)
+        expected = LocalSearchConstraints.COST_BOUND.format(objective=ModelObjective.PENALIZED_COST, bound=cost.total)
+        self.assertEqual(self.solver.cost_bound_constraints(identical), [expected])
+
+    def test_structurally_infeasible_input_gets_no_bound(self) -> None:
+        infeasible = with_employee(self.optimum, 1, DEGENERATE_SHIFT)
+        self.assertEqual(self.solver.cost_bound_constraints(infeasible), [])
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -400,7 +447,7 @@ class TestImproveWithCpSat(unittest.TestCase):
         self.assertEqual(self.evaluator.evaluate(result.horaire).coverage_cost, BENCH_1_OPTIMUM)
 
     def test_everyone_freed_reaches_the_optimum(self) -> None:
-        identical = Horaire(employees=(self.optimum.employees[0],) * self.instance.employee_count)
+        identical = identical_shifts(self.optimum)
         result = cp_sat_solver(self.instance, size=self.instance.employee_count).improve(identical, random.Random(SEED))
         self.assertEqual(result.freed_employees, frozenset({1, 2, 3}))
         self.assertEqual(result.outcome, SolveOutcome.OPTIMAL)
@@ -409,17 +456,36 @@ class TestImproveWithCpSat(unittest.TestCase):
         self.assertEqual(cost.coverage_cost, BENCH_1_OPTIMUM)
 
     def test_unsatisfiable_subproblem_returns_the_input(self) -> None:
-        # Trois quarts identiques, structurellement faisables, mais qui laissent des cellules demandées vides.
-        # Avec size = 0, personne n'est libéré : la contrainte « au moins 1 » du modèle est alors violée.
-        identical = Horaire(employees=(self.optimum.employees[0],) * self.instance.employee_count)
+        # Modèle de référence. Trois quarts identiques, structurellement faisables, mais qui laissent des cellules
+        # demandées vides. Avec size = 0, personne n'est libéré : la contrainte « au moins 1 » est alors violée.
+        identical = identical_shifts(self.optimum)
         # Toutes les variables étant fixées, MiniZinc détecte l'incohérence dès l'aplatissement et avertit
         # (« model inconsistency detected ») : c'est précisément le cas testé.
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", MiniZincWarning)
-            result = cp_sat_solver(self.instance, size=0).improve(identical, random.Random(SEED))
+            solver = cp_sat_solver(self.instance, size=0, model=ModelVariants.REFERENCE)
+            result = solver.improve(identical, random.Random(SEED))
         self.assertEqual(result.outcome, SolveOutcome.UNSATISFIABLE)
         self.assertEqual(result.freed_employees, frozenset())
         self.assertIs(result.horaire, identical)
+
+    def test_relaxed_model_accepts_a_coverage_violation_when_nobody_is_freed(self) -> None:
+        # Même entrée qu'au test précédent : avec le modèle assoupli, elle est une solution (plus d'UNSAT).
+        identical = identical_shifts(self.optimum)
+        result = cp_sat_solver(self.instance, size=0).improve(identical, random.Random(SEED))
+        self.assertEqual(result.outcome, SolveOutcome.OPTIMAL)
+        self.assertEqual(result.horaire, identical)
+
+    def test_relaxed_model_improves_a_coverage_violation_with_two_freed_employees(self) -> None:
+        # Le cas des mesures du 2026-11-13 : une entrée qui viole « au moins 1 », deux employés libérés.
+        identical = identical_shifts(self.optimum)
+        before = self.evaluator.evaluate(identical)
+        self.assertGreater(before.coverage_violations, 0)
+        result = cp_sat_solver(self.instance, size=2).improve(identical, random.Random(SEED))
+        self.assertTrue(result.outcome.has_solution)
+        self.assertEqual(len(result.freed_employees), 2)
+        self.assert_non_freed_unchanged(identical, result)
+        self.assertLessEqual(self.evaluator.evaluate(result.horaire).total, before.total)
 
     def test_exhausted_budget_returns_the_input(self) -> None:
         instance = bench("bench_5")
