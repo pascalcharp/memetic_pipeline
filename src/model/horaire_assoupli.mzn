@@ -30,6 +30,12 @@ int: NB_EMPLOYES ;
 int: NB_ACTIVITES ; 
 int: NB_PERIODES ;
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% MODÈLE ASSOUPLI: PARAMÈTRE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+int: POIDS_COUVERTURE ;
+
 % Pour chaque période, le nombre requis d'employés pour une tâche donnée
 
 array[1..NB_PERIODES, 1..NB_ACTIVITES] of 0..NB_EMPLOYES: demande ;
@@ -101,29 +107,29 @@ int: MAX_DINER = MAX_PERIODES - 12 ;
 
 % Début du quart
 
-array[REMP] of var MIN_DEBUT..MAX_DEBUT: debut ;
+array[REMP] of var MIN_DEBUT..MAX_DEBUT: debut :: add_to_output ;
 
 % Fin du quart
 
-array[REMP] of var MIN_FIN..MAX_FIN: fin ;
+array[REMP] of var MIN_FIN..MAX_FIN: fin :: add_to_output ;
 
  % Premières pause
   
-array[REMP] of var MIN_P1..MAX_P1: pause1 ;
+array[REMP] of var MIN_P1..MAX_P1: pause1 :: add_to_output ;
 
  % Deuxième pause
   
-array[REMP] of var MIN_P2..MAX_P2: pause2 ;
+array[REMP] of var MIN_P2..MAX_P2: pause2 :: add_to_output ;
 
  % Dîner 
  
-array[REMP] of var MIN_DINER..MAX_DINER: diner ;
+array[REMP] of var MIN_DINER..MAX_DINER: diner :: add_to_output ;
 
 % Tâches affectées à chaque employé: chaque employé doit faire exactement 4 tâches par quart
 % L'employé change de tâche aux pauses ou au dîner
 % Les tâches NE sont PAS nécéssairement différentes: l'employé pourrait faire la même tâche avant et après sa pause, par exemple
 
-array[REMP, 1..4] of var RACT: activites ;
+array[REMP, 1..4] of var RACT: activites :: add_to_output ;
 
 % Ce tableau collige le nombre total d'employés faisant l'activité a à la période p
 % Il sera utilisé dans la contrainte de demande, et le calcul du coût
@@ -162,29 +168,16 @@ constraint forall (e in REMP) (fin[e] - pause2[e] >= 4) ;
 
 constraint forall (e in  REMP) (let {var int: duree = fin[e] - debut[e]} in duree >= 27 /\ duree <= 35)  ;
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% MODÈLE ASSOUPLI
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 % Au-moins 1 employé est affecté à une tâche ayant une demande.
 
-constraint forall (p in RPER, a in RACT where demande[p, a] != 0) (total[p, a] >= 1) ;
+% constraint forall (p in RPER, a in RACT where demande[p, a] != 0) (total[p, a] >= 1) ;
 
+var int: violations_couverture :: add_to_output = sum (p in RPER, a in RACT where demande[p, a] != 0) (bool2int( total[p, a] == 0))  ;
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% CONTRAINTES DE BRIS DE SYMÉTRIE
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% Les employés sont interchangeables, il y a donc symétrie complète de permutation entre les employés
-% On brise cette symétrie en forçant les horaires de chaque employé à être ordonnés.
-
-%constraint forall (i in 1..NB_EMPLOYES - 1) (
-%    lex_lesseq(
-%        [debut[i], activites[i,1], pause1[i], activites[i,2], diner[i], activites[i,3], pause2[i], activites[i,4], fin[i]],
-%        [debut[i+1], activites[i+1,1], pause1[i+1], activites[i+1,2], diner[i+1], activites[i+1,3], pause2[i+1], activites[i+1,4], fin[i+1]]
-%    )
-%) ;
-
-% Étant donné que dans nos données élaguées, un employé doit être présent en tout temps, il doit absolument y avoir un
-% employé qui débute à 1.  Ce sera l'employé 1.
-
-% constraint debut[1] = MIN_PERIODES ;
  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Fonction de coût
@@ -192,12 +185,14 @@ constraint forall (p in RPER, a in RACT where demande[p, a] != 0) (total[p, a] >
 
 
 
-var int: cout_total = sum(p in RPER, a in RACT) (
+var int: cout_total :: add_to_output  = sum(p in RPER, a in RACT) (
     max(0, demande[p, a] - total[p, a]) * souscout[p, a] +
     max(0, total[p, a] - demande[p, a]) * surcout[p, a]
-) ;
+);
 
-solve minimize cout_total;
+var int: cout_penalise = cout_total + violations_couverture * POIDS_COUVERTURE ;
+
+solve minimize cout_penalise ;
 
 
 
@@ -213,7 +208,9 @@ output [
   "  \"pause2\": " ++ show(pause2) ++ ",\n",
   "  \"activites\": " ++ show(activites) ++ ",\n",
   "  \"demande\": " ++ show(demande) ++ ",\n",
-  "  \"Cout\": " ++ show(cout_total) ++ "\n",
+  "  \"Cout\": " ++ show(cout_total) ++ ",\n",
+  "  \"violations_couverture\": " ++ show(violations_couverture) ++ ", \n",
+  "  \"cout_penalise\": " ++ show(cout_penalise) ++ "\n",
   "}\n"
 ] ;
 

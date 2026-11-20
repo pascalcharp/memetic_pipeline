@@ -220,7 +220,9 @@ class ModelVariant:
         ``{RelaxedModelNames.COVERAGE_WEIGHT: weights.coverage_violation}`` si ``penalizes_coverage``, sinon un
         dictionnaire vide : MiniZinc refuse une valeur pour un paramètre que le modèle ne déclare pas.
         """
-        raise NotImplementedError  # Étape 5c (Pascal)
+        if self.penalizes_coverage:
+            return {RelaxedModelNames.COVERAGE_WEIGHT: weights.coverage_violation}
+        return {}
 
 
 class ModelVariants:
@@ -364,9 +366,9 @@ class SolverAdapter(ABC):
         Raises:
             SolverFailureError: si MiniZinc échoue (contrainte mal formée, statut ERROR ou inattendu).
         """
-        # Étape 5c (Pascal) : résoudre self.model.path et transmettre self.model.parameters(self.weights).
-        # En attendant, le modèle de référence est toujours résolu, comme avant 5c.
-        minizinc_instance = minizinc.Instance(self.solver, minizinc.Model(ProjectPaths.REFERENCE_MODEL_FILE))
+        minizinc_instance = minizinc.Instance(self.solver, minizinc.Model(self.model.path))
+        for name, value in self.model.parameters(self.weights).items():
+            minizinc_instance[name] = value
         self._assign_instance_data(minizinc_instance, instance)
         for constraint in extra_constraints:
             minizinc_instance.add_string(constraint)
