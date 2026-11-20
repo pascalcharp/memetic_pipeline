@@ -762,3 +762,34 @@ Reste avant la fusion : relecture par Xavier ; `git push` ; description de la PR
 - les exceptions suivent la convention commune (le code qui lève formate le gabarit), en attendant D14.
 
 Suite complète verte.
+
+## 2026-11-19 — Étape 8b : collecteurs (Mély)
+
+Fait (M), par Mély, branche `etape-8b-observabilite` : implémentation des quatre collecteurs de mesures dans `src/observability/collectors.py`, conformément à la décision D8.
+
+Collecteurs implémentés
+
+- `CostStatisticsCollector` : statistiques des coûts à chaque fin de génération (minimum, moyenne, médiane, maximum, écart-type, nombre d'individus faisables et moyennes des coûts décomposés).
+- `DiversityCollector` : diversité génotypique et phénotypique, ainsi que nombre de coûts distincts. Fréquence de mesure configurable.
+- `FeasibilityRateCollector` : taux de faisabilité avant et après le `LocalSolver`, regroupés par origine et opérateur, pour chaque génération et pour toute l'exécution.
+- `SolverEffortCollector` : nombre d'appels et charge du solveur (nœuds, échecs, propagations et temps de résolution), par génération et cumulée.
+
+Revue (Pascal, 2026-11-19). La logique des quatre collecteurs a été validée. Les tests existants passaient, mais plusieurs ajustements étaient nécessaires pour respecter les conventions de `CLAUDE.md`.
+
+Corrections apportées
+
+- Création de `InvalidPopulationError`, dérivée de `CollectorError`, et ajout d'un message centralisé dans `CollectorMessages`. Les collecteurs de coûts et de diversité lèvent maintenant la même exception lorsqu'une population est vide ou contient un individu non évalué.
+- Conservation de `total_min` et `total_max` en `int`, plutôt qu'en `float`. Ajout d'assertions vérifiant explicitement ces types.
+- Remplacement des listes de compteurs et des indices numériques dans `FeasibilityRateCollector` par la dataclass `_FeasibilityCounts`.
+- Remplacement des listes de statistiques et des `getattr()` dans `SolverEffortCollector` par la dataclass `_SolverEffortCounts`, qui accumule directement les valeurs rapportées.
+- Remise à zéro des compteurs des deux collecteurs avec état à la réception de `RunStarted`.
+- Simplification de la diversité génotypique avec `Counter` et `frozenset`, sans tenir compte de la permutation des employés, et de la diversité phénotypique avec `grid.tolist()`.
+- Nettoyage du code : suppression des conversions et commentaires inutiles, ajout d'annotations de types, organisation des imports et ajustements de mise en forme.
+
+Tests
+
+- 24 tests unitaires des collecteurs réussis avec Python 3.13 après les corrections.
+- Vérification des types `int` de `total_min` et `total_max`.
+- Les tests spécifiques aux populations invalides et à la remise à zéro entre deux exécutions restent à ajouter.
+
+Reste avant la fusion : ajouter les tests spécifiques manquants, compléter `TODO.md` et `TEAM.md`, relancer la suite complète et faire réviser les corrections dans la Pull Request.
