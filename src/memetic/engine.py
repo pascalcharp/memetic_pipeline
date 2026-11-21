@@ -43,7 +43,7 @@ from src.memetic.seeds import SeedStreams, SeedsCollection, derive_task_seeds
 from src.memetic.termination import TerminationCriterion
 from src.model.evaluation import CostEvaluator
 from src.model.horaire import Horaire
-from src.observability.events import GenerationEnded, IndividualCreated, LocalSearchDone, RunStarted
+from src.observability.events import Converged, GenerationEnded, IndividualCreated, LocalSearchDone, Restarted, RunEnded, RunStarted
 from src.observability.hub import ObservationHub
 from src.observability.sinks import RecordSink
 
@@ -89,6 +89,7 @@ class Memetic[G]:
 
     population: tuple[Individu[G], ...]
     generation: int = 0
+    restarts: int = 0
 
 
     def __init__(self, config: MemeticConfig[G]) -> None:
@@ -109,6 +110,7 @@ class Memetic[G]:
         self.survivors_selector = self.config.survivor_selector
         self.solver = self.config.local_solver
         self.convergence = self.config.convergence
+        self.restart_policy = self.config.restart
         self.executor = self.config.executor
 
     def run(self) -> MemeticResult[G]:
@@ -128,7 +130,21 @@ class Memetic[G]:
             self.executor.map(self._crossover_loop, self._NR(seeds_collection.PARENT_SELECTION, seeds_collection.CROSSOVER, seeds_collection.LOCAL_SEARCH))
             self.executor.map(self._mutation_loop, self._NM(seeds_collection.MUTABLE_SELECTION, seeds_collection.MUTATION, seeds_collection.LOCAL_SEARCH))
 
-        raise NotImplementedError  # Étape 9 (Xavier)
+            self.population = self.survivors_selector.select(self.population, self.config.population_size, self._generate_rng(seeds_collection.SURVIVOR_SELECTION))
+
+            if self.convergence.has_converged(self.population):
+                self._restart(self._generate_rng(seeds_collection.SURVIVOR_SELECTION))
+
+            seeds_collection = self._generate_seed()
+
+        self.dispatcher.emit(RunEnded(generations=self.generation, best=self.population[0]))
+        self.dispatcher.close()
+        return MemeticResult(
+            best=self.population[0],
+            population=self.population,
+            generations=self.generation,
+            restarts=self.restarts,
+        )
 
     def _init_population(self, rng: random.Random):
         def _evaluate(individual: Individu[G]):
@@ -137,7 +153,7 @@ class Memetic[G]:
             self.dispatcher.emit(
                 IndividualCreated(
                     generation=self.generation,
-                    origin="tomate",
+                    origin="initialization",
                     operator=None,
                     individual=individual
                 )
@@ -201,6 +217,18 @@ class Memetic[G]:
             for x in mutated
         ]
         self.population = tuple(list(self.population) + children)
+
+    def _restart(self, rng: random.Random) -> None:
+        self.dispatcher.emit(Converged(generation=self.generation))
+        self.population = self.restart_policy.restart(self.population, rng)
+        self.convergence.reset()
+        self.dispatcher.emit(
+            Restarted(
+                generation=self.generation,
+                population=self.population,
+            )
+        )
+
 
     def _process_result(self, origin: str, operator: str | None = None):
         def _process(result: LocalSearchResult) -> Individu[G]:
