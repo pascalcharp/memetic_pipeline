@@ -27,14 +27,17 @@ from collections import Counter
 
 from src.ga.chromosome import BlockEncoding, Encoding
 from src.ga.initialization import RandomBlockInitializer
-from src.ga.operators import ShiftStartMutation, UniformGeneCrossover
+from src.ga.operators import Crossover, Mutation, ShiftStartMutation, UniformGeneCrossover
+from src.ga.population import ConvergenceCriterion, RestartPolicy, SurvivorSelector
 from src.ga.registry import IncompatibleOperatorError
-from src.ga.selection import TournamentSelector, UniformMutableSelector
+from src.ga.selection import MutableSelector, ParentSelector, TournamentSelector, UniformMutableSelector
 from src.memetic import engine
 from src.memetic.config import InvalidMemeticConfigError, MemeticConfig, MemeticError
-from src.memetic.engine import Memetic, MemeticResult
+from src.memetic.engine import Memetic, MemeticResult, MemeticCrossoverArgs
 from src.memetic.executor import SequentialExecutor
+from src.memetic.local_search import LocalSearchResult, LocalSolver
 from src.memetic.seeds import SeedStreams, derive_task_seeds
+from src.memetic.solver import SolveOutcome, SolverStatistics
 from src.memetic.termination import (
     GenerationLimit,
     InvalidTerminationParameterError,
@@ -42,6 +45,7 @@ from src.memetic.termination import (
 )
 from src.model.evaluation import CostEvaluator
 from src.model.horaire import Horaire
+from src.observability.hub import ObservationHub
 from src.observability.events import (
     Converged,
     GenerationEnded,
@@ -62,6 +66,7 @@ from tests.fixtures import (
     RecordingCollector,
     synthetic_instance,
 )
+from unittest import mock
 
 POPULATION_SIZE: int = 4
 CROSSOVER_COUNT: int = 2
@@ -101,6 +106,43 @@ def fake_config() -> MemeticConfig:
         crossover_count=CROSSOVER_COUNT,
         mutation_count=MUTATION_COUNT,
         master_seed=MASTER_SEED,
+        dispatcher=mock.MagicMock(ObservationHub)
+    )
+
+def fake_config_with_mock(
+        dispatcher: ObservationHub = mock.Mock(),
+        local_solver: LocalSolver = mock.Mock(),
+        parent_selector: ParentSelector = mock.MagicMock(TournamentSelector),
+        crossover: Crossover = mock.MagicMock(FakeCrossover),
+        mutable_selector: UniformMutableSelector = mock.MagicMock(MutableSelector),
+        mutation: Mutation = mock.MagicMock(FakeMutation),
+        evaluator: CostEvaluator = mock.MagicMock(CostEvaluator),
+        survivor_selector: SurvivorSelector = mock.MagicMock(FakeSurvivorSelector),
+        convergence: ConvergenceCriterion = mock.MagicMock(FakeConvergenceCriterion),
+        restart: RestartPolicy = mock.MagicMock(FakeRestartPolicy),
+        termination: TerminationCriterion = mock.MagicMock(GenerationLimit),
+) -> MemeticConfig:
+    """Configuration complète avec les faux objets, sans MiniZinc."""
+    instance = synthetic_instance()
+    encoding = BlockEncoding()
+    return MemeticConfig(
+        encoding=encoding,
+        initializer=RandomBlockInitializer(instance, encoding),
+        parent_selector=parent_selector,
+        crossover=crossover,
+        mutable_selector=mutable_selector,
+        mutation=mutation,
+        local_solver=local_solver,
+        evaluator=evaluator,
+        survivor_selector=survivor_selector,
+        convergence=convergence,
+        restart=restart,
+        termination=termination,
+        population_size=POPULATION_SIZE,
+        crossover_count=CROSSOVER_COUNT,
+        mutation_count=MUTATION_COUNT,
+        master_seed=MASTER_SEED,
+        dispatcher=dispatcher
     )
 
 
@@ -185,8 +227,7 @@ class TestScaffoldContract(unittest.TestCase):
     def test_givenFakeObjects_whenBuildingConfig_thenDefaultsAreSequentialAndNoObservation(self) -> None:
         config = fake_config()
         self.assertIsInstance(config.executor, SequentialExecutor)
-        self.assertEqual(config.collectors, ())
-        self.assertEqual(config.sinks, ())
+        self.assertIsInstance(config.dispatcher, ObservationHub)
 
     def test_givenConfig_whenBuildingEngine_thenEngineKeepsIt(self) -> None:
         config = fake_config()
@@ -245,6 +286,102 @@ class TestEngine(unittest.TestCase):
         for _ in range(100):
             self.assertEqual(rng1.random(), rng2.random())
 
+    def test_engine_init_population_correct_size(self):
+        engine = Memetic(fake_config())
+        collection = engine._generate_seed()
+        rng = engine._generate_rng(collection.INITIALIZATION)
+        engine._init_population(rng)
+        self.assertEqual(len(engine.population), engine.config.population_size)
+
+    def test_engine_init_population_caclulate_cost(self):
+        engine = Memetic(fake_config())
+        collection = engine._generate_seed()
+        rng = engine._generate_rng(collection.INITIALIZATION)
+        engine._init_population(rng)
+        for i in engine.population:
+            self.assertTrue(i.is_evaluated())
+
+    def test_engine_init_population_send_event(self):
+        dispatcher = mock.Mock()
+        engine = Memetic(fake_config_with_mock(dispatcher=dispatcher))
+        collection = engine._generate_seed()
+        rng = engine._generate_rng(collection.INITIALIZATION)
+        engine._init_population(rng)
+        self.assertEqual(dispatcher.emit.call_count, engine.config.population_size + 1)
+
+    def test_engine_crossover_send_to_local_solver(self):
+        local_solver = mock.MagicMock(LocalSolver)
+        default_config = fake_config()
+        engine = Memetic(fake_config_with_mock(
+            local_solver=local_solver,
+            parent_selector=default_config.parent_selector,
+            evaluator=default_config.evaluator,
+            crossover=default_config.crossover
+        ))
+        collection = engine._generate_seed()
+        rng = engine._generate_rng(collection.INITIALIZATION)
+        engine._init_population(rng)
+        local_solver.improve.return_value = LocalSearchResult(engine.population[0].horaire, engine.population[0].horaire, SolveOutcome("no_solution"), frozenset([1]), SolverStatistics())
+        engine._crossover_loop(MemeticCrossoverArgs(rng, rng, rng))
+        self.assertEqual(local_solver.improve.call_count, engine.config.crossover_count)
+
+    def test_engine_crossover_event_are_sent(self):
+        local_solver = mock.MagicMock(LocalSolver)
+        dispatcher = mock.Mock()
+        default_config = fake_config()
+        engine = Memetic(fake_config_with_mock(
+            local_solver=local_solver,
+            parent_selector=default_config.parent_selector,
+            evaluator=default_config.evaluator,
+            crossover=default_config.crossover,
+            dispatcher=dispatcher,
+        ))
+        collection = engine._generate_seed()
+        rng = engine._generate_rng(collection.INITIALIZATION)
+
+        engine._init_population(rng)
+        local_solver.improve.return_value = LocalSearchResult(engine.population[0].horaire, engine.population[0].horaire, SolveOutcome("no_solution"), frozenset([1]), SolverStatistics())
+        dispatcher.reset_mock()
+
+        engine._crossover_loop(MemeticCrossoverArgs(rng, rng, rng))
+
+        self.assertEqual(dispatcher.emit.call_count, 2 * engine.config.crossover_count)
+
+    def test_engine_process_result(self):
+        engine = Memetic(fake_config_with_mock())
+        collection = engine._generate_seed()
+        rng = engine._generate_rng(collection.INITIALIZATION)
+        engine._init_population(rng)
+
+        _process = engine._process_result("")
+
+        i = _process(LocalSearchResult(engine.population[0].horaire, engine.population[0].horaire, SolveOutcome("no_solution"), frozenset([1]), SolverStatistics()))
+
+        self.assertTrue(i.is_evaluated())
+
+    def test_engine_process_result_send_origin_with_operator(self):
+        origin = "tomate"
+        operator = "cerise"
+
+        dispacther = mock.Mock()
+        emit = mock.Mock()
+        dispacther.emit = emit
+        engine = Memetic(fake_config_with_mock(dispatcher=dispacther))
+        collection = engine._generate_seed()
+        rng = engine._generate_rng(collection.INITIALIZATION)
+        engine._init_population(rng)
+        emit.reset_mock()
+
+        _process = engine._process_result(origin, operator)
+        _process(LocalSearchResult(engine.population[0].horaire, engine.population[0].horaire, SolveOutcome("no_solution"), frozenset([1]), SolverStatistics()))
+
+        for c in emit.call_args_list:
+            event = c.args[0]
+            self.assertIsNotNone(event.origin)
+            self.assertEqual(event.origin, origin)
+
+            self.assertIsNotNone(event.operator)
+            self.assertEqual(event.operator, operator)
 
 # ---------------------------------------------------------------------------------------------------------------------
 # Graines dérivées (D7)
