@@ -30,6 +30,7 @@ from src.ga.initialization import RandomBlockInitializer
 from src.ga.operators import ShiftStartMutation, UniformGeneCrossover
 from src.ga.registry import IncompatibleOperatorError
 from src.ga.selection import TournamentSelector, UniformMutableSelector
+from src.memetic import engine
 from src.memetic.config import InvalidMemeticConfigError, MemeticConfig, MemeticError
 from src.memetic.engine import Memetic, MemeticResult
 from src.memetic.executor import SequentialExecutor
@@ -197,6 +198,52 @@ class TestScaffoldContract(unittest.TestCase):
 
     def test_givenMemeticErrors_whenCheckingHierarchy_thenConfigErrorIsAMemeticError(self) -> None:
         self.assertTrue(issubclass(InvalidMemeticConfigError, MemeticError))
+
+class TestEngine(unittest.TestCase):
+    def test_engine_seed_collection_generate_seeds(self):
+        engine = Memetic(fake_config())
+        seeds = engine._generate_seed()
+
+        self.assertIsNotNone(next(seeds.INITIALIZATION))
+        self.assertIsNotNone(next(seeds.PARENT_SELECTION))
+        self.assertIsNotNone(next(seeds.CROSSOVER))
+        self.assertIsNotNone(next(seeds.MUTABLE_SELECTION))
+        self.assertIsNotNone(next(seeds.MUTATION))
+        self.assertIsNotNone(next(seeds.LOCAL_SEARCH))
+        self.assertIsNotNone(next(seeds.SURVIVOR_SELECTION))
+        self.assertIsNotNone(next(seeds.RESTART))
+
+    def test_engine_each_seed_generated_increment_generation(self):
+        engine = Memetic(fake_config())
+        for _ in range(100):
+            old_generation = engine.generation
+            engine._generate_seed()
+            self.assertEqual(engine.generation, old_generation + 1)
+
+
+    def test_engine_seed_collection_generate_same_seeds_each_time(self):
+        engine = Memetic(fake_config())
+
+        seeds1 = engine._generate_seed()
+        engine.generation = 0
+        seeds2 = engine._generate_seed()
+
+        self.assertEqual(next(seeds1.INITIALIZATION), next(seeds2.INITIALIZATION))
+        self.assertEqual(next(seeds1.PARENT_SELECTION), next(seeds2.PARENT_SELECTION))
+        self.assertEqual(next(seeds1.CROSSOVER), next(seeds2.CROSSOVER))
+        self.assertEqual(next(seeds1.MUTABLE_SELECTION), next(seeds2.MUTABLE_SELECTION))
+        self.assertEqual(next(seeds1.MUTATION), next(seeds2.MUTATION))
+        self.assertEqual(next(seeds1.LOCAL_SEARCH), next(seeds2.LOCAL_SEARCH))
+        self.assertEqual(next(seeds1.SURVIVOR_SELECTION), next(seeds2.SURVIVOR_SELECTION))
+        self.assertEqual(next(seeds1.RESTART), next(seeds2.RESTART))
+
+    def test_engine_seed_random_is_the_same(self):
+        engine = Memetic(fake_config())
+        rng1 = engine._generate_rng(engine._generate_seed().INITIALIZATION)
+        engine.generation = 0
+        rng2 = engine._generate_rng(engine._generate_seed().INITIALIZATION)
+        for _ in range(100):
+            self.assertEqual(rng1.random(), rng2.random())
 
 
 # ---------------------------------------------------------------------------------------------------------------------
