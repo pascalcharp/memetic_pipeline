@@ -97,6 +97,7 @@ class LocalSearchResult:
     """
 
     horaire: Horaire
+    seed_horraire: Horaire
     outcome: SolveOutcome
     freed_employees: frozenset[int]
     statistics: SolverStatistics
@@ -195,6 +196,7 @@ class MiniZincLocalSolver(LocalSolver):
 
         return LocalSearchResult(
             horaire=Horaire.from_model_variables(solver_run.variables) if solver_run.outcome.has_solution else horaire,
+            seed_horraire=horaire,
             outcome=solver_run.outcome,
             freed_employees=freed_employees,
             statistics=solver_run.statistics,
