@@ -20,6 +20,7 @@ from src.memetic.local_search import LocalSolver
 from src.memetic.termination import TerminationCriterion
 from src.model.evaluation import CostEvaluator
 from src.observability.collectors import MetricCollector
+from src.observability.hub import ObservationHub
 from src.observability.sinks import RecordSink
 
 
@@ -73,9 +74,8 @@ class MemeticConfig[G]:
     crossover_count: int
     mutation_count: int
     master_seed: int
+    dispatcher: ObservationHub = ObservationHub((), ())
     executor: Executor = field(default_factory=SequentialExecutor)
-    collectors: tuple[MetricCollector, ...] = ()
-    sinks: tuple[RecordSink, ...] = ()
 
     def validate(self) -> None:
         """Vérifie les paramètres et l'assemblage, avant toute exécution.
