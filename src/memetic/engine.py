@@ -118,34 +118,6 @@ class Memetic[G]:
             InvalidMemeticConfigError, IncompatibleOperatorError: si la configuration est invalide
                 (``MemeticConfig.validate``).
         """
-
-        """
-        Memetic(NR, NM):
-
-            Initialiser population P
-
-            while not terminé(P):
-
-
-                for j in NR:
-                    Parents = SelectParent(P)
-                    Enfants = Recombine(Parents)
-                    Enfants = SolveurLocal(Enfants)
-                    Evaluer(Enfants)
-                    P = P + Enfants
-
-                for j in NM:
-                    i = SelectMutable(P)
-                    Mute(i)
-                    i = SolveurLocal(i)
-                    Evaluer(i)
-                    P = P + {i}
-
-                P = SelectPop(P)
-
-                if (P a convergé)
-                    P = Restart(P)
-        """
         self.dispatcher.emit(RunStarted(self.config.master_seed, self.config.population_size, self.config.crossover_count, self.config.mutation_count))
 
         seeds_collection = self._generate_seed()

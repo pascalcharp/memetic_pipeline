@@ -33,7 +33,7 @@ from src.ga.registry import IncompatibleOperatorError
 from src.ga.selection import MutableSelector, ParentSelector, TournamentSelector, UniformMutableSelector
 from src.memetic import engine
 from src.memetic.config import InvalidMemeticConfigError, MemeticConfig, MemeticError
-from src.memetic.engine import Memetic, MemeticResult, MemeticCrossoverArgs
+from src.memetic.engine import Memetic, MemeticResult, MemeticCrossoverArgs, MemeticMutationArgs
 from src.memetic.executor import SequentialExecutor
 from src.memetic.local_search import LocalSearchResult, LocalSolver
 from src.memetic.seeds import SeedStreams, derive_task_seeds
@@ -114,7 +114,7 @@ def fake_config_with_mock(
         local_solver: LocalSolver = mock.Mock(),
         parent_selector: ParentSelector = mock.MagicMock(TournamentSelector),
         crossover: Crossover = mock.MagicMock(FakeCrossover),
-        mutable_selector: UniformMutableSelector = mock.MagicMock(MutableSelector),
+        mutable_selector: MutableSelector = mock.MagicMock(MutableSelector),
         mutation: Mutation = mock.MagicMock(FakeMutation),
         evaluator: CostEvaluator = mock.MagicMock(CostEvaluator),
         survivor_selector: SurvivorSelector = mock.MagicMock(FakeSurvivorSelector),
@@ -167,7 +167,6 @@ def real_operators_config(master_seed: int = MASTER_SEED, with_collector: bool =
         crossover_count=CROSSOVER_COUNT,
         mutation_count=MUTATION_COUNT,
         master_seed=master_seed,
-        collectors=(RecordingCollector(),) if with_collector else (),
     )
 
 
@@ -346,6 +345,45 @@ class TestEngine(unittest.TestCase):
         engine._crossover_loop(MemeticCrossoverArgs(rng, rng, rng))
 
         self.assertEqual(dispatcher.emit.call_count, 2 * engine.config.crossover_count)
+
+    def test_engine_mutation_send_to_local_solver(self):
+        local_solver = mock.MagicMock(LocalSolver)
+        default_config = fake_config()
+        engine = Memetic(fake_config_with_mock(
+            local_solver=local_solver,
+            mutable_selector=default_config.mutable_selector,
+            mutation=default_config.mutation,
+            evaluator=default_config.evaluator,
+        ))
+        collection = engine._generate_seed()
+        rng = engine._generate_rng(collection.INITIALIZATION)
+        engine._init_population(rng)
+        local_solver.improve.return_value = LocalSearchResult(engine.population[0].horaire, engine.population[0].horaire, SolveOutcome("no_solution"), frozenset([1]), SolverStatistics())
+        engine._mutation_loop(MemeticMutationArgs(rng, rng, rng))
+
+        self.assertEqual(local_solver.improve.call_count, engine.config.mutation_count)
+
+    def test_engine_mutation_event_are_sent(self):
+        local_solver = mock.MagicMock(LocalSolver)
+        dispatcher = mock.Mock()
+        default_config = fake_config()
+        engine = Memetic(fake_config_with_mock(
+            dispatcher=dispatcher,
+            local_solver=local_solver,
+            mutable_selector=default_config.mutable_selector,
+            mutation=default_config.mutation,
+            evaluator=default_config.evaluator,
+        ))
+        collection = engine._generate_seed()
+        rng = engine._generate_rng(collection.INITIALIZATION)
+
+        engine._init_population(rng)
+        local_solver.improve.return_value = LocalSearchResult(engine.population[0].horaire, engine.population[0].horaire, SolveOutcome("no_solution"), frozenset([1]), SolverStatistics())
+        dispatcher.reset_mock()
+
+        engine._mutation_loop(MemeticMutationArgs(rng, rng, rng))
+
+        self.assertEqual(dispatcher.emit.call_count, 2 * engine.config.mutation_count)
 
     def test_engine_process_result(self):
         engine = Memetic(fake_config_with_mock())
@@ -622,6 +660,23 @@ class TestMemeticRunWithRealOperators(unittest.TestCase):
         Memetic(real_operators_config()).run()
         self.assertEqual(random.getstate(), state_before, "chaque tâche a son propre random.Random (D7)")
 
+    def test_engine_each_loop_increment_generation(self):
+        is_done = mock.Mock()
+        run = [False, False, True]
+        is_done.side_effect = run
+        terminated = mock.Mock()
+        terminated.is_done = is_done
+        default_config = fake_config()
+        engine = Memetic(
+            fake_config_with_mock(
+                termination=terminated,
+
+                local_solver=default_config.local_solver,
+            )
+         )
+        engine.run()
+
+        self.assertEqual(engine.generation, len(run))
 
 if __name__ == "__main__":
     unittest.main()
