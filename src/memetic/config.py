@@ -7,10 +7,13 @@ avec le registre de l'étape 7a).
 
 from dataclasses import dataclass, field
 
+from numpy import minimum
+
 from src.ga.chromosome import Encoding
 from src.ga.initialization import PopulationInitializer
-from src.ga.operators import Crossover, Mutation
+from src.ga.operators import Crossover, Mutation, VariationOperator
 from src.ga.population import ConvergenceCriterion, RestartPolicy, SurvivorSelector
+from src.ga.registry import OperatorRegistry
 from src.ga.selection import MutableSelector, ParentSelector
 from src.memetic.executor import Executor, SequentialExecutor
 from src.memetic.local_search import LocalSolver
@@ -48,9 +51,10 @@ class InvalidMemeticConfigError(MemeticError):
 class MemeticConfig[G]:
     """Stratégies et paramètres d'une exécution.
 
-    ``crossover_count`` est NR (nombre de croisements par génération) et ``mutation_count`` NM (nombre de
-    mutations par génération). ``master_seed`` est la graine dont dérivent toutes les graines des tâches (D7).
-    ``convergence`` garde un état d'une génération à l'autre : utiliser une configuration par exécution.
+    - ``crossover_count`` est NR (nombre de croisements par génération) 
+    - ``mutation_count`` NM (nombre de mutations par génération).
+    - ``master_seed`` est la graine dont dérivent toutes les graines des tâches (D7).
+    - ``convergence`` garde un état d'une génération à l'autre : utiliser une configuration par exécution.
     """
 
     encoding: Encoding[G]
@@ -76,11 +80,39 @@ class MemeticConfig[G]:
     def validate(self) -> None:
         """Vérifie les paramètres et l'assemblage, avant toute exécution.
 
-        À vérifier : taille de population, NR et NM (``MemeticDefaults``), et compatibilité du croisement et de la
-        mutation avec l'encodage (``OperatorRegistry.check_compatibility``, étape 7a).
+        À vérifier :
+            - taille de population
+            - NR et NM (``MemeticDefaults``)
+            - Compatibilité du croisement et de la mutation avec l'encodage (``OperatorRegistry.check_compatibility``, étape 7a).
 
         Raises:
             InvalidMemeticConfigError: si un paramètre est hors de son domaine (son nom et sa valeur dans le message).
             IncompatibleOperatorError: si un opérateur de variation ne manipule pas les génomes de ``encoding``.
         """
-        raise NotImplementedError  # Étape 9 (Xavier)
+        def _operator_validation(operator: VariationOperator):
+            OperatorRegistry.check_compatibility(operator, self.encoding)
+        def _operation_count_validation(field: str, value: int):
+            if MemeticDefaults.MIN_OPERATION_COUNT > value:
+                raise InvalidMemeticConfigError(
+                    MemeticMessages.INVALID_OPERATION_COUNT.format(
+                        name=field,
+                        minimum=MemeticDefaults.MIN_OPERATION_COUNT,
+                        value=value
+                    )
+                )
+        _operator_validation(self.mutation)
+        _operator_validation(self.crossover)
+
+        if MemeticDefaults.MIN_POPULATION_SIZE > self.population_size:
+            raise InvalidMemeticConfigError(
+                MemeticMessages.INVALID_POPULATION_SIZE.format(
+                    minimum=MemeticDefaults.MIN_POPULATION_SIZE,
+                    value=self.population_size,
+                )
+            )
+
+        _operation_count_validation("mutation_count", self.mutation_count)
+        _operation_count_validation("crossover_count", self.crossover_count)
+
+        if MemeticDefaults.MIN_OPERATION_COUNT == self.crossover_count + self.mutation_count:
+            raise InvalidMemeticConfigError(MemeticMessages.NO_VARIATION)
