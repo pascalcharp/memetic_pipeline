@@ -22,7 +22,9 @@ from collections.abc import Sequence
 
 from src.ga.individual import Individu
 from src.ga.initialization import PopulationInitializer
-from src.model.evaluation import CostEvaluator
+from src.model.evaluation import CostEvaluator, CostBreakdown
+
+from itertools import cycle, islice
 
 
 class PopulationDefaults:
@@ -108,7 +110,22 @@ class PlusSurvivorSelector[G](SurvivorSelector[G]):
     """
 
     def select(self, population: Sequence[Individu[G]], size: int, rng: random.Random) -> tuple[Individu[G], ...]:
-        raise NotImplementedError  # Étape 8 (Tristan)
+        if size == 0 or len(population) == 0:
+            return tuple()
+        ordered_sequence: Sequence[Individu[G]] = sorted(population, key=lambda individu: individu.cost.total)
+        if len(ordered_sequence) == 0:
+            return tuple()
+        if size == 1:
+            return (ordered_sequence[0],)
+        unique: list[Individu[G]] = [ordered_sequence[0]]
+        for individu in ordered_sequence:
+            if individu not in unique:
+                unique.append(individu)
+            if len(unique) == size:
+                return tuple(unique)
+        missing: int = size - len(unique)
+        unique.extend(islice(cycle(unique), missing))
+        return tuple(unique)
 
 
 class DeathPenaltySurvivorSelector[G](SurvivorSelector[G]):
@@ -118,7 +135,20 @@ class DeathPenaltySurvivorSelector[G](SurvivorSelector[G]):
     """
 
     def select(self, population: Sequence[Individu[G]], size: int, rng: random.Random) -> tuple[Individu[G], ...]:
-        raise NotImplementedError  # Étape 8 (Tristan)
+        if size == 0 or len(population) == 0:
+            return tuple()
+        ordered_sequence: Sequence[Individu[G]] = sorted(population, key=lambda individu: (not individu.cost.is_feasible, individu.cost.total))
+        if len(ordered_sequence) == 0:
+            return tuple()
+        if size == 1:
+            return (ordered_sequence[0],)
+        unique: list[Individu[G]] = [ordered_sequence[0]]
+        for individu in ordered_sequence:
+            if individu not in unique:
+                unique.append(individu)
+            if len(unique) == size:
+                return tuple(unique)
+        return tuple(unique)
 
 
 class StagnationCriterion[G](ConvergenceCriterion[G]):
@@ -134,12 +164,27 @@ class StagnationCriterion[G](ConvergenceCriterion[G]):
                 minimum=PopulationDefaults.MIN_STAGNATION_GENERATIONS, value=generations
             ))
         self.generations = generations
+        self._best_cost: int | None = None
+        self._count: int = 0
 
     def has_converged(self, population: Sequence[Individu[G]]) -> bool:
-        raise NotImplementedError  # Étape 8 (Tristan)
+        self._update_convergence(min(individu.cost.total for individu in population))
+        return self._count >= self.generations            
 
     def reset(self) -> None:
-        raise NotImplementedError  # Étape 8 (Tristan)
+        self._best_cost = None
+        self._count = 0
+
+    def _update_convergence(self, best_cost: int) -> None:
+        if self._best_cost is None:
+            self._best_cost = best_cost
+            self._count = 0
+            return
+        if self._best_cost > best_cost:
+            self._best_cost = best_cost
+            self._count = 0
+        else:
+            self._count += 1
 
 
 class EliteRestart[G](RestartPolicy[G]):
@@ -170,4 +215,16 @@ class EliteRestart[G](RestartPolicy[G]):
         self.elite_count = elite_count
 
     def restart(self, population: Sequence[Individu[G]], rng: random.Random) -> tuple[Individu[G], ...]:
-        raise NotImplementedError  # Étape 8 (Tristan)
+        if self.elite_count > len(population):
+            raise InvalidPopulationParameterError(PopulationMessages.ELITE_LARGER_THAN_POPULATION.format(
+                elite_count=self.elite_count, size=len(population)
+            ))
+        if (len(population) == self.elite_count):
+            return tuple(population)
+        new_population: list[Individu[G]] = sorted(population, key= lambda individu: individu.cost.total)[:self.elite_count]
+        new_individus: tuple[Individu[G], ...] = self.initializer.initialize(len(population) - self.elite_count, rng)
+        for individu in new_individus:
+            cost: CostBreakdown = self.evaluator.evaluate(individu.horaire)
+            individu_with_cost: Individu[G] = individu.with_cost(cost)
+            new_population.append(individu_with_cost)
+        return tuple(new_population)
