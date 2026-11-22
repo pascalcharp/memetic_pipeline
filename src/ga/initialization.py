@@ -12,15 +12,18 @@ structurellement faisables, ce qui revient à respecter, pour chaque gène :
     - chaque activité dans 1..``activity_count``.
 Le test de référence est ``FeasibilityChecker`` : tout individu produit doit être sans violation.
 
-Option : chaque individu initial passe par un ``LocalSolver`` avant d'entrer dans la population.
+Option : chaque individu initial passe par un ``LocalSolver`` avant d'entrer dans la population. L'initialiseur
+rend alors aussi ces recherches locales (``InitializationResult.searches``) : le moteur émet un ``LocalSearchDone``
+pour chacune, et la charge du solveur à l'initialisation et au restart est mesurée (D10).
 """
 
 import random
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
 
 from src.ga.chromosome import ActivityBlock, BlockEncoding, BlockGene, BlockGenome
 from src.ga.individual import Individu
-from src.memetic.local_search import LocalSolver
+from src.memetic.local_search import LocalSearchRecord, LocalSolver
 from src.utils.io import ProblemInstance
 from src.model.shift_rules import ShiftStructure
 
@@ -45,12 +48,22 @@ class InvalidPopulationSizeError(InitializationError):
     """La taille demandée est hors de son domaine."""
 
 
+@dataclass(frozen=True)
+class InitializationResult[G]:
+    """Résultat d'une initialisation : les individus, non évalués, et les recherches locales faites pour les
+    obtenir (vide sans ``LocalSolver``), dans l'ordre des individus."""
+
+    individuals: tuple[Individu[G], ...]
+    searches: tuple[LocalSearchRecord, ...] = ()
+
+
 class PopulationInitializer[G](ABC):
     """Stratégie d'initialisation de la population (D5)."""
 
     @abstractmethod
-    def initialize(self, size: int, rng: random.Random) -> tuple[Individu[G], ...]:
-        """``size`` individus non évalués. Le seul aléa provient de ``rng`` : même état ⇒ même population.
+    def initialize(self, size: int, rng: random.Random) -> InitializationResult[G]:
+        """``size`` individus non évalués, avec les recherches locales faites pour les obtenir. Le seul aléa provient
+        de ``rng`` : même état ⇒ même résultat.
 
         Raises:
             InvalidPopulationSizeError: si ``size < InitializationDefaults.MIN_POPULATION_SIZE``.
@@ -61,7 +74,7 @@ class RandomBlockInitializer(PopulationInitializer[BlockGenome]):
     """Génomes ``BlockGenome`` structurellement faisables, tirés au hasard (D1).
 
     Si ``local_solver`` est donné, chaque horaire tiré lui est passé, et l'individu est construit à partir de
-    l'horaire rendu (ré-encodé par ``encoding``).
+    l'horaire rendu (ré-encodé par ``encoding``) ; chaque appel est noté dans ``InitializationResult.searches``.
     """
 
     def __init__(
@@ -74,7 +87,7 @@ class RandomBlockInitializer(PopulationInitializer[BlockGenome]):
         self.encoding = encoding
         self.local_solver = local_solver
 
-    def initialize(self, size: int, rng: random.Random) -> tuple[Individu[BlockGenome], ...]:
+    def initialize(self, size: int, rng: random.Random) -> InitializationResult[BlockGenome]:
         """Initialise une population de taille ``size``."""
         if size < InitializationDefaults.MIN_POPULATION_SIZE:
             raise InvalidPopulationSizeError(
@@ -85,6 +98,7 @@ class RandomBlockInitializer(PopulationInitializer[BlockGenome]):
             )
 
         population: list[Individu[BlockGenome]] = []
+        searches: list[LocalSearchRecord] = []
 
         for _ in range(size):
             genome = self.random_genome(rng)
@@ -92,12 +106,13 @@ class RandomBlockInitializer(PopulationInitializer[BlockGenome]):
 
             if self.local_solver is not None:
                 result = self.local_solver.improve(individu.horaire, rng)
+                searches.append(LocalSearchRecord(input_horaire=individu.horaire, result=result))
                 genome = self.encoding.encode(result.horaire)
                 individu = Individu.from_genome(genome, self.encoding)
 
             population.append(individu)
 
-        return tuple(population)  # Étape 6 (Mély)
+        return InitializationResult(individuals=tuple(population), searches=tuple(searches))
 
     def random_genome(self, rng: random.Random) -> BlockGenome:
         """Génère un génome contenant un gène faisable pour chaque employé."""

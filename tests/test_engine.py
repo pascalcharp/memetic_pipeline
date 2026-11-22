@@ -31,7 +31,7 @@ from src.ga.chromosome import BlockEncoding, Encoding
 from src.ga.chromosome import BlockGenome
 from src.ga.initialization import PopulationInitializer, RandomBlockInitializer
 from src.ga.operators import ShiftStartMutation, UniformGeneCrossover
-from src.ga.population import SurvivorSelector
+from src.ga.population import EliteRestart, SurvivorSelector
 from src.ga.registry import IncompatibleOperatorError
 from src.ga.selection import TournamentSelector, UniformMutableSelector
 from src.memetic.config import InvalidMemeticConfigError, MemeticConfig, MemeticError
@@ -647,6 +647,68 @@ class TestEngineSeeds(unittest.TestCase):
         convergence = FakeConvergenceCriterion(frozenset([CONVERGENCE_CALL]))
         Memetic(dataclasses.replace(fake_config(), restart=restart, convergence=convergence)).run()
         self.assertEqual(restart.states, [expected_state(CONVERGENCE_CALL, SeedStreams.RESTART)])
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Recherches locales hors du moteur : initialisation et restart (D8, D10)
+# ---------------------------------------------------------------------------------------------------------------------
+
+ELITE_COUNT: int = 1
+
+
+def config_with_outside_searches(converge_at: frozenset[int] = frozenset()) -> MemeticConfig:
+    """``fake_config`` dont l'initialiseur passe par un ``FakeLocalSolver`` et dont le restart est un vrai
+    ``EliteRestart`` qui réutilise cet initialiseur."""
+    instance = synthetic_instance()
+    encoding = BlockEncoding()
+    evaluator = CostEvaluator(instance)
+    initializer = RandomBlockInitializer(instance, encoding, local_solver=FakeLocalSolver())
+    return dataclasses.replace(
+        fake_config(),
+        initializer=initializer,
+        evaluator=evaluator,
+        restart=EliteRestart(initializer, evaluator, ELITE_COUNT),
+        convergence=FakeConvergenceCriterion(converge_at),
+    )
+
+
+class TestOutsideSearches(unittest.TestCase):
+
+    def test_givenInitializerWithLocalSolver_whenRun_thenGenerationZeroPublishesItsSearches(self) -> None:
+        _, events = observed_run(config_with_outside_searches())
+        generation_zero = events[1:events.index(next(e for e in events if isinstance(e, GenerationEnded)))]
+        searches = [event for event in generation_zero if isinstance(event, LocalSearchDone)]
+        created = [event for event in generation_zero if isinstance(event, IndividualCreated)]
+        self.assertEqual(len(searches), POPULATION_SIZE)
+        self.assertEqual(len(created), POPULATION_SIZE)
+        self.assertEqual(generation_zero, searches + created, "les recherches d'abord, puis les individus")
+        for event in searches:
+            self.assertEqual(event.origin, Origins.INITIALIZATION.value)
+            self.assertIsNone(event.operator)
+            self.assertEqual(event.generation, 0)
+            self.assertEqual(event.cost_after, CostEvaluator(synthetic_instance()).evaluate(event.result.horaire))
+
+    def test_givenRestart_whenRun_thenNewcomersAndTheirSearchesArePublishedBetweenConvergedAndRestarted(self) -> None:
+        result, events = observed_run(config_with_outside_searches(frozenset([CONVERGENCE_CALL])))
+        self.assertEqual(result.restarts, 1)
+        converged = next(index for index, event in enumerate(events) if isinstance(event, Converged))
+        restarted = next(index for index, event in enumerate(events) if isinstance(event, Restarted))
+        between = events[converged + 1:restarted]
+        newcomer_count = POPULATION_SIZE - ELITE_COUNT
+        searches = [event for event in between if isinstance(event, LocalSearchDone)]
+        created = [event for event in between if isinstance(event, IndividualCreated)]
+        self.assertEqual(between, searches + created)
+        self.assertEqual(len(searches), newcomer_count)
+        self.assertEqual(len(created), newcomer_count)
+        for event in searches + created:
+            self.assertEqual(event.origin, Origins.RESTART.value)
+            self.assertIsNone(event.operator)
+            self.assertEqual(event.generation, CONVERGENCE_CALL)
+        restarted_population = events[restarted].population
+        self.assertEqual(len(restarted_population), POPULATION_SIZE)
+        self.assertEqual([event.individual for event in created], list(restarted_population[ELITE_COUNT:]))
+        for event in created:
+            self.assertTrue(event.individual.is_evaluated())
 
 
 if __name__ == "__main__":

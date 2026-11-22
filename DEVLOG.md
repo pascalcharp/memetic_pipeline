@@ -992,3 +992,33 @@ Points de la deuxième revue de la PR #10, laissés pour après la fusion :
 - `EliteRestart.restart` : `if missing_count == 0` au lieu de `if not missing_count`.
 
 Aucun changement de comportement. Suite complète verte.
+
+## 2026-11-22 — Étape 9-intégration : assemblage de référence et exécution complète sur bench_1 (Pascal)
+
+**Fait (C)** : scaffold de `src/memetic/assembly.py` (`AssemblyDefaults`, `AssemblySettings`, squelette de `build_block_memetic_config`) et `tests/test_integration.py`, validés contre un assemblage de référence jetable (hors dépôt).
+
+**Fait (P)** : `build_block_memetic_config`, par Pascal. Composants : `BlockEncoding`, `RandomBlockInitializer` (avec le `LocalSolver` si `initial_local_search`), `TournamentSelector`, `UniformGeneCrossover`, `UniformMutableSelector`, `ShiftStartMutation`, `MiniZincLocalSolver` sur `CpSatAdapter` (modèle assoupli, monothread, `DeterministicTimeLimit`) avec `RandomEmployeesNeighborhood`, `CostEvaluator`, `PlusSurvivorSelector`, `StagnationCriterion`, `EliteRestart`, `GenerationLimit`. Le même évaluateur et le même initialiseur servent au moteur, au `LocalSolver` et au restart.
+
+**Tests** (24, verts) :
+- `TestAssembly` (11, sans MiniZinc) : composants attendus, paramètres transmis, CP-SAT sur le modèle assoupli en monothread sous limite déterministe, objets partagés, option `LocalSolver` à l'initialisation, hub par défaut propre à chaque configuration, composants neufs à chaque appel ;
+- `TestMemeticOnBench1` (13, environ 30 s) : deux exécutions de même graine sur bench_1, l'une sans mesure, l'autre avec les quatre collecteurs de 8b, un `MemorySink` et un `JsonlSink`. Taille et nombre de générations, coût du meilleur qui ne remonte jamais, faisabilité structurelle de chaque individu, borne de la recherche locale, appels réels à CP-SAT, restart exercé, résultat identique avec et sans collecteurs, ordre des événements, enregistrements de chaque collecteur, fichier JSONL identique au `MemorySink`.
+
+**Résultat** : avec la graine 7 (6 individus, NR = 2, NM = 2, 4 générations, stagnation d'une génération), le prototype atteint l'optimum de bench_1 (94, prouvé par CP-SAT ; docs/PROBLEME.md) et fait un restart. **Le prototype fonctionne de bout en bout.**
+
+**Blocage apparent** : dans PyCharm, un test semblait boucler. C'était la durée de `setUpClass` (les deux exécutions, environ 30 s), attribuée au premier test de la classe dans PyCharm, et affichée après la ligne du dernier test de `TestAssembly` en console (`unittest -v` exécute `setUpClass` avant d'afficher le nom du test suivant). Note ajoutée dans la docstring de `TestMemeticOnBench1`.
+
+**Reste** : trancher l'émission d'`IndividualCreated` (origine `RESTART`) pour les individus régénérés au restart (D8).
+
+## 2026-11-22 — Étape 9-intégration : événements et charge du solveur à l'initialisation et au restart (Pascal)
+
+**Constat** : le nombre d'individus régénérés au restart n'est pas fixe (μ − min(k, génomes distincts), entre μ − k et μ − 1), et le moteur ne savait pas lesquels étaient nouveaux : aucun `IndividualCreated` au restart. Plus grave pour l'étape 10 : avec l'option `LocalSolver` de l'initialiseur, les recherches locales de l'initialisation et du restart n'émettaient aucun `LocalSearchDone`. Le `SolverEffortCollector` (D10) sous-estimait donc la charge du solveur (sur bench_1 avec les réglages d'intégration : 6 appels à l'initialisation et 5 par restart, absents des 24 comptés), ce qui aurait faussé la comparaison avec CP-SAT seul en faveur du mémétique.
+
+**Décision (Pascal)** : un retour explicite plutôt qu'une enveloppe du `LocalSolver` déclarée dans la configuration (oublier de la brancher aurait perdu la mesure sans erreur).
+- `LocalSearchRecord(input_horaire, result)` (`local_search.py`) : une recherche locale faite hors du moteur ;
+- `PopulationInitializer.initialize` rend `InitializationResult(individuals, searches)` ; `RandomBlockInitializer` note chaque appel à son `LocalSolver` ;
+- `RestartPolicy.restart` rend `RestartResult(elite, newcomers, searches)`, avec la propriété `population` (élite puis nouveaux) ; `EliteRestart` transmet les recherches de l'initialiseur ;
+- le moteur émet un `LocalSearchDone` par recherche (origine `INITIALIZATION` ou `RESTART`, opérateur `None`, coûts avant et après évalués), puis un `IndividualCreated` par nouvel individu : à la génération 0 avant `GenerationEnded(0)`, au restart entre `Converged(g)` et `Restarted(g)`.
+
+**Interfaces communes modifiées** : étape 6 (`PopulationInitializer`) et étape 8 (`RestartPolicy`). Tests adaptés : `test_initialization`, `test_operators` (`.individuals`), `test_population` (`.population`, nouveaux tests du découpage élite / nouveaux et du passage des recherches), `fixtures.FakeRestartPolicy`.
+
+**Tests** : `test_initialization` (+2 : recherches rendues dans l'ordre des individus, aucune sans solveur), `test_population` (+2), `test_engine` (+2 : recherches de la génération 0 avant les individus ; recherches et nouveaux individus du restart entre `Converged` et `Restarted`, origine `RESTART`), `test_integration` (ordre des événements avec initialisation et restart ; une recherche locale par nouvel individu, quelle que soit son origine). Suite complète verte (536 tests).

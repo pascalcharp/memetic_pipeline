@@ -24,12 +24,15 @@ from src.ga.population import (
     PopulationDefaults,
     PopulationError,
     RestartPolicy,
+    RestartResult,
     StagnationCriterion,
     SurvivorSelector,
 )
 from src.ga.chromosome import BlockEncoding
 from src.ga.individual import Individu
-from src.ga.initialization import RandomBlockInitializer
+from src.ga.initialization import InitializationResult, RandomBlockInitializer
+from src.memetic.local_search import LocalSearchRecord, LocalSearchResult
+from src.memetic.solver import SolveOutcome, SolverStatistics
 from src.ga.selection import EmptyPopulationError, InvalidSelectionParameterError, UnevaluatedIndividualError
 from src.model.evaluation import CostBreakdown, CostEvaluator
 from src.model.horaire import Horaire, HoraireEmploye
@@ -157,15 +160,27 @@ def ids(individus) -> list[int]:
 
 class FakeInitializer:
     """Génère ``count`` individus non évalués dont l'identifiant est tiré de ``rng`` (la consommation du
-    générateur est donc observable)."""
+    générateur est donc observable), et une recherche locale factice par individu."""
 
     def __init__(self) -> None:
         self.calls: list[tuple[int, random.Random]] = []
+        self.searches: list[LocalSearchRecord] = []
 
-    def initialize(self, count: int, rng: random.Random) -> tuple[Individu[int], ...]:
+    def initialize(self, count: int, rng: random.Random) -> InitializationResult[int]:
         self.calls.append((count, rng))
         new_ids = [rng.randrange(NEW_ID_BASE, NEW_ID_BASE + NEW_ID_SPAN) for _ in range(count)]
-        return tuple(Individu(genome=i, horaire=distinct_horaire(i)) for i in new_ids)
+        individuals = tuple(Individu(genome=i, horaire=distinct_horaire(i)) for i in new_ids)
+        searches = tuple(fake_search(individu.horaire) for individu in individuals)
+        self.searches.extend(searches)
+        return InitializationResult(individuals=individuals, searches=searches)
+
+
+def fake_search(horaire: Horaire) -> LocalSearchRecord:
+    """Recherche locale factice : rend l'horaire reçu."""
+    result = LocalSearchResult(
+        horaire=horaire, outcome=SolveOutcome.FEASIBLE, freed_employees=frozenset(), statistics=SolverStatistics()
+    )
+    return LocalSearchRecord(input_horaire=horaire, result=result)
 
 
 class FakeEvaluator:
@@ -521,20 +536,20 @@ class TestEliteRestart(unittest.TestCase):
 
     def test_givenPopulation_whenRestart_thenSizeIsKept(self) -> None:
         restart, _, _ = fake_elite_restart(MULTIPLE_ELITES)
-        self.assertEqual(len(restart.restart(self.population, self.rng)), len(self.population))
+        self.assertEqual(len(restart.restart(self.population, self.rng).population), len(self.population))
 
     def test_givenSingleElite_whenRestart_thenBestIndividualIsKept(self) -> None:
         restart, _, _ = fake_elite_restart(SINGLE_ELITE)
-        self.assertEqual(ids(restart.restart(self.population, self.rng))[:SINGLE_ELITE], list(IDS_BY_COST[:SINGLE_ELITE]))
+        self.assertEqual(ids(restart.restart(self.population, self.rng).population)[:SINGLE_ELITE], list(IDS_BY_COST[:SINGLE_ELITE]))
 
     def test_givenMultipleElites_whenRestart_thenBestAreKeptInCostOrder(self) -> None:
         restart, _, _ = fake_elite_restart(MULTIPLE_ELITES)
-        result = restart.restart(self.population, self.rng)
+        result = restart.restart(self.population, self.rng).population
         self.assertEqual(ids(result)[:MULTIPLE_ELITES], list(IDS_BY_COST[:MULTIPLE_ELITES]))
 
     def test_givenEliteInPopulation_whenRestart_thenElitesKeepTheirCost(self) -> None:
         restart, _, _ = fake_elite_restart(SINGLE_ELITE)
-        best = restart.restart(self.population, self.rng)[BEST_INDEX]
+        best = restart.restart(self.population, self.rng).population[BEST_INDEX]
         self.assertEqual(best.cost.total, COST_LOWEST)
 
     def test_givenDuplicateElites_whenRestart_thenOneCopyKeptAndSizeIsKept(self) -> None:
@@ -546,27 +561,27 @@ class TestEliteRestart(unittest.TestCase):
             individual(ID_C, COST_MEDIUM),
         ]
         restart, _, _ = fake_elite_restart(MULTIPLE_ELITES)
-        result = restart.restart(population, self.rng)
+        result = restart.restart(population, self.rng).population
         self.assertEqual(ids(result)[:MULTIPLE_ELITES], [ID_A, ID_B])
         self.assertEqual(len(result), len(population))
 
     def test_givenFewerDistinctGenomesThanEliteCount_whenRestart_thenRestRegenerated(self) -> None:
         population = copies_of(ID_A, COST_LOWEST)
         restart, initializer, _ = fake_elite_restart(len(population))
-        result = restart.restart(population, self.rng)
+        result = restart.restart(population, self.rng).population
         self.assertEqual(ids(result)[:SINGLE_DISTINCT], [ID_A])
         self.assertEqual([count for count, _ in initializer.calls], [len(population) - SINGLE_DISTINCT])
         self.assertEqual(len(result), len(population))
 
     def test_givenRestart_whenCalled_thenInitializerGeneratesTheRest(self) -> None:
         restart, initializer, _ = fake_elite_restart(MULTIPLE_ELITES)
-        result = restart.restart(self.population, self.rng)
+        result = restart.restart(self.population, self.rng).population
         self.assertEqual([count for count, _ in initializer.calls], [len(self.population) - MULTIPLE_ELITES])
         self.assertTrue(all(genome_id >= NEW_ID_BASE for genome_id in ids(result[MULTIPLE_ELITES:])))
 
     def test_givenRestart_whenCalled_thenNewIndividualsAreEvaluated(self) -> None:
         restart, _, evaluator = fake_elite_restart(MULTIPLE_ELITES)
-        new_individuals = restart.restart(self.population, self.rng)[MULTIPLE_ELITES:]
+        new_individuals = restart.restart(self.population, self.rng).population[MULTIPLE_ELITES:]
         self.assertTrue(all(individu.is_evaluated() for individu in new_individuals))
         self.assertEqual(
             [individu.cost.total for individu in new_individuals], [EVALUATED_TOTAL] * len(new_individuals)
@@ -575,7 +590,7 @@ class TestEliteRestart(unittest.TestCase):
 
     def test_givenSeededRng_whenRestart_thenInitializerConsumesThatGenerator(self) -> None:
         restart, initializer, _ = fake_elite_restart(SINGLE_ELITE)
-        result = restart.restart(self.population, self.rng)
+        result = restart.restart(self.population, self.rng).population
         expected_rng = random.Random(SEED)
         expected_ids = [
             expected_rng.randrange(NEW_ID_BASE, NEW_ID_BASE + NEW_ID_SPAN)
@@ -587,7 +602,7 @@ class TestEliteRestart(unittest.TestCase):
 
     def test_givenEliteEqualToPopulationSize_whenRestart_thenNothingIsRegenerated(self) -> None:
         restart, initializer, _ = fake_elite_restart(len(self.population))
-        result = restart.restart(self.population, self.rng)
+        result = restart.restart(self.population, self.rng).population
         # Le restart rend l'élite triée par coût croissant, pas dans l'ordre d'entrée.
         self.assertEqual(ids(result), list(IDS_BY_COST))
         self.assertEqual(initializer.calls, [])
@@ -614,9 +629,26 @@ class TestEliteRestart(unittest.TestCase):
         self.assertEqual(self.population, snapshot)
         self.assertEqual([individu.cost.total for individu in self.population], totals_before)
 
-    def test_givenRestart_whenCalled_thenResultIsATuple(self) -> None:
-        restart, _, _ = fake_elite_restart(SINGLE_ELITE)
-        self.assertIsInstance(restart.restart(self.population, self.rng), tuple)
+    def test_givenRestart_whenCalled_thenResultSeparatesEliteAndNewcomers(self) -> None:
+        restart, _, _ = fake_elite_restart(MULTIPLE_ELITES)
+        result = restart.restart(self.population, self.rng)
+        self.assertIsInstance(result, RestartResult)
+        self.assertEqual(ids(result.elite), list(IDS_BY_COST[:MULTIPLE_ELITES]))
+        self.assertEqual(len(result.newcomers), len(self.population) - MULTIPLE_ELITES)
+        self.assertEqual(result.population, result.elite + result.newcomers)
+        self.assertIsInstance(result.population, tuple)
+
+    def test_givenInitializerWithSearches_whenRestart_thenSearchesArePassedOn(self) -> None:
+        restart, initializer, _ = fake_elite_restart(MULTIPLE_ELITES)
+        result = restart.restart(self.population, self.rng)
+        self.assertEqual(result.searches, tuple(initializer.searches))
+        self.assertEqual(len(result.searches), len(result.newcomers))
+
+    def test_givenEliteEqualToPopulationSize_whenRestart_thenNoNewcomerAndNoSearch(self) -> None:
+        restart, _, _ = fake_elite_restart(len(self.population))
+        result = restart.restart(self.population, self.rng)
+        self.assertEqual(result.newcomers, ())
+        self.assertEqual(result.searches, ())
 
 
 if __name__ == "__main__":

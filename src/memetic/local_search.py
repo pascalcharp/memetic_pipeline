@@ -102,6 +102,16 @@ class LocalSearchResult:
     statistics: SolverStatistics
 
 
+@dataclass(frozen=True)
+class LocalSearchRecord:
+    """Une recherche locale faite hors du moteur (à l'initialisation ou au restart) : l'horaire passé au
+    ``LocalSolver`` et son résultat. Le moteur s'en sert pour émettre ``LocalSearchDone`` et mesurer la charge du
+    solveur (D10)."""
+
+    input_horaire: Horaire
+    result: LocalSearchResult
+
+
 # ---------------------------------------------------------------------------------------------------------------------
 # Interfaces
 # ---------------------------------------------------------------------------------------------------------------------
