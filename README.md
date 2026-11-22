@@ -103,6 +103,8 @@ Les paramètres (taille de la population, NR, NM, générations, graine, budget 
 
 Guide pratique, avec pour chaque question les fichiers à modifier, l'interface à dériver et un exemple exécuté : [`docs/HOWTO.md`](docs/HOWTO.md).
 
+Ce qui existe déjà, rôle par rôle (classes, paramètres, garanties, stratégies prévues) : [`docs/AVAILABLE_STRATEGIES.md`](docs/AVAILABLE_STRATEGIES.md).
+
 - [Je veux faire rouler la boucle mémétique. Je m'y prends comment ?](docs/HOWTO.md#1-je-veux-faire-rouler-la-boucle-mémétique)
 - [Je veux modifier la probabilité de crossover. Que faire ?](docs/HOWTO.md#2-je-veux-modifier-la-probabilité-de-crossover)
 - [Je veux modifier la probabilité de mutation. Comment faire ça ?](docs/HOWTO.md#3-je-veux-modifier-la-probabilité-de-mutation)

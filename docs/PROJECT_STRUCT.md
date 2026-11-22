@@ -16,6 +16,7 @@ memetic_pipeline/
 │   ├── bench_4.json            # 8 employés × 4 activités × 44 périodes
 │   └── bench_5.json            # 8 employés × 5 activités × 48 périodes (difficile : ~1 min pour une 1re solution)
 ├── docs/                       # Toute la documentation, accessible depuis README.md
+│   ├── AVAILABLE_STRATEGIES.md # Catalogue des stratégies disponibles par rôle : classes, paramètres, garanties, stratégies prévues
 │   ├── ALGO.md                 # Pseudo-code de l'algorithme mémétique, correspondance avec le code, écarts assumés
 │   ├── HOWTO.md                # Comment faire ? Lancer la boucle, ajouter un opérateur, changer de solveur, etc.
 │   ├── PROBLEME.md             # Description du problème : données, règles d'un quart, coût, exemple

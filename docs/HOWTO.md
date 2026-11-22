@@ -2,6 +2,8 @@
 
 Guide pratique pour utiliser et modifier le pipeline. Chaque section dit **quels fichiers modifier**, **quelle interface dériver** et donne **au moins un exemple**. Tous les exemples de code ont été exécutés sur `bench_1` le 22 novembre 2026.
 
+Pour savoir ce qui existe déjà avant d'écrire une nouvelle stratégie : [`AVAILABLE_STRATEGIES.md`](AVAILABLE_STRATEGIES.md).
+
 1. [Je veux faire rouler la boucle mémétique](#1-je-veux-faire-rouler-la-boucle-mémétique)
 2. [Je veux modifier la probabilité de crossover](#2-je-veux-modifier-la-probabilité-de-crossover)
 3. [Je veux modifier la probabilité de mutation](#3-je-veux-modifier-la-probabilité-de-mutation)
