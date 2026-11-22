@@ -21,6 +21,7 @@ La génération 0 est l'initialisation.
 
 from collections.abc import Sequence
 from dataclasses import dataclass
+from enum import Enum
 from typing import Any, ClassVar
 
 from src.ga.individual import Individu
@@ -42,13 +43,13 @@ class EventNames:
     RUN_ENDED: str = "run_ended"
 
 
-class Origins:
+class Origins(Enum):
     """D'où vient un individu : utile pour mesurer la faisabilité et l'apport du solveur par opérateur."""
 
-    INITIALIZATION: str = "initialization"
-    CROSSOVER: str = "crossover"
-    MUTATION: str = "mutation"
-    RESTART: str = "restart"
+    INITIALIZATION = "initialization"
+    CROSSOVER = "crossover"
+    MUTATION = "mutation"
+    RESTART = "restart"
 
 
 class RecordSchema:
