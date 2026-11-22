@@ -28,7 +28,8 @@ from unittest import mock
 from collections import Counter
 
 from src.ga.chromosome import BlockEncoding, Encoding
-from src.ga.initialization import RandomBlockInitializer
+from src.ga.chromosome import BlockGenome
+from src.ga.initialization import PopulationInitializer, RandomBlockInitializer
 from src.ga.operators import ShiftStartMutation, UniformGeneCrossover
 from src.ga.population import SurvivorSelector
 from src.ga.registry import IncompatibleOperatorError
@@ -36,6 +37,7 @@ from src.ga.selection import TournamentSelector, UniformMutableSelector
 from src.memetic.config import InvalidMemeticConfigError, MemeticConfig, MemeticError
 from src.memetic.engine import Memetic, MemeticResult
 from src.memetic.executor import Executor, SequentialExecutor
+from src.memetic.local_search import LocalSearchResult
 from src.memetic.seeds import SeedStreams, derive_task_seeds
 from src.memetic.termination import (
     GenerationLimit,
@@ -531,6 +533,120 @@ class TestMemeticBatches(unittest.TestCase):
             crossover_count=CROSSOVER_COUNT, mutation_count=MUTATION_COUNT, master_seed=MASTER_SEED,
         )
         self.assertIsNot(MemeticConfig(**arguments).dispatcher, MemeticConfig(**arguments).dispatcher)
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Graines du moteur (D7) : chaque lot a son stream, et une tâche ne dépend que de sa position dans son lot
+# ---------------------------------------------------------------------------------------------------------------------
+
+RngState = tuple
+
+
+def expected_state(generation: int, stream: SeedStreams, position: int = 0) -> RngState:
+    """État du ``random.Random`` que doit recevoir la tâche ``position`` du lot ``stream`` de ``generation``."""
+    seeds = derive_task_seeds(MASTER_SEED, generation, stream)
+    seed = [next(seeds) for _ in range(position + 1)][position]
+    return random.Random(seed).getstate()
+
+
+class RngRecordingMutation(FakeMutation):
+    """``FakeMutation`` qui note l'état du générateur reçu, sans le consommer."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.states: list[RngState] = []
+
+    def mutate(self, genome: BlockGenome, rng: random.Random) -> BlockGenome:
+        self.states.append(rng.getstate())
+        return super().mutate(genome, rng)
+
+
+class RngRecordingLocalSolver(FakeLocalSolver):
+    """``FakeLocalSolver`` qui note l'état du générateur reçu, sans le consommer."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.states: list[RngState] = []
+
+    def improve(self, horaire: Horaire, rng: random.Random) -> LocalSearchResult:
+        self.states.append(rng.getstate())
+        return super().improve(horaire, rng)
+
+
+class RngRecordingInitializer[G](PopulationInitializer[G]):
+    """Initialiseur qui note l'état du générateur reçu, puis délègue à ``delegate``."""
+
+    def __init__(self, delegate: PopulationInitializer[G]) -> None:
+        self.delegate = delegate
+        self.states: list[RngState] = []
+
+    def initialize(self, size: int, rng: random.Random) -> tuple[Individu[G], ...]:
+        self.states.append(rng.getstate())
+        return self.delegate.initialize(size, rng)
+
+
+class RngRecordingRestartPolicy(FakeRestartPolicy):
+    """``FakeRestartPolicy`` qui note l'état du générateur reçu, sans le consommer."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.states: list[RngState] = []
+
+    def restart(self, population, rng: random.Random):
+        self.states.append(rng.getstate())
+        return super().restart(population, rng)
+
+
+class TestEngineSeeds(unittest.TestCase):
+
+    def mutation_task_states(self, crossover_count: int) -> tuple[list[RngState], list[RngState]]:
+        """États reçus par les tâches de mutation (par ``mutate`` et par le ``LocalSolver``), pour un NR donné."""
+        mutation = RngRecordingMutation()
+        local_solver = RngRecordingLocalSolver()
+        config = dataclasses.replace(
+            fake_config(),
+            crossover_count=crossover_count,
+            mutation_count=LARGE_MUTATION_COUNT,
+            mutation=mutation,
+            local_solver=local_solver,
+        )
+        Memetic(config).run()
+        crossover_children = crossover_count * CHILDREN_PER_CROSSOVER
+        calls_per_generation = crossover_children + LARGE_MUTATION_COUNT
+        mutation_local_search_states = [
+            state
+            for generation_start in range(0, calls_per_generation * GENERATIONS, calls_per_generation)
+            for state in local_solver.states[generation_start + crossover_children:generation_start + calls_per_generation]
+        ]
+        return mutation.states, mutation_local_search_states
+
+    def test_givenOtherNr_whenRun_thenMutationTasksReceiveTheSameGenerators(self) -> None:
+        reference_mutate, reference_search = self.mutation_task_states(CROSSOVER_COUNT)
+        other_mutate, other_search = self.mutation_task_states(LARGE_CROSSOVER_COUNT)
+        self.assertEqual(len(reference_mutate), LARGE_MUTATION_COUNT * GENERATIONS)
+        self.assertEqual(reference_mutate, other_mutate, "le générateur d'une mutation ne dépend pas de NR")
+        self.assertEqual(reference_search, other_search, "la recherche locale d'une mutation ne dépend pas de NR")
+
+    def test_givenMutationTask_whenRun_thenOperatorAndLocalSolverShareTheTaskGenerator(self) -> None:
+        mutate_states, search_states = self.mutation_task_states(CROSSOVER_COUNT)
+        expected = [
+            expected_state(generation, SeedStreams.MUTATION, position)
+            for generation in range(ONE_GENERATION, GENERATIONS + 1)
+            for position in range(LARGE_MUTATION_COUNT)
+        ]
+        self.assertEqual(mutate_states, expected)
+        self.assertEqual(search_states, expected, "pas le générateur de la sélection des individus à muter")
+
+    def test_givenRun_whenInitializing_thenInitializerReceivesTheInitializationGenerator(self) -> None:
+        initializer = RngRecordingInitializer(fake_config().initializer)
+        Memetic(dataclasses.replace(fake_config(), initializer=initializer)).run()
+        self.assertEqual(initializer.states, [expected_state(0, SeedStreams.INITIALIZATION)])
+
+    def test_givenConvergence_whenRestarting_thenRestartReceivesTheRestartGenerator(self) -> None:
+        restart = RngRecordingRestartPolicy()
+        convergence = FakeConvergenceCriterion(frozenset([CONVERGENCE_CALL]))
+        Memetic(dataclasses.replace(fake_config(), restart=restart, convergence=convergence)).run()
+        self.assertEqual(restart.states, [expected_state(CONVERGENCE_CALL, SeedStreams.RESTART)])
 
 
 if __name__ == "__main__":

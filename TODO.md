@@ -290,7 +290,7 @@ Croisement arithmétique : pour chaque employé, l'enfant reçoit `d·p1 + (1−
 - [x] Assemblage selon le pseudo-code de CLAUDE.md ; le moteur ne dépend que des interfaces ; critère `terminé(P)` via `TerminationCriterion`
 - [x] Émission des événements de D8 aux points prévus ; un `ObservationHub` (`MemeticConfig.dispatcher`, un hub vide par défaut) remplace les collecteurs et destinations ; le moteur le ferme à la fin de `run`
 - [x] Tests (sans MiniZinc, avec des faux objets) : terminaison, coût du meilleur monotone non croissant, moteur exercé avec des opérateurs factices, reproductibilité (même graine ⇒ même historique, avec ou sans collecteurs ; solveur limité en effort plutôt qu'en temps), entrées des opérateurs jamais modifiées
-  - validé le 2026-11-22 (PR #11 de Xavier, reprise et corrigée par Pascal et Claude) : lots NR et NM conformes à D7, graines par tâche, 42 tests dans `test_engine`, suite complète verte (502 tests)
+  - validé le 2026-11-22 (PR #11 de Xavier, reprise et corrigée par Pascal et Claude) : lots NR et NM conformes à D7, graines par tâche, 46 tests dans `test_engine`, suite complète verte (506 tests)
 - [ ] **9-intégration** (Pascal, après la fusion de 5c, 8, 8b et 9) : exécution complète sur `bench_1` avec les vrais composants (`MiniZincLocalSolver` + CP-SAT limité en effort déterministe), coût du meilleur monotone non croissant, reproductibilité avec et sans collecteurs, événements reçus dans l'ordre
 
 ## Étape 10 — Driver et expériences (`src/drivers/`) **(C)**
