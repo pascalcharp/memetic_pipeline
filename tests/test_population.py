@@ -29,6 +29,7 @@ from src.ga.population import (
 from src.ga.chromosome import BlockEncoding
 from src.ga.individual import Individu
 from src.ga.initialization import RandomBlockInitializer
+from src.ga.selection import EmptyPopulationError, InvalidSelectionParameterError, UnevaluatedIndividualError
 from src.model.evaluation import CostBreakdown, CostEvaluator
 from src.model.horaire import Horaire, HoraireEmploye
 from tests.fixtures import cost_with_total, synthetic_instance
@@ -52,8 +53,13 @@ COST_HIGHEST: int = 50
 
 # Population type : identifiants triés du meilleur au pire coût (voir ``mixed_population``).
 IDS_BY_COST: tuple[int, ...] = (ID_B, ID_D, ID_C, ID_E, ID_A)
+BEST_INDEX: int = 0
+BEST_ID: int = IDS_BY_COST[BEST_INDEX]
 TOP_COUNT: int = 3
 SINGLE_SURVIVOR: int = 1
+
+# Nombre de copies d'un même génome dans les populations de doublons.
+DUPLICATE_COUNT: int = 3
 
 # Les individus créés par le faux initialiseur ont des identifiants >= NEW_ID_BASE : on les distingue ainsi
 # des individus de la population de départ.
@@ -61,12 +67,18 @@ NEW_ID_BASE: int = 1_000_000
 NEW_ID_SPAN: int = 1_000_000
 EVALUATED_TOTAL: int = 100
 
-# Paramètres du restart et de la stagnation.
+# Paramètres du restart.
 SINGLE_ELITE: int = PopulationDefaults.MIN_RESTART_ELITE_COUNT
 MULTIPLE_ELITES: int = 2
 EXCESS_ELITES: int = 1
+SINGLE_DISTINCT: int = 1
+FIRST_CALL: int = 0
+
+# Paramètres de la stagnation.
 GENERATIONS: int = 3
 ONE_GENERATION: int = PopulationDefaults.MIN_STAGNATION_GENERATIONS
+REFERENCE_GENERATION: int = 1  # la 1re génération fixe la référence : elle ne compte pas comme une stagnation
+DROP_GENERATION: int = 1  # une génération dont le meilleur coût baisse remet le compteur à zéro
 
 # Décalages de l'horaire synthétique d'un génome (jalons à la suite du début).
 BREAK1_OFFSET: int = 1
@@ -117,6 +129,11 @@ def individual(genome_id: int, total: int, feasible: bool = True) -> Individu[in
     return Individu(genome=genome_id, horaire=distinct_horaire(genome_id), cost=cost_of(total, feasible))
 
 
+def unevaluated_individual(genome_id: int) -> Individu[int]:
+    """Individu sans coût (non évalué)."""
+    return Individu(genome=genome_id, horaire=distinct_horaire(genome_id))
+
+
 def mixed_population() -> list[Individu[int]]:
     """Cinq génomes distincts, dans le désordre ; triés par coût croissant : ``IDS_BY_COST``."""
     return [
@@ -126,6 +143,11 @@ def mixed_population() -> list[Individu[int]]:
         individual(ID_D, COST_LOW),
         individual(ID_E, COST_HIGH),
     ]
+
+
+def copies_of(genome_id: int, total: int, count: int = DUPLICATE_COUNT) -> list[Individu[int]]:
+    """``count`` exemplaires du même génome (donc des doublons)."""
+    return [individual(genome_id, total) for _ in range(count)]
 
 
 def ids(individus) -> list[int]:
@@ -235,21 +257,50 @@ class TestCommonSurvivorSelectors(unittest.TestCase):
         for selector_class in self.SELECTORS:
             with self.subTest(selector=selector_class.__name__):
                 result = selector_class().select(population, SINGLE_SURVIVOR, self.rng)
-                self.assertEqual(ids(result), [IDS_BY_COST[0]])
+                self.assertEqual(ids(result), [BEST_ID])
 
     def test_givenBestIsLastInInput_whenSelect_thenBestIsNeverLost(self) -> None:
         worst_first = sorted(mixed_population(), key=lambda individu: individu.cost.total, reverse=True)
         size = len(worst_first) - SINGLE_SURVIVOR
         for selector_class in self.SELECTORS:
             with self.subTest(selector=selector_class.__name__):
-                self.assertEqual(ids(selector_class().select(worst_first, size, self.rng))[0], IDS_BY_COST[0])
+                self.assertEqual(ids(selector_class().select(worst_first, size, self.rng))[BEST_INDEX], BEST_ID)
 
-    def test_givenSizeZeroOrEmptyPopulation_whenSelect_thenEmptyTuple(self) -> None:
+    def test_givenFewerDistinctGenomesThanSize_whenSelect_thenCompletedWithDuplicatesInCostOrder(self) -> None:
+        # B n'existe qu'en un exemplaire : la complétion ne le répète pas (pas de cycle A, B, A, B) ; elle prend
+        # les doublons écartés de A, dans l'ordre.
+        population = [individual(ID_B, COST_LOW)] + copies_of(ID_A, COST_LOWEST)
+        expected = [ID_A, ID_B] + [ID_A] * (DUPLICATE_COUNT - SINGLE_SURVIVOR)
+        for selector_class in self.SELECTORS:
+            with self.subTest(selector=selector_class.__name__):
+                self.assertEqual(ids(selector_class().select(population, len(expected), self.rng)), expected)
+
+    def test_givenSingleDistinctGenome_whenSelect_thenSizeReachedWithCopiesOfIt(self) -> None:
+        population = copies_of(ID_A, COST_LOWEST)
+        expected = [ID_A] * DUPLICATE_COUNT
+        for selector_class in self.SELECTORS:
+            with self.subTest(selector=selector_class.__name__):
+                self.assertEqual(ids(selector_class().select(population, len(expected), self.rng)), expected)
+
+    def test_givenSizeZero_whenSelect_thenRaisesInvalidSelectionParameterError(self) -> None:
         population = mixed_population()
         for selector_class in self.SELECTORS:
             with self.subTest(selector=selector_class.__name__):
-                self.assertEqual(selector_class().select(population, INVALID_COUNT, self.rng), ())
-                self.assertEqual(selector_class().select([], SINGLE_SURVIVOR, self.rng), ())
+                with self.assertRaises(InvalidSelectionParameterError):
+                    selector_class().select(population, INVALID_COUNT, self.rng)
+
+    def test_givenEmptyPopulation_whenSelect_thenRaisesEmptyPopulationError(self) -> None:
+        for selector_class in self.SELECTORS:
+            with self.subTest(selector=selector_class.__name__):
+                with self.assertRaises(EmptyPopulationError):
+                    selector_class().select([], SINGLE_SURVIVOR, self.rng)
+
+    def test_givenUnevaluatedIndividual_whenSelect_thenRaisesUnevaluatedIndividualError(self) -> None:
+        population = mixed_population() + [unevaluated_individual(NEW_ID_BASE)]
+        for selector_class in self.SELECTORS:
+            with self.subTest(selector=selector_class.__name__):
+                with self.assertRaises(UnevaluatedIndividualError):
+                    selector_class().select(population, SINGLE_SURVIVOR, self.rng)
 
     def test_givenPopulation_whenSelect_thenInputIsNotModified(self) -> None:
         population = [
@@ -304,16 +355,6 @@ class TestPlusSurvivorSelector(unittest.TestCase):
         # Mêmes coûts : le tri stable garde l'ordre d'entrée A, B, A ; le doublon n'est pas adjacent.
         population = [individual(ID_A, COST_LOWEST), individual(ID_B, COST_LOWEST), individual(ID_A, COST_LOWEST)]
         expected = [ID_A, ID_B]
-        self.assertEqual(self.select_ids(population, expected), expected)
-
-    def test_givenFewerDistinctGenomesThanSize_whenSelect_thenCompletedWithDuplicatesInCostOrder(self) -> None:
-        population = [individual(ID_B, COST_LOW), individual(ID_A, COST_LOWEST), individual(ID_B, COST_LOW)]
-        expected = [ID_A, ID_B, ID_A, ID_B, ID_A]
-        self.assertEqual(self.select_ids(population, expected), expected)
-
-    def test_givenSingleDistinctGenome_whenSelect_thenSizeReachedWithCopiesOfIt(self) -> None:
-        population = [individual(ID_A, COST_LOWEST), individual(ID_A, COST_LOWEST)]
-        expected = [ID_A, ID_A, ID_A]
         self.assertEqual(self.select_ids(population, expected), expected)
 
     def test_givenEqualCosts_whenSelect_thenTiesBrokenByInputOrder(self) -> None:
@@ -393,16 +434,15 @@ class TestDeathPenaltySurvivorSelector(unittest.TestCase):
         expected = [ID_A, ID_B, ID_C]
         self.assertEqual(self.select_ids(population, expected), expected)
 
-    def test_givenFewerDistinctGenomesThanSize_whenSelect_thenFewerReturnedWithoutDuplicates(self) -> None:
-        # Pas de complément par doublons (contrairement à PlusSurvivorSelector) : ils feraient perdre de la
-        # diversité et converger prématurément.
+    def test_givenFewerDistinctGenomes_whenSelect_thenInfeasibleDistinctBeforeFeasibleDuplicate(self) -> None:
+        # Ordre de complétion : faisables distincts, infaisables distincts, puis doublons.
         population = [
             individual(ID_A, COST_LOWEST),
             individual(ID_B, COST_LOW, feasible=False),
             individual(ID_A, COST_LOWEST),
         ]
-        result = self.selector.select(population, len(population), self.rng)
-        self.assertEqual(ids(result), [ID_A, ID_B])
+        expected = [ID_A, ID_B, ID_A]
+        self.assertEqual(self.select_ids(population, expected), expected)
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -417,11 +457,11 @@ class TestStagnationCriterion(unittest.TestCase):
         self.assertEqual(results, [False] * len(totals))
 
     def test_givenCostStagnates_whenHasConverged_thenTrueAfterExactlyGenerationsWithoutDrop(self) -> None:
-        totals = [COST_MEDIUM] * (GENERATIONS + 1)
+        totals = [COST_MEDIUM] * (GENERATIONS + REFERENCE_GENERATION)
         self.assertEqual(feed(StagnationCriterion(generations=GENERATIONS), totals), stagnation_pattern(GENERATIONS))
 
     def test_givenMinimumGenerations_whenNextGenerationDoesNotDrop_thenConverged(self) -> None:
-        totals = [COST_MEDIUM] * (ONE_GENERATION + 1)
+        totals = [COST_MEDIUM] * (ONE_GENERATION + REFERENCE_GENERATION)
         self.assertEqual(
             feed(StagnationCriterion(generations=ONE_GENERATION), totals), stagnation_pattern(ONE_GENERATION)
         )
@@ -429,13 +469,14 @@ class TestStagnationCriterion(unittest.TestCase):
     def test_givenDropAfterStagnation_whenHasConverged_thenCounterRestartsFromZero(self) -> None:
         # GENERATIONS générations au coût élevé (aucune ne converge), puis une baisse remet le compteur à zéro :
         # il faut encore GENERATIONS générations sans baisse pour converger.
-        totals = [COST_HIGH] * GENERATIONS + [COST_MEDIUM] * (GENERATIONS + 1)
-        results = feed(StagnationCriterion(generations=GENERATIONS), totals)
-        self.assertEqual(results, [False] * (len(totals) - 1) + [True])
+        totals = [COST_HIGH] * GENERATIONS + [COST_MEDIUM] * (DROP_GENERATION + GENERATIONS)
+        *earlier_results, last_result = feed(StagnationCriterion(generations=GENERATIONS), totals)
+        self.assertFalse(any(earlier_results))
+        self.assertTrue(last_result)
 
     def test_givenCostIncreases_whenHasConverged_thenCountsAsNoDrop(self) -> None:
         totals = [COST_LOW, COST_MEDIUM, COST_HIGH]
-        generations = len(totals) - 1
+        generations = len(totals) - REFERENCE_GENERATION
         self.assertEqual(feed(StagnationCriterion(generations=generations), totals), stagnation_pattern(generations))
 
     def test_givenPopulationWithSeveralIndividuals_whenHasConverged_thenBestCostIsTracked(self) -> None:
@@ -445,9 +486,13 @@ class TestStagnationCriterion(unittest.TestCase):
         # (le 1er individu seul resterait à COST_HIGH).
         self.assertFalse(criterion.has_converged([individual(ID_A, COST_HIGH), individual(ID_B, COST_LOWEST)]))
 
+    def test_givenEmptyPopulation_whenHasConverged_thenRaisesPopulationError(self) -> None:
+        with self.assertRaises(PopulationError):
+            StagnationCriterion().has_converged([])
+
     def test_givenConverged_whenReset_thenCounterStartsOverFromZero(self) -> None:
         criterion = StagnationCriterion(generations=GENERATIONS)
-        totals = [COST_MEDIUM] * (GENERATIONS + 1)
+        totals = [COST_MEDIUM] * (GENERATIONS + REFERENCE_GENERATION)
         self.assertEqual(feed(criterion, totals), stagnation_pattern(GENERATIONS))
         criterion.reset()
         self.assertEqual(feed(criterion, totals), stagnation_pattern(GENERATIONS))
@@ -458,8 +503,8 @@ class TestStagnationCriterion(unittest.TestCase):
         criterion.reset()
         # Sans reset, COST_HIGHEST compterait comme une non-baisse ; après reset, c'est la nouvelle référence.
         # Séquence : référence, baisse (compteur à zéro), puis GENERATIONS générations sans baisse.
-        totals = [COST_HIGHEST] + [COST_HIGH] * (GENERATIONS + 1)
-        self.assertEqual(feed(criterion, totals), stagnation_pattern(GENERATIONS + 1))
+        totals = [COST_HIGHEST] + [COST_HIGH] * (DROP_GENERATION + GENERATIONS)
+        self.assertEqual(feed(criterion, totals), stagnation_pattern(DROP_GENERATION + GENERATIONS))
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -487,8 +532,29 @@ class TestEliteRestart(unittest.TestCase):
 
     def test_givenEliteInPopulation_whenRestart_thenElitesKeepTheirCost(self) -> None:
         restart, _, _ = fake_elite_restart(SINGLE_ELITE)
-        best = restart.restart(self.population, self.rng)[0]
+        best = restart.restart(self.population, self.rng)[BEST_INDEX]
         self.assertEqual(best.cost.total, COST_LOWEST)
+
+    def test_givenDuplicateElites_whenRestart_thenOneCopyKeptAndSizeIsKept(self) -> None:
+        # Pas de complément de l'élite par des doublons : A n'est gardé qu'une fois, le reste est régénéré.
+        population = [
+            individual(ID_A, COST_LOWEST),
+            individual(ID_A, COST_LOWEST),
+            individual(ID_B, COST_LOW),
+            individual(ID_C, COST_MEDIUM),
+        ]
+        restart, _, _ = fake_elite_restart(MULTIPLE_ELITES)
+        result = restart.restart(population, self.rng)
+        self.assertEqual(ids(result)[:MULTIPLE_ELITES], [ID_A, ID_B])
+        self.assertEqual(len(result), len(population))
+
+    def test_givenFewerDistinctGenomesThanEliteCount_whenRestart_thenRestRegenerated(self) -> None:
+        population = copies_of(ID_A, COST_LOWEST)
+        restart, initializer, _ = fake_elite_restart(len(population))
+        result = restart.restart(population, self.rng)
+        self.assertEqual(ids(result)[:SINGLE_DISTINCT], [ID_A])
+        self.assertEqual([count for count, _ in initializer.calls], [len(population) - SINGLE_DISTINCT])
+        self.assertEqual(len(result), len(population))
 
     def test_givenRestart_whenCalled_thenInitializerGeneratesTheRest(self) -> None:
         restart, initializer, _ = fake_elite_restart(MULTIPLE_ELITES)
@@ -514,12 +580,14 @@ class TestEliteRestart(unittest.TestCase):
             for _ in range(len(self.population) - SINGLE_ELITE)
         ]
         self.assertEqual(ids(result)[SINGLE_ELITE:], expected_ids)
-        self.assertIs(initializer.calls[0][1], self.rng)
+        _, used_rng = initializer.calls[FIRST_CALL]
+        self.assertIs(used_rng, self.rng)
 
     def test_givenEliteEqualToPopulationSize_whenRestart_thenNothingIsRegenerated(self) -> None:
         restart, initializer, _ = fake_elite_restart(len(self.population))
         result = restart.restart(self.population, self.rng)
-        self.assertEqual(result, tuple(self.population))
+        # Le restart rend l'élite triée par coût croissant, pas dans l'ordre d'entrée.
+        self.assertEqual(ids(result), list(IDS_BY_COST))
         self.assertEqual(initializer.calls, [])
 
     def test_givenEliteLargerThanPopulation_whenRestart_thenRaisesWithSizesInMessage(self) -> None:
@@ -529,6 +597,12 @@ class TestEliteRestart(unittest.TestCase):
             restart.restart(self.population, self.rng)
         self.assertIn(str(elite_count), str(context.exception))
         self.assertIn(str(len(self.population)), str(context.exception))
+
+    def test_givenEmptyPopulation_whenRestart_thenRaisesInvalidPopulationParameterError(self) -> None:
+        # elite_count vaut au moins 1 : il dépasse toujours la taille d'une population vide.
+        restart, _, _ = fake_elite_restart(SINGLE_ELITE)
+        with self.assertRaises(InvalidPopulationParameterError):
+            restart.restart([], self.rng)
 
     def test_givenPopulation_whenRestart_thenInputIsNotModified(self) -> None:
         restart, _, _ = fake_elite_restart(MULTIPLE_ELITES)
