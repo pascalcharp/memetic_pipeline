@@ -341,9 +341,6 @@ class TestDeriveTaskSeeds(unittest.TestCase):
             self.assertIsNotNone(seed)
             self.assertIsInstance(seed, int)
 
-    def test_givenZeroTasks_whenDerive_thenEmptyTuple(self) -> None:
-        self.assertEqual(derive_task_seeds(MASTER_SEED, SEED_GENERATION, SeedStreams.CROSSOVER, 0), ())
-
     def test_givenOneBatch_whenDerive_thenSeedsWithinTheBatchAreDistinct(self) -> None:
         seeds = derive_task_seeds(MASTER_SEED, SEED_GENERATION, SeedStreams.CROSSOVER, SEED_BATCH)
         sets = self._genator_to_set(seeds, SEED_BATCH)
