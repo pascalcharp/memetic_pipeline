@@ -204,7 +204,7 @@ Rappel : les tests peuvent être écrits par un agent de codage (règle 0 de CLA
 **Tests** : `python -m unittest tests.test_smoke_minizinc tests.test_solver tests.test_local_search` (appellent MiniZinc).
 
 ### Tristan — Étape 8 : gestion de la population
-- [ ] Étape 8
+- [x] Étape 8
 
 **Fichiers**
 - `src/ga/population.py`
