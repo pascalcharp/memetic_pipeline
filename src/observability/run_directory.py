@@ -38,6 +38,9 @@ class RunDirectoryDefaults:
     TRACKED_PACKAGES: tuple[str, ...] = ("minizinc", "numpy")
     UNKNOWN_VALUE: str = "inconnu"
     GIT_COMMIT_COMMAND: tuple[str, ...] = ("git", "rev-parse", "HEAD")
+    # Fichiers modifiés, ajoutés ou non suivis de tout le dépôt ; les chemins exclus sont ajoutés après « -- ».
+    GIT_STATUS_COMMAND: tuple[str, ...] = ("git", "status", "--porcelain", "--untracked-files=all", "--", ".")
+    GIT_EXCLUDE_TEMPLATE: str = ":(exclude){path}"
 
 
 class ConfigFields:
@@ -72,6 +75,23 @@ def current_git_commit(repository: Path = ProjectPaths.ROOT) -> str:
     except (OSError, subprocess.CalledProcessError):
         return RunDirectoryDefaults.UNKNOWN_VALUE
     return completed.stdout.strip()
+
+
+def working_tree_is_dirty(repository: Path = ProjectPaths.ROOT, excluded: Sequence[Path] = ()) -> bool | None:
+    """Vrai si la copie de travail de ``repository`` a des modifications non commitées (fichiers modifiés, ajoutés ou
+    non suivis), en ignorant les chemins ``excluded`` (relatifs à la racine du dépôt) ; ``None`` hors d'un dépôt Git.
+
+    Un résultat produit avec une copie de travail modifiée ne peut pas être reproduit à partir du seul commit noté.
+    """
+    exclusions = tuple(RunDirectoryDefaults.GIT_EXCLUDE_TEMPLATE.format(path=path.as_posix()) for path in excluded)
+    try:
+        completed = subprocess.run(
+            RunDirectoryDefaults.GIT_STATUS_COMMAND + exclusions,
+            cwd=repository, capture_output=True, text=True, check=True,
+        )
+    except (OSError, subprocess.CalledProcessError):
+        return None
+    return completed.stdout.strip() != ""
 
 
 def package_versions(packages: Sequence[str] = RunDirectoryDefaults.TRACKED_PACKAGES) -> dict[str, str]:

@@ -21,11 +21,17 @@ memetic_pipeline/
 │   ├── HOWTO.md                # Comment faire ? Lancer la boucle, ajouter un opérateur, changer de solveur, etc.
 │   ├── PROBLEME.md             # Description du problème : données, règles d'un quart, coût, exemple
 │   └── PROJECT_STRUCT.md       # Ce document
+├── experiments/                # Expériences (étape 10), versionnées
+│   ├── EXPLOG.md               # Journal des expériences : une entrée par exécution, ajoutée par run_experiment
+│   ├── config/                 # Configurations JSON des expériences (description, instance, paramètres)
+│   │   └── integration_bench1.json # Configuration de base : les réglages de la 9-intégration sur bench_1
+│   └── results/                # Résultats JSON, un répertoire par jour (AAAA-MM-JJ/)
 ├── src/                        # Code source principal
 │   ├── __init__.py
 │   ├── config.py               # Configuration : chemins du projet et des deux modèles (ProjectPaths), MiniZinc (MiniZincConfig)
-│   ├── drivers/                # Points d'entrée des expériences (vide pour l'instant)
-│   │   └── __init__.py
+│   ├── drivers/                # Points d'entrée des expériences
+│   │   ├── __init__.py
+│   │   └── run_experiment.py   # Script d'expériences : configuration JSON → exécution mesurée → résultats JSON et entrée d'EXPLOG.md (étape 10a)
 │   ├── ga/                     # Algorithme génétique
 │   │   ├── __init__.py
 │   │   ├── chromosome.py       # Génotype : interface Encoding[G], BlockEncoding (gènes BlockGene, ActivityBlock)
@@ -86,6 +92,7 @@ memetic_pipeline/
 │   ├── test_observability.py   # Observabilité : schéma, destinations, ObservationHub, journal, répertoire d'exécution
 │   ├── test_operators.py       # Variation (étape 7b) : propriétés avec un vrai Random, cas limites, messages
 │   ├── test_population.py      # Population (étape 8) : sélecteurs (doublons, peine de mort), stagnation, restart (élite, nouveaux, recherches)
+│   ├── test_run_experiment.py  # Script d'expériences (étape 10a) : configuration, chemins, résultats, journal, exécution courte sur bench_1
 │   ├── test_registry.py        # Registre (étape 7a) : enregistrement et création par nom, compatibilité opérateur / encodage
 │   ├── test_selection.py       # Sélection (étape 7a) : check_selectable, tournoi, tirage uniforme, reproductibilité
 │   ├── test_shift_rules.py     # Constantes du domaine et sondes de cohérence avec horaire.mzn
@@ -102,4 +109,4 @@ memetic_pipeline/
 └── requirements.txt            # Dépendances Python (minizinc, numpy)
 ```
 
-Non suivis par Git : `.venv/` (environnement virtuel local), `.idea/` (PyCharm), les caches `__pycache__/` et `results/` (résultats des exécutions, D8).
+Non suivis par Git : `.venv/` (environnement virtuel local), `.idea/` (PyCharm), les caches `__pycache__/` et `/results/` à la racine (répertoires de `RunDirectory`, D8). `experiments/results/` est versionné.

@@ -64,7 +64,7 @@ La commande par défaut de l'image lance toute la suite de tests. Le code est **
 docker run --rm -v "$PWD":/app memetic-pipeline
 ```
 
-Sous Linux, un test propre à macOS est ignoré : le résultat attendu est `OK (skipped=1)`.
+Dans l'image, six tests sont ignorés : un test propre à macOS, et les cinq tests de `working_tree_is_dirty`, qui ont besoin de `git` (absent de l'image). Le résultat attendu est `OK (skipped=6)`.
 
 #### En local
 
@@ -81,7 +81,15 @@ Les commandes se lancent **depuis la racine du dépôt** (les imports partent de
 
 ### 2.3 Exécuter des expériences
 
-Le point d'entrée en ligne de commande viendra à l'étape 10 du [`TODO.md`](TODO.md). En attendant, l'assemblage de référence (`src/memetic/assembly.py`) lance le moteur avec les vrais composants. Depuis la racine du dépôt :
+Une expérience est décrite par un fichier de configuration JSON dans `experiments/config/`. Depuis la racine du dépôt :
+
+```bash
+python -m src.drivers.run_experiment experiments/config/integration_bench1.json
+```
+
+Le script construit le moteur avec l'assemblage de référence, l'exécute en mesurant tout, écrit un fichier de résultats JSON dans `experiments/results/<date du jour>/` et ajoute une entrée au journal des expériences, [`experiments/EXPLOG.md`](experiments/EXPLOG.md) : description, chemins, coût obtenu, effort cumulé du solveur. Options : `--results-dir` (autre répertoire de résultats) et `--log` (autre journal). Format de la configuration : docstring de `src/drivers/run_experiment.py`, et [`docs/HOWTO.md`, section 1](docs/HOWTO.md#1-je-veux-faire-rouler-la-boucle-mémétique).
+
+Le moteur peut aussi être lancé depuis Python, avec l'assemblage de référence (`src/memetic/assembly.py`) :
 
 ```python
 from src.config import ProjectPaths
