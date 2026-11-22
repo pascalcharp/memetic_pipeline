@@ -324,7 +324,7 @@ class TestDeriveTaskSeeds(unittest.TestCase):
     def _genator_to_set(self, inifinite_seeds: Generator[int], limit: int) -> Set[int]:
         s = set()
         for i in range(limit):
-            s.add(i)
+            s.add(next(inifinite_seeds))
 
         return s
 
