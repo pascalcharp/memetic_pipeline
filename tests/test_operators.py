@@ -284,7 +284,7 @@ class TestActivityMutationWithRealRandom(unittest.TestCase):
         instance = load_instance(ProjectPaths.DATA_DIR / ACTIVITY_BENCH_FILE)
         population = RandomBlockInitializer(instance, BlockEncoding()).initialize(
             ACTIVITY_GENOME_COUNT, Random(ACTIVITY_SEED)
-        )
+        ).individuals
         mutation = ActivityMutation(instance)
         rng = Random(ACTIVITY_SEED)
         drawn_activities: set[int] = set()
@@ -380,7 +380,7 @@ class TestBlockBoundaryMutationWithRealRandom(unittest.TestCase):
         instance = load_instance(ProjectPaths.DATA_DIR / BOUNDARY_BENCH_FILE)
         population = RandomBlockInitializer(instance, BlockEncoding()).initialize(
             BOUNDARY_GENOME_COUNT, Random(BOUNDARY_SEED)
-        )
+        ).individuals
         mutation = BlockBoundaryMutation()
         rng = Random(BOUNDARY_SEED)
         for index, individual in enumerate(population):
@@ -546,7 +546,7 @@ class TestShiftStartMutationWithRealRandom(unittest.TestCase):
         instance = load_instance(ProjectPaths.DATA_DIR / SHIFT_BENCH_FILE)
         population = RandomBlockInitializer(instance, BlockEncoding()).initialize(
             SHIFT_GENOME_COUNT, Random(SHIFT_SEED)
-        )
+        ).individuals
         mutation = ShiftStartMutation(instance)
         rng = Random(SHIFT_SEED)
         for index, individual in enumerate(population):

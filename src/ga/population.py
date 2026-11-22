@@ -22,10 +22,12 @@ Les stratégies ne modifient jamais la population reçue ni ses individus (D7) :
 import random
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
+from dataclasses import dataclass
 
 from src.ga.individual import Individu
 from src.ga.initialization import PopulationInitializer
 from src.ga.selection import check_selectable
+from src.memetic.local_search import LocalSearchRecord
 from src.model.evaluation import CostBreakdown, CostEvaluator
 
 
@@ -98,12 +100,29 @@ class ConvergenceCriterion[G](ABC):
         """Oublie l'historique : appelé après un restart."""
 
 
+@dataclass(frozen=True)
+class RestartResult[G]:
+    """Résultat d'un restart : l'élite gardée, les nouveaux individus (évalués) et les recherches locales faites
+    pour les obtenir. Le moteur émet un ``IndividualCreated`` par nouvel individu et un ``LocalSearchDone`` par
+    recherche (D8, D10)."""
+
+    elite: tuple[Individu[G], ...]
+    newcomers: tuple[Individu[G], ...]
+    searches: tuple[LocalSearchRecord, ...] = ()
+
+    @property
+    def population(self) -> tuple[Individu[G], ...]:
+        """La nouvelle population : l'élite, puis les nouveaux individus."""
+        return self.elite + self.newcomers
+
+
 class RestartPolicy[G](ABC):
     """``Restart`` : régénère une population qui a convergé."""
 
     @abstractmethod
-    def restart(self, population: Sequence[Individu[G]], rng: random.Random) -> tuple[Individu[G], ...]:
-        """Nouvelle population évaluée, de même taille que ``population`` ; ``population`` n'est pas modifiée."""
+    def restart(self, population: Sequence[Individu[G]], rng: random.Random) -> RestartResult[G]:
+        """Nouvelle population évaluée, de même taille que ``population``, séparée en élite et nouveaux individus ;
+        ``population`` n'est pas modifiée."""
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -258,20 +277,19 @@ class EliteRestart[G](RestartPolicy[G]):
         self.evaluator = evaluator
         self.elite_count = elite_count
 
-    def restart(self, population: Sequence[Individu[G]], rng: random.Random) -> tuple[Individu[G], ...]:
+    def restart(self, population: Sequence[Individu[G]], rng: random.Random) -> RestartResult[G]:
         if self.elite_count > len(population):
             raise InvalidPopulationParameterError(PopulationMessages.ELITE_LARGER_THAN_POPULATION.format(
                 elite_count=self.elite_count, size=len(population)
             ))
         sorted_population: list[Individu[G]] = sorted(population, key=lambda individu: individu.cost.total)
-        new_population: list[Individu[G]] = list(
-            _distinct_by_cost(sorted_population, self.elite_count, fill_duplicates=False)
-        )
-        missing_count: int = len(population) - len(new_population)
+        elite: tuple[Individu[G], ...] = _distinct_by_cost(sorted_population, self.elite_count, fill_duplicates=False)
+        missing_count: int = len(population) - len(elite)
         if missing_count == 0:
-            return tuple(new_population)
-        new_individus: tuple[Individu[G], ...] = self.initializer.initialize(missing_count, rng)
-        for individu in new_individus:
+            return RestartResult(elite=elite, newcomers=())
+        initialization = self.initializer.initialize(missing_count, rng)
+        newcomers: list[Individu[G]] = []
+        for individu in initialization.individuals:
             cost: CostBreakdown = self.evaluator.evaluate(individu.horaire)
-            new_population.append(individu.with_cost(cost))
-        return tuple(new_population)
+            newcomers.append(individu.with_cost(cost))
+        return RestartResult(elite=elite, newcomers=tuple(newcomers), searches=initialization.searches)

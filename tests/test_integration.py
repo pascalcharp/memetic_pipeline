@@ -286,9 +286,21 @@ class TestMemeticOnBench1(unittest.TestCase):
 
     # --- Recherche locale réelle -------------------------------------------------------------------------------------
 
-    def test_givenRun_whenFinished_thenOneLocalSearchPerNewIndividual(self) -> None:
-        per_generation = INTEGRATION_SETTINGS.crossover_count * CHILDREN_PER_CROSSOVER + INTEGRATION_SETTINGS.mutation_count
-        self.assertEqual(len(self.events_of(LocalSearchDone)), per_generation * INTEGRATION_SETTINGS.generations)
+    def test_givenRun_whenFinished_thenOneLocalSearchPerNewIndividualWhateverItsOrigin(self) -> None:
+        searches = self.events_of(LocalSearchDone)
+        created = self.events_of(IndividualCreated)
+        self.assertEqual(len(searches), len(created), "chaque nouvel individu passe par le LocalSolver")
+        by_origin = {origin.value: 0 for origin in Origins}
+        for event in searches:
+            by_origin[event.origin] += 1
+        per_generation = INTEGRATION_SETTINGS.crossover_count * CHILDREN_PER_CROSSOVER
+        self.assertEqual(by_origin[Origins.INITIALIZATION.value], INTEGRATION_SETTINGS.population_size)
+        self.assertEqual(by_origin[Origins.CROSSOVER.value], per_generation * INTEGRATION_SETTINGS.generations)
+        self.assertEqual(by_origin[Origins.MUTATION.value],
+                         INTEGRATION_SETTINGS.mutation_count * INTEGRATION_SETTINGS.generations)
+        restart_newcomers = sum(1 for event in created if event.origin == Origins.RESTART.value)
+        self.assertEqual(by_origin[Origins.RESTART.value], restart_newcomers)
+        self.assertGreater(restart_newcomers, 0)
 
     def test_givenFeasibleInput_whenLocalSearchDone_thenCostDoesNotIncrease(self) -> None:
         for index, event in enumerate(self.events_of(LocalSearchDone)):
@@ -312,20 +324,39 @@ class TestMemeticOnBench1(unittest.TestCase):
     # --- Événements et enregistrements ------------------------------------------------------------------------------
 
     def test_givenObservedRun_whenListingEvents_thenTheyComeInTheExpectedOrder(self) -> None:
+        """Génération 0 : recherches de l'initialiseur, puis individus, puis ``GenerationEnded(0)``. Génération g :
+        paires (``LocalSearchDone``, ``IndividualCreated``) des lots NR et NM, puis ``GenerationEnded(g)``, puis, en
+        cas de restart, ``Converged(g)``, les recherches et les nouveaux individus du restart, ``Restarted(g)``."""
         self.assertIsInstance(self.events[0], RunStarted)
         self.assertIsInstance(self.events[-1], RunEnded)
         population_size = INTEGRATION_SETTINGS.population_size
-        initial = self.events[1:1 + population_size]
-        for event in initial:
+        initial_searches = self.events[1:1 + population_size]
+        initial_created = self.events[1 + population_size:1 + 2 * population_size]
+        for event in initial_searches:
+            self.assertIsInstance(event, LocalSearchDone)
+            self.assertEqual(event.origin, Origins.INITIALIZATION.value)
+        for event in initial_created:
             self.assertIsInstance(event, IndividualCreated)
             self.assertEqual(event.origin, Origins.INITIALIZATION.value)
-        self.assertIsInstance(self.events[1 + population_size], GenerationEnded)
+        self.assertIsInstance(self.events[1 + 2 * population_size], GenerationEnded)
 
         generation = 0
+        restarting = False
         expecting_search_result = False
-        for event in self.events[2 + population_size:-1]:
+        for event in self.events[2 + 2 * population_size:-1]:
             with self.subTest(event=type(event).__name__, generation=generation):
-                if isinstance(event, LocalSearchDone):
+                if isinstance(event, Converged):
+                    self.assertEqual(event.generation, generation)
+                    restarting = True
+                elif isinstance(event, Restarted):
+                    self.assertTrue(restarting)
+                    self.assertEqual(event.generation, generation)
+                    restarting = False
+                elif restarting:
+                    self.assertIsInstance(event, (LocalSearchDone, IndividualCreated))
+                    self.assertEqual(event.origin, Origins.RESTART.value)
+                    self.assertEqual(event.generation, generation)
+                elif isinstance(event, LocalSearchDone):
                     self.assertFalse(expecting_search_result, "deux LocalSearchDone de suite")
                     self.assertEqual(event.generation, generation + 1)
                     expecting_search_result = True
@@ -333,12 +364,10 @@ class TestMemeticOnBench1(unittest.TestCase):
                     self.assertTrue(expecting_search_result, "IndividualCreated sans LocalSearchDone avant")
                     self.assertEqual(event.generation, generation + 1)
                     expecting_search_result = False
-                elif isinstance(event, GenerationEnded):
+                else:
+                    self.assertIsInstance(event, GenerationEnded)
                     self.assertFalse(expecting_search_result)
                     generation += 1
-                    self.assertEqual(event.generation, generation)
-                else:
-                    self.assertIsInstance(event, (Converged, Restarted))
                     self.assertEqual(event.generation, generation)
         self.assertEqual(generation, INTEGRATION_SETTINGS.generations)
 

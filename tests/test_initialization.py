@@ -104,7 +104,7 @@ class TestRandomBlockInitializer(unittest.TestCase):
         population = initializer.initialize(
             5,
             random.Random(SEED)
-        )
+        ).individuals
 
         self.assertEqual(len(population), 5)
 
@@ -125,7 +125,7 @@ class TestRandomBlockInitializer(unittest.TestCase):
         population = initializer.initialize(
             20,
             random.Random(SEED)
-        )
+        ).individuals
 
         for individu in population:
             violations = checker.violations(individu.horaire)
@@ -143,12 +143,12 @@ class TestRandomBlockInitializer(unittest.TestCase):
         population1 = initializer.initialize(
             20,
             random.Random(SEED)
-        )
+        ).individuals
 
         population2 = initializer.initialize(
             20,
             random.Random(SEED)
-        )
+        ).individuals
 
         self.assertEqual(population1, population2)
 
@@ -163,7 +163,7 @@ class TestRandomBlockInitializer(unittest.TestCase):
         for size in [0, -1, -5]:
             with self.subTest(size=size):
                 with self.assertRaises(InvalidPopulationSizeError):
-                    initializer.initialize(size, random.Random(SEED))
+                    initializer.initialize(size, random.Random(SEED)).individuals
 
     def test_population_diversity(self) -> None:
         """Vérifie que deux graines différentes produisent des populations différentes."""
@@ -176,12 +176,12 @@ class TestRandomBlockInitializer(unittest.TestCase):
         population1 = initializer.initialize(
             20,
             random.Random(SEED)
-        )
+        ).individuals
 
         population2 = initializer.initialize(
             20,
             random.Random(SEED + 1)
-        )
+        ).individuals
 
         self.assertNotEqual(population1, population2)
 
@@ -204,7 +204,7 @@ class TestRandomBlockInitializer(unittest.TestCase):
                 population = initializer.initialize(
                     20,
                     random.Random(SEED)
-                )
+                ).individuals
 
                 for individu in population:
                     violations = checker.violations(individu.horaire)
@@ -226,7 +226,7 @@ class TestRandomBlockInitializer(unittest.TestCase):
         population = initializer.initialize(
             5,
             random.Random(SEED)
-        )
+        ).individuals
 
         # Le solveur doit être appelé une fois par individu
         self.assertEqual(len(local_solver.received), 5)
@@ -253,7 +253,7 @@ class TestRandomBlockInitializer(unittest.TestCase):
         population = initializer.initialize(
             5,
             random.Random(SEED)
-        )
+        ).individuals
 
         self.assertEqual(len(local_solver.received), 5)
 
@@ -261,6 +261,27 @@ class TestRandomBlockInitializer(unittest.TestCase):
             self.assertEqual(individu.horaire, replacement)
             self.assertEqual(individu.genome, encoding.encode(replacement))
             self.assertIsNone(individu.cost)
+
+    def test_local_solver_searches_are_returned(self) -> None:
+        """Vérifie que chaque appel au solveur est rendu dans ``searches``, dans l'ordre des individus (D10)."""
+
+        instance = synthetic_instance()
+        replacement = single(REFERENCE_SHIFT)
+        local_solver = FakeLocalSolver(replacement=replacement)
+        initializer = RandomBlockInitializer(instance, BlockEncoding(), local_solver=local_solver)
+
+        result = initializer.initialize(5, random.Random(SEED))
+
+        self.assertEqual(len(result.searches), len(result.individuals))
+        self.assertEqual([search.input_horaire for search in result.searches], local_solver.received)
+        for search in result.searches:
+            self.assertEqual(search.result.horaire, replacement)
+
+    def test_no_local_solver_no_searches(self) -> None:
+        """Vérifie qu'aucune recherche n'est rendue sans solveur."""
+
+        initializer = RandomBlockInitializer(synthetic_instance(), BlockEncoding())
+        self.assertEqual(initializer.initialize(5, random.Random(SEED)).searches, ())
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -336,7 +357,7 @@ class TestInitializationWithCpSat(unittest.TestCase):
         # Le modèle de référence avertit (« model inconsistency detected ») sur un sous-problème insatisfiable.
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", MiniZincWarning)
-            population = initializer.initialize(population_size, random.Random(seed))
+            population = initializer.initialize(population_size, random.Random(seed)).individuals
         return population, local_solver
 
     def assert_common_invariants(

@@ -4,8 +4,8 @@ Le moteur ne dépend que des interfaces (D5) : toutes les stratégies viennent d
 
 Déroulement d'une exécution (``run``) :
     1. valider la configuration ; émettre ``RunStarted`` ;
-    2. génération 0 : ``initializer.initialize``, puis évaluer chaque individu ; émettre ``IndividualCreated``
-       pour chacun et ``GenerationEnded`` ;
+    2. génération 0 : ``initializer.initialize``, puis évaluer chaque individu ; émettre un ``LocalSearchDone`` par
+       recherche locale faite par l'initialiseur, puis un ``IndividualCreated`` par individu, puis ``GenerationEnded`` ;
     3. tant que ``termination.is_done`` est faux, une génération :
         a. lot NR (D7) : tirer d'un coup les ``NR × parent_count`` parents dans P (``parent_selector``), puis NR
            tâches indépendantes, chacune : ``crossover.recombine``, et pour chaque enfant : décoder, évaluer (coût
@@ -15,8 +15,9 @@ Déroulement d'une exécution (``run``) :
            ``mutation.mutate`` sur le génome, puis comme en a. ;
         c. ``survivor_selector.select`` sur parents + nouveaux, ramenée à ``population_size`` ; émettre
            ``GenerationEnded`` ;
-        d. si ``convergence.has_converged`` : émettre ``Converged``, ``restart.restart``, ``convergence.reset()``,
-           émettre ``Restarted`` ;
+        d. si ``convergence.has_converged`` : émettre ``Converged`` ; ``restart.restart`` ; émettre un
+           ``LocalSearchDone`` par recherche locale du restart, puis un ``IndividualCreated`` par nouvel individu
+           (origine ``RESTART``) ; ``convergence.reset()`` ; émettre ``Restarted`` ;
     4. émettre ``RunEnded`` avec le meilleur individu ; fermer le hub ; rendre ``MemeticResult``.
 
 Les tâches d'un lot passent par ``config.executor.map``. Elles ne lisent que leurs propres entrées (parents ou
@@ -31,7 +32,7 @@ from dataclasses import dataclass
 
 from src.ga.individual import Individu
 from src.memetic.config import MemeticConfig
-from src.memetic.local_search import LocalSearchResult
+from src.memetic.local_search import LocalSearchRecord, LocalSearchResult
 from src.memetic.seeds import SeedStreams, derive_task_seeds
 from src.model.evaluation import CostBreakdown
 from src.observability.events import (
@@ -126,9 +127,13 @@ class Memetic[G]:
 
             if self.config.convergence.has_converged(population):
                 hub.emit(Converged(generation=generation))
-                population = self.config.restart.restart(
-                    population, self.single_task_rng(generation, SeedStreams.RESTART)
-                )
+                restart = self.config.restart.restart(population, self.single_task_rng(generation, SeedStreams.RESTART))
+                self.publish_outside_searches(restart.searches, generation, Origins.RESTART)
+                for individual in restart.newcomers:
+                    hub.emit(IndividualCreated(
+                        generation=generation, origin=Origins.RESTART.value, operator=None, individual=individual
+                    ))
+                population = restart.population
                 self.config.convergence.reset()
                 restarts += 1
                 hub.emit(Restarted(generation=generation, population=population))
@@ -143,14 +148,16 @@ class Memetic[G]:
     # -----------------------------------------------------------------------------------------------------------------
 
     def initial_population(self) -> tuple[Individu[G], ...]:
-        """Génération 0 : population initiale évaluée ; émet ``IndividualCreated`` pour chacun, puis
-        ``GenerationEnded(0)``."""
+        """Génération 0 : population initiale évaluée ; émet un ``LocalSearchDone`` par recherche locale de
+        l'initialiseur, puis ``IndividualCreated`` pour chaque individu, puis ``GenerationEnded(0)``."""
         generation = EngineConstants.INITIAL_GENERATION
         rng = self.single_task_rng(generation, SeedStreams.INITIALIZATION)
-        individuals = self.config.initializer.initialize(self.config.population_size, rng)
+        initialization = self.config.initializer.initialize(self.config.population_size, rng)
         population = tuple(
-            individual.with_cost(self.config.evaluator.evaluate(individual.horaire)) for individual in individuals
+            individual.with_cost(self.config.evaluator.evaluate(individual.horaire))
+            for individual in initialization.individuals
         )
+        self.publish_outside_searches(initialization.searches, generation, Origins.INITIALIZATION)
         for individual in population:
             self.config.dispatcher.emit(IndividualCreated(
                 generation=generation, origin=Origins.INITIALIZATION.value, operator=None, individual=individual
@@ -209,6 +216,22 @@ class Memetic[G]:
                 generation=generation, origin=origin.value, operator=operator, individual=child.individual
             ))
         return tuple(child.individual for child in children)
+
+    def publish_outside_searches(
+            self, searches: Sequence[LocalSearchRecord], generation: int, origin: Origins
+    ) -> None:
+        """Émet un ``LocalSearchDone`` (opérateur ``None``) pour chaque recherche locale faite hors du moteur, par
+        l'initialiseur ou le restart : la charge du solveur est ainsi mesurée partout (D10)."""
+        evaluator = self.config.evaluator
+        for search in searches:
+            self.config.dispatcher.emit(LocalSearchDone(
+                generation=generation,
+                origin=origin.value,
+                operator=None,
+                cost_before=evaluator.evaluate(search.input_horaire),
+                cost_after=evaluator.evaluate(search.result.horaire),
+                result=search.result,
+            ))
 
     # -----------------------------------------------------------------------------------------------------------------
     # Tâches (indépendantes : ni état modifié, ni événement)

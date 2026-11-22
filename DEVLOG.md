@@ -1008,3 +1008,17 @@ Aucun changement de comportement. Suite complète verte.
 **Blocage apparent** : dans PyCharm, un test semblait boucler. C'était la durée de `setUpClass` (les deux exécutions, environ 30 s), attribuée au premier test de la classe dans PyCharm, et affichée après la ligne du dernier test de `TestAssembly` en console (`unittest -v` exécute `setUpClass` avant d'afficher le nom du test suivant). Note ajoutée dans la docstring de `TestMemeticOnBench1`.
 
 **Reste** : trancher l'émission d'`IndividualCreated` (origine `RESTART`) pour les individus régénérés au restart (D8).
+
+## 2026-11-22 — Étape 9-intégration : événements et charge du solveur à l'initialisation et au restart (Pascal)
+
+**Constat** : le nombre d'individus régénérés au restart n'est pas fixe (μ − min(k, génomes distincts), entre μ − k et μ − 1), et le moteur ne savait pas lesquels étaient nouveaux : aucun `IndividualCreated` au restart. Plus grave pour l'étape 10 : avec l'option `LocalSolver` de l'initialiseur, les recherches locales de l'initialisation et du restart n'émettaient aucun `LocalSearchDone`. Le `SolverEffortCollector` (D10) sous-estimait donc la charge du solveur (sur bench_1 avec les réglages d'intégration : 6 appels à l'initialisation et 5 par restart, absents des 24 comptés), ce qui aurait faussé la comparaison avec CP-SAT seul en faveur du mémétique.
+
+**Décision (Pascal)** : un retour explicite plutôt qu'une enveloppe du `LocalSolver` déclarée dans la configuration (oublier de la brancher aurait perdu la mesure sans erreur).
+- `LocalSearchRecord(input_horaire, result)` (`local_search.py`) : une recherche locale faite hors du moteur ;
+- `PopulationInitializer.initialize` rend `InitializationResult(individuals, searches)` ; `RandomBlockInitializer` note chaque appel à son `LocalSolver` ;
+- `RestartPolicy.restart` rend `RestartResult(elite, newcomers, searches)`, avec la propriété `population` (élite puis nouveaux) ; `EliteRestart` transmet les recherches de l'initialiseur ;
+- le moteur émet un `LocalSearchDone` par recherche (origine `INITIALIZATION` ou `RESTART`, opérateur `None`, coûts avant et après évalués), puis un `IndividualCreated` par nouvel individu : à la génération 0 avant `GenerationEnded(0)`, au restart entre `Converged(g)` et `Restarted(g)`.
+
+**Interfaces communes modifiées** : étape 6 (`PopulationInitializer`) et étape 8 (`RestartPolicy`). Tests adaptés : `test_initialization`, `test_operators` (`.individuals`), `test_population` (`.population`, nouveaux tests du découpage élite / nouveaux et du passage des recherches), `fixtures.FakeRestartPolicy`.
+
+**Tests** : `test_initialization` (+2 : recherches rendues dans l'ordre des individus, aucune sans solveur), `test_population` (+2), `test_engine` (+2 : recherches de la génération 0 avant les individus ; recherches et nouveaux individus du restart entre `Converged` et `Restarted`, origine `RESTART`), `test_integration` (ordre des événements avec initialisation et restart ; une recherche locale par nouvel individu, quelle que soit son origine). Suite complète verte (536 tests).

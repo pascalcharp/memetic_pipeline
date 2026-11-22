@@ -13,7 +13,7 @@ from collections.abc import Sequence
 from src.ga.chromosome import BlockEncoding, BlockGene, BlockGenome, Encoding
 from src.ga.individual import Individu
 from src.ga.operators import Crossover, Mutation
-from src.ga.population import ConvergenceCriterion, RestartPolicy, SurvivorSelector
+from src.ga.population import ConvergenceCriterion, RestartPolicy, RestartResult, SurvivorSelector
 from src.memetic.local_search import LocalSearchResult, LocalSolver
 from src.memetic.solver import SolveOutcome, SolverStatistics
 from src.model.evaluation import CostBreakdown
@@ -148,14 +148,14 @@ class FakeConvergenceCriterion[G](ConvergenceCriterion[G]):
 
 
 class FakeRestartPolicy[G](RestartPolicy[G]):
-    """Faux restart : rend la population inchangée et note chaque appel."""
+    """Faux restart : rend la population inchangée (toute en élite, aucun nouvel individu) et note chaque appel."""
 
     def __init__(self) -> None:
         self.received: list[tuple[Individu[G], ...]] = []
 
-    def restart(self, population: Sequence[Individu[G]], rng: random.Random) -> tuple[Individu[G], ...]:
+    def restart(self, population: Sequence[Individu[G]], rng: random.Random) -> RestartResult[G]:
         self.received.append(tuple(population))
-        return tuple(population)
+        return RestartResult(elite=tuple(population), newcomers=())
 
 
 class RecordingCollector(MetricCollector):
