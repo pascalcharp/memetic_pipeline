@@ -16,7 +16,8 @@ memetic_pipeline/
 │   ├── bench_4.json            # 8 employés × 4 activités × 44 périodes
 │   └── bench_5.json            # 8 employés × 5 activités × 48 périodes (difficile : ~1 min pour une 1re solution)
 ├── docs/                       # Toute la documentation, accessible depuis README.md
-│   ├── ALGO.md                 # Pseudo-code de l'algorithme mémétique
+│   ├── ALGO.md                 # Pseudo-code de l'algorithme mémétique, correspondance avec le code, écarts assumés
+│   ├── HOWTO.md                # Comment faire ? Lancer la boucle, ajouter un opérateur, changer de solveur, etc.
 │   ├── PROBLEME.md             # Description du problème : données, règles d'un quart, coût, exemple
 │   └── PROJECT_STRUCT.md       # Ce document
 ├── src/                        # Code source principal
@@ -28,18 +29,18 @@ memetic_pipeline/
 │   │   ├── __init__.py
 │   │   ├── chromosome.py       # Génotype : interface Encoding[G], BlockEncoding (gènes BlockGene, ActivityBlock)
 │   │   ├── individual.py       # Individu : génome, horaire décodé, coût
-│   │   ├── initialization.py   # Initialisation : PopulationInitializer, RandomBlockInitializer (scaffold, étape 6)
+│   │   ├── initialization.py   # Initialisation : PopulationInitializer, InitializationResult, RandomBlockInitializer (étape 6)
 │   │   ├── operators.py        # Variation : Crossover[G], Mutation[G], opérateurs de BlockEncoding (étape 7b)
-│   │   ├── population.py       # SelectPop, convergence, restart : SurvivorSelector, ConvergenceCriterion, RestartPolicy (scaffold, étape 8)
+│   │   ├── population.py       # SelectPop, convergence, restart : PlusSurvivorSelector, StagnationCriterion, EliteRestart, RestartResult (étape 8)
 │   │   ├── registry.py         # Registre des opérateurs par nom, IncompatibleOperatorError (étape 7a)
 │   │   └── selection.py        # Sélection : ParentSelector, MutableSelector, TournamentSelector (étape 7a)
 │   ├── memetic/                # Couplage mémétique, recherche locale et moteur
 │   │   ├── __init__.py
-│   │   ├── assembly.py         # Assemblage de référence avec les vrais composants : AssemblySettings, build_block_memetic_config (scaffold, 9-intégration)
+│   │   ├── assembly.py         # Assemblage de référence avec les vrais composants : AssemblySettings, build_block_memetic_config (9-intégration)
 │   │   ├── config.py           # MemeticConfig : stratégies, paramètres et hub d'observation d'une exécution (étape 9)
 │   │   ├── engine.py           # Moteur Memetic(NR, NM), lots NR et NM (D7), MemeticResult (étape 9)
 │   │   ├── executor.py         # Exécution des lots : Executor, SequentialExecutor (D7)
-│   │   ├── local_search.py     # Recherche locale : Neighborhood, LocalSolver, MiniZincLocalSolver, borne selon le modèle (étapes 5b, 5c)
+│   │   ├── local_search.py     # Recherche locale : Neighborhood, LocalSolver, MiniZincLocalSolver, LocalSearchRecord, borne selon le modèle (étapes 5b, 5c)
 │   │   ├── seeds.py            # Graines dérivées par tâche : derive_task_seeds, SeedStreams (étape 9)
 │   │   ├── solver.py           # Indirection vers les solveurs : SolverAdapter, CpSatAdapter, ModelVariant, limites d'effort, SolverRun
 │   │   └── termination.py      # Critère d'arrêt : TerminationCriterion, GenerationLimit (étape 9)
@@ -53,7 +54,7 @@ memetic_pipeline/
 │   │   └── shift_rules.py      # Constantes du domaine : noms des variables MiniZinc, durées, écarts, décalages des fenêtres
 │   ├── observability/          # Observabilité (D8) : événements, collecteurs, destinations, journal, répertoire d'exécution
 │   │   ├── __init__.py
-│   │   ├── collectors.py       # MetricCollector et collecteurs de mesures (scaffold, étape 8b)
+│   │   ├── collectors.py       # MetricCollector et collecteurs : coût, diversité, taux de faisabilité, charge du solveur (étape 8b)
 │   │   ├── events.py           # Catalogue des événements du moteur, schéma des enregistrements (make_record)
 │   │   ├── hub.py              # ObservationHub : diffuse les événements aux collecteurs, écrit dans les destinations
 │   │   ├── logging_config.py   # Journal de diagnostic : configure_logging, get_logger
@@ -68,14 +69,14 @@ memetic_pipeline/
 │   ├── fixtures.py             # Outil de test (pas un test) : individus aux coûts choisis, génome de référence, faux objets (LocalSolver, opérateurs, stratégies de population, collecteur)
 │   ├── minizinc_probe.py       # Outil de test (pas un test) : sonde horaire.mzn pour vérifier la cohérence avec Python
 │   ├── test_chromosome.py      # Génotype : allers-retours, génomes infaisables, conditions de D1, solutions MiniZinc
-│   ├── test_collectors.py      # Collecteurs (étape 8b) : contrat du scaffold, cas à couvrir en tête de fichier
-│   ├── test_engine.py          # Moteur (étape 9) : faux objets, lots NR et NM, graines, événements, reproductibilité
+│   ├── test_collectors.py      # Collecteurs (étape 8b) : événements construits à la main, valeurs attendues calculées à la main
+│   ├── test_engine.py          # Moteur (étape 9) : faux objets, lots NR et NM, graines, événements (initialisation et restart compris), reproductibilité
 │   ├── test_evaluation.py      # Évaluation : cas à la main, totaux de couverture, pénalités, coût comparé à MiniZinc
 │   ├── test_executor.py        # Exécution des lots : SequentialExecutor
 │   ├── test_feasibility.py     # Faisabilité structurelle : bornes exactes, violations isolées, verdict comparé à MiniZinc
 │   ├── test_horaire.py         # Phénotype : construction, forme, grille comparée à la 2ᵉ sortie de MiniZinc
 │   ├── test_individual.py      # Individu : décodage unique, évaluation sans modification (encodage factice)
-│   ├── test_integration.py     # 9-intégration : assemblage de référence, puis exécution complète sur bench_1 avec CP-SAT
+│   ├── test_integration.py     # 9-intégration : assemblage de référence, puis exécution complète sur bench_1 avec CP-SAT (~30 s)
 │   ├── test_initialization.py  # Initialisation (étape 6) : faux solveur, puis CP-SAT sur bench_1 et bench_5 avec les deux modèles
 │   ├── test_io.py              # Lecture des instances : 5 bench, cas d'erreur, plage utile comparée à MiniZinc
 │   ├── test_local_search.py    # Recherche locale (étapes 5b, 5c) : voisinage, fixation, bornes des deux modèles, CP-SAT
@@ -83,9 +84,9 @@ memetic_pipeline/
 │   ├── test_relaxed_model.py   # Modèle assoupli (étape 5c) : référence inchangée, mêmes optimums, validation croisée Python / MiniZinc
 │   ├── test_observability.py   # Observabilité : schéma, destinations, ObservationHub, journal, répertoire d'exécution
 │   ├── test_operators.py       # Variation (étape 7b) : propriétés avec un vrai Random, cas limites, messages
-│   ├── test_population.py      # Population (étape 8) : contrat du scaffold, cas à couvrir en tête de fichier
-│   ├── test_registry.py        # Registre (étape 7a) : contrat du scaffold, cas à couvrir en tête de fichier
-│   ├── test_selection.py       # Sélection (étape 7a) : check_selectable, contrat du scaffold, cas à couvrir
+│   ├── test_population.py      # Population (étape 8) : sélecteurs (doublons, peine de mort), stagnation, restart (élite, nouveaux, recherches)
+│   ├── test_registry.py        # Registre (étape 7a) : enregistrement et création par nom, compatibilité opérateur / encodage
+│   ├── test_selection.py       # Sélection (étape 7a) : check_selectable, tournoi, tirage uniforme, reproductibilité
 │   ├── test_shift_rules.py     # Constantes du domaine et sondes de cohérence avec horaire.mzn
 │   ├── test_smoke_minizinc.py  # Test de fumée : CP-SAT résout horaire.mzn sur bench_1 (optimum 94)
 │   └── test_solver.py          # Solveurs : options, modèles (ModelVariant), traduction des statuts, reproductibilité, issues

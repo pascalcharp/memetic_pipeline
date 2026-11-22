@@ -18,7 +18,9 @@ Description détaillée (données, règles d'un quart, coût, exemple commenté)
 
 Un algorithme **mémétique** : une population d'horaires évolue par croisement et mutation, et chaque nouvel individu est amélioré par une recherche locale confiée à MiniZinc.
 
-Pseudo-code : [`docs/ALGO.md`](docs/ALGO.md).
+Pseudo-code, et correspondance avec le code : [`docs/ALGO.md`](docs/ALGO.md).
+
+**État (22 novembre 2026)** : le prototype tourne de bout en bout (étape 9). Avec les vrais composants (CP-SAT en monothread, sous limite d'effort déterministe), il atteint l'optimum de `bench_1` (coût 94) en quatre générations. Prochaine étape : les expériences (étape 10).
 
 ### 1.3 Structure du projet
 
@@ -45,7 +47,7 @@ Pour vérifier que CP-SAT est disponible : `minizinc --solvers` doit afficher la
 
 ### 2.2 Exécuter les tests
 
-La suite complète prend une dizaine de secondes. Les mêmes tests tournent dans la CI (GitHub Actions) à chaque push sur `main`.
+La suite complète prend environ une minute et demie, dont une trentaine de secondes pour deux exécutions complètes du moteur sur `bench_1` (`tests.test_integration`). Les mêmes tests tournent dans la CI (GitHub Actions) à chaque push sur `main` et pour chaque *pull request* vers `main`.
 
 #### Avec Docker (préféré)
 
@@ -79,13 +81,44 @@ Les commandes se lancent **depuis la racine du dépôt** (les imports partent de
 
 ### 2.3 Exécuter des expériences
 
-*À venir (étape 10 du [`TODO.md`](TODO.md)).*
+Le point d'entrée en ligne de commande viendra à l'étape 10 du [`TODO.md`](TODO.md). En attendant, l'assemblage de référence (`src/memetic/assembly.py`) lance le moteur avec les vrais composants. Depuis la racine du dépôt :
+
+```python
+from src.config import ProjectPaths
+from src.memetic.assembly import AssemblySettings, build_block_memetic_config
+from src.memetic.engine import Memetic
+from src.utils.io import load_instance
+
+instance = load_instance(ProjectPaths.DATA_DIR / "bench_1.json")
+settings = AssemblySettings(generations=4, master_seed=7, stagnation_generations=1)
+result = Memetic(build_block_memetic_config(instance, settings)).run()
+print(result.best.cost.total, result.generations, result.restarts)   # 94 4 1
+```
+
+Les paramètres (taille de la population, NR, NM, générations, graine, budget de CP-SAT, etc.) et leurs valeurs par défaut sont dans `AssemblySettings`. Pour mesurer une exécution et écrire ses résultats dans `results/`, voir [`docs/HOWTO.md`, section 1](docs/HOWTO.md#1-je-veux-faire-rouler-la-boucle-mémétique).
 
 ---
 
-## 3. Contribuer
+## 3. Comment faire ?
 
-### 3.1 Méthode de travail
+Guide pratique, avec pour chaque question les fichiers à modifier, l'interface à dériver et un exemple exécuté : [`docs/HOWTO.md`](docs/HOWTO.md).
+
+- [Je veux faire rouler la boucle mémétique. Je m'y prends comment ?](docs/HOWTO.md#1-je-veux-faire-rouler-la-boucle-mémétique)
+- [Je veux modifier la probabilité de crossover. Que faire ?](docs/HOWTO.md#2-je-veux-modifier-la-probabilité-de-crossover)
+- [Je veux modifier la probabilité de mutation. Comment faire ça ?](docs/HOWTO.md#3-je-veux-modifier-la-probabilité-de-mutation)
+- [Je veux créer un nouveau crossover. Je fais comment ?](docs/HOWTO.md#4-je-veux-créer-un-nouveau-crossover)
+- [Je veux créer un nouvel opérateur de mutation. Je fais quoi ?](docs/HOWTO.md#5-je-veux-créer-un-nouvel-opérateur-de-mutation)
+- [Je veux modifier la stratégie de sélection de la population. Que dois-je faire ?](docs/HOWTO.md#6-je-veux-modifier-la-stratégie-de-sélection-de-la-population)
+- [Je veux une autre stratégie de redémarrage. Comment je devrais m'y prendre ?](docs/HOWTO.md#7-je-veux-une-autre-stratégie-de-redémarrage)
+- [Je veux modifier les options de CP-SAT pour ma prochaine expérience. Que dois-je changer ?](docs/HOWTO.md#8-je-veux-modifier-les-options-de-cp-sat-pour-ma-prochaine-expérience)
+- [Je veux essayer la boucle avec un autre solveur sur MiniZinc. On fait comment ?](docs/HOWTO.md#9-je-veux-essayer-la-boucle-avec-un-autre-solveur-sur-minizinc)
+- [Je veux modifier l'encodage des génomes. Comment ?](docs/HOWTO.md#10-je-veux-modifier-lencodage-des-génomes)
+
+---
+
+## 4. Contribuer
+
+### 4.1 Méthode de travail
 
 Le projet suit une méthode stricte, décrite dans [`CLAUDE.md`](CLAUDE.md) :
 
@@ -96,14 +129,14 @@ Le projet suit une méthode stricte, décrite dans [`CLAUDE.md`](CLAUDE.md) :
 
 Le projet est aussi pédagogique : les méthodes et algorithmes clés sont écrits à la main, et Claude Code prépare le squelette et vérifie le résultat. Dans le TODO, chaque tâche porte l'une de ces marques : **(C)** Claude écrit, **(P)** le développeur écrit et Claude vérifie, **(C→P)** Claude prépare le squelette et le développeur implémente.
 
-### 3.2 État d'avancement
+### 4.2 État d'avancement
 
 Étapes planifiées, tâches terminées et décisions de conception encore ouvertes : [`TODO.md`](TODO.md).
 
-### 3.3 Décisions de conception
+### 4.3 Décisions de conception
 
-Le **pourquoi** du code : décisions architecturales (D1 à D7), blocages rencontrés et correctifs appliqués, dans l'ordre chronologique : [`DEVLOG.md`](DEVLOG.md).
+Le **pourquoi** du code. Les décisions de conception D1 à D14 sont énoncées en tête de [`TODO.md`](TODO.md). Leur contexte, les blocages rencontrés et les correctifs appliqués sont consignés dans l'ordre chronologique dans [`DEVLOG.md`](DEVLOG.md).
 
-### 3.4 Conventions de code
+### 4.4 Conventions de code
 
 Clarté avant concision, annotations de type, exceptions sur mesure, aucune constante ni message d'erreur codé en dur : voir la section *Style de Code & Lisibilité* de [`CLAUDE.md`](CLAUDE.md).

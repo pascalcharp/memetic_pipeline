@@ -67,7 +67,7 @@ memetic_pipeline/
 │   │   ├── horaire_assoupli.mzn # Modèle du pipeline : couverture « au moins 1 » en pénalité (D12)
 │   │   ├── horaire.py          # Phénotype canonique Horaire et grille « employé × période »
 │   │   └── shift_rules.py      # Constantes du domaine : noms des variables MiniZinc, durées, écarts, décalages des fenêtres
-│   ├── ga/                     # Logique de l'Algorithme Génétique (à venir)
+│   ├── ga/                     # Logique de l'Algorithme Génétique
 │   │   ├── __init__.py
 │   │   ├── chromosome.py       # Génotype : interface Encoding[G] et encodages concrets
 │   │   ├── individual.py       # Individu : génome, horaire décodé, coût
@@ -76,10 +76,17 @@ memetic_pipeline/
 │   │   ├── population.py       # Gestion de la population globale
 │   │   ├── registry.py         # Registre des opérateurs par nom, compatibilité opérateur / encodage
 │   │   └── selection.py        # Sélection : ParentSelector, MutableSelector
-│   ├── memetic/                # Couplage Mémétique & Réparation (à venir)
+│   ├── memetic/                # Couplage Mémétique, réparation et moteur
 │   │   ├── __init__.py
+│   │   ├── assembly.py         # Assemblage de référence avec les vrais composants (build_block_memetic_config)
+│   │   ├── config.py           # MemeticConfig : stratégies, paramètres et hub d'observation d'une exécution
+│   │   ├── engine.py           # Moteur Memetic(NR, NM) : lots NR et NM (D7), événements (D8)
+│   │   ├── executor.py         # Exécution des lots : Executor, SequentialExecutor (D7)
 │   │   ├── local_search.py     # Neighborhood et LocalSolver : recherche locale et réparation par MiniZinc
-│   │   └── solver.py           # SolverAdapter : modèle résolu (ModelVariant), options, limites d'effort, issue et statistiques
+│   │   ├── seeds.py            # Graines dérivées par tâche (D7)
+│   │   ├── solver.py           # SolverAdapter : modèle résolu (ModelVariant), options, limites d'effort, issue et statistiques
+│   │   └── termination.py      # Critère d'arrêt : TerminationCriterion, GenerationLimit
+│   ├── observability/          # Observabilité (D8) : événements, collecteurs, destinations, journal, répertoire d'exécution
 │   ├── utils/                  # Environnement, lecture de fichiers et parsing
 │   │   ├── __init__.py
 │   │   ├── minizinc_env.py     # Localisation de MiniZinc et des solveurs
