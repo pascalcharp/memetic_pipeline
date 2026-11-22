@@ -146,7 +146,8 @@ class Memetic[G]:
                 self._restart(self._generate_rng(seeds_collection.SURVIVOR_SELECTION))
 
 
-        self.dispatcher.emit(RunEnded(generations=self.generation, best=self.population[0]))
+        best = self._get_best()
+        self.dispatcher.emit(RunEnded(generations=self.generation, best=best))
         self.dispatcher.close()
         return MemeticResult(
             best=self.population[0],
@@ -313,6 +314,22 @@ class Memetic[G]:
             RESTART=_seeds(SeedStreams.RESTART, 1),
         )
         return collections
+
+    def _get_best(self):
+        def _is_better(best: Individu[G], i: Individu[G]) -> bool:
+            assert(not best.cost == None)
+            assert(not i.cost == None)
+            return i.cost.total < best.cost.total
+
+        best: Individu[G] = self.population[0]
+
+        for i in self.population:
+            if best == None or _is_better(best, i):
+                best = i
+
+        assert(not best == None)
+
+        return best
 
     def _generate_rng(self, seed: Iterable[int]):
         rng = random.Random()
