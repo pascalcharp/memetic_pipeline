@@ -35,13 +35,14 @@ memetic_pipeline/
 │   │   └── selection.py        # Sélection : ParentSelector, MutableSelector, TournamentSelector (étape 7a)
 │   ├── memetic/                # Couplage mémétique, recherche locale et moteur
 │   │   ├── __init__.py
-│   │   ├── config.py           # MemeticConfig : stratégies et paramètres d'une exécution (scaffold, étape 9)
-│   │   ├── engine.py           # Moteur Memetic(NR, NM) et MemeticResult (scaffold, étape 9)
+│   │   ├── assembly.py         # Assemblage de référence avec les vrais composants : AssemblySettings, build_block_memetic_config (scaffold, 9-intégration)
+│   │   ├── config.py           # MemeticConfig : stratégies, paramètres et hub d'observation d'une exécution (étape 9)
+│   │   ├── engine.py           # Moteur Memetic(NR, NM), lots NR et NM (D7), MemeticResult (étape 9)
 │   │   ├── executor.py         # Exécution des lots : Executor, SequentialExecutor (D7)
 │   │   ├── local_search.py     # Recherche locale : Neighborhood, LocalSolver, MiniZincLocalSolver, borne selon le modèle (étapes 5b, 5c)
-│   │   ├── seeds.py            # Graines dérivées par tâche : derive_task_seeds, SeedStreams (scaffold, étape 9)
+│   │   ├── seeds.py            # Graines dérivées par tâche : derive_task_seeds, SeedStreams (étape 9)
 │   │   ├── solver.py           # Indirection vers les solveurs : SolverAdapter, CpSatAdapter, ModelVariant, limites d'effort, SolverRun
-│   │   └── termination.py      # Critère d'arrêt : TerminationCriterion, GenerationLimit (scaffold, étape 9)
+│   │   └── termination.py      # Critère d'arrêt : TerminationCriterion, GenerationLimit (étape 9)
 │   ├── model/                  # Modèle CP (MiniZinc) et ses règles côté Python
 │   │   ├── __init__.py
 │   │   ├── evaluation.py       # Coût : couverture (cout_total) et pénalités (CostEvaluator, CostBreakdown, PenaltyWeights)
@@ -68,12 +69,13 @@ memetic_pipeline/
 │   ├── minizinc_probe.py       # Outil de test (pas un test) : sonde horaire.mzn pour vérifier la cohérence avec Python
 │   ├── test_chromosome.py      # Génotype : allers-retours, génomes infaisables, conditions de D1, solutions MiniZinc
 │   ├── test_collectors.py      # Collecteurs (étape 8b) : contrat du scaffold, cas à couvrir en tête de fichier
-│   ├── test_engine.py          # Moteur (étape 9) : contrat du scaffold, configuration factice, cas à couvrir en tête de fichier
+│   ├── test_engine.py          # Moteur (étape 9) : faux objets, lots NR et NM, graines, événements, reproductibilité
 │   ├── test_evaluation.py      # Évaluation : cas à la main, totaux de couverture, pénalités, coût comparé à MiniZinc
 │   ├── test_executor.py        # Exécution des lots : SequentialExecutor
 │   ├── test_feasibility.py     # Faisabilité structurelle : bornes exactes, violations isolées, verdict comparé à MiniZinc
 │   ├── test_horaire.py         # Phénotype : construction, forme, grille comparée à la 2ᵉ sortie de MiniZinc
 │   ├── test_individual.py      # Individu : décodage unique, évaluation sans modification (encodage factice)
+│   ├── test_integration.py     # 9-intégration : assemblage de référence, puis exécution complète sur bench_1 avec CP-SAT
 │   ├── test_initialization.py  # Initialisation (étape 6) : faux solveur, puis CP-SAT sur bench_1 et bench_5 avec les deux modèles
 │   ├── test_io.py              # Lecture des instances : 5 bench, cas d'erreur, plage utile comparée à MiniZinc
 │   ├── test_local_search.py    # Recherche locale (étapes 5b, 5c) : voisinage, fixation, bornes des deux modèles, CP-SAT

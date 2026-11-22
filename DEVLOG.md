@@ -992,3 +992,19 @@ Points de la deuxième revue de la PR #10, laissés pour après la fusion :
 - `EliteRestart.restart` : `if missing_count == 0` au lieu de `if not missing_count`.
 
 Aucun changement de comportement. Suite complète verte.
+
+## 2026-11-22 — Étape 9-intégration : assemblage de référence et exécution complète sur bench_1 (Pascal)
+
+**Fait (C)** : scaffold de `src/memetic/assembly.py` (`AssemblyDefaults`, `AssemblySettings`, squelette de `build_block_memetic_config`) et `tests/test_integration.py`, validés contre un assemblage de référence jetable (hors dépôt).
+
+**Fait (P)** : `build_block_memetic_config`, par Pascal. Composants : `BlockEncoding`, `RandomBlockInitializer` (avec le `LocalSolver` si `initial_local_search`), `TournamentSelector`, `UniformGeneCrossover`, `UniformMutableSelector`, `ShiftStartMutation`, `MiniZincLocalSolver` sur `CpSatAdapter` (modèle assoupli, monothread, `DeterministicTimeLimit`) avec `RandomEmployeesNeighborhood`, `CostEvaluator`, `PlusSurvivorSelector`, `StagnationCriterion`, `EliteRestart`, `GenerationLimit`. Le même évaluateur et le même initialiseur servent au moteur, au `LocalSolver` et au restart.
+
+**Tests** (24, verts) :
+- `TestAssembly` (11, sans MiniZinc) : composants attendus, paramètres transmis, CP-SAT sur le modèle assoupli en monothread sous limite déterministe, objets partagés, option `LocalSolver` à l'initialisation, hub par défaut propre à chaque configuration, composants neufs à chaque appel ;
+- `TestMemeticOnBench1` (13, environ 30 s) : deux exécutions de même graine sur bench_1, l'une sans mesure, l'autre avec les quatre collecteurs de 8b, un `MemorySink` et un `JsonlSink`. Taille et nombre de générations, coût du meilleur qui ne remonte jamais, faisabilité structurelle de chaque individu, borne de la recherche locale, appels réels à CP-SAT, restart exercé, résultat identique avec et sans collecteurs, ordre des événements, enregistrements de chaque collecteur, fichier JSONL identique au `MemorySink`.
+
+**Résultat** : avec la graine 7 (6 individus, NR = 2, NM = 2, 4 générations, stagnation d'une génération), le prototype atteint l'optimum de bench_1 (94, prouvé par CP-SAT ; docs/PROBLEME.md) et fait un restart. **Le prototype fonctionne de bout en bout.**
+
+**Blocage apparent** : dans PyCharm, un test semblait boucler. C'était la durée de `setUpClass` (les deux exécutions, environ 30 s), attribuée au premier test de la classe dans PyCharm, et affichée après la ligne du dernier test de `TestAssembly` en console (`unittest -v` exécute `setUpClass` avant d'afficher le nom du test suivant). Note ajoutée dans la docstring de `TestMemeticOnBench1`.
+
+**Reste** : trancher l'émission d'`IndividualCreated` (origine `RESTART`) pour les individus régénérés au restart (D8).

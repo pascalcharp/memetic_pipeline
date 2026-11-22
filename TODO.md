@@ -292,6 +292,9 @@ Croisement arithmétique : pour chaque employé, l'enfant reçoit `d·p1 + (1−
 - [x] Tests (sans MiniZinc, avec des faux objets) : terminaison, coût du meilleur monotone non croissant, moteur exercé avec des opérateurs factices, reproductibilité (même graine ⇒ même historique, avec ou sans collecteurs ; solveur limité en effort plutôt qu'en temps), entrées des opérateurs jamais modifiées
   - validé le 2026-11-22 (PR #11 de Xavier, reprise et corrigée par Pascal et Claude) : lots NR et NM conformes à D7, graines par tâche, 46 tests dans `test_engine`, suite complète verte (506 tests)
 - [ ] **9-intégration** (Pascal, après la fusion de 5c, 8, 8b et 9) : exécution complète sur `bench_1` avec les vrais composants (`MiniZincLocalSolver` + CP-SAT limité en effort déterministe), coût du meilleur monotone non croissant, reproductibilité avec et sans collecteurs, événements reçus dans l'ordre
+  - [x] Scaffold et tests **(C)** (2026-11-22) : `src/memetic/assembly.py` (`AssemblyDefaults`, `AssemblySettings`, squelette de `build_block_memetic_config`) ; `tests/test_integration.py` : 11 tests de l'assemblage sans MiniZinc, 13 tests d'une exécution complète sur bench_1 (environ 30 s). Validés contre un assemblage de référence jetable : 24 tests verts, optimum 94 atteint, un restart
+  - [x] **(P)** `build_block_memetic_config` : faire passer `tests.test_integration` — Pascal, 2026-11-22, 24 tests verts
+  - [ ] Trancher : `IndividualCreated` (origine `RESTART`) pour les individus régénérés au restart (D8), et leur place par rapport à `Restarted`
 
 ## Étape 10 — Driver et expériences (`src/drivers/`) **(C)**
 - [ ] Point d'entrée CLI (instance, NR, NM, taille de population, graine, limite de temps)
