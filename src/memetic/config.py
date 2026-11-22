@@ -7,8 +7,6 @@ avec le registre de l'étape 7a).
 
 from dataclasses import dataclass, field
 
-from numpy import minimum
-
 from src.ga.chromosome import Encoding
 from src.ga.initialization import PopulationInitializer
 from src.ga.operators import Crossover, Mutation, VariationOperator
@@ -19,9 +17,7 @@ from src.memetic.executor import Executor, SequentialExecutor
 from src.memetic.local_search import LocalSolver
 from src.memetic.termination import TerminationCriterion
 from src.model.evaluation import CostEvaluator
-from src.observability.collectors import MetricCollector
 from src.observability.hub import ObservationHub
-from src.observability.sinks import RecordSink
 
 
 class MemeticDefaults:
@@ -52,9 +48,11 @@ class InvalidMemeticConfigError(MemeticError):
 class MemeticConfig[G]:
     """Stratégies et paramètres d'une exécution.
 
-    - ``crossover_count`` est NR (nombre de croisements par génération) 
-    - ``mutation_count`` NM (nombre de mutations par génération).
-    - ``master_seed`` est la graine dont dérivent toutes les graines des tâches (D7).
+    - ``crossover_count`` est NR (nombre de croisements par génération) ;
+    - ``mutation_count`` est NM (nombre de mutations par génération) ;
+    - ``master_seed`` est la graine dont dérivent toutes les graines des tâches (D7) ;
+    - ``dispatcher`` diffuse les événements de D8 ; par défaut, un hub sans collecteur (rien n'est mesuré). Le moteur
+      le ferme à la fin de ``run`` ;
     - ``convergence`` garde un état d'une génération à l'autre : utiliser une configuration par exécution.
     """
 
@@ -74,28 +72,29 @@ class MemeticConfig[G]:
     crossover_count: int
     mutation_count: int
     master_seed: int
-    dispatcher: ObservationHub = ObservationHub((), ())
+    dispatcher: ObservationHub = field(default_factory=ObservationHub)
     executor: Executor = field(default_factory=SequentialExecutor)
 
     def validate(self) -> None:
         """Vérifie les paramètres et l'assemblage, avant toute exécution.
 
         À vérifier :
-            - taille de population
-            - NR et NM (``MemeticDefaults``)
-            - Compatibilité du croisement et de la mutation avec l'encodage (``OperatorRegistry.check_compatibility``, étape 7a).
+            - la taille de la population et NR et NM (``MemeticDefaults``) ;
+            - la compatibilité du croisement et de la mutation avec l'encodage
+              (``OperatorRegistry.check_compatibility``, étape 7a).
 
         Raises:
             InvalidMemeticConfigError: si un paramètre est hors de son domaine (son nom et sa valeur dans le message).
             IncompatibleOperatorError: si un opérateur de variation ne manipule pas les génomes de ``encoding``.
         """
-        def _operator_validation(operator: VariationOperator):
+        def _operator_validation(operator: VariationOperator) -> None:
             OperatorRegistry.check_compatibility(operator, self.encoding)
-        def _operation_count_validation(field: str, value: int):
+
+        def _operation_count_validation(field_name: str, value: int) -> None:
             if MemeticDefaults.MIN_OPERATION_COUNT > value:
                 raise InvalidMemeticConfigError(
                     MemeticMessages.INVALID_OPERATION_COUNT.format(
-                        name=field,
+                        name=field_name,
                         minimum=MemeticDefaults.MIN_OPERATION_COUNT,
                         value=value
                     )
@@ -114,5 +113,7 @@ class MemeticConfig[G]:
         _operation_count_validation("mutation_count", self.mutation_count)
         _operation_count_validation("crossover_count", self.crossover_count)
 
-        if MemeticDefaults.MIN_OPERATION_COUNT == self.crossover_count + self.mutation_count:
+        no_crossover = self.crossover_count == MemeticDefaults.MIN_OPERATION_COUNT
+        no_mutation = self.mutation_count == MemeticDefaults.MIN_OPERATION_COUNT
+        if no_crossover and no_mutation:
             raise InvalidMemeticConfigError(MemeticMessages.NO_VARIATION)

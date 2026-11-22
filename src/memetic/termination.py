@@ -41,7 +41,7 @@ class GenerationLimit[G](TerminationCriterion[G]):
     def __init__(self, maximum_generations: int) -> None:
         """
         Raises:
-            InvalidTerminationParameterError: si ``generations < TerminationDefaults.MIN_GENERATIONS``.
+            InvalidTerminationParameterError: si ``maximum_generations < TerminationDefaults.MIN_GENERATIONS``.
         """
         if maximum_generations < TerminationDefaults.MIN_GENERATIONS:
             raise InvalidTerminationParameterError(TerminationMessages.INVALID_GENERATIONS.format(

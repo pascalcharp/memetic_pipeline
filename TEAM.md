@@ -257,7 +257,7 @@ Rappel : les tests peuvent être écrits par un agent de codage (règle 0 de CLA
 **Tests** : `python -m unittest tests.test_collectors` (sans MiniZinc). Populations construites à la main, résultats lus dans un `MemorySink`.
 
 ### Xavier — Étape 9 : boucle mémétique
-- [ ] Étape 9
+- [x] Étape 9
 
 **Fichiers**
 - `src/memetic/engine.py` (moteur `Memetic`), `src/memetic/config.py` (`MemeticConfig.validate`), `src/memetic/seeds.py` (`derive_task_seeds`), `src/memetic/termination.py` (`GenerationLimit`)

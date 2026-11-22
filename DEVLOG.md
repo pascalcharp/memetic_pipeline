@@ -952,3 +952,32 @@ Toutes les cases de 5c sont cochées, sauf le suivi de la documentation.
 
 **Reste**
 - Étape 9 : le test d'intégration attend une population de taille μ (pas « ≤ μ »). `RestartPolicy` n'a pas besoin de changer d'interface.
+
+## 2026-11-22 — Étape 9 : boucle mémétique (Xavier ; reprise par Pascal et Claude)
+
+**Fait (P)**, par Xavier, PR #11 (branche `feature/menetic_pipeline`) : `Memetic`, `MemeticConfig.validate`, `derive_task_seeds` (générateur infini de graines, `numpy.random.default_rng([graine maître, génération, lot])`), `GenerationLimit`, `Origins` en `str, Enum` (sérialisable en JSON) ; `collectors` et `sinks` de `MemeticConfig` remplacés par un `ObservationHub` (`dispatcher`).
+
+**Revue (2026-11-22)** : la suite passait, mais les valeurs des tests (NR = 2, NM = 1) masquaient deux bogues. Xavier n'étant pas disponible, Pascal a repris la branche en local et l'a corrigée avec Claude.
+
+**Bogues corrigés**
+- Chaque tâche NR tirait NR parents et les passait tous à `recombine` : avec le vrai `UniformGeneCrossover`, NR = 3 levait `WrongParentCountError` et NR = 1 passait un seul parent. NR = 2 tombait par hasard sur le nombre de parents attendu.
+- Chaque tâche NM tirait NM individus et les mutait tous : NM² mutations par génération (9 au lieu de 3 pour NM = 3).
+- Les tâches ajoutaient leurs enfants à `self.population` pendant `executor.map` : la tâche suivante tirait ses parents dans la population agrandie (contraire à D7, et condition de course pour un futur exécuteur parallèle).
+- `MemeticResult.best` valait `population[0]`, qui n'est le meilleur que si `SelectPop` trie par coût (faux avec `DeathPenaltySurvivorSelector`).
+- Graines : la recherche locale des mutations utilisait le générateur de la sélection ; les deux boucles partageaient le générateur `LOCAL_SEARCH` ; le restart utilisait celui de `SelectPop` ; l'initialisation ignorait la graine dérivée.
+
+**Nouveau déroulement d'une génération** (docstring de `engine.py`) : on tire d'un coup les `NR × parent_count` parents dans P (une graine `PARENT_SELECTION`), puis on lance NR tâches `CrossoverTask(parents, graine)` ; on tire de même les NM individus à muter, puis NM tâches `MutationTask(génome, graine)`. Une tâche ne modifie rien et n'émet rien : elle rend ses `ImprovedChild` (résultat du `LocalSolver`, coût avant, individu évalué). Les événements sont émis par le fil principal après le lot (D8). Chaque tâche utilise son `random.Random` pour l'opérateur puis pour le `LocalSolver` : le stream `LOCAL_SEARCH` est retiré de `SeedStreams`.
+
+**Interfaces communes**
+- `LocalSearchResult.seed_horraire` (ajouté par la PR) est retiré : le moteur évalue l'horaire décodé avant d'appeler `improve`, comme prévu par la docstring. `local_search.py`, `fixtures.py`, `test_local_search.py` et `test_collectors.py` reviennent à l'interface de 5b.
+- `derive_task_seeds(master_seed, generation, stream)` : le paramètre `task_count`, devenu inutile, est retiré ; borne des graines dans `SeedDefaults.MAX_TASK_SEED`. `SeedsCollection` est retirée.
+- `MemeticConfig.dispatcher` : `field(default_factory=ObservationHub)` au lieu d'une instance partagée par toutes les configurations. La validation est faite au début de `run` (et non dans le constructeur), comme le dit sa docstring.
+- `Executor.map` accepte un `Iterable` (changement de Xavier, gardé).
+
+**Tests** : `test_engine` compte 42 tests. Les tests des méthodes privées de la première version (`_generate_seed`, `_init_population`, `_process_result`) sont retirés avec ces méthodes. Nouveaux tests : NR = 3 (chaque croisement reçoit exactement `parent_count` parents ; vrai `UniformGeneCrossover` sans erreur), NM = 3 (exactement NM mutations), parents tirés dans la population d'avant le lot, meilleur individu exact quand `SelectPop` ne trie pas par coût, même historique quand l'exécuteur traite les tâches dans un autre ordre, hub fermé à la fin, hub par défaut propre à chaque configuration. Suite complète verte (502 tests).
+
+**Leçon** : des constantes de test qui coïncident avec une valeur du domaine (NR = 2 = nombre de parents, NM = 1) masquent les confusions entre ces grandeurs. Choisir des valeurs qui les distinguent.
+
+**Reste**
+- Le restart n'émet pas d'`IndividualCreated` (origine `RESTART`) pour les individus régénérés ; D8 le prévoit. À ajouter avec la 9-intégration, en décidant où placer ces événements par rapport à `Restarted`.
+- 9-intégration (Pascal) : exécution complète sur `bench_1` avec `MiniZincLocalSolver`.

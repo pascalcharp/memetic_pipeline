@@ -7,45 +7,50 @@ Déroulement d'une exécution (``run``) :
     2. génération 0 : ``initializer.initialize``, puis évaluer chaque individu ; émettre ``IndividualCreated``
        pour chacun et ``GenerationEnded`` ;
     3. tant que ``termination.is_done`` est faux, une génération :
-        a. boucle NR, **par lot** (D7) : tirer tous les parents (``parent_selector``), produire tous les enfants
-           (``crossover.recombine``), puis pour chaque enfant : décoder, évaluer (coût avant), ``local_solver``,
-           ré-encoder l'horaire rendu (``encoding.encode``), évaluer ; émettre ``LocalSearchDone`` et
-           ``IndividualCreated`` ;
-        b. boucle NM, par lot : tirer les individus à muter (``mutable_selector``), ``mutation.mutate`` sur leur
-           génome, puis comme en a. ;
+        a. lot NR (D7) : tirer d'un coup les ``NR × parent_count`` parents dans P (``parent_selector``), puis NR
+           tâches indépendantes, chacune : ``crossover.recombine``, et pour chaque enfant : décoder, évaluer (coût
+           avant), ``local_solver``, ré-encoder l'horaire rendu (``encoding.encode``), évaluer. Après le lot :
+           émettre ``LocalSearchDone`` et ``IndividualCreated`` pour chaque enfant, puis P = P + enfants ;
+        b. lot NM : tirer d'un coup les NM individus à muter dans P (``mutable_selector``), puis NM tâches, chacune :
+           ``mutation.mutate`` sur le génome, puis comme en a. ;
         c. ``survivor_selector.select`` sur parents + nouveaux, ramenée à ``population_size`` ; émettre
            ``GenerationEnded`` ;
         d. si ``convergence.has_converged`` : émettre ``Converged``, ``restart.restart``, ``convergence.reset()``,
            émettre ``Restarted`` ;
-    4. émettre ``RunEnded`` avec le meilleur individu ; fermer les destinations ; rendre ``MemeticResult``.
+    4. émettre ``RunEnded`` avec le meilleur individu ; fermer le hub ; rendre ``MemeticResult``.
 
-Chaque tâche d'un lot reçoit son propre ``random.Random`` (``derive_task_seeds``, D7) et passe par
-``config.executor.map``. Les événements passent par ``ObservationHub`` (D8), depuis le fil principal, après chaque lot.
+Les tâches d'un lot passent par ``config.executor.map``. Elles ne lisent que leurs propres entrées (parents ou
+génome déjà tirés, graine) et rendent leurs enfants sans rien modifier ni émettre : chaque tâche a son propre
+``random.Random`` (``derive_task_seeds``, D7), et les événements sont émis depuis le fil principal, après chaque lot
+(D8). Le résultat ne dépend donc pas de l'ordre d'exécution des tâches.
 """
 
-from dataclasses import dataclass
 import random
-from typing import Generator, Iterable, Sequence, Tuple
+from collections.abc import Iterator, Sequence
+from dataclasses import dataclass
 
-from numpy.random import rand
-
-from src.ga import population
-from src.ga.chromosome import Encoding
 from src.ga.individual import Individu
-from src.ga.initialization import PopulationInitializer
-from src.ga.operators import Crossover
-from src.ga.population import ConvergenceCriterion, SurvivorSelector
-from src.ga.selection import MutableSelector, ParentSelector
-from src.memetic import local_search
 from src.memetic.config import MemeticConfig
-from src.memetic.local_search import LocalSolver, LocalSearchResult
-from src.memetic.seeds import SeedStreams, SeedsCollection, derive_task_seeds
-from src.memetic.termination import TerminationCriterion
-from src.model.evaluation import CostEvaluator
-from src.model.horaire import Horaire
-from src.observability.events import Converged, GenerationEnded, IndividualCreated, LocalSearchDone, Origins, Restarted, RunEnded, RunStarted
-from src.observability.hub import ObservationHub
-from src.observability.sinks import RecordSink
+from src.memetic.local_search import LocalSearchResult
+from src.memetic.seeds import SeedStreams, derive_task_seeds
+from src.model.evaluation import CostBreakdown
+from src.observability.events import (
+    Converged,
+    GenerationEnded,
+    IndividualCreated,
+    LocalSearchDone,
+    Origins,
+    Restarted,
+    RunEnded,
+    RunStarted,
+)
+
+
+class EngineConstants:
+    """Constantes du déroulement d'une exécution."""
+
+    # La génération 0 est l'initialisation (D8).
+    INITIAL_GENERATION: int = 0
 
 
 @dataclass(frozen=True)
@@ -57,282 +62,192 @@ class MemeticResult[G]:
     generations: int
     restarts: int
 
-@dataclass(frozen=True)
-class MemeticCrossoverArgs:
-    PARENT_SELECTION: random.Random
-    CROSSOVER: random.Random
-    LOCAL_SEARCH: random.Random
 
 @dataclass(frozen=True)
-class MemeticMutationArgs:
-    MUTABLE_SELECTION: random.Random
-    MUTATION: random.Random
-    LOCAL_SEARCH: random.Random
+class CrossoverTask[G]:
+    """Une tâche du lot NR : les génomes des parents, déjà tirés, et la graine de la tâche."""
+
+    parents: tuple[G, ...]
+    seed: int
+
+
+@dataclass(frozen=True)
+class MutationTask[G]:
+    """Une tâche du lot NM : le génome à muter, déjà tiré, et la graine de la tâche."""
+
+    genome: G
+    seed: int
+
+
+@dataclass(frozen=True)
+class ImprovedChild[G]:
+    """Un nouvel individu produit par une tâche : résultat du ``LocalSolver``, coût avant la recherche locale, et
+    individu ré-encodé et évalué (son coût est le coût après)."""
+
+    search: LocalSearchResult
+    cost_before: CostBreakdown
+    individual: Individu[G]
+
 
 class Memetic[G]:
-    """Moteur mémétique, configuré par ``config``."""
-
-    config: MemeticConfig[G]
-
-    dispatcher: ObservationHub
-    rng: random.Random
-
-    initializer: PopulationInitializer[G]
-    crossover: Crossover[G]
-    termination: TerminationCriterion[G]
-    encoding: Encoding[G]
-    parents_selector: ParentSelector[G]
-    mutable_selector: MutableSelector[G]
-    survivors_selector: SurvivorSelector[G]
-    solver: LocalSolver
-    convergence: ConvergenceCriterion[G]
-
-    population: tuple[Individu[G], ...]
-    generation: int = 0
-    restarts: int = 0
-
+    """Moteur mémétique, configuré par ``config``. Une instance (et une configuration) par exécution."""
 
     def __init__(self, config: MemeticConfig[G]) -> None:
-        config.validate()
-
         self.config = config
-        self.dispatcher = self.config.dispatcher
-
-        self.rng = random.Random()
-        self.rng.seed(self.config.master_seed)
-
-        self.initializer = self.config.initializer
-        self.crossover = self.config.crossover
-        self.termination = self.config.termination
-        self.encoding = self.config.encoding
-        self.parents_selector = self.config.parent_selector
-        self.mutable_selector = self.config.mutable_selector
-        self.survivors_selector = self.config.survivor_selector
-        self.solver = self.config.local_solver
-        self.convergence = self.config.convergence
-        self.restart_policy = self.config.restart
-        self.executor = self.config.executor
-        self.mutation = self.config.mutation
 
     def run(self) -> MemeticResult[G]:
         """Exécute l'algorithme jusqu'au critère d'arrêt et rend le résultat.
 
         Raises:
             InvalidMemeticConfigError, IncompatibleOperatorError: si la configuration est invalide
-                (``MemeticConfig.validate``).
+                (``MemeticConfig.validate``), avant tout événement.
         """
-        self.dispatcher.emit(RunStarted(self.config.master_seed, self.config.population_size, self.config.crossover_count, self.config.mutation_count))
+        self.config.validate()
+        hub = self.config.dispatcher
+        hub.emit(RunStarted(
+            master_seed=self.config.master_seed,
+            population_size=self.config.population_size,
+            crossover_count=self.config.crossover_count,
+            mutation_count=self.config.mutation_count,
+        ))
 
-        seeds_collection = self._generate_seed()
+        generation = EngineConstants.INITIAL_GENERATION
+        restarts = 0
+        population = self.initial_population()
 
-        self._init_population(self._generate_rng(seeds_collection.INITIALIZATION))
+        while not self.config.termination.is_done(generation, population):
+            generation += 1
+            population = population + self.crossover_batch(population, generation)
+            population = population + self.mutation_batch(population, generation)
+            population = self.config.survivor_selector.select(
+                population, self.config.population_size, self.single_task_rng(generation, SeedStreams.SURVIVOR_SELECTION)
+            )
+            hub.emit(GenerationEnded(generation=generation, population=population))
 
-        while not self.termination.is_done(self.generation, self.population):
-            self.generation += 1
-            seeds_collection = self._generate_seed()
-            self.executor.map(self._crossover_loop, self._NR(seeds_collection.PARENT_SELECTION, seeds_collection.CROSSOVER, seeds_collection.LOCAL_SEARCH))
-            self.executor.map(self._mutation_loop, self._NM(seeds_collection.MUTABLE_SELECTION, seeds_collection.MUTATION, seeds_collection.LOCAL_SEARCH))
-
-            self.population = self.survivors_selector.select(self.population, self.config.population_size, self._generate_rng(seeds_collection.SURVIVOR_SELECTION))
-
-            self.dispatcher.emit(
-                GenerationEnded(
-                    generation=self.generation,
-                    population=self.population
+            if self.config.convergence.has_converged(population):
+                hub.emit(Converged(generation=generation))
+                population = self.config.restart.restart(
+                    population, self.single_task_rng(generation, SeedStreams.RESTART)
                 )
-             )
+                self.config.convergence.reset()
+                restarts += 1
+                hub.emit(Restarted(generation=generation, population=population))
 
-            if self.convergence.has_converged(self.population):
-                self._restart(self._generate_rng(seeds_collection.SURVIVOR_SELECTION))
+        best = self.best_of(population)
+        hub.emit(RunEnded(generations=generation, best=best))
+        hub.close()
+        return MemeticResult(best=best, population=population, generations=generation, restarts=restarts)
 
+    # -----------------------------------------------------------------------------------------------------------------
+    # Étapes d'une génération (fil principal)
+    # -----------------------------------------------------------------------------------------------------------------
 
-        best = self._get_best()
-        self.dispatcher.emit(RunEnded(generations=self.generation, best=best))
-        self.dispatcher.close()
-        return MemeticResult(
-            best=self.population[0],
-            population=self.population,
-            generations=self.generation,
-            restarts=self.restarts,
+    def initial_population(self) -> tuple[Individu[G], ...]:
+        """Génération 0 : population initiale évaluée ; émet ``IndividualCreated`` pour chacun, puis
+        ``GenerationEnded(0)``."""
+        generation = EngineConstants.INITIAL_GENERATION
+        rng = self.single_task_rng(generation, SeedStreams.INITIALIZATION)
+        individuals = self.config.initializer.initialize(self.config.population_size, rng)
+        population = tuple(
+            individual.with_cost(self.config.evaluator.evaluate(individual.horaire)) for individual in individuals
         )
+        for individual in population:
+            self.config.dispatcher.emit(IndividualCreated(
+                generation=generation, origin=Origins.INITIALIZATION.value, operator=None, individual=individual
+            ))
+        self.config.dispatcher.emit(GenerationEnded(generation=generation, population=population))
+        return population
 
-    def _init_population(self, rng: random.Random):
-        def _evaluate(individual: Individu[G], operator: str):
-            cost = self.config.evaluator.evaluate(individual.horaire)
-            individual = individual.with_cost(cost)
-            self.dispatcher.emit(
-                IndividualCreated(
-                    generation=self.generation,
-                    origin=Origins.INITIALIZATION.value,
-                    operator=None,
-                    individual=individual
-                )
-            )
-            return individual
-
-        self.population = self.initializer.initialize(self.config.population_size, self.rng)
-        self.population = tuple([
-            _evaluate(i, self.initializer.initialize.__name__)
-            for i in self.population
-        ])
-        self.dispatcher.emit(
-            GenerationEnded(
-                generation=self.generation,
-                population=self.population,
-            )
+    def crossover_batch(self, population: Sequence[Individu[G]], generation: int) -> tuple[Individu[G], ...]:
+        """Lot NR : les enfants des NR croisements, réparés et évalués (événements émis après le lot)."""
+        crossover_count = self.config.crossover_count
+        if crossover_count == 0:
+            return ()
+        parent_count = self.config.crossover.parent_count()
+        parents = self.config.parent_selector.select(
+            population,
+            crossover_count * parent_count,
+            self.single_task_rng(generation, SeedStreams.PARENT_SELECTION),
         )
-
-    def _crossover_loop(self, args: MemeticCrossoverArgs):
-        """
-        The crossover loop:
-            Parents = SelectParent(P)
-            Enfants = Recombine(Parents)
-            Enfants = SolveurLocal(Enfants)
-            Evaluer(Enfants)
-            P = P + Enfants
-        """
-        _process = self._process_result(Origins.CROSSOVER, self.crossover.__class__.__name__)
-        parents = self.parents_selector.select(self.population, self.config.crossover_count, args.PARENT_SELECTION)
-        children_to_crossover = self.crossover.recombine([x.genome for x in parents], args.CROSSOVER)
-        childrens = [
-            _process(
-                self.solver.improve(
-                    self.encoding.decode(x),
-                    args.LOCAL_SEARCH
-                )
-            )
-            for x in children_to_crossover
+        parent_genomes = [parent.genome for parent in parents]
+        seeds = derive_task_seeds(self.config.master_seed, generation, SeedStreams.CROSSOVER)
+        tasks = [
+            CrossoverTask(parents=tuple(parent_genomes[start:start + parent_count]), seed=next(seeds))
+            for start in range(0, crossover_count * parent_count, parent_count)
         ]
-        self.population = tuple(list(self.population) + childrens)
+        children_by_task = self.config.executor.map(self.run_crossover_task, tasks)
+        children = [child for task_children in children_by_task for child in task_children]
+        return self.publish(children, generation, Origins.CROSSOVER, type(self.config.crossover).__name__)
 
-    def _mutation_loop(self, args: MemeticMutationArgs):
-        """
-        The mutation loop:
-            i = SelectMutable(P)
-            Mute(i)
-            i = SolveurLocal(i)
-            Evaluer(i)
-            P = P + {i}
-        """
-        _process = self._process_result(Origins.MUTATION, self.mutation.__class__.__name__)
-        population_subset = self.mutable_selector.select(self.population, self.config.mutation_count, args.MUTABLE_SELECTION)
-        mutated = [
-            self.encoding.decode(
-                self.mutation.mutate(x.genome, args.MUTATION)
-            )
-            for x in population_subset
-        ]
-        children = [
-            _process(self.solver.improve(x, args.MUTABLE_SELECTION))
-            for x in mutated
-        ]
-        self.population = tuple(list(self.population) + children)
-
-    def _restart(self, rng: random.Random) -> None:
-        self.dispatcher.emit(Converged(generation=self.generation))
-        self.population = self.restart_policy.restart(self.population, rng)
-        self.convergence.reset()
-        self.restarts += 1
-        self.dispatcher.emit(
-            Restarted(
-                generation=self.generation,
-                population=self.population,
-            )
+    def mutation_batch(self, population: Sequence[Individu[G]], generation: int) -> tuple[Individu[G], ...]:
+        """Lot NM : les NM individus mutés, réparés et évalués (événements émis après le lot)."""
+        mutation_count = self.config.mutation_count
+        if mutation_count == 0:
+            return ()
+        selected = self.config.mutable_selector.select(
+            population, mutation_count, self.single_task_rng(generation, SeedStreams.MUTABLE_SELECTION)
         )
+        seeds = derive_task_seeds(self.config.master_seed, generation, SeedStreams.MUTATION)
+        tasks = [MutationTask(genome=individual.genome, seed=next(seeds)) for individual in selected]
+        children = self.config.executor.map(self.run_mutation_task, tasks)
+        return self.publish(children, generation, Origins.MUTATION, type(self.config.mutation).__name__)
 
+    def publish(
+            self, children: Sequence[ImprovedChild[G]], generation: int, origin: Origins, operator: str
+    ) -> tuple[Individu[G], ...]:
+        """Émet ``LocalSearchDone`` puis ``IndividualCreated`` pour chaque enfant, dans l'ordre ; rend les individus."""
+        for child in children:
+            self.config.dispatcher.emit(LocalSearchDone(
+                generation=generation,
+                origin=origin.value,
+                operator=operator,
+                cost_before=child.cost_before,
+                cost_after=child.individual.cost,
+                result=child.search,
+            ))
+            self.config.dispatcher.emit(IndividualCreated(
+                generation=generation, origin=origin.value, operator=operator, individual=child.individual
+            ))
+        return tuple(child.individual for child in children)
 
-    def _process_result(self, origin: Origins, operator: str | None = None):
-        def _process(result: LocalSearchResult) -> Individu[G]:
-            old_cost = self.config.evaluator.evaluate(result.seed_horraire)
-            new_cost = self.config.evaluator.evaluate(result.horaire)
-            self.dispatcher.emit(
-                LocalSearchDone(
-                    generation=self.generation,
-                    origin=origin.value,
-                    operator=operator,
-                    cost_before=old_cost,
-                    cost_after=new_cost,
-                    result=result
-                )
-            )
+    # -----------------------------------------------------------------------------------------------------------------
+    # Tâches (indépendantes : ni état modifié, ni événement)
+    # -----------------------------------------------------------------------------------------------------------------
 
-            individual = Individu.from_genome(self.encoding.encode(result.horaire), self.encoding)
-            individual = individual.with_cost(new_cost)
-            self.dispatcher.emit(
-                IndividualCreated(
-                    generation=self.generation,
-                    origin=origin.value,
-                    operator=operator,
-                    individual=individual
-                )
-            )
-            return individual
-        return _process
+    def run_crossover_task(self, task: CrossoverTask[G]) -> tuple[ImprovedChild[G], ...]:
+        """Un croisement, puis la recherche locale de chaque enfant, avec le générateur de la tâche."""
+        rng = random.Random(task.seed)
+        child_genomes = self.config.crossover.recombine(task.parents, rng)
+        return tuple(self.improve(genome, rng) for genome in child_genomes)
 
-    def _NR(self, select_parents_seed: Iterable[int], recombine_seed: Iterable[int], local_solver_seed: Iterable[int]) -> Generator[MemeticCrossoverArgs]:
-        """
-        Generator creating NR new random number generator to be use by the crossover loop
-        The number generator is created with the help of the master seed.
-        """
-        for i in range(self.config.crossover_count):
-            yield MemeticCrossoverArgs(
-                self._generate_rng(select_parents_seed),
-                self._generate_rng(recombine_seed),
-                self._generate_rng(local_solver_seed)
-            )
+    def run_mutation_task(self, task: MutationTask[G]) -> ImprovedChild[G]:
+        """Une mutation, puis la recherche locale du mutant, avec le générateur de la tâche."""
+        rng = random.Random(task.seed)
+        mutant = self.config.mutation.mutate(task.genome, rng)
+        return self.improve(mutant, rng)
 
-    def _NM(self, select_mutation_seed: Iterable[int], mutation_seeds: Iterable[int], local_solver_seed: Iterable[int]) -> Generator[MemeticMutationArgs]:
-        """
-        Generator creating NM new random number generator to be use by the mutation loop.
-        The number generator is created with the help of the master seed.
-        """
-        for i in range(self.config.mutation_count):
-            yield MemeticMutationArgs(
-                self._generate_rng(select_mutation_seed),
-                self._generate_rng(mutation_seeds),
-                self._generate_rng(local_solver_seed)
-            )
+    def improve(self, genome: G, rng: random.Random) -> ImprovedChild[G]:
+        """Décode ``genome``, l'évalue (coût avant), le passe au ``LocalSolver``, ré-encode l'horaire rendu et
+        l'évalue (coût après)."""
+        encoding = self.config.encoding
+        evaluator = self.config.evaluator
+        horaire = encoding.decode(genome)
+        cost_before = evaluator.evaluate(horaire)
+        search = self.config.local_solver.improve(horaire, rng)
+        individual = Individu.from_genome(encoding.encode(search.horaire), encoding)
+        individual = individual.with_cost(evaluator.evaluate(individual.horaire))
+        return ImprovedChild(search=search, cost_before=cost_before, individual=individual)
 
-    def _generate_seed(self):
-        def _seeds(streams: SeedStreams, task_count: int):
-            master_seed = self.config.master_seed
-            generation = self.generation
-            return derive_task_seeds(master_seed, generation, streams, self.config.crossover_count)
+    # -----------------------------------------------------------------------------------------------------------------
+    # Utilitaires
+    # -----------------------------------------------------------------------------------------------------------------
 
-        collections = SeedsCollection(
-            INITIALIZATION=_seeds(SeedStreams.INITIALIZATION, 1),
+    def single_task_rng(self, generation: int, stream: SeedStreams) -> random.Random:
+        """Générateur d'un lot d'une seule tâche (sélection, initialisation, restart) : la première graine du lot."""
+        seeds: Iterator[int] = derive_task_seeds(self.config.master_seed, generation, stream)
+        return random.Random(next(seeds))
 
-            PARENT_SELECTION=_seeds(SeedStreams.PARENT_SELECTION, self.config.crossover_count),
-            CROSSOVER=_seeds(SeedStreams.CROSSOVER, self.config.crossover_count),
-
-            MUTABLE_SELECTION=_seeds(SeedStreams.MUTABLE_SELECTION, self.config.mutation_count),
-            MUTATION=_seeds(SeedStreams.MUTATION, self.config.mutation_count),
-
-            LOCAL_SEARCH=_seeds(SeedStreams.LOCAL_SEARCH, self.config.mutation_count + self.config.crossover_count),
-
-            SURVIVOR_SELECTION=_seeds(SeedStreams.SURVIVOR_SELECTION, 1),
-            RESTART=_seeds(SeedStreams.RESTART, 1),
-        )
-        return collections
-
-    def _get_best(self):
-        def _is_better(best: Individu[G], i: Individu[G]) -> bool:
-            assert(not best.cost == None)
-            assert(not i.cost == None)
-            return i.cost.total < best.cost.total
-
-        best: Individu[G] = self.population[0]
-
-        for i in self.population:
-            if best == None or _is_better(best, i):
-                best = i
-
-        assert(not best == None)
-
-        return best
-
-    def _generate_rng(self, seed: Iterable[int]):
-        rng = random.Random()
-        rng.seed(next(iter(seed)))
-        return rng
-
+    @staticmethod
+    def best_of(population: Sequence[Individu[G]]) -> Individu[G]:
+        """L'individu de plus petit ``cost.total`` (le premier rencontré en cas d'égalité)."""
+        return min(population, key=lambda individual: individual.cost.total)

@@ -22,25 +22,21 @@ Déroulement attendu, tel que les tests le vérifient :
 
 import dataclasses
 import random
-from typing import Generator, Set
+from collections.abc import Iterator, Sequence
 import unittest
 from unittest import mock
 from collections import Counter
 
 from src.ga.chromosome import BlockEncoding, Encoding
 from src.ga.initialization import RandomBlockInitializer
-from src.ga.operators import Crossover, Mutation, ShiftStartMutation, UniformGeneCrossover
-from src.ga.population import ConvergenceCriterion, RestartPolicy, SurvivorSelector
+from src.ga.operators import ShiftStartMutation, UniformGeneCrossover
+from src.ga.population import SurvivorSelector
 from src.ga.registry import IncompatibleOperatorError
-from src.ga.selection import MutableSelector, ParentSelector, TournamentSelector, UniformMutableSelector
-from src.memetic import engine
-from src.memetic import termination
+from src.ga.selection import TournamentSelector, UniformMutableSelector
 from src.memetic.config import InvalidMemeticConfigError, MemeticConfig, MemeticError
-from src.memetic.engine import Memetic, MemeticResult, MemeticCrossoverArgs, MemeticMutationArgs
-from src.memetic.executor import SequentialExecutor
-from src.memetic.local_search import LocalSearchResult, LocalSolver
+from src.memetic.engine import Memetic, MemeticResult
+from src.memetic.executor import Executor, SequentialExecutor
 from src.memetic.seeds import SeedStreams, derive_task_seeds
-from src.memetic.solver import SolveOutcome, SolverStatistics
 from src.memetic.termination import (
     GenerationLimit,
     InvalidTerminationParameterError,
@@ -49,6 +45,7 @@ from src.memetic.termination import (
 from src.model.evaluation import CostEvaluator
 from src.model.horaire import Horaire
 from src.observability.hub import ObservationHub
+from src.ga.individual import Individu
 from src.observability.events import (
     Converged,
     GenerationEnded,
@@ -69,7 +66,6 @@ from tests.fixtures import (
     RecordingCollector,
     synthetic_instance,
 )
-from unittest import mock
 
 POPULATION_SIZE: int = 4
 CROSSOVER_COUNT: int = 2
@@ -86,6 +82,11 @@ SEED_BATCH: int = 100
 SEED_PREFIX: int = 3
 SEED_GENERATION: int = 7
 CHILDREN_PER_CROSSOVER: int = FakeCrossover.PARENT_COUNT
+# NR et NM différents du nombre de parents et de 1 : un moteur qui confondrait NR et le nombre de parents, ou
+# qui ferait NM mutations par tâche, est alors détecté.
+LARGE_CROSSOVER_COUNT: int = 3
+LARGE_MUTATION_COUNT: int = 3
+ONE_GENERATION: int = 1
 
 
 def fake_config() -> MemeticConfig:
@@ -112,43 +113,6 @@ def fake_config() -> MemeticConfig:
         dispatcher=mock.MagicMock(ObservationHub)
     )
 
-def fake_config_with_mock(
-        dispatcher: ObservationHub = mock.Mock(),
-        local_solver: LocalSolver = mock.Mock(),
-        parent_selector: ParentSelector = mock.MagicMock(TournamentSelector),
-        crossover: Crossover = mock.MagicMock(FakeCrossover),
-        mutable_selector: MutableSelector = mock.MagicMock(MutableSelector),
-        mutation: Mutation = mock.MagicMock(FakeMutation),
-        evaluator: CostEvaluator = mock.MagicMock(CostEvaluator),
-        survivor_selector: SurvivorSelector = mock.MagicMock(FakeSurvivorSelector),
-        convergence: ConvergenceCriterion = mock.MagicMock(FakeConvergenceCriterion),
-        restart: RestartPolicy = mock.MagicMock(FakeRestartPolicy),
-        termination: TerminationCriterion = mock.MagicMock(GenerationLimit),
-) -> MemeticConfig:
-    """Configuration complète avec les faux objets, sans MiniZinc."""
-    instance = synthetic_instance()
-    encoding = BlockEncoding()
-    return MemeticConfig(
-        encoding=encoding,
-        initializer=RandomBlockInitializer(instance, encoding),
-        parent_selector=parent_selector,
-        crossover=crossover,
-        mutable_selector=mutable_selector,
-        mutation=mutation,
-        local_solver=local_solver,
-        evaluator=evaluator,
-        survivor_selector=survivor_selector,
-        convergence=convergence,
-        restart=restart,
-        termination=termination,
-        population_size=POPULATION_SIZE,
-        crossover_count=CROSSOVER_COUNT,
-        mutation_count=MUTATION_COUNT,
-        master_seed=MASTER_SEED,
-        dispatcher=dispatcher
-    )
-
-
 def real_operators_config(master_seed: int = MASTER_SEED, with_collector: bool = False) -> MemeticConfig:
     """Vrais opérateurs de 7b et vrai initialiseur, sur 3 employés ; seul le ``LocalSolver`` est factice."""
     instance = synthetic_instance(EMPLOYEE_COUNT)
@@ -170,6 +134,7 @@ def real_operators_config(master_seed: int = MASTER_SEED, with_collector: bool =
         crossover_count=CROSSOVER_COUNT,
         mutation_count=MUTATION_COUNT,
         master_seed=master_seed,
+        dispatcher=ObservationHub((RecordingCollector(),)) if with_collector else ObservationHub(),
     )
 
 
@@ -236,84 +201,11 @@ class TestScaffoldContract(unittest.TestCase):
         self.assertIs(Memetic(config).config, config)
 
     def test_givenSeedStreams_whenListed_thenAllDistinct(self) -> None:
-        streams = [value for name, value in vars(SeedStreams).items() if name.isupper()]
+        streams = [stream.value for stream in SeedStreams]
         self.assertEqual(len(streams), len(set(streams)))
 
     def test_givenMemeticErrors_whenCheckingHierarchy_thenConfigErrorIsAMemeticError(self) -> None:
         self.assertTrue(issubclass(InvalidMemeticConfigError, MemeticError))
-
-class TestEngine(unittest.TestCase):
-    def test_engine_seed_collection_generate_seeds(self):
-        engine = Memetic(fake_config())
-        seeds = engine._generate_seed()
-
-        self.assertIsNotNone(next(seeds.INITIALIZATION))
-        self.assertIsNotNone(next(seeds.PARENT_SELECTION))
-        self.assertIsNotNone(next(seeds.CROSSOVER))
-        self.assertIsNotNone(next(seeds.MUTABLE_SELECTION))
-        self.assertIsNotNone(next(seeds.MUTATION))
-        self.assertIsNotNone(next(seeds.LOCAL_SEARCH))
-        self.assertIsNotNone(next(seeds.SURVIVOR_SELECTION))
-        self.assertIsNotNone(next(seeds.RESTART))
-
-    def test_engine_seed_collection_generate_same_seeds_each_time(self):
-        engine = Memetic(fake_config())
-
-        seeds1 = engine._generate_seed()
-        engine.generation = 0
-        seeds2 = engine._generate_seed()
-
-        self.assertEqual(next(seeds1.INITIALIZATION), next(seeds2.INITIALIZATION))
-        self.assertEqual(next(seeds1.PARENT_SELECTION), next(seeds2.PARENT_SELECTION))
-        self.assertEqual(next(seeds1.CROSSOVER), next(seeds2.CROSSOVER))
-        self.assertEqual(next(seeds1.MUTABLE_SELECTION), next(seeds2.MUTABLE_SELECTION))
-        self.assertEqual(next(seeds1.MUTATION), next(seeds2.MUTATION))
-        self.assertEqual(next(seeds1.LOCAL_SEARCH), next(seeds2.LOCAL_SEARCH))
-        self.assertEqual(next(seeds1.SURVIVOR_SELECTION), next(seeds2.SURVIVOR_SELECTION))
-        self.assertEqual(next(seeds1.RESTART), next(seeds2.RESTART))
-
-    def test_engine_seed_random_is_the_same(self):
-        engine = Memetic(fake_config())
-        rng1 = engine._generate_rng(engine._generate_seed().INITIALIZATION)
-        engine.generation = 0
-        rng2 = engine._generate_rng(engine._generate_seed().INITIALIZATION)
-        for _ in range(100):
-            self.assertEqual(rng1.random(), rng2.random())
-
-    def test_engine_init_population_correct_size(self):
-        engine = Memetic(fake_config())
-        collection = engine._generate_seed()
-        rng = engine._generate_rng(collection.INITIALIZATION)
-        engine._init_population(rng)
-        self.assertEqual(len(engine.population), engine.config.population_size)
-
-    def test_engine_init_population_caclulate_cost(self):
-        engine = Memetic(fake_config())
-        collection = engine._generate_seed()
-        rng = engine._generate_rng(collection.INITIALIZATION)
-        engine._init_population(rng)
-        for i in engine.population:
-            self.assertTrue(i.is_evaluated())
-
-    def test_engine_init_population_send_event(self):
-        dispatcher = mock.Mock()
-        engine = Memetic(fake_config_with_mock(dispatcher=dispatcher))
-        collection = engine._generate_seed()
-        rng = engine._generate_rng(collection.INITIALIZATION)
-        engine._init_population(rng)
-        self.assertEqual(dispatcher.emit.call_count, engine.config.population_size + 1)
-
-    def test_engine_process_result(self):
-        engine = Memetic(fake_config_with_mock())
-        collection = engine._generate_seed()
-        rng = engine._generate_rng(collection.INITIALIZATION)
-        engine._init_population(rng)
-
-        _process = engine._process_result(Origins.INITIALIZATION)
-
-        i = _process(LocalSearchResult(engine.population[0].horaire, engine.population[0].horaire, SolveOutcome("no_solution"), frozenset([1]), SolverStatistics()))
-
-        self.assertTrue(i.is_evaluated())
 
 # ---------------------------------------------------------------------------------------------------------------------
 # Graines dérivées (D7)
@@ -321,49 +213,41 @@ class TestEngine(unittest.TestCase):
 
 class TestDeriveTaskSeeds(unittest.TestCase):
 
-    def _genator_to_set(self, inifinite_seeds: Generator[int], limit: int) -> Set[int]:
-        s = set()
-        for i in range(limit):
-            s.add(next(inifinite_seeds))
-
-        return s
-
+    @staticmethod
+    def _first_seeds(seeds: Iterator[int], count: int) -> list[int]:
+        return [next(seeds) for _ in range(count)]
 
     def test_givenSameArguments_whenDerive_thenSameSeeds(self) -> None:
-        first = derive_task_seeds(MASTER_SEED, SEED_GENERATION, SeedStreams.CROSSOVER, SEED_BATCH)
-        second = derive_task_seeds(MASTER_SEED, SEED_GENERATION, SeedStreams.CROSSOVER, SEED_BATCH)
-        self.assertEqual(self._genator_to_set(first, SEED_BATCH), self._genator_to_set(second, SEED_BATCH))
+        first = derive_task_seeds(MASTER_SEED, SEED_GENERATION, SeedStreams.CROSSOVER)
+        second = derive_task_seeds(MASTER_SEED, SEED_GENERATION, SeedStreams.CROSSOVER)
+        self.assertEqual(self._first_seeds(first, SEED_BATCH), self._first_seeds(second, SEED_BATCH))
 
     def test_givenTaskCount_whenDerive_thenOneIntegerSeedPerTask(self) -> None:
-        seeds = derive_task_seeds(MASTER_SEED, SEED_GENERATION, SeedStreams.CROSSOVER, SEED_BATCH)
-        for i in range(SEED_BATCH):
-            seed = next(seeds)
-            self.assertIsNotNone(seed)
+        seeds = derive_task_seeds(MASTER_SEED, SEED_GENERATION, SeedStreams.CROSSOVER)
+        for seed in self._first_seeds(seeds, SEED_BATCH):
             self.assertIsInstance(seed, int)
 
     def test_givenOneBatch_whenDerive_thenSeedsWithinTheBatchAreDistinct(self) -> None:
-        seeds = derive_task_seeds(MASTER_SEED, SEED_GENERATION, SeedStreams.CROSSOVER, SEED_BATCH)
-        sets = self._genator_to_set(seeds, SEED_BATCH)
-        self.assertEqual(len(sets), SEED_BATCH)
+        seeds = derive_task_seeds(MASTER_SEED, SEED_GENERATION, SeedStreams.CROSSOVER)
+        self.assertEqual(len(set(self._first_seeds(seeds, SEED_BATCH))), SEED_BATCH)
 
     def test_givenOtherGenerationStreamOrMasterSeed_whenDerive_thenSeedsDiffer(self) -> None:
-        reference = derive_task_seeds(MASTER_SEED, SEED_GENERATION, SeedStreams.CROSSOVER, SEED_BATCH)
+        reference = derive_task_seeds(MASTER_SEED, SEED_GENERATION, SeedStreams.CROSSOVER)
         variants = {
-            "génération": derive_task_seeds(MASTER_SEED, SEED_GENERATION + 1, SeedStreams.CROSSOVER, SEED_BATCH),
-            "lot": derive_task_seeds(MASTER_SEED, SEED_GENERATION, SeedStreams.MUTATION, SEED_BATCH),
-            "graine maître": derive_task_seeds(OTHER_SEED, SEED_GENERATION, SeedStreams.CROSSOVER, SEED_BATCH),
+            "génération": derive_task_seeds(MASTER_SEED, SEED_GENERATION + 1, SeedStreams.CROSSOVER),
+            "lot": derive_task_seeds(MASTER_SEED, SEED_GENERATION, SeedStreams.MUTATION),
+            "graine maître": derive_task_seeds(OTHER_SEED, SEED_GENERATION, SeedStreams.CROSSOVER),
         }
-        reference_set = self._genator_to_set(reference, SEED_BATCH)
+        reference_seeds = set(self._first_seeds(reference, SEED_BATCH))
         for name, variant in variants.items():
-            sets = self._genator_to_set(variant, SEED_BATCH)
             with self.subTest(change=name):
-                self.assertTrue(sets.isdisjoint(reference_set))
+                self.assertTrue(reference_seeds.isdisjoint(self._first_seeds(variant, SEED_BATCH)))
 
     def test_givenLargerBatch_whenDerive_thenSeedsOfTheFirstTasksAreUnchanged(self) -> None:
-        short = derive_task_seeds(MASTER_SEED, SEED_GENERATION, SeedStreams.CROSSOVER, SEED_PREFIX)
-        long = derive_task_seeds(MASTER_SEED, SEED_GENERATION, SeedStreams.CROSSOVER, SEED_BATCH)
-        for i in range(SEED_PREFIX):
-            self.assertEqual(next(short), next(long))
+        short = derive_task_seeds(MASTER_SEED, SEED_GENERATION, SeedStreams.CROSSOVER)
+        long = derive_task_seeds(MASTER_SEED, SEED_GENERATION, SeedStreams.CROSSOVER)
+        long_seeds = self._first_seeds(long, SEED_BATCH)
+        self.assertEqual(self._first_seeds(short, SEED_PREFIX), long_seeds[:SEED_PREFIX])
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -564,23 +448,90 @@ class TestMemeticRunWithRealOperators(unittest.TestCase):
         Memetic(real_operators_config()).run()
         self.assertEqual(random.getstate(), state_before, "chaque tâche a son propre random.Random (D7)")
 
-    def test_engine_each_loop_increment_generation(self):
-        is_done = mock.Mock()
-        run = [False, False, True]
-        is_done.side_effect = run
-        terminated = mock.Mock()
-        terminated.is_done = is_done
-        default_config = fake_config()
-        engine = Memetic(
-            fake_config_with_mock(
-                termination=terminated,
 
-                local_solver=default_config.local_solver,
-            )
-         )
-        engine.run()
+# ---------------------------------------------------------------------------------------------------------------------
+# Lots NR et NM (D7) : nombre d'appels, parents tirés dans P, indépendance des tâches
+# ---------------------------------------------------------------------------------------------------------------------
 
-        self.assertEqual(engine.generation, len([x for x in run if not x]))
+class WorstFirstSurvivorSelector[G](SurvivorSelector[G]):
+    """``SelectPop`` factice qui garde les ``size`` meilleurs, mais rangés du pire au meilleur."""
+
+    def select(self, population: Sequence[Individu[G]], size: int, rng: random.Random) -> tuple[Individu[G], ...]:
+        ranked = sorted(population, key=lambda individual: individual.cost.total)[:size]
+        return tuple(reversed(ranked))
+
+
+class ReversedOrderExecutor(Executor):
+    """Exécuteur factice qui exécute les tâches dans l'ordre inverse, mais rend les résultats dans l'ordre du lot."""
+
+    def map(self, task, items):
+        batch = list(items)
+        results = [task(item) for item in reversed(batch)]
+        return list(reversed(results))
+
+
+class TestMemeticBatches(unittest.TestCase):
+
+    def test_givenLargeNr_whenRun_thenEachCrossoverReceivesParentCountParents(self) -> None:
+        config = dataclasses.replace(fake_config(), crossover_count=LARGE_CROSSOVER_COUNT)
+        Memetic(config).run()
+        self.assertEqual(len(config.crossover.received), LARGE_CROSSOVER_COUNT * GENERATIONS)
+        for parents in config.crossover.received:
+            self.assertEqual(len(parents), FakeCrossover.PARENT_COUNT)
+
+    def test_givenLargeNrAndRealCrossover_whenRun_thenNoWrongParentCount(self) -> None:
+        config = dataclasses.replace(real_operators_config(), crossover_count=LARGE_CROSSOVER_COUNT)
+        result = Memetic(config).run()
+        self.assertEqual(result.generations, REAL_RUN_GENERATIONS)
+
+    def test_givenLargeNm_whenRun_thenExactlyNmMutationsPerGeneration(self) -> None:
+        config = dataclasses.replace(fake_config(), mutation_count=LARGE_MUTATION_COUNT)
+        Memetic(config).run()
+        self.assertEqual(len(config.mutation.received), LARGE_MUTATION_COUNT * GENERATIONS)
+        new_per_generation = CROSSOVER_COUNT * CHILDREN_PER_CROSSOVER + LARGE_MUTATION_COUNT
+        self.assertEqual(len(config.local_solver.received), new_per_generation * GENERATIONS)
+
+    def test_givenCrossoverBatch_whenRun_thenParentsComeFromThePopulationBeforeTheBatch(self) -> None:
+        config = dataclasses.replace(
+            fake_config(), crossover_count=LARGE_CROSSOVER_COUNT, termination=GenerationLimit(ONE_GENERATION)
+        )
+        _, events = observed_run(config)
+        initial_genomes = history(events)[0]
+        for parents in config.crossover.received:
+            for parent in parents:
+                self.assertIn(parent, initial_genomes)
+
+    def test_givenSurvivorsNotSortedByCost_whenRun_thenBestIsTheCheapest(self) -> None:
+        config = dataclasses.replace(fake_config(), survivor_selector=WorstFirstSurvivorSelector())
+        result, events = observed_run(config)
+        cheapest = min(individual.cost.total for individual in result.population)
+        self.assertEqual(result.best.cost.total, cheapest)
+        self.assertEqual(events[-1].best.cost.total, cheapest)
+
+    def test_givenTasksRunInAnotherOrder_whenRun_thenSameHistory(self) -> None:
+        _, sequential_events = observed_run(real_operators_config())
+        reordered = dataclasses.replace(real_operators_config(), executor=ReversedOrderExecutor())
+        _, reordered_events = observed_run(reordered)
+        self.assertEqual(history(sequential_events), history(reordered_events))
+
+    def test_givenRun_whenFinished_thenTheHubIsClosed(self) -> None:
+        dispatcher = mock.Mock()
+        Memetic(dataclasses.replace(fake_config(), dispatcher=dispatcher)).run()
+        dispatcher.close.assert_called_once()
+
+    def test_givenTwoConfigs_whenBuiltWithDefaultHub_thenEachHasItsOwnHub(self) -> None:
+        instance = synthetic_instance()
+        encoding = BlockEncoding()
+        arguments = dict(
+            encoding=encoding, initializer=RandomBlockInitializer(instance, encoding),
+            parent_selector=TournamentSelector(), crossover=FakeCrossover(), mutable_selector=UniformMutableSelector(),
+            mutation=FakeMutation(), local_solver=FakeLocalSolver(), evaluator=CostEvaluator(instance),
+            survivor_selector=FakeSurvivorSelector(), convergence=FakeConvergenceCriterion(),
+            restart=FakeRestartPolicy(), termination=GenerationLimit(GENERATIONS), population_size=POPULATION_SIZE,
+            crossover_count=CROSSOVER_COUNT, mutation_count=MUTATION_COUNT, master_seed=MASTER_SEED,
+        )
+        self.assertIsNot(MemeticConfig(**arguments).dispatcher, MemeticConfig(**arguments).dispatcher)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -7,8 +7,7 @@ générateur aléatoire ni état modifiable avec les autres.
 """
 
 from abc import ABC, abstractmethod
-from collections.abc import Callable, Sequence
-from typing import Iterable
+from collections.abc import Callable, Iterable
 
 
 class Executor(ABC):

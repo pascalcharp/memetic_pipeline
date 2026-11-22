@@ -79,7 +79,6 @@ class FakeLocalSolver(LocalSolver):
         result_horaire = horaire if self.replacement is None else self.replacement
         return LocalSearchResult(
             horaire=result_horaire,
-            seed_horraire=horaire,
             outcome=SolveOutcome.FEASIBLE,
             freed_employees=frozenset(),
             statistics=SolverStatistics(),
