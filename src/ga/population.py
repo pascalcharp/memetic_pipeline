@@ -4,14 +4,17 @@ Après les boucles NR et NM, la population contient μ parents et λ nouveaux in
 ``SurvivorSelector`` la ramène à μ individus ; ``ConvergenceCriterion`` dit si elle a convergé ; ``RestartPolicy``
 la régénère alors en gardant une élite.
 
-D4 (tranchée le 2026-11-16) :
+D4 (tranchée le 2026-11-16 et 2026-11-21, précisée à la révision de l'étape 8) :
     - remplacement : (μ+λ) sans doublons. Tri stable par ``cost.total`` croissant, un seul exemplaire de chaque
-      génome identique, les μ meilleurs ; s'il y a moins de μ génomes distincts, on complète avec des doublons,
-      dans l'ordre des coûts. Le meilleur individu n'est jamais perdu ;
+      génome identique, les μ meilleurs ; s'il y a moins de μ génomes distincts, on complète avec les doublons
+      écartés, dans l'ordre des coûts. Le meilleur individu n'est jamais perdu ;
     - variante « peine de mort » : les faisables d'abord (sans doublons), puis les meilleurs infaisables
-      selon ``cost.total`` pour compléter à μ ;
+      selon ``cost.total`` pour compléter à μ. S'il manque encore des individus, même complément par les doublons
+      écartés (faisables d'abord). Les deux sélecteurs suivent donc la même règle de complétion ;
     - convergence : le coût du meilleur n'a pas baissé depuis G générations ;
-    - restart : on garde les k meilleurs et on régénère le reste avec le ``PopulationInitializer`` (étape 6).
+    - restart : on garde jusqu'à k meilleurs individus distincts et on régénère le reste avec le
+      ``PopulationInitializer`` (étape 6). Pas de complément par des doublons pour l'élite : s'il y a moins de k
+      génomes distincts, on en garde moins et on en régénère davantage, la taille de la population est conservée.
 
 Les stratégies ne modifient jamais la population reçue ni ses individus (D7) : elles rendent un nouveau tuple.
 """
@@ -22,7 +25,8 @@ from collections.abc import Sequence
 
 from src.ga.individual import Individu
 from src.ga.initialization import PopulationInitializer
-from src.model.evaluation import CostEvaluator
+from src.ga.selection import check_selectable
+from src.model.evaluation import CostBreakdown, CostEvaluator
 
 
 class PopulationDefaults:
@@ -47,6 +51,7 @@ class PopulationMessages:
     ELITE_LARGER_THAN_POPULATION: str = (
         "L'élite gardée au restart ({elite_count} individus) dépasse la taille de la population ({size})."
     )
+    INVALID_STAGNATION_POPULATION: str = "La population ne doit pas être vide."
 
 
 class PopulationError(Exception):
@@ -98,9 +103,35 @@ class RestartPolicy[G](ABC):
 
 
 # ---------------------------------------------------------------------------------------------------------------------
-# Implémentations (à écrire, étape 8)
+# Implémentations 
 # ---------------------------------------------------------------------------------------------------------------------
 
+def _distinct_by_cost[G](
+        ordered: Sequence[Individu[G]],
+        size: int,
+        *,
+        fill_duplicates: bool = False,
+) -> tuple[Individu[G], ...]:
+    """Les ``size`` premiers individus de ``ordered`` en un seul exemplaire par génome (égalité d'``Individu``).
+
+    ``ordered`` est déjà trié par ordre de préférence : l'ordre est conservé. Si ``ordered`` compte moins de
+    ``size`` génomes distincts :
+        - ``fill_duplicates`` faux : on rend ces génomes distincts, soit moins de ``size`` individus ;
+        - ``fill_duplicates`` vrai : on complète avec les doublons écartés pendant le parcours, dans l'ordre où ils
+          ont été rencontrés (donc dans l'ordre de préférence).
+    """
+    unique: list[Individu[G]] = []
+    duplicates: list[Individu[G]] = []
+    for individu in ordered:
+        if individu not in unique:
+            unique.append(individu)
+            if len(unique) == size:
+                return tuple(unique)
+        elif fill_duplicates:
+            duplicates.append(individu)
+    if fill_duplicates:
+        unique.extend(duplicates[:size - len(unique)])
+    return tuple(unique)
 class PlusSurvivorSelector[G](SurvivorSelector[G]):
     """(μ+λ) sans doublons (D4) : tri stable par ``cost.total`` croissant, un seul exemplaire de chaque génome
     identique, les ``size`` meilleurs. S'il y a moins de ``size`` génomes distincts, complète avec des doublons,
@@ -108,17 +139,34 @@ class PlusSurvivorSelector[G](SurvivorSelector[G]):
     """
 
     def select(self, population: Sequence[Individu[G]], size: int, rng: random.Random) -> tuple[Individu[G], ...]:
-        raise NotImplementedError  # Étape 8 (Tristan)
+        """Les ``size`` meilleurs individus distincts de ``population``, complétés par des doublons si besoin.
+
+        Raises:
+            voir ``src.ga.selection.check_selectable``.
+        """
+        check_selectable(population, size)
+        ordered: list[Individu[G]] = sorted(population, key=lambda individu: individu.cost.total)
+        return _distinct_by_cost(ordered, size, fill_duplicates=True)
 
 
 class DeathPenaltySurvivorSelector[G](SurvivorSelector[G]):
     """Variante « peine de mort » (D4) : les individus faisables (``cost.is_feasible``) d'abord, sans doublons et
     par ``cost.total`` croissant ; s'il en reste moins de ``size``, complète avec les meilleurs infaisables selon
-    ``cost.total``.
+    ``cost.total``. S'il y a encore moins de ``size`` génomes distincts, complète avec les doublons écartés
+    (faisables d'abord, puis par ``cost.total``), comme ``PlusSurvivorSelector``.
     """
 
     def select(self, population: Sequence[Individu[G]], size: int, rng: random.Random) -> tuple[Individu[G], ...]:
-        raise NotImplementedError  # Étape 8 (Tristan)
+        """Les ``size`` meilleurs individus distincts, faisables d'abord, complétés par des doublons si besoin.
+
+        Raises:
+            voir ``src.ga.selection.check_selectable``.
+        """
+        check_selectable(population, size)
+        ordered: list[Individu[G]] = sorted(
+            population, key=lambda individu: (not individu.cost.is_feasible, individu.cost.total)
+        )
+        return _distinct_by_cost(ordered, size, fill_duplicates=True)
 
 
 class StagnationCriterion[G](ConvergenceCriterion[G]):
@@ -134,21 +182,52 @@ class StagnationCriterion[G](ConvergenceCriterion[G]):
                 minimum=PopulationDefaults.MIN_STAGNATION_GENERATIONS, value=generations
             ))
         self.generations = generations
+        self._best_cost: int | None = None
+        self._count: int = 0
 
     def has_converged(self, population: Sequence[Individu[G]]) -> bool:
-        raise NotImplementedError  # Étape 8 (Tristan)
+        """Vrai si le meilleur coût n'a pas baissé depuis ``generations`` générations.
+
+        La première génération fixe la référence. Une hausse du coût compte comme une génération sans baisse.
+
+        Raises:
+            PopulationError: si ``population`` est vide.
+        """
+        if len(population) == 0:
+            raise PopulationError(PopulationMessages.INVALID_STAGNATION_POPULATION)
+        self._update_convergence(min(individu.cost.total for individu in population))
+        return self._count >= self.generations
 
     def reset(self) -> None:
-        raise NotImplementedError  # Étape 8 (Tristan)
+        self._best_cost = None
+        self._count = 0
+
+    def _update_convergence(self, best_cost: int) -> None:
+        """Met à jour la référence et le compteur : une baisse du meilleur coût remet le compteur à zéro,
+        sinon il augmente d'une génération. Le premier appel (après ``reset`` compris) fixe seulement la référence.
+        """
+        if self._best_cost is None:
+            self._best_cost = best_cost
+            self._count = 0
+            return
+        if self._best_cost > best_cost:
+            self._best_cost = best_cost
+            self._count = 0
+        else:
+            self._count += 1
 
 
 class EliteRestart[G](RestartPolicy[G]):
-    """Restart (D4) : garde les ``elite_count`` meilleurs individus (``cost.total``) et régénère le reste avec
-    ``initializer`` ; les nouveaux individus sont évalués par ``evaluator``. Pour qu'ils passent aussi par le
-    ``LocalSolver``, construire ``initializer`` avec son option ``local_solver`` (étape 6).
+    """Restart (D4) : garde jusqu'à ``elite_count`` meilleurs individus distincts (``cost.total``) et régénère le
+    reste avec ``initializer`` ; les nouveaux individus sont évalués par ``evaluator``. Pour qu'ils passent aussi
+    par le ``LocalSolver``, construire ``initializer`` avec son option ``local_solver`` (étape 6).
+
+    L'élite n'est jamais complétée par des doublons : s'il y a moins de ``elite_count`` génomes distincts, on en
+    garde moins et on en régénère davantage, de sorte que la taille de la population est conservée.
 
     Raises (``restart``):
-        InvalidPopulationParameterError: si ``elite_count`` dépasse la taille de la population.
+        InvalidPopulationParameterError: si ``elite_count`` dépasse la taille de la population (c'est toujours le
+            cas pour une population vide, car ``elite_count`` vaut au moins 1).
     """
 
     def __init__(
@@ -170,4 +249,19 @@ class EliteRestart[G](RestartPolicy[G]):
         self.elite_count = elite_count
 
     def restart(self, population: Sequence[Individu[G]], rng: random.Random) -> tuple[Individu[G], ...]:
-        raise NotImplementedError  # Étape 8 (Tristan)
+        if self.elite_count > len(population):
+            raise InvalidPopulationParameterError(PopulationMessages.ELITE_LARGER_THAN_POPULATION.format(
+                elite_count=self.elite_count, size=len(population)
+            ))
+        sorted_population: list[Individu[G]] = sorted(population, key=lambda individu: individu.cost.total)
+        new_population: list[Individu[G]] = list(
+            _distinct_by_cost(sorted_population, self.elite_count, fill_duplicates=False)
+        )
+        missing_count: int = len(population) - len(new_population)
+        if not missing_count:
+            return tuple(new_population)
+        new_individus: tuple[Individu[G], ...] = self.initializer.initialize(missing_count, rng)
+        for individu in new_individus:
+            cost: CostBreakdown = self.evaluator.evaluate(individu.horaire)
+            new_population.append(individu.with_cost(cost))
+        return tuple(new_population)

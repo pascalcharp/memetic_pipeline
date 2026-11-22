@@ -267,9 +267,9 @@ Croisement arithmétique : pour chaque employé, l'enfant reçoit `d·p1 + (1−
 ## Étape 8 — Gestion de la population (`src/ga/population.py`) **(C→P)** — Tristan, branche `etape-8-population`
 - [x] Trancher D4 (2026-11-16, voir la décision)
 - [x] Scaffold **(C)**, dans le scaffold commun de la semaine du 16 novembre : interfaces `SurvivorSelector[G]`, `ConvergenceCriterion[G]`, `RestartPolicy[G]`, squelettes des classes concrètes, constantes, exceptions et messages — Tristan écrit les classes concrètes, branche `etape-8-population`
-- [ ] **(P)** `SelectPop` : `PlusSurvivorSelector` ((μ+λ) sans doublons) ; convergence : `StagnationCriterion(generations)` ; `Restart` : `EliteRestart(elite_count, initializer, evaluator)`
-- [ ] Tests : taille conservée, meilleur individu jamais perdu (si élitiste), convergence détectée sur population homogène
-- [ ] **(P)** `DeathPenaltySurvivorSelector` : variante rigide « peine de mort » (remarque de Pascal, 2026-11-07 ; cas limite tranché par D4 : compléter avec les meilleurs infaisables) : les individus infaisables (`not cost.is_feasible`) sont éliminés d'emblée, au lieu d'être pénalisés (étape 4). À brancher comme stratégie (filtre au remplacement ou `SurvivorSelector` dédié), sans toucher à l'évaluation. Cas limite à trancher : que faire si trop peu d'enfants sont faisables pour remplir la population ?
+- [x] **(P)** `SelectPop` : `PlusSurvivorSelector` ((μ+λ) sans doublons) ; convergence : `StagnationCriterion(generations)` ; `Restart` : `EliteRestart(elite_count, initializer, evaluator)`
+- [x] Tests : taille conservée, meilleur individu jamais perdu (si élitiste), convergence détectée sur population homogène
+- [x] **(P)** `DeathPenaltySurvivorSelector` : variante rigide « peine de mort » (remarque de Pascal, 2026-11-07 ; cas limite tranché par D4 : compléter avec les meilleurs infaisables) : les individus infaisables (`not cost.is_feasible`) sont éliminés d'emblée, au lieu d'être pénalisés (étape 4). À brancher comme stratégie (filtre au remplacement ou `SurvivorSelector` dédié), sans toucher à l'évaluation. Cas limite à trancher : que faire si trop peu d'enfants sont faisables pour remplir la population ?
 
 ## Étape 8b — Observabilité (`src/observability/`) **(C→P)** — infrastructure par Claude dans le scaffold commun ; collecteurs par Mély, branche `etape-8b-observabilite`
 - [x] Interfaces `MetricCollector` et `RecordSink`, catalogue des événements et schéma des enregistrements (`schema_version`, `event`) **(C)** ; diffusion `ObservationHub` (scaffold du 2026-11-16)

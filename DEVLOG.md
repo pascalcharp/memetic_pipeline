@@ -926,3 +926,29 @@ Toutes les cases de 5c sont cochées, sauf le suivi de la documentation.
 **Correctif** : le test remplace les CRLF par des LF avant de calculer l'empreinte, qui est maintenant celle du fichier tel que Git le stocke. Il passe sur la copie CRLF comme sur une copie LF (la CI).
 
 **Leçon** : une empreinte de fichier dans un test se calcule sur un contenu normalisé, ou sur le blob Git (`git show HEAD:<fichier>`), jamais sur la seule copie de travail.
+
+## 2026-11-21 — Étape 8 : gestion de la population (Tristan, code et tests générés avec l'aide de Sonnet 5.5 Medium, vérifiés par Tristan)
+
+**Fait (P)** : `PlusSurvivorSelector`, `DeathPenaltySurvivorSelector`, `StagnationCriterion` et `EliteRestart` dans `src/ga/population.py`, avec leurs tests dans `tests/test_population.py`. Le code et les tests ont été générés avec l'aide de Sonnet 5.5 ; Tristan a vérifié les tests. Tous les tests passent (suite complète verte).
+
+**Décision d'équipe (suite de D4)**
+- Les deux sélecteurs suivent la même règle : s'il y a moins de `size` génomes distincts, on complète avec les doublons écartés, dans l'ordre de préférence (`cost.total` pour le (μ+λ), faisables d'abord pour la peine de mort). La taille de la population reste donc μ.
+- `EliteRestart` garde jusqu'à `elite_count` individus **distincts**, sans complément par des doublons : s'il y a moins de `elite_count` génomes distincts, on en garde moins et on en régénère davantage. La taille de la population est conservée.
+- Ce choix remplace l'option « population réduite » discutée en revue : `DeathPenaltySurvivorSelector` ne rend plus moins de `size` individus.
+
+**Corrections issues de la revue**
+- `check_selectable` est appelé au début de chaque `select` : `size` invalide, population vide et individu non évalué lèvent `InvalidSelectionParameterError`, `EmptyPopulationError` et `UnevaluatedIndividualError`, au lieu de rendre `()` ou de lever un `AttributeError`.
+- Fonction commune `_distinct_by_cost(ordered, size, fill_duplicates)` pour les deux sélecteurs. La complétion prend les doublons **écartés pendant le parcours** : avec `[A, A, A, B]` et `size = 4`, on obtient `[A, B, A, A]` et non `[A, B, A, B]`.
+- Code mort retiré : les `if size == 0 or len(population) == 0` des sélecteurs (déjà couverts par `check_selectable`) et le `if len(population) == 0: return tuple()` d'`EliteRestart.restart`, inatteignable puisque `elite_count ≥ 1` fait lever l'exception avant. Une population vide lève `InvalidPopulationParameterError`.
+- `StagnationCriterion.has_converged` lève `PopulationError` pour une population vide, documenté dans la docstring.
+- Docstrings ajoutées (`select`, `_distinct_by_cost`, `_update_convergence`, `has_converged`), docstring du module (D4) mise à jour, imports réordonnés, parenthèses inutiles retirées.
+
+**Blocage : `EliteRestart` appelait l'initialiseur pour 0 individu.** `test_givenEliteEqualToPopulationSize_whenRestart_thenNothingIsRegenerated` échouait : `initializer.calls` contenait `(0, rng)`. Quand l'élite remplit déjà la population, `restart` rend maintenant le résultat sans appeler l'initialiseur. Ce test comparait aussi à la population dans l'ordre d'entrée alors que le restart rend l'élite triée par coût : il compare maintenant à `IDS_BY_COST`.
+
+**Tests**
+- Complétion par doublons déplacée dans `TestCommonSurvivorSelectors`, puisque la règle est commune aux deux sélecteurs.
+- Nouveaux tests : exceptions de `check_selectable`, infaisable distinct avant doublon faisable, population vide pour `StagnationCriterion` et `EliteRestart`, élites en doublon, moins de génomes distincts que `elite_count`.
+- Nombres magiques remplacés par des constantes (`BEST_INDEX`, `DUPLICATE_COUNT`, `REFERENCE_GENERATION`, `DROP_GENERATION`, `SINGLE_DISTINCT`, `FIRST_CALL`) et un utilitaire `copies_of`. Aucun test n'appelle une méthode deux fois pour comparer les résultats, sauf le test de `reset`, qui vérifie un état avant et après.
+
+**Reste**
+- Étape 9 : le test d'intégration attend une population de taille μ (pas « ≤ μ »). `RestartPolicy` n'a pas besoin de changer d'interface.
