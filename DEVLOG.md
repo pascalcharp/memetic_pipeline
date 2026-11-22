@@ -981,3 +981,14 @@ Toutes les cases de 5c sont cochées, sauf le suivi de la documentation.
 **Reste**
 - Le restart n'émet pas d'`IndividualCreated` (origine `RESTART`) pour les individus régénérés ; D8 le prévoit. À ajouter avec la 9-intégration, en décidant où placer ces événements par rapport à `Restarted`.
 - 9-intégration (Pascal) : exécution complète sur `bench_1` avec `MiniZincLocalSolver`.
+
+## 2026-11-22 — Étape 8 : corrections mineures après la fusion de la PR #10 (Pascal)
+
+Points de la deuxième revue de la PR #10, laissés pour après la fusion :
+- `StagnationCriterion.has_converged` lève `EmptyPopulationForConvergenceError` (nouvelle sous-classe de `PopulationError`) au lieu de la classe de base, pour une population vide ; test renommé, hiérarchie vérifiée.
+- `population.py` : deux lignes vides avant `PlusSurvivorSelector` (PEP 8), espace finale retirée après `# Implémentations`.
+- D4 dans TODO.md alignée sur la docstring du module : complétion par les doublons écartés, élite distincte au restart, même règle de complétion pour la peine de mort.
+- Docstring de `_distinct_by_cost` : si la population compte elle-même moins de `size` individus, aucune copie n'est inventée (cas impossible dans le moteur, μ+λ ≥ μ).
+- `EliteRestart.restart` : `if missing_count == 0` au lieu de `if not missing_count`.
+
+Aucun changement de comportement. Suite complète verte.

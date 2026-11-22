@@ -18,6 +18,7 @@ from src.ga.population import (
     ConvergenceCriterion,
     DeathPenaltySurvivorSelector,
     EliteRestart,
+    EmptyPopulationForConvergenceError,
     InvalidPopulationParameterError,
     PlusSurvivorSelector,
     PopulationDefaults,
@@ -233,6 +234,7 @@ class TestScaffoldContract(unittest.TestCase):
 
     def test_givenPopulationErrors_whenCheckingHierarchy_thenEveryErrorIsAPopulationError(self) -> None:
         self.assertTrue(issubclass(InvalidPopulationParameterError, PopulationError))
+        self.assertTrue(issubclass(EmptyPopulationForConvergenceError, PopulationError))
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -486,8 +488,8 @@ class TestStagnationCriterion(unittest.TestCase):
         # (le 1er individu seul resterait à COST_HIGH).
         self.assertFalse(criterion.has_converged([individual(ID_A, COST_HIGH), individual(ID_B, COST_LOWEST)]))
 
-    def test_givenEmptyPopulation_whenHasConverged_thenRaisesPopulationError(self) -> None:
-        with self.assertRaises(PopulationError):
+    def test_givenEmptyPopulation_whenHasConverged_thenRaisesEmptyPopulationForConvergenceError(self) -> None:
+        with self.assertRaises(EmptyPopulationForConvergenceError):
             StagnationCriterion().has_converged([])
 
     def test_givenConverged_whenReset_thenCounterStartsOverFromZero(self) -> None:

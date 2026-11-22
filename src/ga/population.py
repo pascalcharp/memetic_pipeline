@@ -62,6 +62,10 @@ class InvalidPopulationParameterError(PopulationError):
     """Un paramètre de la gestion de la population (stagnation, élite) est hors de son domaine."""
 
 
+class EmptyPopulationForConvergenceError(PopulationError):
+    """Le critère de convergence a reçu une population vide."""
+
+
 # ---------------------------------------------------------------------------------------------------------------------
 # Interfaces
 # ---------------------------------------------------------------------------------------------------------------------
@@ -103,7 +107,7 @@ class RestartPolicy[G](ABC):
 
 
 # ---------------------------------------------------------------------------------------------------------------------
-# Implémentations 
+# Implémentations
 # ---------------------------------------------------------------------------------------------------------------------
 
 def _distinct_by_cost[G](
@@ -119,6 +123,10 @@ def _distinct_by_cost[G](
         - ``fill_duplicates`` faux : on rend ces génomes distincts, soit moins de ``size`` individus ;
         - ``fill_duplicates`` vrai : on complète avec les doublons écartés pendant le parcours, dans l'ordre où ils
           ont été rencontrés (donc dans l'ordre de préférence).
+
+    Même avec ``fill_duplicates`` vrai, on rend tout ``ordered`` (moins de ``size`` individus) si ``ordered`` compte
+    lui-même moins de ``size`` individus : aucune copie n'est inventée. Dans le moteur, cela n'arrive pas, car la
+    population de ``SelectPop`` (μ+λ) compte toujours au moins μ individus.
     """
     unique: list[Individu[G]] = []
     duplicates: list[Individu[G]] = []
@@ -132,6 +140,8 @@ def _distinct_by_cost[G](
     if fill_duplicates:
         unique.extend(duplicates[:size - len(unique)])
     return tuple(unique)
+
+
 class PlusSurvivorSelector[G](SurvivorSelector[G]):
     """(μ+λ) sans doublons (D4) : tri stable par ``cost.total`` croissant, un seul exemplaire de chaque génome
     identique, les ``size`` meilleurs. S'il y a moins de ``size`` génomes distincts, complète avec des doublons,
@@ -191,10 +201,10 @@ class StagnationCriterion[G](ConvergenceCriterion[G]):
         La première génération fixe la référence. Une hausse du coût compte comme une génération sans baisse.
 
         Raises:
-            PopulationError: si ``population`` est vide.
+            EmptyPopulationForConvergenceError: si ``population`` est vide.
         """
         if len(population) == 0:
-            raise PopulationError(PopulationMessages.INVALID_STAGNATION_POPULATION)
+            raise EmptyPopulationForConvergenceError(PopulationMessages.INVALID_STAGNATION_POPULATION)
         self._update_convergence(min(individu.cost.total for individu in population))
         return self._count >= self.generations
 
@@ -258,7 +268,7 @@ class EliteRestart[G](RestartPolicy[G]):
             _distinct_by_cost(sorted_population, self.elite_count, fill_duplicates=False)
         )
         missing_count: int = len(population) - len(new_population)
-        if not missing_count:
+        if missing_count == 0:
             return tuple(new_population)
         new_individus: tuple[Individu[G], ...] = self.initializer.initialize(missing_count, rng)
         for individu in new_individus:
