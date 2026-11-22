@@ -43,13 +43,16 @@ class EventNames:
     RUN_ENDED: str = "run_ended"
 
 
-class Origins(Enum):
+class Origins(str, Enum):
     """D'où vient un individu : utile pour mesurer la faisabilité et l'apport du solveur par opérateur."""
 
     INITIALIZATION = "initialization"
     CROSSOVER = "crossover"
     MUTATION = "mutation"
     RESTART = "restart"
+
+    def __str__(self):
+        return self.value
 
 
 class RecordSchema:
