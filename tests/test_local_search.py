@@ -195,6 +195,7 @@ class TestScaffoldContract(unittest.TestCase):
     def test_result_is_frozen(self) -> None:
         result = LocalSearchResult(
             horaire=single(REFERENCE_SHIFT),
+            seed_horraire=single(REFERENCE_SHIFT),
             outcome=SolveOutcome.OPTIMAL,
             freed_employees=frozenset({1}),
             statistics=SolverStatistics(),

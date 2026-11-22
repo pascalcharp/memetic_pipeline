@@ -107,6 +107,7 @@ def local_search_done(
 ) -> LocalSearchDone:
     result = LocalSearchResult(
         horaire=single(REFERENCE_SHIFT),
+        seed_horraire=single(REFERENCE_SHIFT),
         outcome=SolveOutcome.FEASIBLE,
         freed_employees=frozenset(),
         statistics=statistics,
