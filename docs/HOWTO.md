@@ -47,9 +47,37 @@ Pour brancher un composant à vous, deux façons de faire :
 
 ## 1. Je veux faire rouler la boucle mémétique
 
-**Fichiers** : aucun à modifier. On utilise `src/memetic/assembly.py` et `src/memetic/engine.py`.
+**Fichiers** : aucun à modifier.
 
-**Exécution simple.** Depuis la racine du dépôt (les imports partent de `src.`) :
+**Par une expérience (la façon normale).** Écrire un fichier de configuration dans `experiments/config/`, par exemple `experiments/config/mon_essai.json` :
+
+```json
+{
+  "description": "Ce que l'expérience cherche à montrer, en une ou deux phrases.",
+  "instance": "bench_3",
+  "settings": {"population_size": 10, "crossover_count": 3, "mutation_count": 2, "generations": 20, "master_seed": 1}
+}
+```
+
+`instance` est le nom d'un fichier de `data/` sans extension ; les clés de `settings` sont les champs de `AssemblySettings` (ci-dessous), et les champs absents gardent leur valeur par défaut. Une clé inconnue ou une valeur du mauvais type est refusée avant toute exécution (`InvalidExperimentConfigError`). Puis, depuis la racine du dépôt :
+
+```bash
+python -m src.drivers.run_experiment experiments/config/mon_essai.json
+```
+
+Le script (`src/drivers/run_experiment.py`) prend trois chemins :
+
+| Paramètre | Rôle | Par défaut |
+|---|---|---|
+| `CONFIG` (obligatoire) | le fichier de configuration | — |
+| `--results-dir` | le répertoire du fichier de résultats | `experiments/results/<AAAA-MM-JJ>/`, un répertoire par jour |
+| `--log` | le journal des expériences | `experiments/EXPLOG.md` |
+
+Il écrit `<nom de la configuration>_<HHMMSS>.json` : la configuration complète, la provenance (commit Git, `git_dirty`, versions), le meilleur individu (coût décomposé et horaire), l'effort cumulé du solveur, les taux de faisabilité cumulés par origine et opérateur, et les statistiques de coût et de diversité de chaque génération. Il ajoute ensuite une entrée à `EXPLOG.md` : description, chemins, coût obtenu et effort cumulé du solveur. Les résultats et le journal sont versionnés : les commiter avec le reste.
+
+**Commitez le code avant de lancer une expérience à citer.** `git_dirty` vaut `true` si la copie de travail avait des modifications non commitées au lancement (hors `experiments/results/` et `EXPLOG.md`) : le résultat ne peut alors pas être reproduit à partir du seul commit noté, et l'entrée d'`EXPLOG.md` le signale en gras. Il vaut `null` hors d'un dépôt Git.
+
+**Depuis Python.** Depuis la racine du dépôt (les imports partent de `src.`) :
 
 ```python
 from src.config import ProjectPaths

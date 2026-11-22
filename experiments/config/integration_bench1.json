@@ -1,0 +1,12 @@
+{
+  "description": "Configuration de base : les réglages de la 9-intégration sur bench_1 (6 individus, NR = 2, NM = 2, 4 générations, stagnation d'une génération, graine 7). Sert de référence pour vérifier que le pipeline d'expériences fonctionne ; la 9-intégration y atteint l'optimum 94 avec un restart.",
+  "instance": "bench_1",
+  "settings": {
+    "population_size": 6,
+    "crossover_count": 2,
+    "mutation_count": 2,
+    "generations": 4,
+    "master_seed": 7,
+    "stagnation_generations": 1
+  }
+}

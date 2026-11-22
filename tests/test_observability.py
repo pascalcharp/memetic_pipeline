@@ -9,6 +9,8 @@ import csv
 import io
 import json
 import logging
+import shutil
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -31,6 +33,7 @@ from src.observability.run_directory import (
     RunDirectoryExistsError,
     current_git_commit,
     package_versions,
+    working_tree_is_dirty,
 )
 from src.observability.sinks import (
     ConsoleSink,
@@ -253,6 +256,56 @@ class TestRunDirectory(unittest.TestCase):
         missing = "paquet_inexistant_pour_le_test"
         versions = package_versions((missing,))
         self.assertEqual(versions[missing], RunDirectoryDefaults.UNKNOWN_VALUE)
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# État de la copie de travail (git_dirty)
+# ---------------------------------------------------------------------------------------------------------------------
+
+GIT_IDENTITY: tuple[str, ...] = ("-c", "user.name=Test", "-c", "user.email=test@example.com")
+
+
+@unittest.skipUnless(shutil.which("git"), "git absent (image Docker de la CI) : aucun dépôt temporaire possible")
+class TestWorkingTreeIsDirty(unittest.TestCase):
+    """Dans un dépôt Git temporaire, avec un fichier commité et un répertoire de sorties à exclure."""
+
+    def setUp(self) -> None:
+        self.directory = tempfile.TemporaryDirectory()
+        self.root = Path(self.directory.name)
+        self.git("init", "--quiet")
+        (self.root / "code.py").write_text("x = 1\n", encoding="utf-8")
+        (self.root / "sorties").mkdir()
+        (self.root / "sorties" / "a.json").write_text("{}", encoding="utf-8")
+        self.git("add", ".")
+        self.git(*GIT_IDENTITY, "commit", "--quiet", "-m", "initial")
+        self.excluded = (Path("sorties"),)
+
+    def tearDown(self) -> None:
+        self.directory.cleanup()
+
+    def git(self, *arguments: str) -> None:
+        subprocess.run(("git",) + arguments, cwd=self.root, check=True, capture_output=True)
+
+    def test_givenCleanTree_whenChecked_thenFalse(self) -> None:
+        self.assertFalse(working_tree_is_dirty(self.root))
+
+    def test_givenModifiedTrackedFile_whenChecked_thenTrue(self) -> None:
+        (self.root / "code.py").write_text("x = 2\n", encoding="utf-8")
+        self.assertTrue(working_tree_is_dirty(self.root, self.excluded))
+
+    def test_givenUntrackedFile_whenChecked_thenTrue(self) -> None:
+        (self.root / "nouveau.py").write_text("y = 1\n", encoding="utf-8")
+        self.assertTrue(working_tree_is_dirty(self.root, self.excluded))
+
+    def test_givenChangesOnlyInExcludedPaths_whenChecked_thenFalse(self) -> None:
+        (self.root / "sorties" / "a.json").write_text('{"b": 1}', encoding="utf-8")
+        (self.root / "sorties" / "nouveau.json").write_text("{}", encoding="utf-8")
+        self.assertFalse(working_tree_is_dirty(self.root, self.excluded))
+        self.assertTrue(working_tree_is_dirty(self.root))
+
+    def test_givenNotARepository_whenChecked_thenNone(self) -> None:
+        with tempfile.TemporaryDirectory() as other:
+            self.assertIsNone(working_tree_is_dirty(Path(other)))
 
 
 if __name__ == "__main__":

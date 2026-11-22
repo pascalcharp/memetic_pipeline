@@ -13,6 +13,11 @@ class ProjectPaths:
     REFERENCE_MODEL_FILE: Path = MODEL_DIR / "horaire.mzn"
     # Modèle du pipeline : « au moins 1 » pénalisée, même fonction de coût que CostEvaluator.total (D12).
     RELAXED_MODEL_FILE: Path = MODEL_DIR / "horaire_assoupli.mzn"
+    # Expériences (étape 10) : configurations, résultats (un répertoire par jour) et journal des expériences.
+    EXPERIMENTS_DIR: Path = ROOT / "experiments"
+    EXPERIMENT_CONFIG_DIR: Path = EXPERIMENTS_DIR / "config"
+    EXPERIMENT_RESULTS_DIR: Path = EXPERIMENTS_DIR / "results"
+    EXPLOG_FILE: Path = EXPERIMENTS_DIR / "EXPLOG.md"
 
 
 class MiniZincConfig:
