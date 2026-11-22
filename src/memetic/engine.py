@@ -43,7 +43,7 @@ from src.memetic.seeds import SeedStreams, SeedsCollection, derive_task_seeds
 from src.memetic.termination import TerminationCriterion
 from src.model.evaluation import CostEvaluator
 from src.model.horaire import Horaire
-from src.observability.events import Converged, GenerationEnded, IndividualCreated, LocalSearchDone, Restarted, RunEnded, RunStarted
+from src.observability.events import Converged, GenerationEnded, IndividualCreated, LocalSearchDone, Origins, Restarted, RunEnded, RunStarted
 from src.observability.hub import ObservationHub
 from src.observability.sinks import RecordSink
 
@@ -112,6 +112,7 @@ class Memetic[G]:
         self.convergence = self.config.convergence
         self.restart_policy = self.config.restart
         self.executor = self.config.executor
+        self.mutation = self.config.mutation
 
     def run(self) -> MemeticResult[G]:
         """Exécute l'algorithme jusqu'au critère d'arrêt et rend le résultat.
@@ -126,16 +127,24 @@ class Memetic[G]:
 
         self._init_population(self._generate_rng(seeds_collection.INITIALIZATION))
 
-        while not self.termination.is_done(0, self.population):
+        while not self.termination.is_done(self.generation, self.population):
+            self.generation += 1
+            seeds_collection = self._generate_seed()
             self.executor.map(self._crossover_loop, self._NR(seeds_collection.PARENT_SELECTION, seeds_collection.CROSSOVER, seeds_collection.LOCAL_SEARCH))
             self.executor.map(self._mutation_loop, self._NM(seeds_collection.MUTABLE_SELECTION, seeds_collection.MUTATION, seeds_collection.LOCAL_SEARCH))
 
             self.population = self.survivors_selector.select(self.population, self.config.population_size, self._generate_rng(seeds_collection.SURVIVOR_SELECTION))
 
+            self.dispatcher.emit(
+                GenerationEnded(
+                    generation=self.generation,
+                    population=self.population
+                )
+             )
+
             if self.convergence.has_converged(self.population):
                 self._restart(self._generate_rng(seeds_collection.SURVIVOR_SELECTION))
 
-            seeds_collection = self._generate_seed()
 
         self.dispatcher.emit(RunEnded(generations=self.generation, best=self.population[0]))
         self.dispatcher.close()
@@ -147,13 +156,13 @@ class Memetic[G]:
         )
 
     def _init_population(self, rng: random.Random):
-        def _evaluate(individual: Individu[G]):
+        def _evaluate(individual: Individu[G], operator: str):
             cost = self.config.evaluator.evaluate(individual.horaire)
             individual = individual.with_cost(cost)
             self.dispatcher.emit(
                 IndividualCreated(
                     generation=self.generation,
-                    origin="initialization",
+                    origin=Origins.INITIALIZATION.value,
                     operator=None,
                     individual=individual
                 )
@@ -162,7 +171,7 @@ class Memetic[G]:
 
         self.population = self.initializer.initialize(self.config.population_size, self.rng)
         self.population = tuple([
-            _evaluate(i)
+            _evaluate(i, self.initializer.initialize.__name__)
             for i in self.population
         ])
         self.dispatcher.emit(
@@ -181,7 +190,7 @@ class Memetic[G]:
             Evaluer(Enfants)
             P = P + Enfants
         """
-        _process = self._process_result("NR", "recombine")
+        _process = self._process_result(Origins.CROSSOVER, self.crossover.__class__.__name__)
         parents = self.parents_selector.select(self.population, self.config.crossover_count, args.PARENT_SELECTION)
         children_to_crossover = self.crossover.recombine([x.genome for x in parents], args.CROSSOVER)
         childrens = [
@@ -204,11 +213,11 @@ class Memetic[G]:
             Evaluer(i)
             P = P + {i}
         """
-        _process = self._process_result("NM", "mutation")
+        _process = self._process_result(Origins.MUTATION, self.mutation.__class__.__name__)
         population_subset = self.mutable_selector.select(self.population, self.config.mutation_count, args.MUTABLE_SELECTION)
         mutated = [
             self.encoding.decode(
-                self.config.mutation.mutate(x.genome, args.MUTATION)
+                self.mutation.mutate(x.genome, args.MUTATION)
             )
             for x in population_subset
         ]
@@ -222,6 +231,7 @@ class Memetic[G]:
         self.dispatcher.emit(Converged(generation=self.generation))
         self.population = self.restart_policy.restart(self.population, rng)
         self.convergence.reset()
+        self.restarts += 1
         self.dispatcher.emit(
             Restarted(
                 generation=self.generation,
@@ -230,14 +240,14 @@ class Memetic[G]:
         )
 
 
-    def _process_result(self, origin: str, operator: str | None = None):
+    def _process_result(self, origin: Origins, operator: str | None = None):
         def _process(result: LocalSearchResult) -> Individu[G]:
             old_cost = self.config.evaluator.evaluate(result.seed_horraire)
             new_cost = self.config.evaluator.evaluate(result.horaire)
             self.dispatcher.emit(
                 LocalSearchDone(
                     generation=self.generation,
-                    origin=origin,
+                    origin=origin.value,
                     operator=operator,
                     cost_before=old_cost,
                     cost_after=new_cost,
@@ -250,7 +260,7 @@ class Memetic[G]:
             self.dispatcher.emit(
                 IndividualCreated(
                     generation=self.generation,
-                    origin=origin,
+                    origin=origin.value,
                     operator=operator,
                     individual=individual
                 )
@@ -286,7 +296,7 @@ class Memetic[G]:
         def _seeds(streams: SeedStreams, task_count: int):
             master_seed = self.config.master_seed
             generation = self.generation
-            return derive_task_seeds(master_seed, generation, SeedStreams.INITIALIZATION, self.config.crossover_count)
+            return derive_task_seeds(master_seed, generation, streams, self.config.crossover_count)
 
         collections = SeedsCollection(
             INITIALIZATION=_seeds(SeedStreams.INITIALIZATION, 1),
@@ -302,7 +312,6 @@ class Memetic[G]:
             SURVIVOR_SELECTION=_seeds(SeedStreams.SURVIVOR_SELECTION, 1),
             RESTART=_seeds(SeedStreams.RESTART, 1),
         )
-        self.generation += 1
         return collections
 
     def _generate_rng(self, seed: Iterable[int]):
