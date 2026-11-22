@@ -36,18 +36,18 @@ class TerminationCriterion[G](ABC):
 
 
 class GenerationLimit[G](TerminationCriterion[G]):
-    """Arrêt après ``generations`` générations (sans compter l'initialisation)."""
+    """Arrêt après ``maximum_generations`` générations (sans compter l'initialisation)."""
 
-    def __init__(self, generations: int) -> None:
+    def __init__(self, maximum_generations: int) -> None:
         """
         Raises:
             InvalidTerminationParameterError: si ``generations < TerminationDefaults.MIN_GENERATIONS``.
         """
-        if generations < TerminationDefaults.MIN_GENERATIONS:
+        if maximum_generations < TerminationDefaults.MIN_GENERATIONS:
             raise InvalidTerminationParameterError(TerminationMessages.INVALID_GENERATIONS.format(
-                minimum=TerminationDefaults.MIN_GENERATIONS, value=generations
+                minimum=TerminationDefaults.MIN_GENERATIONS, value=maximum_generations
             ))
-        self.generations = generations
+        self.maximum_generations = maximum_generations
 
     def is_done(self, generation: int, population: Sequence[Individu[G]]) -> bool:
-        raise NotImplementedError  # Étape 9 (Xavier)
+        return self.maximum_generations <= generation
