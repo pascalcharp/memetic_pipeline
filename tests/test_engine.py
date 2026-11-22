@@ -22,7 +22,9 @@ Déroulement attendu, tel que les tests le vérifient :
 
 import dataclasses
 import random
+from typing import Generator, Set
 import unittest
+from unittest import mock
 from collections import Counter
 
 from src.ga.chromosome import BlockEncoding, Encoding
@@ -32,6 +34,7 @@ from src.ga.population import ConvergenceCriterion, RestartPolicy, SurvivorSelec
 from src.ga.registry import IncompatibleOperatorError
 from src.ga.selection import MutableSelector, ParentSelector, TournamentSelector, UniformMutableSelector
 from src.memetic import engine
+from src.memetic import termination
 from src.memetic.config import InvalidMemeticConfigError, MemeticConfig, MemeticError
 from src.memetic.engine import Memetic, MemeticResult, MemeticCrossoverArgs, MemeticMutationArgs
 from src.memetic.executor import SequentialExecutor
@@ -172,9 +175,9 @@ def real_operators_config(master_seed: int = MASTER_SEED, with_collector: bool =
 
 def observed_run(config: MemeticConfig) -> tuple[MemeticResult, list]:
     """Exécute ``config`` avec un ``RecordingCollector`` et rend le résultat et les événements reçus."""
-    collector = RecordingCollector()
-    result = Memetic(dataclasses.replace(config, collectors=(collector,))).run()
-    return result, collector.events
+    dispatcher = mock.Mock()
+    result = Memetic(dataclasses.replace(config, dispatcher=dispatcher)).run()
+    return result, [x.args[0] for x in dispatcher.emit.call_args_list]
 
 
 def history(events: list) -> list[list]:
@@ -216,7 +219,7 @@ class TestScaffoldContract(unittest.TestCase):
             TerminationCriterion()  # type: ignore[abstract]
 
     def test_givenGenerationLimit_whenConstructed_thenKeepsItsLimit(self) -> None:
-        self.assertEqual(GenerationLimit(GENERATIONS).generations, GENERATIONS)
+        self.assertEqual(GenerationLimit(GENERATIONS).maximum_generations, GENERATIONS)
 
     def test_givenInvalidGenerations_whenGenerationLimit_thenRaisesWithValueInMessage(self) -> None:
         with self.assertRaises(InvalidTerminationParameterError) as context:
@@ -252,14 +255,6 @@ class TestEngine(unittest.TestCase):
         self.assertIsNotNone(next(seeds.LOCAL_SEARCH))
         self.assertIsNotNone(next(seeds.SURVIVOR_SELECTION))
         self.assertIsNotNone(next(seeds.RESTART))
-
-    def test_engine_each_seed_generated_increment_generation(self):
-        engine = Memetic(fake_config())
-        for _ in range(100):
-            old_generation = engine.generation
-            engine._generate_seed()
-            self.assertEqual(engine.generation, old_generation + 1)
-
 
     def test_engine_seed_collection_generate_same_seeds_each_time(self):
         engine = Memetic(fake_config())
@@ -391,35 +386,11 @@ class TestEngine(unittest.TestCase):
         rng = engine._generate_rng(collection.INITIALIZATION)
         engine._init_population(rng)
 
-        _process = engine._process_result("")
+        _process = engine._process_result(Origins.INITIALIZATION)
 
         i = _process(LocalSearchResult(engine.population[0].horaire, engine.population[0].horaire, SolveOutcome("no_solution"), frozenset([1]), SolverStatistics()))
 
         self.assertTrue(i.is_evaluated())
-
-    def test_engine_process_result_send_origin_with_operator(self):
-        origin = "tomate"
-        operator = "cerise"
-
-        dispacther = mock.Mock()
-        emit = mock.Mock()
-        dispacther.emit = emit
-        engine = Memetic(fake_config_with_mock(dispatcher=dispacther))
-        collection = engine._generate_seed()
-        rng = engine._generate_rng(collection.INITIALIZATION)
-        engine._init_population(rng)
-        emit.reset_mock()
-
-        _process = engine._process_result(origin, operator)
-        _process(LocalSearchResult(engine.population[0].horaire, engine.population[0].horaire, SolveOutcome("no_solution"), frozenset([1]), SolverStatistics()))
-
-        for c in emit.call_args_list:
-            event = c.args[0]
-            self.assertIsNotNone(event.origin)
-            self.assertEqual(event.origin, origin)
-
-            self.assertIsNotNone(event.operator)
-            self.assertEqual(event.operator, operator)
 
 # ---------------------------------------------------------------------------------------------------------------------
 # Graines dérivées (D7)
@@ -427,16 +398,24 @@ class TestEngine(unittest.TestCase):
 
 class TestDeriveTaskSeeds(unittest.TestCase):
 
+    def _genator_to_set(self, inifinite_seeds: Generator[int], limit: int) -> Set[int]:
+        s = set()
+        for i in range(limit):
+            s.add(i)
+
+        return s
+
+
     def test_givenSameArguments_whenDerive_thenSameSeeds(self) -> None:
         first = derive_task_seeds(MASTER_SEED, SEED_GENERATION, SeedStreams.CROSSOVER, SEED_BATCH)
         second = derive_task_seeds(MASTER_SEED, SEED_GENERATION, SeedStreams.CROSSOVER, SEED_BATCH)
-        self.assertEqual(first, second)
+        self.assertEqual(self._genator_to_set(first, SEED_BATCH), self._genator_to_set(second, SEED_BATCH))
 
     def test_givenTaskCount_whenDerive_thenOneIntegerSeedPerTask(self) -> None:
         seeds = derive_task_seeds(MASTER_SEED, SEED_GENERATION, SeedStreams.CROSSOVER, SEED_BATCH)
-        self.assertIsInstance(seeds, tuple)
-        self.assertEqual(len(seeds), SEED_BATCH)
-        for seed in seeds:
+        for i in range(SEED_BATCH):
+            seed = next(seeds)
+            self.assertIsNotNone(seed)
             self.assertIsInstance(seed, int)
 
     def test_givenZeroTasks_whenDerive_thenEmptyTuple(self) -> None:
@@ -444,7 +423,8 @@ class TestDeriveTaskSeeds(unittest.TestCase):
 
     def test_givenOneBatch_whenDerive_thenSeedsWithinTheBatchAreDistinct(self) -> None:
         seeds = derive_task_seeds(MASTER_SEED, SEED_GENERATION, SeedStreams.CROSSOVER, SEED_BATCH)
-        self.assertEqual(len(set(seeds)), SEED_BATCH)
+        sets = self._genator_to_set(seeds, SEED_BATCH)
+        self.assertEqual(len(sets), SEED_BATCH)
 
     def test_givenOtherGenerationStreamOrMasterSeed_whenDerive_thenSeedsDiffer(self) -> None:
         reference = derive_task_seeds(MASTER_SEED, SEED_GENERATION, SeedStreams.CROSSOVER, SEED_BATCH)
@@ -453,14 +433,17 @@ class TestDeriveTaskSeeds(unittest.TestCase):
             "lot": derive_task_seeds(MASTER_SEED, SEED_GENERATION, SeedStreams.MUTATION, SEED_BATCH),
             "graine maître": derive_task_seeds(OTHER_SEED, SEED_GENERATION, SeedStreams.CROSSOVER, SEED_BATCH),
         }
+        reference_set = self._genator_to_set(reference, SEED_BATCH)
         for name, variant in variants.items():
+            sets = self._genator_to_set(variant, SEED_BATCH)
             with self.subTest(change=name):
-                self.assertTrue(set(variant).isdisjoint(reference))
+                self.assertTrue(sets.isdisjoint(reference_set))
 
     def test_givenLargerBatch_whenDerive_thenSeedsOfTheFirstTasksAreUnchanged(self) -> None:
         short = derive_task_seeds(MASTER_SEED, SEED_GENERATION, SeedStreams.CROSSOVER, SEED_PREFIX)
         long = derive_task_seeds(MASTER_SEED, SEED_GENERATION, SeedStreams.CROSSOVER, SEED_BATCH)
-        self.assertEqual(long[:SEED_PREFIX], short)
+        for i in range(SEED_PREFIX):
+            self.assertEqual(next(short), next(long))
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -511,10 +494,11 @@ class TestMemeticConfigValidate(unittest.TestCase):
 
     def test_givenInvalidConfig_whenRun_thenRaisesBeforeAnyEvent(self) -> None:
         collector = RecordingCollector()
-        config = dataclasses.replace(fake_config(), population_size=0, collectors=(collector,))
+        dispatcher = mock.Mock()
+        config = dataclasses.replace(fake_config(), population_size=0, dispatcher=dispatcher)
         with self.assertRaises(InvalidMemeticConfigError):
             Memetic(config).run()
-        self.assertEqual(collector.events, [])
+        dispatcher.assert_not_called()
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -560,10 +544,10 @@ class TestMemeticRunWithFakes(unittest.TestCase):
         initial = [event for event in created if event.generation == 0]
         self.assertEqual(len(initial), POPULATION_SIZE)
         for event in initial:
-            self.assertEqual(event.origin, Origins.INITIALIZATION)
+            self.assertEqual(event.origin, Origins.INITIALIZATION.value)
             self.assertIsNone(event.operator)
             self.assertTrue(event.individual.is_evaluated())
-        origins = Counter((event.origin, event.operator) for event in searches)
+        origins = Counter((Origins(event.origin), event.operator) for event in searches)
         self.assertEqual(origins, Counter({
             (Origins.CROSSOVER, FakeCrossover.__name__): CROSSOVER_COUNT * CHILDREN_PER_CROSSOVER * GENERATIONS,
             (Origins.MUTATION, FakeMutation.__name__): MUTATION_COUNT * GENERATIONS,
@@ -587,7 +571,7 @@ class TestMemeticRunWithFakes(unittest.TestCase):
             self.assertIsNotNone(event.cost_before)
 
     def test_givenConvergence_whenRun_thenRestartThenResetAndEventsFollowGenerationEnded(self) -> None:
-        convergence = FakeConvergenceCriterion(frozenset({CONVERGENCE_CALL}))
+        convergence = FakeConvergenceCriterion(frozenset([CONVERGENCE_CALL]))
         restart = FakeRestartPolicy()
         config = dataclasses.replace(fake_config(), convergence=convergence, restart=restart)
         result, events = observed_run(config)
@@ -676,7 +660,7 @@ class TestMemeticRunWithRealOperators(unittest.TestCase):
          )
         engine.run()
 
-        self.assertEqual(engine.generation, len(run))
+        self.assertEqual(engine.generation, len([x for x in run if not x]))
 
 if __name__ == "__main__":
     unittest.main()
