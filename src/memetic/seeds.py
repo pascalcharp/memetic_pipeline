@@ -50,6 +50,6 @@ def derive_task_seeds(master_seed: int, generation: int, stream: SeedStreams, ta
         task_count: nombre de tâches du lot.
     """
 
-    rng_from_seed = numpy.random.default_rng([master_seed, generation, stream.value, task_count])
+    rng_from_seed = numpy.random.default_rng([master_seed, generation, stream.value])
     while True:
         yield int(rng_from_seed.integers(0, 2**63))
