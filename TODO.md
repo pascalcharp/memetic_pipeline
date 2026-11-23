@@ -321,6 +321,15 @@ Conventions (Pascal, 2026-11-22) : configurations dans `experiments/config/`, r�
 - [ ] Export des résultats (CSV/JSON), accompagnés de la configuration complète utilisée (via les destinations de D8)
 - [ ] Scripts ou notebooks d'analyse qui relisent `results/` (évolution du coût, de la diversité, comparaison d'opérateurs)
 
+### 10b — Distribution des coûts de la population, par génération **(C)** — proposée le 2026-11-23 (Pascal)
+But : voir la convergence, l'effondrement de la diversité et l'effet des restarts, au-delà des résumés de `CostStatisticsCollector` (min, moyenne, médiane, max, écart-type). Les données passent déjà par le hub : `GenerationEnded` et `Restarted` portent la population ; il manque un collecteur qui garde les coûts individuels.
+- [ ] **`CostDistributionCollector`** (`src/observability/collectors.py`) : à chaque `GenerationEnded`, un enregistrement `RecordNames.COST_DISTRIBUTION` avec `generation` et `totals` (liste triée des `cost.total`) ; à chaque `Restarted`, le même enregistrement, distingué par un champ `phase` (fin de génération ou restart). Noms de champs dans une classe de constantes ; population vide ou non évaluée : même exception que `CostStatisticsCollector`. Destinations : `JsonlSink`, `MemorySink` (pas `CsvSink`, dont les colonnes sont fixes)
+- [ ] Optionnel : distribution des **candidats avant `SelectPop`** (enfants et mutants regroupés depuis les `IndividualCreated` de la génération), pour voir la sélection à l'œuvre (candidats contre survivants)
+- [ ] Brancher le collecteur dans `run_experiment` (événements écrits avec les résultats)
+- [ ] Tests : un enregistrement par génération et par restart, `totals` trié et de la taille de la population, champ `phase`, population vide ou non évaluée, aucun enregistrement pour les autres événements, passage par `JsonlSink`
+- [ ] **Script de tracé** (`src/analysis/` ou `experiments/analysis/`, à trancher) qui relit le `.jsonl` : avec de petites populations (6 individus), une heatmap (génération en x, tranches de coût en y, nombre d'individus en couleur) ou un nuage de points par génération avec la courbe du meilleur coût, plutôt qu'un histogramme par génération ; les histogrammes deviendront utiles avec de plus grandes populations (bench_3 à bench_5). Restarts marqués sur l'axe des générations
+  - dépendance matplotlib dans un fichier à part (`requirements-analysis.txt`), pour ne pas alourdir l'image Docker des tests
+
 ## Étape 11 — Documentation **(C)**
 - [ ] README : construction Docker, lancement des tests, lancement des expériences
 - [ ] DEVLOG à jour
