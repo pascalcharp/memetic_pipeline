@@ -67,7 +67,7 @@ Commun à tous les sélecteurs : `check_selectable(population, count)` lève `In
 
 ## 4. Croisement
 
-Rôle `crossover`, interface `Crossover[G]` (`src/ga/operators.py`). Le moteur fait exactement **NR croisements par génération** (`crossover_count`) ; il n'y a pas de probabilité de croisement (voir [`HOWTO.md`, section 2](HOWTO.md#2-je-veux-modifier-la-probabilité-de-crossover)).
+Rôle `crossover`, interface `Crossover[G]` (`src/ga/operators.py`). Le moteur fait exactement **NR croisements par génération** (`crossover_count`) ; il n'y a pas de probabilité de croisement (voir [`HOWTO.md`, section 3](HOWTO.md#3-je-veux-modifier-la-probabilité-de-crossover)).
 
 | Classe | Encodage | Parents → enfants | Paramètres | Réf. |
 |---|---|---|---|---|
@@ -141,7 +141,7 @@ Tout est dans `src/memetic/solver.py`. Le `MiniZincLocalSolver` reçoit un `Solv
 |---|---|---|---|
 | `CpSatAdapter` | `cp-sat` (OR-Tools CP-SAT) | `DeterministicTimeLimit`, `WallTimeLimit` | ✅ |
 
-**`CpSatAdapter`**. Transmet la graine (`random_seed`), le nombre de threads et la limite. Les autres solveurs du *bundle* MiniZinc (Gecode, Chuffed, HiGHS) n'ont pas encore d'adaptateur : voir [`HOWTO.md`, section 9](HOWTO.md#9-je-veux-essayer-la-boucle-avec-un-autre-solveur-sur-minizinc).
+**`CpSatAdapter`**. Transmet la graine (`random_seed`), le nombre de threads et la limite. Les autres solveurs du *bundle* MiniZinc (Gecode, Chuffed, HiGHS) n'ont pas encore d'adaptateur : voir [`HOWTO.md`, section 10](HOWTO.md#10-je-veux-essayer-la-boucle-avec-un-autre-solveur-sur-minizinc).
 
 **Options** (`SolverOptions`) :
 
@@ -252,7 +252,7 @@ Rôle `executor`, interface `Executor` (`src/memetic/executor.py`). `map(tâche,
 
 ## 15. Observation : collecteurs et destinations
 
-Rôle `dispatcher` : un `ObservationHub(collectors, sinks)` (`src/observability/hub.py`), qui diffuse chaque événement du moteur aux collecteurs et écrit leurs enregistrements dans chaque destination (D8). Par défaut, un hub sans collecteur : rien n'est mesuré. Le moteur ferme le hub à la fin de `run`. Exemple complet : [`HOWTO.md`, section 1](HOWTO.md#1-je-veux-faire-rouler-la-boucle-mémétique).
+Rôle `dispatcher` : un `ObservationHub(collectors, sinks)` (`src/observability/hub.py`), qui diffuse chaque événement du moteur aux collecteurs et écrit leurs enregistrements dans chaque destination (D8). Par défaut, un hub sans collecteur : rien n'est mesuré. Le moteur ferme le hub à la fin de `run`. Exemple complet : [`HOWTO.md`, section 2](HOWTO.md#2-je-veux-faire-rouler-la-boucle-mémétique-depuis-python) ; `run_experiment` branche les quatre collecteurs lui-même ([section 1](HOWTO.md#1-je-veux-lancer-une-expérience)).
 
 **Collecteurs** (interface `MetricCollector`, `src/observability/collectors.py`). Les noms des champs sont des constantes de `RecordFields`, `CostStatisticsFields`, `DiversityFields`, `FeasibilityFields` et `SolverEffortFields`.
 

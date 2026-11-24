@@ -81,29 +81,13 @@ Les commandes se lancent **depuis la racine du dépôt** (les imports partent de
 
 ### 2.3 Exécuter des expériences
 
-Une expérience est décrite par un fichier de configuration JSON dans `experiments/config/`. Depuis la racine du dépôt :
+`src/` est le cœur ; `experiments/` contient ce qui sert à l'exploiter : scripts de pilotage (`experiments/drivers/`), configurations (`experiments/config/`), résultats versionnés (`experiments/results/`) et journal des expériences ([`experiments/EXPLOG.md`](experiments/EXPLOG.md)). Une expérience se lance depuis la racine du dépôt :
 
 ```bash
 python -m experiments.drivers.run_experiment experiments/config/integration_bench1.json
 ```
 
-Le script construit le moteur avec l'assemblage de référence, l'exécute en mesurant tout, écrit un fichier de résultats JSON dans `experiments/results/<date du jour>/` et ajoute une entrée au journal des expériences, [`experiments/EXPLOG.md`](experiments/EXPLOG.md) : description, chemins, coût obtenu, effort cumulé du solveur. Options : `--results-dir` (autre répertoire de résultats) et `--log` (autre journal). Format de la configuration : docstring de `experiments/drivers/run_experiment.py`, et [`docs/HOWTO.md`, section 1](docs/HOWTO.md#1-je-veux-faire-rouler-la-boucle-mémétique).
-
-Le moteur peut aussi être lancé depuis Python, avec l'assemblage de référence (`src/memetic/assembly.py`) :
-
-```python
-from src.config import ProjectPaths
-from src.memetic.assembly import AssemblySettings, build_block_memetic_config
-from src.memetic.engine import Memetic
-from src.utils.io import load_instance
-
-instance = load_instance(ProjectPaths.DATA_DIR / "bench_1.json")
-settings = AssemblySettings(generations=4, master_seed=7, stagnation_generations=1)
-result = Memetic(build_block_memetic_config(instance, settings)).run()
-print(result.best.cost.total, result.generations, result.restarts)   # 94 4 1
-```
-
-Les paramètres (taille de la population, NR, NM, générations, graine, budget de CP-SAT, etc.) et leurs valeurs par défaut sont dans `AssemblySettings`. Pour mesurer une exécution et écrire ses résultats dans `results/`, voir [`docs/HOWTO.md`, section 1](docs/HOWTO.md#1-je-veux-faire-rouler-la-boucle-mémétique).
+Format de la configuration, paramètres et valeurs par défaut, options, fichiers produits, Docker, reproductibilité : [`docs/HOWTO.md`, section 1](docs/HOWTO.md#1-je-veux-lancer-une-expérience). Pour lancer le moteur depuis Python : [section 2](docs/HOWTO.md#2-je-veux-faire-rouler-la-boucle-mémétique-depuis-python).
 
 ---
 
@@ -113,16 +97,17 @@ Guide pratique, avec pour chaque question les fichiers à modifier, l'interface 
 
 Ce qui existe déjà, rôle par rôle (classes, paramètres, garanties, stratégies prévues) : [`docs/AVAILABLE_STRATEGIES.md`](docs/AVAILABLE_STRATEGIES.md).
 
-- [Je veux faire rouler la boucle mémétique. Je m'y prends comment ?](docs/HOWTO.md#1-je-veux-faire-rouler-la-boucle-mémétique)
-- [Je veux modifier la probabilité de crossover. Que faire ?](docs/HOWTO.md#2-je-veux-modifier-la-probabilité-de-crossover)
-- [Je veux modifier la probabilité de mutation. Comment faire ça ?](docs/HOWTO.md#3-je-veux-modifier-la-probabilité-de-mutation)
-- [Je veux créer un nouveau crossover. Je fais comment ?](docs/HOWTO.md#4-je-veux-créer-un-nouveau-crossover)
-- [Je veux créer un nouvel opérateur de mutation. Je fais quoi ?](docs/HOWTO.md#5-je-veux-créer-un-nouvel-opérateur-de-mutation)
-- [Je veux modifier la stratégie de sélection de la population. Que dois-je faire ?](docs/HOWTO.md#6-je-veux-modifier-la-stratégie-de-sélection-de-la-population)
-- [Je veux une autre stratégie de redémarrage. Comment je devrais m'y prendre ?](docs/HOWTO.md#7-je-veux-une-autre-stratégie-de-redémarrage)
-- [Je veux modifier les options de CP-SAT pour ma prochaine expérience. Que dois-je changer ?](docs/HOWTO.md#8-je-veux-modifier-les-options-de-cp-sat-pour-ma-prochaine-expérience)
-- [Je veux essayer la boucle avec un autre solveur sur MiniZinc. On fait comment ?](docs/HOWTO.md#9-je-veux-essayer-la-boucle-avec-un-autre-solveur-sur-minizinc)
-- [Je veux modifier l'encodage des génomes. Comment ?](docs/HOWTO.md#10-je-veux-modifier-lencodage-des-génomes)
+- [Je veux lancer une expérience. Comment je fais ?](docs/HOWTO.md#1-je-veux-lancer-une-expérience)
+- [Je veux faire rouler la boucle mémétique depuis Python. Je m'y prends comment ?](docs/HOWTO.md#2-je-veux-faire-rouler-la-boucle-mémétique-depuis-python)
+- [Je veux modifier la probabilité de crossover. Que faire ?](docs/HOWTO.md#3-je-veux-modifier-la-probabilité-de-crossover)
+- [Je veux modifier la probabilité de mutation. Comment faire ça ?](docs/HOWTO.md#4-je-veux-modifier-la-probabilité-de-mutation)
+- [Je veux créer un nouveau crossover. Je fais comment ?](docs/HOWTO.md#5-je-veux-créer-un-nouveau-crossover)
+- [Je veux créer un nouvel opérateur de mutation. Je fais quoi ?](docs/HOWTO.md#6-je-veux-créer-un-nouvel-opérateur-de-mutation)
+- [Je veux modifier la stratégie de sélection de la population. Que dois-je faire ?](docs/HOWTO.md#7-je-veux-modifier-la-stratégie-de-sélection-de-la-population)
+- [Je veux une autre stratégie de redémarrage. Comment je devrais m'y prendre ?](docs/HOWTO.md#8-je-veux-une-autre-stratégie-de-redémarrage)
+- [Je veux modifier les options de CP-SAT pour ma prochaine expérience. Que dois-je changer ?](docs/HOWTO.md#9-je-veux-modifier-les-options-de-cp-sat-pour-ma-prochaine-expérience)
+- [Je veux essayer la boucle avec un autre solveur sur MiniZinc. On fait comment ?](docs/HOWTO.md#10-je-veux-essayer-la-boucle-avec-un-autre-solveur-sur-minizinc)
+- [Je veux modifier l'encodage des génomes. Comment ?](docs/HOWTO.md#11-je-veux-modifier-lencodage-des-génomes)
 
 ---
 

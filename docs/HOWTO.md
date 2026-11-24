@@ -4,16 +4,17 @@ Guide pratique pour utiliser et modifier le pipeline. Chaque section dit **quels
 
 Pour savoir ce qui existe déjà avant d'écrire une nouvelle stratégie : [`AVAILABLE_STRATEGIES.md`](AVAILABLE_STRATEGIES.md).
 
-1. [Je veux faire rouler la boucle mémétique](#1-je-veux-faire-rouler-la-boucle-mémétique)
-2. [Je veux modifier la probabilité de crossover](#2-je-veux-modifier-la-probabilité-de-crossover)
-3. [Je veux modifier la probabilité de mutation](#3-je-veux-modifier-la-probabilité-de-mutation)
-4. [Je veux créer un nouveau crossover](#4-je-veux-créer-un-nouveau-crossover)
-5. [Je veux créer un nouvel opérateur de mutation](#5-je-veux-créer-un-nouvel-opérateur-de-mutation)
-6. [Je veux modifier la stratégie de sélection de la population](#6-je-veux-modifier-la-stratégie-de-sélection-de-la-population)
-7. [Je veux une autre stratégie de redémarrage](#7-je-veux-une-autre-stratégie-de-redémarrage)
-8. [Je veux modifier les options de CP-SAT pour ma prochaine expérience](#8-je-veux-modifier-les-options-de-cp-sat-pour-ma-prochaine-expérience)
-9. [Je veux essayer la boucle avec un autre solveur sur MiniZinc](#9-je-veux-essayer-la-boucle-avec-un-autre-solveur-sur-minizinc)
-10. [Je veux modifier l'encodage des génomes](#10-je-veux-modifier-lencodage-des-génomes)
+1. [Je veux lancer une expérience](#1-je-veux-lancer-une-expérience)
+2. [Je veux faire rouler la boucle mémétique depuis Python](#2-je-veux-faire-rouler-la-boucle-mémétique-depuis-python)
+3. [Je veux modifier la probabilité de crossover](#3-je-veux-modifier-la-probabilité-de-crossover)
+4. [Je veux modifier la probabilité de mutation](#4-je-veux-modifier-la-probabilité-de-mutation)
+5. [Je veux créer un nouveau crossover](#5-je-veux-créer-un-nouveau-crossover)
+6. [Je veux créer un nouvel opérateur de mutation](#6-je-veux-créer-un-nouvel-opérateur-de-mutation)
+7. [Je veux modifier la stratégie de sélection de la population](#7-je-veux-modifier-la-stratégie-de-sélection-de-la-population)
+8. [Je veux une autre stratégie de redémarrage](#8-je-veux-une-autre-stratégie-de-redémarrage)
+9. [Je veux modifier les options de CP-SAT pour ma prochaine expérience](#9-je-veux-modifier-les-options-de-cp-sat-pour-ma-prochaine-expérience)
+10. [Je veux essayer la boucle avec un autre solveur sur MiniZinc](#10-je-veux-essayer-la-boucle-avec-un-autre-solveur-sur-minizinc)
+11. [Je veux modifier l'encodage des génomes](#11-je-veux-modifier-lencodage-des-génomes)
 
 ---
 
@@ -34,7 +35,7 @@ Pour brancher un composant à vous, deux façons de faire :
 
 - **Pour un choix durable** : modifier `build_block_memetic_config` (et ajouter un champ à `AssemblySettings` et une valeur par défaut à `AssemblyDefaults` si le composant a des paramètres). Les tests `tests/test_integration.py` (classe `TestAssembly`) vérifient les composants de l'assemblage : à mettre à jour avec lui.
 
-**Attention aux objets partagés.** Dans la configuration de référence, le même `LocalSolver` sert au moteur **et** à l'initialiseur, et le même initialiseur et le même évaluateur servent au restart (`EliteRestart`). Si vous remplacez le `LocalSolver`, remplacez aussi l'initialiseur et le restart (voir la [section 9](#9-je-veux-essayer-la-boucle-avec-un-autre-solveur-sur-minizinc)).
+**Attention aux objets partagés.** Dans la configuration de référence, le même `LocalSolver` sert au moteur **et** à l'initialiseur, et le même initialiseur et le même évaluateur servent au restart (`EliteRestart`). Si vous remplacez le `LocalSolver`, remplacez aussi l'initialiseur et le restart (voir la [section 10](#10-je-veux-essayer-la-boucle-avec-un-autre-solveur-sur-minizinc)).
 
 **Règles communes à toute nouvelle classe** (détail dans [`CLAUDE.md`](../CLAUDE.md)) :
 - classe documentée, annotations de type, aucun nombre magique : les constantes vont dans une classe de constantes (par exemple `OperatorDefaults`) ou une constante de classe ;
@@ -45,11 +46,21 @@ Pour brancher un composant à vous, deux façons de faire :
 
 ---
 
-## 1. Je veux faire rouler la boucle mémétique
+## 1. Je veux lancer une expérience
 
-**Fichiers** : aucun à modifier.
+**Fichiers** : un fichier de configuration à créer dans `experiments/config/` ; aucun code à modifier.
 
-**Par une expérience (la façon normale).** Écrire un fichier de configuration dans `experiments/config/`, par exemple `experiments/config/mon_essai.json` :
+**Où sont les choses.** `src/` est le **cœur** (modèle, algorithme génétique, mémétique, observabilité). `experiments/` contient ce qui sert à l'**exploiter** :
+
+| Chemin | Contenu |
+|---|---|
+| `experiments/drivers/` | scripts de pilotage, dont `run_experiment.py` |
+| `experiments/analysis/` | scripts d'analyse des résultats (à venir, étape 10b) |
+| `experiments/config/` | configurations JSON des expériences |
+| `experiments/results/<AAAA-MM-JJ>/` | fichiers de résultats JSON, un répertoire par jour (versionnés) |
+| `experiments/EXPLOG.md` | journal des expériences : une entrée par exécution, ajoutée automatiquement |
+
+**1. Écrire la configuration**, par exemple `experiments/config/mon_essai.json`. Le nom du fichier, sans extension, devient le nom de l'expérience :
 
 ```json
 {
@@ -59,25 +70,91 @@ Pour brancher un composant à vous, deux façons de faire :
 }
 ```
 
-`instance` est le nom d'un fichier de `data/` sans extension ; les clés de `settings` sont les champs de `AssemblySettings` (ci-dessous), et les champs absents gardent leur valeur par défaut. Une clé inconnue ou une valeur du mauvais type est refusée avant toute exécution (`InvalidExperimentConfigError`). Puis, depuis la racine du dépôt :
+| Clé | Obligatoire | Contenu |
+|---|---|---|
+| `description` | oui | texte lisible, recopié dans les résultats et dans `EXPLOG.md` |
+| `instance` | oui | nom d'un fichier de `data/` sans extension (`bench_1` … `bench_5`) |
+| `settings` | non | paramètres de l'assemblage de référence (`AssemblySettings`) ; les champs absents gardent leur valeur par défaut |
+
+Paramètres de `settings` et valeurs par défaut (`AssemblyDefaults`, `src/memetic/assembly.py`) :
+
+| Paramètre | Type | Défaut | Rôle |
+|---|---|---|---|
+| `population_size` | entier | 6 | taille de la population |
+| `crossover_count` | entier | 2 | NR : croisements par génération |
+| `mutation_count` | entier | 2 | NM : mutations par génération |
+| `generations` | entier | 5 | nombre de générations (critère d'arrêt) |
+| `master_seed` | entier | 0 | graine maître, d'où dérivent toutes les graines (D7) |
+| `tournament_size` | entier | 2 | taille du tournoi (sélection des parents et des mutables) |
+| `stagnation_generations` | entier | 10 | générations sans amélioration avant un restart |
+| `elite_count` | entier | 1 | individus gardés au restart |
+| `neighborhood_size` | entier | 1 | employés libérés par la recherche locale |
+| `deterministic_time_units` | réel | 5.0 | budget de CP-SAT par appel (limite déterministe) |
+| `initial_local_search` | booléen | `true` | passer aussi les individus initiaux et ceux du restart par le `LocalSolver` |
+
+Une clé inconnue, une clé obligatoire absente, une valeur du mauvais type ou une instance introuvable sont refusées **avant toute exécution** (`InvalidExperimentConfigError`, avec le chemin et la clé en cause dans le message). Les domaines (par exemple une taille au moins 1) sont vérifiés à la construction du moteur.
+
+**2. Commiter le code.** `git_dirty` vaut `true` si la copie de travail a des modifications non commitées au lancement (hors `experiments/results/` et `EXPLOG.md`). Le résultat ne peut alors pas être reproduit à partir du seul commit noté, et l'entrée d'`EXPLOG.md` le signale en gras.
+
+**3. Lancer**, depuis la racine du dépôt :
 
 ```bash
 python -m experiments.drivers.run_experiment experiments/config/mon_essai.json
 ```
 
-Le script (`experiments/drivers/run_experiment.py`) prend trois chemins :
+Toujours avec `python -m` et depuis la racine : `python experiments/drivers/run_experiment.py` échoue (`ModuleNotFoundError: No module named 'src'`), car les imports partent de la racine. Dans PyCharm, le répertoire de travail de la configuration d'exécution doit être la racine.
 
 | Paramètre | Rôle | Par défaut |
 |---|---|---|
 | `CONFIG` (obligatoire) | le fichier de configuration | — |
-| `--results-dir` | le répertoire du fichier de résultats | `experiments/results/<AAAA-MM-JJ>/`, un répertoire par jour |
-| `--log` | le journal des expériences | `experiments/EXPLOG.md` |
+| `--results-dir` | le répertoire du fichier de résultats, créé au besoin | `experiments/results/<AAAA-MM-JJ>/`, la date du lancement |
+| `--log` | le journal des expériences, créé avec son en-tête s'il n'existe pas | `experiments/EXPLOG.md` |
 
-Il écrit `<nom de la configuration>_<HHMMSS>.json` : la configuration complète, la provenance (commit Git, `git_dirty`, versions), le meilleur individu (coût décomposé et horaire), l'effort cumulé du solveur, les taux de faisabilité cumulés par origine et opérateur, et les statistiques de coût et de diversité de chaque génération. Il ajoute ensuite une entrée à `EXPLOG.md` : description, chemins, coût obtenu et effort cumulé du solveur. Les résultats et le journal sont versionnés : les commiter avec le reste.
+Pour un essai qu'on ne veut pas garder, envoyer les résultats et le journal ailleurs : `--results-dir /tmp/essai --log /tmp/essai/EXPLOG.md`.
 
-**Commitez le code avant de lancer une expérience à citer.** `git_dirty` vaut `true` si la copie de travail avait des modifications non commitées au lancement (hors `experiments/results/` et `EXPLOG.md`) : le résultat ne peut alors pas être reproduit à partir du seul commit noté, et l'entrée d'`EXPLOG.md` le signale en gras. Il vaut `null` hors d'un dépôt Git.
+À la fin, le script affiche une ligne de résumé :
 
-**Depuis Python.** Depuis la racine du dépôt (les imports partent de `src.`) :
+```text
+Coût obtenu : 94 ; effort cumulé du solveur : 35 appels. Résultats : experiments/results/2026-11-22/integration_bench1_151611.json
+```
+
+En cas d'erreur (configuration refusée, fichier de résultats déjà présent), il s'arrête avec l'exception et un code de sortie non nul, sans écrire de fichier de résultats ni d'entrée au journal.
+
+**4. Ce qui est produit.**
+
+- **Le fichier de résultats** `<nom de l'expérience>_<HHMMSS>.json`, jamais écrasé (`ResultsFileExistsError` si le nom existe déjà). Il contient :
+  - la configuration complète (`description`, `config_path`, `instance`, `settings` avec les valeurs par défaut appliquées) ;
+  - la provenance : `started_at`, `duration_seconds`, `git_commit`, `git_dirty`, versions de Python et des paquets ;
+  - `best` : le coût décomposé (`cost`, dont `total` et `is_feasible`) et l'horaire (`schedule`) du meilleur individu ;
+  - `generations` et `restarts` ;
+  - `solver_effort` : l'effort cumulé du solveur (D10 : appels, échecs, propagations, temps de résolution), initialisation et restarts compris ;
+  - `feasibility_rates` : taux de faisabilité cumulés avant et après la recherche locale, par origine (initialisation, croisement, mutation, restart) et par opérateur ;
+  - `cost_statistics` et `diversity` : une entrée par génération.
+- **Une entrée dans `EXPLOG.md`** : description, chemins de la configuration et des résultats, coût obtenu, effort cumulé du solveur, durée, commit et état de la copie de travail.
+
+**5. Commiter les résultats et le journal** avec un message qui dit ce que l'expérience montre. Les résultats sont versionnés : c'est ce qui permet de citer une expérience dans le rapport.
+
+**Reproductibilité** : même configuration et même commit ⇒ même résultat, car CP-SAT tourne en monothread sous limite déterministe. Le temps de résolution (`solve_time`) varie d'une machine à l'autre ; pour comparer l'effort, utiliser les appels et les propagations.
+
+**Depuis Docker.** Monter le dépôt pour que les résultats et le journal arrivent sur la machine hôte :
+
+```bash
+docker run --rm -v "$PWD":/app memetic-pipeline python -m experiments.drivers.run_experiment experiments/config/mon_essai.json
+```
+
+L'image ne contient pas Git : `git_commit` y vaut `inconnu` et `git_dirty`, `null`. L'heure est celle du conteneur (UTC), ce qui change le répertoire du jour et le nom du fichier. Pour une expérience à citer, lancer plutôt en local.
+
+**Ce que `run_experiment` ne fait pas (encore).** Il utilise toujours l'assemblage de référence (`build_block_memetic_config`) : on ne choisit pas les opérateurs, l'encodage ou le solveur dans la configuration (prévu à l'étape 10, via le registre). Pour essayer un autre composant, passer par Python ([section 2](#2-je-veux-faire-rouler-la-boucle-mémétique-depuis-python), puis sections 3 à 11) ; pour un choix durable, modifier `build_block_memetic_config` ([section 0](#0-le-principe--tout-passe-par-memeticconfig)), et `run_experiment` en profite.
+
+---
+
+## 2. Je veux faire rouler la boucle mémétique depuis Python
+
+**Fichiers** : aucun à modifier.
+
+Pour une expérience à citer (configuration JSON, résultats versionnés, entrée d'`EXPLOG.md`), passer par `run_experiment` : [section 1](#1-je-veux-lancer-une-expérience). Cette section-ci lance le moteur depuis Python, pour un essai ou pour brancher un composant à vous.
+
+Depuis la racine du dépôt (les imports partent de `src.`) :
 
 ```python
 from src.config import ProjectPaths
@@ -124,7 +201,7 @@ Le répertoire contient alors `config.json` (paramètres, graine, commit Git, ve
 
 ---
 
-## 2. Je veux modifier la probabilité de crossover
+## 3. Je veux modifier la probabilité de crossover
 
 **À savoir d'abord** : le moteur n'a **pas** de probabilité de croisement. Il suit le pseudo-code (`for j in NR`) : à chaque génération, il fait exactement **NR croisements** (`crossover_count`), chacun sur `parent_count()` parents tirés par le `ParentSelector`, et chacun produit deux enfants avec `UniformGeneCrossover`. Avec une population de μ individus, 2·NR/μ joue le rôle d'un « taux de croisement » : le nombre d'enfants produits par individu et par génération.
 
@@ -173,7 +250,7 @@ Deux conséquences à connaître :
 
 ---
 
-## 3. Je veux modifier la probabilité de mutation
+## 4. Je veux modifier la probabilité de mutation
 
 **À savoir d'abord** : comme pour le croisement, il n'y a pas de probabilité de mutation dans le moteur. À chaque génération, il fait exactement **NM mutations** (`mutation_count`) : le `MutableSelector` tire NM individus, et chacun est muté une fois. NM/μ joue le rôle d'un taux de mutation par individu et par génération. De plus, les opérateurs de mutation existants modifient **un seul gène** (un seul employé) par appel.
 
@@ -188,7 +265,7 @@ Valeur par défaut : `AssemblyDefaults.MUTATION_COUNT` dans `src/memetic/assembl
 **Option B : changer l'intensité d'une mutation.** Les amplitudes sont des constantes de `OperatorDefaults` (`src/ga/operators.py`) : `MIN_SHIFT_AMPLITUDE` et `MAX_SHIFT_AMPLITUDE` pour `ShiftStartMutation`, `MIN_BOUNDARY_TRANSFER` et `MAX_BOUNDARY_TRANSFER` pour `BlockBoundaryMutation`. Les modifier change tous les usages : les tests de `tests/test_operators.py` doivent rester verts.
 
 **Option C : une vraie probabilité p_m.**
-- *Par individu* : même patron que le croisement probabiliste de la section 2, avec l'interface `Mutation[G]` :
+- *Par individu* : même patron que le croisement probabiliste de la section 3, avec l'interface `Mutation[G]` :
 
   ```python
   class ProbabilisticBlockMutation(Mutation[BlockGenome]):
@@ -208,11 +285,11 @@ Valeur par défaut : `AssemblyDefaults.MUTATION_COUNT` dans `src/memetic/assembl
           return genome
   ```
 
-- *Par gène* (chaque employé muté avec la probabilité p_m) : écrire un nouvel opérateur qui parcourt les gènes et tire, pour chacun, `rng.random() < p_m` (voir la [section 5](#5-je-veux-créer-un-nouvel-opérateur-de-mutation) pour la structure d'un opérateur).
+- *Par gène* (chaque employé muté avec la probabilité p_m) : écrire un nouvel opérateur qui parcourt les gènes et tire, pour chacun, `rng.random() < p_m` (voir la [section 6](#6-je-veux-créer-un-nouvel-opérateur-de-mutation) pour la structure d'un opérateur).
 
 ---
 
-## 4. Je veux créer un nouveau crossover
+## 5. Je veux créer un nouveau crossover
 
 **Fichiers** :
 - `src/ga/operators.py` : la nouvelle classe, ses constantes dans `OperatorDefaults`, ses éventuelles exceptions (dérivées de `OperatorError`) et leurs messages dans `OperatorMessages` ;
@@ -264,7 +341,7 @@ result = Memetic(config).run()
 
 ---
 
-## 5. Je veux créer un nouvel opérateur de mutation
+## 6. Je veux créer un nouvel opérateur de mutation
 
 **Fichiers** : les mêmes que pour un croisement : `src/ga/operators.py`, `tests/test_operators.py`, et `src/memetic/assembly.py` pour l'adopter durablement.
 
@@ -312,7 +389,7 @@ config = dataclasses.replace(build_block_memetic_config(instance, settings), mut
 
 ---
 
-## 6. Je veux modifier la stratégie de sélection de la population
+## 7. Je veux modifier la stratégie de sélection de la population
 
 Trois rôles de la configuration sont des sélections :
 
@@ -365,7 +442,7 @@ Ce sélecteur accepte les doublons, contrairement à `PlusSurvivorSelector` : la
 
 ---
 
-## 7. Je veux une autre stratégie de redémarrage
+## 8. Je veux une autre stratégie de redémarrage
 
 Le redémarrage met en jeu deux rôles :
 
@@ -415,7 +492,7 @@ Dans une version durable, le `1` et le `0.5` deviennent des constantes de `Popul
 
 ---
 
-## 8. Je veux modifier les options de CP-SAT pour ma prochaine expérience
+## 9. Je veux modifier les options de CP-SAT pour ma prochaine expérience
 
 Les options d'une résolution sont dans `SolverOptions` (`src/memetic/solver.py`) : `limit` (limite d'effort), `seed` et `threads`. `CpSatAdapter.solver_arguments` les traduit en arguments pour MiniZinc.
 
@@ -427,7 +504,7 @@ settings = AssemblySettings(deterministic_time_units=2.0)
 
 L'unité est le temps déterministe de CP-SAT (`max_deterministic_time`) : environ une seconde de calcul, mais reproductible.
 
-**La graine, le nombre de threads ou une limite en temps mural** : l'assemblage de référence ne construit que `SolverOptions(limit=DeterministicTimeLimit(...))`. Modifier cette ligne dans `build_block_memetic_config` (ou construire votre propre `MiniZincLocalSolver`, voir la [section 9](#9-je-veux-essayer-la-boucle-avec-un-autre-solveur-sur-minizinc)) :
+**La graine, le nombre de threads ou une limite en temps mural** : l'assemblage de référence ne construit que `SolverOptions(limit=DeterministicTimeLimit(...))`. Modifier cette ligne dans `build_block_memetic_config` (ou construire votre propre `MiniZincLocalSolver`, voir la [section 10](#10-je-veux-essayer-la-boucle-avec-un-autre-solveur-sur-minizinc)) :
 
 ```python
 from src.memetic.solver import CpSatAdapter, DeterministicTimeLimit, ModelVariants, SolverOptions, WallTimeLimit
@@ -466,11 +543,11 @@ adapter.solver_arguments()
 # {'processes': 1, 'fzn-flags': '--params random_seed:3,max_deterministic_time:2.0,linearization_level:2'}
 ```
 
-Puis brancher `adapter` dans un `MiniZincLocalSolver`, comme à la section 9.
+Puis brancher `adapter` dans un `MiniZincLocalSolver`, comme à la section 10.
 
 ---
 
-## 9. Je veux essayer la boucle avec un autre solveur sur MiniZinc
+## 10. Je veux essayer la boucle avec un autre solveur sur MiniZinc
 
 **Fichiers** : `src/memetic/solver.py` (le nouvel adaptateur ; l'identifiant du solveur en constante dans `SolverIds`, les mots-clés de minizinc-python dans `MiniZincPythonArguments`), tests dans `tests/test_solver.py`, et `src/memetic/assembly.py` pour l'adopter durablement.
 
@@ -508,7 +585,7 @@ class GecodeAdapter(SolverAdapter):
         }
 ```
 
-**Le brancher** : l'adaptateur va dans un `MiniZincLocalSolver`, et ce `LocalSolver` doit remplacer celui du moteur, de l'initialiseur **et** du restart (voir l'encadré « objets partagés » de la [section 0](#0-le-principe--tout-passe-par-memeticconfig)) :
+**Le brancher** : l'adaptateur va dans un `MiniZincLocalSolver`, et ce `LocalSolver` doit remplacer celui du moteur, de l'initialiseur **et** du restart (voir l'encadré « objets partagés » de la [section 1](#0-le-principe--tout-passe-par-memeticconfig)) :
 
 ```python
 from src.ga.initialization import RandomBlockInitializer
@@ -535,7 +612,7 @@ Points à vérifier pour un nouveau solveur :
 
 ---
 
-## 10. Je veux modifier l'encodage des génomes
+## 11. Je veux modifier l'encodage des génomes
 
 C'est la modification la plus profonde : l'encodage détermine le type `G` des génomes, et donc les opérateurs et l'initialiseur compatibles.
 
