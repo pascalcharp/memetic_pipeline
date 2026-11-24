@@ -5,18 +5,18 @@ blocs (D1), opérateurs de 7b, sélecteurs de 7a, gestion de la population de 8,
 CP-SAT avec le modèle assoupli (D12), en monothread et sous limite d'effort déterministe (D10), pour que deux
 exécutions de même graine soient identiques.
 
-Les paramètres numériques viennent de ``AssemblySettings`` (valeurs par défaut dans ``AssemblyDefaults``). À
-l'étape 10, les expériences pourront choisir les composants par leur nom (registre de 7a) ; cet assemblage reste la
-configuration de référence du prototype.
+Les paramètres numériques viennent de ``AssemblySettings`` (valeurs par défaut dans ``AssemblyDefaults``). Le
+croisement et la mutation sont choisis par leur nom (``StrategyChoices``, catalogue de l'étape 10c) ; sans choix, on
+obtient la configuration de référence du prototype.
 """
 
 from dataclasses import dataclass
 
 from src.ga.chromosome import BlockGenome, BlockEncoding
 from src.ga.initialization import RandomBlockInitializer
-from src.ga.operators import UniformGeneCrossover, ShiftStartMutation
 from src.ga.population import PopulationDefaults, PlusSurvivorSelector, StagnationCriterion, EliteRestart
 from src.ga.selection import SelectionDefaults, TournamentSelector, UniformMutableSelector
+from src.memetic.catalog import BuildContext, StrategyCatalog, StrategyChoices, StrategyRoles
 from src.memetic.config import MemeticConfig
 from src.memetic.executor import SequentialExecutor
 from src.memetic.local_search import NeighborhoodDefaults, MiniZincLocalSolver, RandomEmployeesNeighborhood
@@ -71,6 +71,7 @@ def build_block_memetic_config(
         instance: ProblemInstance,
         settings: AssemblySettings = AssemblySettings(),
         dispatcher: ObservationHub | None = None,
+        strategies: StrategyChoices = StrategyChoices(),
 ) -> MemeticConfig[BlockGenome]:
     """Configuration complète du moteur pour ``instance``, avec les vrais composants.
 
@@ -84,7 +85,8 @@ def build_block_memetic_config(
         - initialiseur : ``RandomBlockInitializer(instance, encoding)``, avec ``local_solver`` si
           ``settings.initial_local_search`` est vrai ; le même objet pour le moteur et le restart ;
         - sélection : ``TournamentSelector(settings.tournament_size)`` et ``UniformMutableSelector()`` ;
-        - variation : ``UniformGeneCrossover()`` et ``ShiftStartMutation(instance)`` ;
+        - variation : créés par le catalogue (``StrategyCatalog``) à partir de ``strategies`` ; par défaut
+          ``UniformGeneCrossover()`` et ``ShiftStartMutation(instance)`` ;
         - population : ``PlusSurvivorSelector()``, ``StagnationCriterion(settings.stagnation_generations)``,
           ``EliteRestart(initializer, evaluator, settings.elite_count)`` ;
         - arrêt : ``GenerationLimit(settings.generations)`` ;
@@ -92,6 +94,10 @@ def build_block_memetic_config(
 
     Chaque appel construit des composants neufs : le critère de convergence a un état, donc une configuration ne
     sert qu'à une exécution.
+
+    Raises:
+        UnknownOperatorError, InvalidOperatorParametersError, ReservedStrategyParameterError: si ``strategies``
+            nomme une stratégie inconnue ou lui donne des paramètres qui ne conviennent pas (voir ``StrategyCatalog``).
     """
     encoding = BlockEncoding()
 
@@ -102,14 +108,18 @@ def build_block_memetic_config(
     initializer = RandomBlockInitializer(instance, encoding, local_solver if settings.initial_local_search else None)
     if dispatcher is None:
         dispatcher = ObservationHub()
+    catalog = StrategyCatalog()
+    context = BuildContext(instance=instance, encoding=encoding)
+    crossover = catalog.create(StrategyRoles.CROSSOVER, strategies.crossover, context)
+    mutation = catalog.create(StrategyRoles.MUTATION, strategies.mutation, context)
 
     return MemeticConfig(
         encoding=encoding,
         initializer=initializer,
         parent_selector=TournamentSelector(settings.tournament_size),
-        crossover=UniformGeneCrossover(),
+        crossover=crossover,
         mutable_selector=UniformMutableSelector(),
-        mutation=ShiftStartMutation(instance),
+        mutation=mutation,
         local_solver=local_solver,
         evaluator=evaluator,
         survivor_selector=PlusSurvivorSelector(),

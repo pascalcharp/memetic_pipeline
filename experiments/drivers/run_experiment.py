@@ -25,6 +25,12 @@ Format de la configuration (``ConfigKeys``) :
 
 ``instance`` est le nom d'un fichier de ``data/`` sans son extension. ``settings`` est facultatif : ses clés sont des
 champs de ``AssemblySettings`` (``src/memetic/assembly.py``), et les champs absents prennent leur valeur par défaut.
+
+``strategies`` (facultatif, étape 10c) choisit des stratégies par leur nom, rôle par rôle (``StrategyRoles``), sous
+une forme courte (le nom seul) ou objet (le nom et les paramètres de sa fabrique) ; les rôles absents gardent la
+stratégie de l'assemblage de référence. Noms disponibles : ``StrategyNames`` (``src/memetic/catalog.py``).
+
+    "strategies": {"crossover": "uniform_gene", "mutation": {"name": "activity", "parameters": {}}}
 """
 
 import argparse
@@ -35,7 +41,7 @@ import sys
 import time
 import warnings
 from collections.abc import Callable, Mapping, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -43,7 +49,9 @@ from typing import Any
 from minizinc.error import MiniZincWarning
 
 from src.config import ProjectPaths
+from src.ga.registry import RegistryError
 from src.memetic.assembly import AssemblySettings, build_block_memetic_config
+from src.memetic.catalog import StrategyCatalog, StrategyChoice, StrategyChoices, StrategyError, StrategyKeys
 from src.memetic.engine import Memetic, MemeticResult
 from src.model.evaluation import CostBreakdown
 from src.observability.collectors import (
@@ -94,8 +102,11 @@ class ConfigKeys:
     DESCRIPTION: str = "description"
     INSTANCE: str = "instance"
     SETTINGS: str = "settings"
+    STRATEGIES: str = "strategies"
     REQUIRED: tuple[str, ...] = (DESCRIPTION, INSTANCE)
-    ALLOWED: tuple[str, ...] = (DESCRIPTION, INSTANCE, SETTINGS)
+    ALLOWED: tuple[str, ...] = (DESCRIPTION, INSTANCE, SETTINGS, STRATEGIES)
+    # Chemin d'une clé imbriquée dans les messages d'erreur, par exemple « strategies.mutation.name ».
+    PATH_TEMPLATE: str = "{parent}.{key}"
 
 
 class ResultKeys:
@@ -107,6 +118,7 @@ class ResultKeys:
     CONFIG_PATH: str = "config_path"
     INSTANCE: str = "instance"
     SETTINGS: str = "settings"
+    STRATEGIES: str = "strategies"
     STARTED_AT: str = "started_at"
     DURATION_SECONDS: str = "duration_seconds"
     GIT_COMMIT: str = "git_commit"
@@ -141,6 +153,7 @@ class ExplogTexts:
         "- Résultats : `{results_path}`\n"
         "- Instance : {instance} ; graine {seed} ; population {population_size}, NR = {crossover_count}, "
         "NM = {mutation_count}, {generations_setting} générations\n"
+        "- Stratégies : {strategies}\n"
         "- **Coût obtenu : {best_total}** ({feasibility}) ; {generations} générations, {restarts} restart(s)\n"
         "- **Effort cumulé du solveur** : {calls} appels ; failures {failures} ; propagations {propagations} ; "
         "nodes {nodes} ; temps de résolution {solve_time} s (non déterministe)\n"
@@ -154,6 +167,9 @@ class ExplogTexts:
     FEASIBLE: str = "faisable"
     INFEASIBLE: str = "infaisable"
     NOT_REPORTED: str = "non rapporté"
+    STRATEGY_ITEM: str = "{role} `{name}`{parameters}"
+    STRATEGY_PARAMETERS: str = " {parameters}"
+    STRATEGY_SEPARATOR: str = " ; "
 
 
 class ExperimentMessages:
@@ -165,6 +181,8 @@ class ExperimentMessages:
     UNKNOWN_KEY: str = "Configuration {path} : clé « {key} » inconnue ; clés permises : {allowed}."
     UNKNOWN_SETTING: str = "Configuration {path} : paramètre « {key} » inconnu ; paramètres permis : {allowed}."
     WRONG_TYPE: str = "Configuration {path} : « {key} » doit être de type {expected} ; trouvé {value!r}."
+    UNKNOWN_STRATEGY_KEY: str = "Configuration {path} : clé « {key} » inconnue dans « {parent} » ; clés permises : {allowed}."
+    INVALID_STRATEGY: str = "Configuration {path} : stratégie « {key} » invalide : {detail}"
     INSTANCE_NOT_FOUND: str = "Configuration {path} : instance « {instance} » introuvable ({instance_path})."
     RESULTS_FILE_EXISTS: str = "Le fichier de résultats {path} existe déjà."
     SUMMARY: str = "Coût obtenu : {best_total} ; effort cumulé du solveur : {calls} appels. Résultats : {results_path}"
@@ -185,13 +203,15 @@ class ResultsFileExistsError(ExperimentError):
 @dataclass(frozen=True)
 class ExperimentConfig:
     """Une expérience lue dans un fichier de configuration : son nom (celui du fichier), sa description, son
-    instance et les paramètres complets de l'assemblage."""
+    instance, les paramètres complets de l'assemblage et les stratégies choisies (celles de l'assemblage de référence
+    par défaut)."""
 
     name: str
     path: Path
     description: str
     instance_name: str
     settings: AssemblySettings
+    strategies: StrategyChoices = field(default_factory=StrategyChoices)
 
     def instance_path(self) -> Path:
         return ExperimentDefaults.INSTANCE_DIR / (self.instance_name + ExperimentDefaults.INSTANCE_EXTENSION)
@@ -220,8 +240,8 @@ def load_experiment_config(path: Path) -> ExperimentConfig:
 
     Raises:
         InvalidExperimentConfigError: fichier illisible ou JSON invalide, racine qui n'est pas un objet, clé
-            obligatoire absente, clé ou paramètre inconnu, valeur du mauvais type, instance introuvable ; le chemin du
-            fichier et la clé en cause sont dans le message.
+            obligatoire absente, clé ou paramètre inconnu, valeur du mauvais type, stratégie inconnue ou mal
+            paramétrée, instance introuvable ; le chemin du fichier et la clé en cause sont dans le message.
     """
     try:
         content = json.loads(path.read_text(encoding=ExperimentDefaults.ENCODING))
@@ -249,6 +269,7 @@ def load_experiment_config(path: Path) -> ExperimentConfig:
         description=content[ConfigKeys.DESCRIPTION],
         instance_name=content[ConfigKeys.INSTANCE],
         settings=settings_from(path, raw_settings),
+        strategies=strategies_from(path, content.get(ConfigKeys.STRATEGIES, {})),
     )
     if not config.instance_path().is_file():
         raise InvalidExperimentConfigError(ExperimentMessages.INSTANCE_NOT_FOUND.format(
@@ -271,6 +292,47 @@ def settings_from(path: Path, raw_settings: Mapping[str, Any]) -> AssemblySettin
             ))
         check_type(path, key, value, fields_by_name[key].type)
     return AssemblySettings(**raw_settings)
+
+
+def strategies_from(path: Path, raw_strategies: Any) -> StrategyChoices:
+    """Les stratégies choisies dans ``raw_strategies`` ; les rôles absents gardent leur valeur par défaut.
+
+    Chaque choix est vérifié par le catalogue (rôle, nom, paramètres) sans créer la stratégie : une configuration
+    invalide est refusée avant toute exécution.
+    """
+    check_type(path, ConfigKeys.STRATEGIES, raw_strategies, dict)
+    catalog = StrategyCatalog()
+    choices: dict[str, StrategyChoice] = {}
+    for role, raw_choice in raw_strategies.items():
+        key = ConfigKeys.PATH_TEMPLATE.format(parent=ConfigKeys.STRATEGIES, key=role)
+        choice = strategy_choice_from(path, key, raw_choice)
+        try:
+            catalog.check(role, choice)
+        except (StrategyError, RegistryError) as error:
+            raise InvalidExperimentConfigError(ExperimentMessages.INVALID_STRATEGY.format(
+                path=path, key=key, detail=error
+            )) from error
+        choices[role] = choice
+    return StrategyChoices(**choices)
+
+
+def strategy_choice_from(path: Path, key: str, raw_choice: Any) -> StrategyChoice:
+    """Un choix sous sa forme courte (le nom) ou objet (``{"name": ..., "parameters": {...}}``)."""
+    if isinstance(raw_choice, str):
+        return StrategyChoice(raw_choice)
+    check_type(path, key, raw_choice, dict)
+    for choice_key in raw_choice:
+        if choice_key not in StrategyKeys.ALLOWED:
+            raise InvalidExperimentConfigError(ExperimentMessages.UNKNOWN_STRATEGY_KEY.format(
+                path=path, key=choice_key, parent=key, allowed=", ".join(StrategyKeys.ALLOWED)
+            ))
+    name_key = ConfigKeys.PATH_TEMPLATE.format(parent=key, key=StrategyKeys.NAME)
+    if StrategyKeys.NAME not in raw_choice:
+        raise InvalidExperimentConfigError(ExperimentMessages.MISSING_KEY.format(path=path, key=name_key))
+    check_type(path, name_key, raw_choice[StrategyKeys.NAME], str)
+    parameters = raw_choice.get(StrategyKeys.PARAMETERS, {})
+    check_type(path, ConfigKeys.PATH_TEMPLATE.format(parent=key, key=StrategyKeys.PARAMETERS), parameters, dict)
+    return StrategyChoice(raw_choice[StrategyKeys.NAME], parameters)
 
 
 def check_type(path: Path, key: str, value: Any, expected: type) -> None:
@@ -304,7 +366,8 @@ def local_now() -> datetime:
 
 
 def run_experiment(config: ExperimentConfig, clock: Callable[[], datetime] = local_now) -> ExperimentOutcome:
-    """Construit le moteur avec l'assemblage de référence et les quatre collecteurs de 8b, puis l'exécute."""
+    """Construit le moteur avec l'assemblage de référence, les stratégies choisies et les quatre collecteurs de 8b,
+    puis l'exécute."""
     instance: ProblemInstance = load_instance(config.instance_path())
     memory = MemorySink()
     hub = ObservationHub(
@@ -316,7 +379,7 @@ def run_experiment(config: ExperimentConfig, clock: Callable[[], datetime] = loc
         ),
         sinks=(memory,),
     )
-    engine = Memetic(build_block_memetic_config(instance, config.settings, hub))
+    engine = Memetic(build_block_memetic_config(instance, config.settings, hub, strategies=config.strategies))
     # L'état Git est lu avant l'exécution : c'est le code qui a produit le résultat.
     git_commit = current_git_commit()
     git_dirty = working_tree_is_dirty(excluded=ExperimentDefaults.GIT_DIRTY_EXCLUDED)
@@ -372,6 +435,7 @@ def results_document(config: ExperimentConfig, outcome: ExperimentOutcome) -> di
         ResultKeys.CONFIG_PATH: display_path(config.path),
         ResultKeys.INSTANCE: config.instance_name,
         ResultKeys.SETTINGS: dataclasses.asdict(config.settings),
+        ResultKeys.STRATEGIES: config.strategies.to_json(),
         ResultKeys.STARTED_AT: outcome.started_at.isoformat(),
         ResultKeys.DURATION_SECONDS: outcome.duration_seconds,
         ResultKeys.GIT_COMMIT: outcome.git_commit,
@@ -449,6 +513,7 @@ def explog_entry(
         crossover_count=settings.crossover_count,
         mutation_count=settings.mutation_count,
         generations_setting=settings.generations,
+        strategies=strategies_text(config.strategies),
         best_total=best_cost[ResultKeys.TOTAL],
         feasibility=ExplogTexts.FEASIBLE if best_cost[ResultKeys.IS_FEASIBLE] else ExplogTexts.INFEASIBLE,
         generations=document[ResultKeys.GENERATIONS],
@@ -462,6 +527,17 @@ def explog_entry(
         git_commit=document[ResultKeys.GIT_COMMIT],
         git_state=git_state_text(document[ResultKeys.GIT_DIRTY]),
     )
+
+
+def strategies_text(strategies: StrategyChoices) -> str:
+    """Les stratégies choisies, rôle par rôle, pour l'entrée du journal ; les paramètres seulement s'il y en a."""
+    items = []
+    for role, choice in strategies.by_role().items():
+        parameters = ""
+        if choice.parameters:
+            parameters = ExplogTexts.STRATEGY_PARAMETERS.format(parameters=json.dumps(dict(choice.parameters)))
+        items.append(ExplogTexts.STRATEGY_ITEM.format(role=role, name=choice.name, parameters=parameters))
+    return ExplogTexts.STRATEGY_SEPARATOR.join(items)
 
 
 def git_state_text(git_dirty: bool | None) -> str:

@@ -25,10 +25,11 @@ from minizinc.error import MiniZincWarning
 from src.config import ProjectPaths
 from src.ga.chromosome import BlockEncoding
 from src.ga.initialization import RandomBlockInitializer
-from src.ga.operators import ShiftStartMutation, UniformGeneCrossover
+from src.ga.operators import ActivityMutation, ShiftStartMutation, UniformGeneCrossover
 from src.ga.population import EliteRestart, PlusSurvivorSelector, StagnationCriterion
 from src.ga.selection import TournamentSelector, UniformMutableSelector
 from src.memetic.assembly import AssemblyDefaults, AssemblySettings, build_block_memetic_config
+from src.memetic.catalog import StrategyChoice, StrategyChoices, StrategyNames
 from src.memetic.config import MemeticConfig
 from src.memetic.engine import Memetic, MemeticResult
 from src.memetic.local_search import MiniZincLocalSolver, RandomEmployeesNeighborhood
@@ -164,6 +165,19 @@ class TestAssembly(unittest.TestCase):
             self.instance, AssemblySettings(initial_local_search=False)
         )
         self.assertIsNone(without.initializer.local_solver)
+
+    def test_givenChosenMutation_whenBuilding_thenTheCatalogCreatesItAndTheConfigIsValid(self) -> None:
+        strategies = StrategyChoices(mutation=StrategyChoice(StrategyNames.ACTIVITY))
+        config = build_block_memetic_config(self.instance, CUSTOM_SETTINGS, strategies=strategies)
+        self.assertIsInstance(config.mutation, ActivityMutation)
+        self.assertIs(config.mutation.instance, self.instance)
+        self.assertIsInstance(config.crossover, UniformGeneCrossover)
+        config.validate()
+
+    def test_givenDefaultStrategies_whenBuilding_thenSameOperatorsAsWithoutStrategies(self) -> None:
+        config = build_block_memetic_config(self.instance, CUSTOM_SETTINGS, strategies=StrategyChoices())
+        self.assertIsInstance(config.crossover, type(self.config.crossover))
+        self.assertIsInstance(config.mutation, type(self.config.mutation))
 
     def test_givenNoDispatcher_whenBuilding_thenEachConfigHasItsOwnHub(self) -> None:
         first = build_block_memetic_config(self.instance)

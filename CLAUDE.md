@@ -80,11 +80,12 @@ memetic_pipeline/
 │   │   ├── initialization.py   # Initialisation de la population (PopulationInitializer)
 │   │   ├── operators.py        # Opérateurs de variation : Crossover[G], Mutation[G]
 │   │   ├── population.py       # Gestion de la population globale
-│   │   ├── registry.py         # Registre des opérateurs par nom, compatibilité opérateur / encodage
+│   │   ├── registry.py         # Registre des opérateurs par nom (fabriques, vérification des paramètres), compatibilité opérateur / encodage
 │   │   └── selection.py        # Sélection : ParentSelector, MutableSelector
 │   ├── memetic/                # Couplage Mémétique, réparation et moteur
 │   │   ├── __init__.py
 │   │   ├── assembly.py         # Assemblage de référence avec les vrais composants (build_block_memetic_config)
+│   │   ├── catalog.py          # Catalogue des stratégies choisies par leur nom (StrategyCatalog), pour les configurations d'expériences
 │   │   ├── config.py           # MemeticConfig : stratégies, paramètres et hub d'observation d'une exécution
 │   │   ├── engine.py           # Moteur Memetic(NR, NM) : lots NR et NM (D7), événements (D8)
 │   │   ├── executor.py         # Exécution des lots : Executor, SequentialExecutor (D7)
