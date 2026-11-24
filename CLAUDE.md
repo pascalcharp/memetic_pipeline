@@ -56,7 +56,13 @@ memetic_pipeline/
 │   ├── …
 │   └── bench_5.json            # 8 employés × 5 activités × 48 périodes (la plus grande)
 ├── docs/                       # Documentation de conception (ALGO.md, PROJECT_STRUCT.md)
-├── src/                        # Code source principal
+├── experiments/                # Exploitation du cœur : tout ce qui sert à s'en servir, hors de src/
+│   ├── drivers/                # Scripts de pilotage (run_experiment.py)
+│   ├── analysis/               # Scripts d'analyse des résultats (à venir)
+│   ├── config/                 # Configurations JSON des expériences
+│   ├── results/                # Résultats JSON, un répertoire par jour (versionnés)
+│   └── EXPLOG.md               # Journal des expériences
+├── src/                        # Cœur : modèle, algorithme génétique, mémétique, observabilité
 │   ├── __init__.py
 │   ├── config.py               # Constantes de configuration : chemins du projet, MiniZinc
 │   ├── model/                  # Modèle CP (MiniZinc) et ses règles côté Python
@@ -91,7 +97,6 @@ memetic_pipeline/
 │   │   ├── __init__.py
 │   │   ├── minizinc_env.py     # Localisation de MiniZinc et des solveurs
 │   │   └── io.py               # Lecture et validation des instances (ProblemInstance)
-│   └── drivers/                # Point d'entrée pour lancer les expériences (à venir)
 ├── tests/                      # Tests unittest (python -m unittest discover)
 ├── CLAUDE.md                   # Guide de développement
 ├── TODO.md                     # Planification des étapes

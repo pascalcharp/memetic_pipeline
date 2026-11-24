@@ -1,4 +1,4 @@
-"""Tests du script d'expériences ``src/drivers/run_experiment.py`` (étape 10a).
+"""Tests du script d'expériences ``experiments/drivers/run_experiment.py`` (étape 10a).
 
 Sans MiniZinc : lecture et validation de la configuration, chemins par défaut, écriture des résultats, journal.
 Avec MiniZinc et CP-SAT (``TestRunExperimentEndToEnd``, quelques secondes) : une exécution complète et courte sur
@@ -14,7 +14,7 @@ from pathlib import Path
 from unittest import mock
 
 from src.config import ProjectPaths
-from src.drivers.run_experiment import (
+from experiments.drivers.run_experiment import (
     ConfigKeys,
     ExperimentDefaults,
     ExplogTexts,

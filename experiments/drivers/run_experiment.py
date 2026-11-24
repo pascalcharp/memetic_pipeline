@@ -2,8 +2,8 @@
 
 Usage, depuis la racine du dépôt :
 
-    python -m src.drivers.run_experiment experiments/config/integration_bench1.json
-    python -m src.drivers.run_experiment CONFIG [--results-dir RÉPERTOIRE] [--log JOURNAL]
+    python -m experiments.drivers.run_experiment experiments/config/integration_bench1.json
+    python -m experiments.drivers.run_experiment CONFIG [--results-dir RÉPERTOIRE] [--log JOURNAL]
 
 Trois chemins :
     - ``CONFIG`` : le fichier de configuration (par convention dans ``experiments/config/``) ;
@@ -131,7 +131,7 @@ class ExplogTexts:
 
     HEADER: str = (
         "# Journal des expériences\n\n"
-        "Une entrée par exécution de `python -m src.drivers.run_experiment`, ajoutée automatiquement. "
+        "Une entrée par exécution de `python -m experiments.drivers.run_experiment`, ajoutée automatiquement. "
         "Les fichiers de résultats complets sont dans `experiments/results/<date>/`.\n"
     )
     ENTRY: str = (
@@ -486,7 +486,7 @@ def append_explog_entry(log_path: Path, entry: str) -> None:
 
 def parse_arguments(argv: Sequence[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        prog="python -m src.drivers.run_experiment",
+        prog="python -m experiments.drivers.run_experiment",
         description="Exécute une expérience décrite par un fichier de configuration JSON.",
     )
     parser.add_argument("config", type=Path, help="fichier de configuration (par convention dans experiments/config/)")

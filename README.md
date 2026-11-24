@@ -84,10 +84,10 @@ Les commandes se lancent **depuis la racine du dépôt** (les imports partent de
 Une expérience est décrite par un fichier de configuration JSON dans `experiments/config/`. Depuis la racine du dépôt :
 
 ```bash
-python -m src.drivers.run_experiment experiments/config/integration_bench1.json
+python -m experiments.drivers.run_experiment experiments/config/integration_bench1.json
 ```
 
-Le script construit le moteur avec l'assemblage de référence, l'exécute en mesurant tout, écrit un fichier de résultats JSON dans `experiments/results/<date du jour>/` et ajoute une entrée au journal des expériences, [`experiments/EXPLOG.md`](experiments/EXPLOG.md) : description, chemins, coût obtenu, effort cumulé du solveur. Options : `--results-dir` (autre répertoire de résultats) et `--log` (autre journal). Format de la configuration : docstring de `src/drivers/run_experiment.py`, et [`docs/HOWTO.md`, section 1](docs/HOWTO.md#1-je-veux-faire-rouler-la-boucle-mémétique).
+Le script construit le moteur avec l'assemblage de référence, l'exécute en mesurant tout, écrit un fichier de résultats JSON dans `experiments/results/<date du jour>/` et ajoute une entrée au journal des expériences, [`experiments/EXPLOG.md`](experiments/EXPLOG.md) : description, chemins, coût obtenu, effort cumulé du solveur. Options : `--results-dir` (autre répertoire de résultats) et `--log` (autre journal). Format de la configuration : docstring de `experiments/drivers/run_experiment.py`, et [`docs/HOWTO.md`, section 1](docs/HOWTO.md#1-je-veux-faire-rouler-la-boucle-mémétique).
 
 Le moteur peut aussi être lancé depuis Python, avec l'assemblage de référence (`src/memetic/assembly.py`) :
 

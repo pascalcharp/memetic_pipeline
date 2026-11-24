@@ -1,6 +1,6 @@
 # Journal des expériences
 
-Une entrée par exécution de `python -m src.drivers.run_experiment`, ajoutée automatiquement. Les fichiers de résultats complets sont dans `experiments/results/<date>/`.
+Une entrée par exécution de `python -m experiments.drivers.run_experiment`, ajoutée automatiquement. Les fichiers de résultats complets sont dans `experiments/results/<date>/`.
 
 ## 2026-11-22 15:16 — integration_bench1
 

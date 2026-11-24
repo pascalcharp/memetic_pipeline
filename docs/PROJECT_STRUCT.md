@@ -21,17 +21,18 @@ memetic_pipeline/
 │   ├── HOWTO.md                # Comment faire ? Lancer la boucle, ajouter un opérateur, changer de solveur, etc.
 │   ├── PROBLEME.md             # Description du problème : données, règles d'un quart, coût, exemple
 │   └── PROJECT_STRUCT.md       # Ce document
-├── experiments/                # Expériences (étape 10), versionnées
+├── experiments/                # Exploitation du cœur (étape 10) : pilotage, configurations, résultats, analyses ; versionné
+│   ├── __init__.py
 │   ├── EXPLOG.md               # Journal des expériences : une entrée par exécution, ajoutée par run_experiment
 │   ├── config/                 # Configurations JSON des expériences (description, instance, paramètres)
 │   │   └── integration_bench1.json # Configuration de base : les réglages de la 9-intégration sur bench_1
-│   └── results/                # Résultats JSON, un répertoire par jour (AAAA-MM-JJ/)
-├── src/                        # Code source principal
-│   ├── __init__.py
-│   ├── config.py               # Configuration : chemins du projet et des deux modèles (ProjectPaths), MiniZinc (MiniZincConfig)
-│   ├── drivers/                # Points d'entrée des expériences
+│   ├── drivers/                # Scripts de pilotage des expériences
 │   │   ├── __init__.py
 │   │   └── run_experiment.py   # Script d'expériences : configuration JSON → exécution mesurée → résultats JSON et entrée d'EXPLOG.md (étape 10a)
+│   └── results/                # Résultats JSON, un répertoire par jour (AAAA-MM-JJ/)
+├── src/                        # Cœur : modèle, algorithme génétique, mémétique, observabilité
+│   ├── __init__.py
+│   ├── config.py               # Configuration : chemins du projet et des deux modèles (ProjectPaths), MiniZinc (MiniZincConfig)
 │   ├── ga/                     # Algorithme génétique
 │   │   ├── __init__.py
 │   │   ├── chromosome.py       # Génotype : interface Encoding[G], BlockEncoding (gènes BlockGene, ActivityBlock)

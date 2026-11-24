@@ -62,10 +62,10 @@ Pour brancher un composant à vous, deux façons de faire :
 `instance` est le nom d'un fichier de `data/` sans extension ; les clés de `settings` sont les champs de `AssemblySettings` (ci-dessous), et les champs absents gardent leur valeur par défaut. Une clé inconnue ou une valeur du mauvais type est refusée avant toute exécution (`InvalidExperimentConfigError`). Puis, depuis la racine du dépôt :
 
 ```bash
-python -m src.drivers.run_experiment experiments/config/mon_essai.json
+python -m experiments.drivers.run_experiment experiments/config/mon_essai.json
 ```
 
-Le script (`src/drivers/run_experiment.py`) prend trois chemins :
+Le script (`experiments/drivers/run_experiment.py`) prend trois chemins :
 
 | Paramètre | Rôle | Par défaut |
 |---|---|---|

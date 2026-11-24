@@ -1040,3 +1040,15 @@ Aucun changement de comportement. Suite complète verte.
 **Tests** : `tests/test_run_experiment.py`, 29 tests (lecture et validation de la configuration, chemins par défaut, écriture des résultats sans écrasement, journal et mention de l'état Git, et une exécution courte de bout en bout sur bench_1 par la ligne de commande) ; `tests/test_observability.py`, 5 tests de `working_tree_is_dirty` dans un dépôt Git temporaire (propre, fichier modifié, fichier non suivi, modifications seulement dans les chemins exclus, hors d'un dépôt). Suite complète verte.
 
 **Blocage (CI de la PR #13)** : `test_givenBaseConfig_whenLoaded_thenIntegrationSettings` échouait dans la CI (`FileNotFoundError` sur `/app/experiments/config/integration_bench1.json`) : le Dockerfile ne copie que `src/`, `data/` et `tests/`. **Correctif** : `COPY experiments/config/ experiments/config/`. Les résultats et le journal ne sont pas copiés ; pour les produire depuis le conteneur, monter le dépôt. Vérifié en local dans l'image avant de pousser : `OK (skipped=6)`. **Leçon** : un test qui lit un fichier du dépôt hors de `src/`, `data/` et `tests/` demande une ligne `COPY` ; lancer la suite dans Docker (`docker build` puis `docker run`) avant d'ouvrir la PR.
+
+## 2026-11-23 — Étape 10 : `drivers` déplacé de `src/` vers `experiments/` (Pascal)
+
+**Décision (Pascal).** `src/` est le cœur : modèle, algorithme génétique, mémétique, observabilité. `experiments/` contient ce qui sert à l'exploiter : scripts de pilotage (`experiments/drivers/`), scripts d'analyse (`experiments/analysis/`, à venir avec 10b), configurations, résultats et journal. Le cœur ne dépend jamais d'`experiments/` ; l'inverse est la règle.
+
+**Changements.**
+- `src/drivers/` → `experiments/drivers/` (`git mv`, historique conservé) ; `experiments/__init__.py` ajouté, pour que `experiments` soit un paquet.
+- Commande : `python -m experiments.drivers.run_experiment CONFIG [--results-dir] [--log]`. Mise à jour dans le script (docstring, `prog`, en-tête d'EXPLOG.md), dans `tests/test_run_experiment.py`, le README, `docs/HOWTO.md`, l'en-tête d'`experiments/EXPLOG.md`.
+- Dockerfile : copie `experiments/__init__.py`, `experiments/drivers/` et `experiments/config/` ; toujours pas les résultats ni le journal.
+- Arbres de `CLAUDE.md` et `docs/PROJECT_STRUCT.md`, titre de l'étape 10 au TODO ; 10b tranché : le script de tracé ira dans `experiments/analysis/`.
+
+**Validation.** Suite complète verte : 570 tests en local ; 570 tests dans Docker, `OK (skipped=6)`.

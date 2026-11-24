@@ -33,8 +33,11 @@ RUN pip install --no-cache-dir --requirement requirements.txt
 
 COPY src/ src/
 COPY data/ data/
-# Configurations des expériences (étape 10a) : lues par les tests et par run_experiment. Les résultats et le journal
-# ne sont pas copiés : pour les produire depuis le conteneur, monter le dépôt (docker run -v "$PWD":/app ...).
+# Exploitation du cœur : le paquet experiments, ses scripts de pilotage et les configurations (lus par les tests et par
+# run_experiment). Les résultats et le journal ne sont pas copiés : pour les produire depuis le conteneur, monter le
+# dépôt (docker run -v "$PWD":/app ...).
+COPY experiments/__init__.py experiments/
+COPY experiments/drivers/ experiments/drivers/
 COPY experiments/config/ experiments/config/
 COPY tests/ tests/
 
