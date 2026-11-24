@@ -984,3 +984,731 @@ Analyse détaillée : `experiments/analysis/bench2_population.md`.
 
 Script de reproduction : `experiments/analysis/analyze_population.py`.
 
+## 2026-11-24 16:46 — bench2_vois2_s00
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 2, graine 0.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois2_s00.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois2_s00_164605.json`
+- Instance : bench_2 ; graine 0 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 289255 ; propagations 79148485 ; nodes non rapporté ; temps de résolution 46.9 s (non déterministe)
+- Durée de l'exécution : 250.1 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:46 — bench2_vois2_s01
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 2, graine 1.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois2_s01.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois2_s01_164606.json`
+- Instance : bench_2 ; graine 1 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 328030 ; propagations 83970606 ; nodes non rapporté ; temps de résolution 48.8 s (non déterministe)
+- Durée de l'exécution : 252.2 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:46 — bench2_vois2_s02
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 2, graine 2.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois2_s02.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois2_s02_164606.json`
+- Instance : bench_2 ; graine 2 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 254001 ; propagations 74849242 ; nodes non rapporté ; temps de résolution 44.2 s (non déterministe)
+- Durée de l'exécution : 247.7 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:46 — bench2_vois2_s03
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 2, graine 3.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois2_s03.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois2_s03_164606.json`
+- Instance : bench_2 ; graine 3 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 327814 ; propagations 80182584 ; nodes non rapporté ; temps de résolution 48.0 s (non déterministe)
+- Durée de l'exécution : 249.7 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:46 — bench2_vois2_s04
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 2, graine 4.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois2_s04.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois2_s04_164606.json`
+- Instance : bench_2 ; graine 4 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 383202 ; propagations 91932428 ; nodes non rapporté ; temps de résolution 54.2 s (non déterministe)
+- Durée de l'exécution : 256.4 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:46 — bench2_vois2_s05
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 2, graine 5.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois2_s05.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois2_s05_164606.json`
+- Instance : bench_2 ; graine 5 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 277696 ; propagations 77129158 ; nodes non rapporté ; temps de résolution 46.5 s (non déterministe)
+- Durée de l'exécution : 249.1 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:46 — bench2_vois2_s06
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 2, graine 6.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois2_s06.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois2_s06_164607.json`
+- Instance : bench_2 ; graine 6 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 272476 ; propagations 77074438 ; nodes non rapporté ; temps de résolution 46.1 s (non déterministe)
+- Durée de l'exécution : 248.9 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:46 — bench2_vois2_s07
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 2, graine 7.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois2_s07.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois2_s07_164606.json`
+- Instance : bench_2 ; graine 7 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 299417 ; propagations 81155342 ; nodes non rapporté ; temps de résolution 48.9 s (non déterministe)
+- Durée de l'exécution : 252.0 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:46 — bench2_vois2_s08
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 2, graine 8.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois2_s08.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois2_s08_164606.json`
+- Instance : bench_2 ; graine 8 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 326601 ; propagations 84055502 ; nodes non rapporté ; temps de résolution 49.6 s (non déterministe)
+- Durée de l'exécution : 252.5 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:46 — bench2_vois2_s09
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 2, graine 9.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois2_s09.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois2_s09_164606.json`
+- Instance : bench_2 ; graine 9 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 324161 ; propagations 82187865 ; nodes non rapporté ; temps de résolution 49.1 s (non déterministe)
+- Durée de l'exécution : 251.7 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:46 — bench2_vois2_s10
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 2, graine 10.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois2_s10.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois2_s10_164607.json`
+- Instance : bench_2 ; graine 10 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 300361 ; propagations 80790020 ; nodes non rapporté ; temps de résolution 48.3 s (non déterministe)
+- Durée de l'exécution : 251.0 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:46 — bench2_vois2_s11
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 2, graine 11.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois2_s11.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois2_s11_164606.json`
+- Instance : bench_2 ; graine 11 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 282111 ; propagations 80606276 ; nodes non rapporté ; temps de résolution 48.7 s (non déterministe)
+- Durée de l'exécution : 251.7 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:46 — bench2_vois2_s12
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 2, graine 12.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois2_s12.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois2_s12_164606.json`
+- Instance : bench_2 ; graine 12 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 313169 ; propagations 78999640 ; nodes non rapporté ; temps de résolution 46.0 s (non déterministe)
+- Durée de l'exécution : 248.4 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:46 — bench2_vois2_s13
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 2, graine 13.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois2_s13.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois2_s13_164605.json`
+- Instance : bench_2 ; graine 13 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 331805 ; propagations 81150415 ; nodes non rapporté ; temps de résolution 48.6 s (non déterministe)
+- Durée de l'exécution : 250.0 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:46 — bench2_vois2_s14
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 2, graine 14.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois2_s14.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois2_s14_164606.json`
+- Instance : bench_2 ; graine 14 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 266432 ; propagations 77842569 ; nodes non rapporté ; temps de résolution 46.8 s (non déterministe)
+- Durée de l'exécution : 249.6 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:46 — bench2_vois2_s15
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 2, graine 15.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois2_s15.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois2_s15_164606.json`
+- Instance : bench_2 ; graine 15 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 330060 ; propagations 82524095 ; nodes non rapporté ; temps de résolution 48.2 s (non déterministe)
+- Durée de l'exécution : 250.9 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:46 — bench2_vois2_s16
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 2, graine 16.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois2_s16.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois2_s16_164606.json`
+- Instance : bench_2 ; graine 16 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 292519 ; propagations 81134592 ; nodes non rapporté ; temps de résolution 50.2 s (non déterministe)
+- Durée de l'exécution : 252.3 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:46 — bench2_vois2_s17
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 2, graine 17.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois2_s17.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois2_s17_164606.json`
+- Instance : bench_2 ; graine 17 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 308919 ; propagations 81143372 ; nodes non rapporté ; temps de résolution 48.4 s (non déterministe)
+- Durée de l'exécution : 251.8 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:46 — bench2_vois2_s18
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 2, graine 18.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois2_s18.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois2_s18_164606.json`
+- Instance : bench_2 ; graine 18 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 319454 ; propagations 80261113 ; nodes non rapporté ; temps de résolution 46.6 s (non déterministe)
+- Durée de l'exécution : 249.1 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:46 — bench2_vois2_s19
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 2, graine 19.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois2_s19.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois2_s19_164605.json`
+- Instance : bench_2 ; graine 19 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 349114 ; propagations 86720784 ; nodes non rapporté ; temps de résolution 51.4 s (non déterministe)
+- Durée de l'exécution : 253.4 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:50 — bench2_vois2_s20
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 2, graine 20.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois2_s20.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois2_s20_165015.json`
+- Instance : bench_2 ; graine 20 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 316614 ; propagations 87908347 ; nodes non rapporté ; temps de résolution 63.1 s (non déterministe)
+- Durée de l'exécution : 296.9 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:50 — bench2_vois3_s00
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 3, graine 0.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois3_s00.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois3_s00_165016.json`
+- Instance : bench_2 ; graine 0 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 26628444 ; propagations 3855683424 ; nodes non rapporté ; temps de résolution 2623.9 s (non déterministe)
+- Durée de l'exécution : 2849.4 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:50 — bench2_vois3_s01
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 3, graine 1.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois3_s01.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois3_s01_165016.json`
+- Instance : bench_2 ; graine 1 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 28385806 ; propagations 4034044064 ; nodes non rapporté ; temps de résolution 2749.5 s (non déterministe)
+- Durée de l'exécution : 2975.4 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:50 — bench2_vois3_s02
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 3, graine 2.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois3_s02.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois3_s02_165016.json`
+- Instance : bench_2 ; graine 2 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 27847802 ; propagations 4007818009 ; nodes non rapporté ; temps de résolution 2696.7 s (non déterministe)
+- Durée de l'exécution : 2924.5 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:50 — bench2_vois3_s03
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 3, graine 3.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois3_s03.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois3_s03_165017.json`
+- Instance : bench_2 ; graine 3 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 27071074 ; propagations 3916600946 ; nodes non rapporté ; temps de résolution 2680.5 s (non déterministe)
+- Durée de l'exécution : 2907.9 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:50 — bench2_vois3_s04
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 3, graine 4.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois3_s04.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois3_s04_165017.json`
+- Instance : bench_2 ; graine 4 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 28393376 ; propagations 4098206581 ; nodes non rapporté ; temps de résolution 2762.1 s (non déterministe)
+- Durée de l'exécution : 2988.5 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:50 — bench2_vois3_s05
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 3, graine 5.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois3_s05.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois3_s05_165017.json`
+- Instance : bench_2 ; graine 5 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 28201536 ; propagations 4033315998 ; nodes non rapporté ; temps de résolution 2751.5 s (non déterministe)
+- Durée de l'exécution : 2976.3 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:50 — bench2_vois3_s06
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 3, graine 6.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois3_s06.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois3_s06_165017.json`
+- Instance : bench_2 ; graine 6 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 26784151 ; propagations 3876917065 ; nodes non rapporté ; temps de résolution 2641.8 s (non déterministe)
+- Durée de l'exécution : 2868.0 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:50 — bench2_vois3_s07
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 3, graine 7.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois3_s07.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois3_s07_165017.json`
+- Instance : bench_2 ; graine 7 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 27423165 ; propagations 3960506849 ; nodes non rapporté ; temps de résolution 2698.2 s (non déterministe)
+- Durée de l'exécution : 2924.4 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:50 — bench2_vois3_s08
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 3, graine 8.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois3_s08.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois3_s08_165018.json`
+- Instance : bench_2 ; graine 8 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 27832209 ; propagations 3885567379 ; nodes non rapporté ; temps de résolution 2596.9 s (non déterministe)
+- Durée de l'exécution : 2824.2 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:50 — bench2_vois3_s09
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 3, graine 9.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois3_s09.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois3_s09_165019.json`
+- Instance : bench_2 ; graine 9 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 26831157 ; propagations 3917051213 ; nodes non rapporté ; temps de résolution 2699.3 s (non déterministe)
+- Durée de l'exécution : 2924.9 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:50 — bench2_vois3_s10
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 3, graine 10.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois3_s10.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois3_s10_165019.json`
+- Instance : bench_2 ; graine 10 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 28170737 ; propagations 3996738761 ; nodes non rapporté ; temps de résolution 2705.9 s (non déterministe)
+- Durée de l'exécution : 2931.2 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:50 — bench2_vois3_s11
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 3, graine 11.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois3_s11.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois3_s11_165019.json`
+- Instance : bench_2 ; graine 11 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 28016439 ; propagations 4090470500 ; nodes non rapporté ; temps de résolution 2767.1 s (non déterministe)
+- Durée de l'exécution : 2991.7 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:50 — bench2_vois3_s12
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 3, graine 12.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois3_s12.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois3_s12_165019.json`
+- Instance : bench_2 ; graine 12 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 28023522 ; propagations 3865711777 ; nodes non rapporté ; temps de résolution 2634.8 s (non déterministe)
+- Durée de l'exécution : 2860.8 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:50 — bench2_vois3_s13
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 3, graine 13.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois3_s13.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois3_s13_165019.json`
+- Instance : bench_2 ; graine 13 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 26839675 ; propagations 3820709288 ; nodes non rapporté ; temps de résolution 2600.4 s (non déterministe)
+- Durée de l'exécution : 2826.5 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:50 — bench2_vois3_s14
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 3, graine 14.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois3_s14.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois3_s14_165020.json`
+- Instance : bench_2 ; graine 14 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 26787545 ; propagations 3882419415 ; nodes non rapporté ; temps de résolution 2658.1 s (non déterministe)
+- Durée de l'exécution : 2884.5 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:50 — bench2_vois3_s15
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 3, graine 15.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois3_s15.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois3_s15_165020.json`
+- Instance : bench_2 ; graine 15 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 26266358 ; propagations 3730851180 ; nodes non rapporté ; temps de résolution 2554.4 s (non déterministe)
+- Durée de l'exécution : 2781.5 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:50 — bench2_vois3_s16
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 3, graine 16.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois3_s16.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois3_s16_165020.json`
+- Instance : bench_2 ; graine 16 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 29336417 ; propagations 4204445347 ; nodes non rapporté ; temps de résolution 2883.2 s (non déterministe)
+- Durée de l'exécution : 3111.2 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:50 — bench2_vois3_s17
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 3, graine 17.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois3_s17.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois3_s17_165020.json`
+- Instance : bench_2 ; graine 17 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 26866571 ; propagations 3875413557 ; nodes non rapporté ; temps de résolution 2685.2 s (non déterministe)
+- Durée de l'exécution : 2911.4 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:50 — bench2_vois3_s18
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 3, graine 18.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois3_s18.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois3_s18_165024.json`
+- Instance : bench_2 ; graine 18 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 27286914 ; propagations 3961060569 ; nodes non rapporté ; temps de résolution 2710.7 s (non déterministe)
+- Durée de l'exécution : 2934.5 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 16:55 — bench2_vois3_s19
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 3, graine 19.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois3_s19.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois3_s19_165513.json`
+- Instance : bench_2 ; graine 19 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 26857874 ; propagations 3922679482 ; nodes non rapporté ; temps de résolution 2681.2 s (non déterministe)
+- Durée de l'exécution : 2906.3 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 18:46 — bench2_vois3_s20
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 3, graine 20.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois3_s20.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois3_s20_184658.json`
+- Instance : bench_2 ; graine 20 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 26654200 ; propagations 3953738400 ; nodes non rapporté ; temps de résolution 2739.1 s (non déterministe)
+- Durée de l'exécution : 2968.1 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 18:46 — bench2_vois4_s00
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 4, graine 0.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois4_s00.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois4_s00_184659.json`
+- Instance : bench_2 ; graine 0 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 36534927 ; propagations 3686234706 ; nodes non rapporté ; temps de résolution 4693.1 s (non déterministe)
+- Durée de l'exécution : 4923.2 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 18:46 — bench2_vois4_s01
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 4, graine 1.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois4_s01.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois4_s01_184659.json`
+- Instance : bench_2 ; graine 1 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 35117683 ; propagations 3624289928 ; nodes non rapporté ; temps de résolution 4568.8 s (non déterministe)
+- Durée de l'exécution : 4798.4 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 18:46 — bench2_vois4_s02
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 4, graine 2.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois4_s02.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois4_s02_184658.json`
+- Instance : bench_2 ; graine 2 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 36851694 ; propagations 3648527068 ; nodes non rapporté ; temps de résolution 4708.9 s (non déterministe)
+- Durée de l'exécution : 4939.0 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 18:46 — bench2_vois4_s03
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 4, graine 3.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois4_s03.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois4_s03_184659.json`
+- Instance : bench_2 ; graine 3 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 36591727 ; propagations 3663427655 ; nodes non rapporté ; temps de résolution 4647.2 s (non déterministe)
+- Durée de l'exécution : 4878.8 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 18:46 — bench2_vois4_s04
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 4, graine 4.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois4_s04.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois4_s04_184659.json`
+- Instance : bench_2 ; graine 4 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 36252910 ; propagations 3668998604 ; nodes non rapporté ; temps de résolution 4688.3 s (non déterministe)
+- Durée de l'exécution : 4915.2 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 18:46 — bench2_vois4_s05
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 4, graine 5.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois4_s05.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois4_s05_184659.json`
+- Instance : bench_2 ; graine 5 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 37357946 ; propagations 3635215844 ; nodes non rapporté ; temps de résolution 4523.7 s (non déterministe)
+- Durée de l'exécution : 4757.3 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 18:46 — bench2_vois4_s06
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 4, graine 6.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois4_s06.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois4_s06_184659.json`
+- Instance : bench_2 ; graine 6 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 37941857 ; propagations 3733565282 ; nodes non rapporté ; temps de résolution 4760.8 s (non déterministe)
+- Durée de l'exécution : 4987.9 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 18:46 — bench2_vois4_s07
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 4, graine 7.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois4_s07.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois4_s07_184659.json`
+- Instance : bench_2 ; graine 7 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 37719003 ; propagations 3638184426 ; nodes non rapporté ; temps de résolution 4621.6 s (non déterministe)
+- Durée de l'exécution : 4849.7 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 18:46 — bench2_vois4_s08
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 4, graine 8.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois4_s08.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois4_s08_184659.json`
+- Instance : bench_2 ; graine 8 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 37175838 ; propagations 3633379944 ; nodes non rapporté ; temps de résolution 4637.1 s (non déterministe)
+- Durée de l'exécution : 4866.3 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 18:46 — bench2_vois4_s09
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 4, graine 9.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois4_s09.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois4_s09_184659.json`
+- Instance : bench_2 ; graine 9 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 35630861 ; propagations 3625727720 ; nodes non rapporté ; temps de résolution 4552.0 s (non déterministe)
+- Durée de l'exécution : 4781.0 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 18:46 — bench2_vois4_s10
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 4, graine 10.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois4_s10.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois4_s10_184659.json`
+- Instance : bench_2 ; graine 10 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 36552679 ; propagations 3658200647 ; nodes non rapporté ; temps de résolution 4679.6 s (non déterministe)
+- Durée de l'exécution : 4908.4 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 18:46 — bench2_vois4_s11
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 4, graine 11.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois4_s11.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois4_s11_184658.json`
+- Instance : bench_2 ; graine 11 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 36561118 ; propagations 3661840457 ; nodes non rapporté ; temps de résolution 4615.0 s (non déterministe)
+- Durée de l'exécution : 4843.9 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 18:46 — bench2_vois4_s12
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 4, graine 12.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois4_s12.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois4_s12_184659.json`
+- Instance : bench_2 ; graine 12 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 38065614 ; propagations 3711709827 ; nodes non rapporté ; temps de résolution 4739.3 s (non déterministe)
+- Durée de l'exécution : 4966.8 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 18:46 — bench2_vois4_s13
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 4, graine 13.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois4_s13.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois4_s13_184659.json`
+- Instance : bench_2 ; graine 13 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 37023059 ; propagations 3626752788 ; nodes non rapporté ; temps de résolution 4559.1 s (non déterministe)
+- Durée de l'exécution : 4790.4 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 18:46 — bench2_vois4_s14
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 4, graine 14.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois4_s14.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois4_s14_184659.json`
+- Instance : bench_2 ; graine 14 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 36319487 ; propagations 3623225551 ; nodes non rapporté ; temps de résolution 4607.9 s (non déterministe)
+- Durée de l'exécution : 4835.8 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 18:46 — bench2_vois4_s15
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 4, graine 15.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois4_s15.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois4_s15_184659.json`
+- Instance : bench_2 ; graine 15 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 37066590 ; propagations 3686151440 ; nodes non rapporté ; temps de résolution 4721.3 s (non déterministe)
+- Durée de l'exécution : 4949.9 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 18:46 — bench2_vois4_s16
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 4, graine 16.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois4_s16.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois4_s16_184659.json`
+- Instance : bench_2 ; graine 16 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 34480265 ; propagations 3614515794 ; nodes non rapporté ; temps de résolution 4678.0 s (non déterministe)
+- Durée de l'exécution : 4907.1 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 18:46 — bench2_vois4_s17
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 4, graine 17.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois4_s17.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois4_s17_184659.json`
+- Instance : bench_2 ; graine 17 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 36870051 ; propagations 3595851066 ; nodes non rapporté ; temps de résolution 4586.3 s (non déterministe)
+- Durée de l'exécution : 4817.4 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 18:46 — bench2_vois4_s18
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 4, graine 18.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois4_s18.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois4_s18_184659.json`
+- Instance : bench_2 ; graine 18 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 36589526 ; propagations 3650406291 ; nodes non rapporté ; temps de résolution 4659.8 s (non déterministe)
+- Durée de l'exécution : 4889.0 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 19:36 — bench2_vois4_s19
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 4, graine 19.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois4_s19.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois4_s19_193628.json`
+- Instance : bench_2 ; graine 19 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 36909593 ; propagations 3659253013 ; nodes non rapporté ; temps de résolution 3851.7 s (non déterministe)
+- Durée de l'exécution : 4036.9 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 20:06 — bench2_vois4_s20
+
+Comparaison des tailles de voisinage sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 4, graine 20.
+
+- Configuration : `experiments/config/bench2_voisinage/bench2_vois4_s20.json`
+- Résultats : `experiments/results/2026-11-24/bench2_vois4_s20_200618.json`
+- Instance : bench_2 ; graine 20 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 35873624 ; propagations 3632236450 ; nodes non rapporté ; temps de résolution 3390.9 s (non déterministe)
+- Durée de l'exécution : 3548.4 s ; commit `94989faaf4ace2a42ab0059cb5d81d7840ff1b0e`
+
+## 2026-11-24 — Synthese : taille du voisinage sur bench_2
+
+Comparaison de quatre tailles de voisinage avec une population
+de 18, 26 generations, 6 croisements et 6 mutations.
+Chaque configuration est evaluee sur les graines 0 a 20.
+
+Les 21 executions du voisinage 1 sont reutilisees.
+Les 63 autres executions sont nouvelles.
+
+| Voisinage | Optimums | Generation optimale moyenne | Propagations moyennes | Temps solveur moyen (s) |
+|---:|---:|---:|---:|---:|
+| 1 | 21/21 | 4.48 | 5982586 | 4.531 |
+| 2 | 21/21 | 0.76 | 81465089 | 48.990 |
+| 3 | 21/21 | 0 | 3947140467 | 2691.459 |
+| 4 | 21/21 | 0.14 | 3651318786 | 4547.166 |
+
+Toutes les configurations atteignent l'optimum de 38.
+
+Les grands voisinages accelerent la convergence en nombre
+de generations, mais augmentent fortement l'effort du solveur.
+
+Le voisinage 3 atteint systematiquement l'optimum des
+l'initialisation et obtient les meilleurs taux de faisabilite
+apres recherche locale.
+
+Le voisinage 1 est retenu provisoirement pour la suite,
+car il atteint le meme optimum avec un effort cumule
+nettement inferieur sur les executions completes.
+
+Les temps cumules ne mesurent pas directement le temps
+necessaire pour atteindre le premier optimum.
+
+Analyse detaillee : `experiments/analysis/bench2_voisinage.md`.
+
+Script reproductible : `experiments/analysis/analyze_neighborhood.py`.
