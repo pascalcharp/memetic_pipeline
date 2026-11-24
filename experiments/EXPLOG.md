@@ -1712,3 +1712,733 @@ necessaire pour atteindre le premier optimum.
 Analyse detaillee : `experiments/analysis/bench2_voisinage.md`.
 
 Script reproductible : `experiments/analysis/analyze_neighborhood.py`.
+
+## 2026-11-24 21:26 — bench2_stag15_s00
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 15, graine 0.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag15_s00.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag15_s00_212657.json`
+- Instance : bench_2 ; graine 0 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 8133 ; propagations 5841764 ; nodes non rapporté ; temps de résolution 4.5 s (non déterministe)
+- Durée de l'exécution : 200.6 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:26 — bench2_stag15_s01
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 15, graine 1.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag15_s01.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag15_s01_212659.json`
+- Instance : bench_2 ; graine 1 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 8393 ; propagations 6337086 ; nodes non rapporté ; temps de résolution 4.6 s (non déterministe)
+- Durée de l'exécution : 201.8 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:27 — bench2_stag15_s02
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 15, graine 2.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag15_s02.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag15_s02_212700.json`
+- Instance : bench_2 ; graine 2 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 7255 ; propagations 4911207 ; nodes non rapporté ; temps de résolution 3.9 s (non déterministe)
+- Durée de l'exécution : 199.9 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:27 — bench2_stag15_s03
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 15, graine 3.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag15_s03.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag15_s03_212700.json`
+- Instance : bench_2 ; graine 3 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 7558 ; propagations 5485469 ; nodes non rapporté ; temps de résolution 4.2 s (non déterministe)
+- Durée de l'exécution : 201.4 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:27 — bench2_stag15_s04
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 15, graine 4.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag15_s04.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag15_s04_212700.json`
+- Instance : bench_2 ; graine 4 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 6642 ; propagations 4696396 ; nodes non rapporté ; temps de résolution 4.2 s (non déterministe)
+- Durée de l'exécution : 200.7 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:27 — bench2_stag15_s05
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 15, graine 5.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag15_s05.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag15_s05_212700.json`
+- Instance : bench_2 ; graine 5 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 7660 ; propagations 5121550 ; nodes non rapporté ; temps de résolution 4.1 s (non déterministe)
+- Durée de l'exécution : 197.6 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:27 — bench2_stag15_s06
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 15, graine 6.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag15_s06.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag15_s06_212705.json`
+- Instance : bench_2 ; graine 6 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 7768 ; propagations 5057950 ; nodes non rapporté ; temps de résolution 4.1 s (non déterministe)
+- Durée de l'exécution : 199.6 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:27 — bench2_stag15_s07
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 15, graine 7.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag15_s07.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag15_s07_212705.json`
+- Instance : bench_2 ; graine 7 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 7520 ; propagations 5448959 ; nodes non rapporté ; temps de résolution 4.3 s (non déterministe)
+- Durée de l'exécution : 200.8 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:27 — bench2_stag15_s08
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 15, graine 8.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag15_s08.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag15_s08_212705.json`
+- Instance : bench_2 ; graine 8 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 7722 ; propagations 5326670 ; nodes non rapporté ; temps de résolution 4.3 s (non déterministe)
+- Durée de l'exécution : 199.3 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:27 — bench2_stag15_s09
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 15, graine 9.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag15_s09.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag15_s09_212706.json`
+- Instance : bench_2 ; graine 9 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 7136 ; propagations 4427147 ; nodes non rapporté ; temps de résolution 3.9 s (non déterministe)
+- Durée de l'exécution : 199.1 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:27 — bench2_stag15_s10
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 15, graine 10.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag15_s10.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag15_s10_212706.json`
+- Instance : bench_2 ; graine 10 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 7993 ; propagations 5500665 ; nodes non rapporté ; temps de résolution 4.4 s (non déterministe)
+- Durée de l'exécution : 200.7 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:27 — bench2_stag15_s11
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 15, graine 11.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag15_s11.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag15_s11_212707.json`
+- Instance : bench_2 ; graine 11 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 6786 ; propagations 5003899 ; nodes non rapporté ; temps de résolution 4.1 s (non déterministe)
+- Durée de l'exécution : 198.6 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:27 — bench2_stag15_s12
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 15, graine 12.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag15_s12.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag15_s12_212707.json`
+- Instance : bench_2 ; graine 12 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 8364 ; propagations 5663332 ; nodes non rapporté ; temps de résolution 4.5 s (non déterministe)
+- Durée de l'exécution : 201.7 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:27 — bench2_stag15_s13
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 15, graine 13.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag15_s13.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag15_s13_212707.json`
+- Instance : bench_2 ; graine 13 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 8137 ; propagations 5808057 ; nodes non rapporté ; temps de résolution 4.5 s (non déterministe)
+- Durée de l'exécution : 198.8 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:27 — bench2_stag15_s14
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 15, graine 14.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag15_s14.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag15_s14_212707.json`
+- Instance : bench_2 ; graine 14 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 8423 ; propagations 6108780 ; nodes non rapporté ; temps de résolution 4.5 s (non déterministe)
+- Durée de l'exécution : 200.3 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:27 — bench2_stag15_s15
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 15, graine 15.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag15_s15.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag15_s15_212707.json`
+- Instance : bench_2 ; graine 15 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 7532 ; propagations 5363407 ; nodes non rapporté ; temps de résolution 4.2 s (non déterministe)
+- Durée de l'exécution : 199.1 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:27 — bench2_stag15_s16
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 15, graine 16.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag15_s16.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag15_s16_212708.json`
+- Instance : bench_2 ; graine 16 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 8283 ; propagations 5984758 ; nodes non rapporté ; temps de résolution 4.5 s (non déterministe)
+- Durée de l'exécution : 199.2 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:27 — bench2_stag15_s17
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 15, graine 17.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag15_s17.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag15_s17_212708.json`
+- Instance : bench_2 ; graine 17 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 5889 ; propagations 4362082 ; nodes non rapporté ; temps de résolution 3.9 s (non déterministe)
+- Durée de l'exécution : 198.9 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:30 — bench2_stag15_s18
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 15, graine 18.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag15_s18.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag15_s18_213019.json`
+- Instance : bench_2 ; graine 18 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 7939 ; propagations 5421064 ; nodes non rapporté ; temps de résolution 3.5 s (non déterministe)
+- Durée de l'exécution : 155.0 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:30 — bench2_stag15_s19
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 15, graine 19.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag15_s19.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag15_s19_213019.json`
+- Instance : bench_2 ; graine 19 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 7950 ; propagations 5485504 ; nodes non rapporté ; temps de résolution 3.5 s (non déterministe)
+- Durée de l'exécution : 155.1 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:30 — bench2_stag15_s20
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 15, graine 20.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag15_s20.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag15_s20_213021.json`
+- Instance : bench_2 ; graine 20 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 8417 ; propagations 6297485 ; nodes non rapporté ; temps de résolution 3.7 s (non déterministe)
+- Durée de l'exécution : 154.9 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:19 — bench2_stag3_s00
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 3, graine 0.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag3_s00.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag3_s00_211928.json`
+- Instance : bench_2 ; graine 0 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 6 restart(s)
+- **Effort cumulé du solveur** : 588 appels ; failures 11054 ; propagations 9237542 ; nodes non rapporté ; temps de résolution 6.7 s (non déterministe)
+- Durée de l'exécution : 234.2 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:19 — bench2_stag3_s01
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 3, graine 1.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag3_s01.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag3_s01_211929.json`
+- Instance : bench_2 ; graine 1 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 571 appels ; failures 10936 ; propagations 8842743 ; nodes non rapporté ; temps de résolution 6.2 s (non déterministe)
+- Durée de l'exécution : 227.3 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:19 — bench2_stag3_s02
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 3, graine 2.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag3_s02.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag3_s02_211929.json`
+- Instance : bench_2 ; graine 2 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 6 restart(s)
+- **Effort cumulé du solveur** : 588 appels ; failures 10876 ; propagations 8712768 ; nodes non rapporté ; temps de résolution 6.2 s (non déterministe)
+- Durée de l'exécution : 233.3 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:19 — bench2_stag3_s03
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 3, graine 3.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag3_s03.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag3_s03_211928.json`
+- Instance : bench_2 ; graine 3 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 571 appels ; failures 10793 ; propagations 8267214 ; nodes non rapporté ; temps de résolution 5.9 s (non déterministe)
+- Durée de l'exécution : 225.2 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:19 — bench2_stag3_s04
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 3, graine 4.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag3_s04.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag3_s04_211929.json`
+- Instance : bench_2 ; graine 4 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 6 restart(s)
+- **Effort cumulé du solveur** : 588 appels ; failures 11859 ; propagations 8699176 ; nodes non rapporté ; temps de résolution 6.5 s (non déterministe)
+- Durée de l'exécution : 232.9 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:19 — bench2_stag3_s05
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 3, graine 5.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag3_s05.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag3_s05_211928.json`
+- Instance : bench_2 ; graine 5 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 6 restart(s)
+- **Effort cumulé du solveur** : 588 appels ; failures 11462 ; propagations 8496026 ; nodes non rapporté ; temps de résolution 6.3 s (non déterministe)
+- Durée de l'exécution : 233.3 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:19 — bench2_stag3_s06
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 3, graine 6.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag3_s06.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag3_s06_211928.json`
+- Instance : bench_2 ; graine 6 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 571 appels ; failures 10343 ; propagations 8069284 ; nodes non rapporté ; temps de résolution 5.9 s (non déterministe)
+- Durée de l'exécution : 228.1 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:19 — bench2_stag3_s07
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 3, graine 7.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag3_s07.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag3_s07_211928.json`
+- Instance : bench_2 ; graine 7 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 6 restart(s)
+- **Effort cumulé du solveur** : 588 appels ; failures 11790 ; propagations 9328286 ; nodes non rapporté ; temps de résolution 6.8 s (non déterministe)
+- Durée de l'exécution : 233.8 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:19 — bench2_stag3_s08
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 3, graine 8.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag3_s08.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag3_s08_211929.json`
+- Instance : bench_2 ; graine 8 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 6 restart(s)
+- **Effort cumulé du solveur** : 588 appels ; failures 12263 ; propagations 9003349 ; nodes non rapporté ; temps de résolution 6.6 s (non déterministe)
+- Durée de l'exécution : 233.6 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:19 — bench2_stag3_s09
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 3, graine 9.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag3_s09.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag3_s09_211929.json`
+- Instance : bench_2 ; graine 9 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 6 restart(s)
+- **Effort cumulé du solveur** : 588 appels ; failures 11616 ; propagations 8958828 ; nodes non rapporté ; temps de résolution 6.5 s (non déterministe)
+- Durée de l'exécution : 231.8 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:19 — bench2_stag3_s10
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 3, graine 10.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag3_s10.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag3_s10_211928.json`
+- Instance : bench_2 ; graine 10 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 6 restart(s)
+- **Effort cumulé du solveur** : 588 appels ; failures 12459 ; propagations 9362645 ; nodes non rapporté ; temps de résolution 6.9 s (non déterministe)
+- Durée de l'exécution : 233.5 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:19 — bench2_stag3_s11
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 3, graine 11.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag3_s11.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag3_s11_211929.json`
+- Instance : bench_2 ; graine 11 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 571 appels ; failures 11975 ; propagations 9298472 ; nodes non rapporté ; temps de résolution 6.5 s (non déterministe)
+- Durée de l'exécution : 227.7 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:19 — bench2_stag3_s12
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 3, graine 12.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag3_s12.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag3_s12_211928.json`
+- Instance : bench_2 ; graine 12 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 6 restart(s)
+- **Effort cumulé du solveur** : 588 appels ; failures 11069 ; propagations 8384676 ; nodes non rapporté ; temps de résolution 6.2 s (non déterministe)
+- Durée de l'exécution : 232.9 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:19 — bench2_stag3_s13
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 3, graine 13.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag3_s13.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag3_s13_211929.json`
+- Instance : bench_2 ; graine 13 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 6 restart(s)
+- **Effort cumulé du solveur** : 588 appels ; failures 11944 ; propagations 9059915 ; nodes non rapporté ; temps de résolution 6.3 s (non déterministe)
+- Durée de l'exécution : 233.0 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:19 — bench2_stag3_s14
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 3, graine 14.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag3_s14.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag3_s14_211928.json`
+- Instance : bench_2 ; graine 14 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 6 restart(s)
+- **Effort cumulé du solveur** : 588 appels ; failures 12644 ; propagations 9248776 ; nodes non rapporté ; temps de résolution 6.7 s (non déterministe)
+- Durée de l'exécution : 234.6 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:19 — bench2_stag3_s15
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 3, graine 15.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag3_s15.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag3_s15_211929.json`
+- Instance : bench_2 ; graine 15 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 6 restart(s)
+- **Effort cumulé du solveur** : 588 appels ; failures 11469 ; propagations 8974067 ; nodes non rapporté ; temps de résolution 6.6 s (non déterministe)
+- Durée de l'exécution : 233.4 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:19 — bench2_stag3_s16
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 3, graine 16.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag3_s16.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag3_s16_211928.json`
+- Instance : bench_2 ; graine 16 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 571 appels ; failures 11789 ; propagations 8801603 ; nodes non rapporté ; temps de résolution 6.3 s (non déterministe)
+- Durée de l'exécution : 228.6 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:19 — bench2_stag3_s17
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 3, graine 17.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag3_s17.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag3_s17_211928.json`
+- Instance : bench_2 ; graine 17 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 6 restart(s)
+- **Effort cumulé du solveur** : 588 appels ; failures 11350 ; propagations 8749954 ; nodes non rapporté ; temps de résolution 6.4 s (non déterministe)
+- Durée de l'exécution : 234.2 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:19 — bench2_stag3_s18
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 3, graine 18.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag3_s18.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag3_s18_211929.json`
+- Instance : bench_2 ; graine 18 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 6 restart(s)
+- **Effort cumulé du solveur** : 588 appels ; failures 12793 ; propagations 9511121 ; nodes non rapporté ; temps de résolution 6.8 s (non déterministe)
+- Durée de l'exécution : 234.5 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:19 — bench2_stag3_s19
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 3, graine 19.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag3_s19.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag3_s19_211929.json`
+- Instance : bench_2 ; graine 19 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 6 restart(s)
+- **Effort cumulé du solveur** : 588 appels ; failures 12266 ; propagations 9628034 ; nodes non rapporté ; temps de résolution 6.7 s (non déterministe)
+- Durée de l'exécution : 232.8 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:23 — bench2_stag3_s20
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 3, graine 20.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag3_s20.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag3_s20_212315.json`
+- Instance : bench_2 ; graine 20 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 571 appels ; failures 11832 ; propagations 9439417 ; nodes non rapporté ; temps de résolution 6.7 s (non déterministe)
+- Durée de l'exécution : 228.9 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:23 — bench2_stag5_s00
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 5, graine 0.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag5_s00.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag5_s00_212317.json`
+- Instance : bench_2 ; graine 0 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 554 appels ; failures 9830 ; propagations 7504942 ; nodes non rapporté ; temps de résolution 5.7 s (non déterministe)
+- Durée de l'exécution : 221.6 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:23 — bench2_stag5_s01
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 5, graine 1.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag5_s01.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag5_s01_212317.json`
+- Instance : bench_2 ; graine 1 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 3 restart(s)
+- **Effort cumulé du solveur** : 537 appels ; failures 9606 ; propagations 7488890 ; nodes non rapporté ; temps de résolution 5.5 s (non déterministe)
+- Durée de l'exécution : 215.2 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:23 — bench2_stag5_s02
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 5, graine 2.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag5_s02.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag5_s02_212318.json`
+- Instance : bench_2 ; graine 2 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 554 appels ; failures 9359 ; propagations 7303749 ; nodes non rapporté ; temps de résolution 5.6 s (non déterministe)
+- Durée de l'exécution : 220.9 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:23 — bench2_stag5_s03
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 5, graine 3.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag5_s03.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag5_s03_212318.json`
+- Instance : bench_2 ; graine 3 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 3 restart(s)
+- **Effort cumulé du solveur** : 537 appels ; failures 10038 ; propagations 7599306 ; nodes non rapporté ; temps de résolution 5.6 s (non déterministe)
+- Durée de l'exécution : 213.9 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:23 — bench2_stag5_s04
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 5, graine 4.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag5_s04.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag5_s04_212322.json`
+- Instance : bench_2 ; graine 4 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 3 restart(s)
+- **Effort cumulé du solveur** : 537 appels ; failures 9922 ; propagations 7038058 ; nodes non rapporté ; temps de résolution 5.4 s (non déterministe)
+- Durée de l'exécution : 214.4 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:23 — bench2_stag5_s05
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 5, graine 5.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag5_s05.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag5_s05_212322.json`
+- Instance : bench_2 ; graine 5 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 554 appels ; failures 10841 ; propagations 7549489 ; nodes non rapporté ; temps de résolution 5.7 s (non déterministe)
+- Durée de l'exécution : 221.8 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:23 — bench2_stag5_s06
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 5, graine 6.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag5_s06.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag5_s06_212322.json`
+- Instance : bench_2 ; graine 6 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 3 restart(s)
+- **Effort cumulé du solveur** : 537 appels ; failures 9319 ; propagations 6921357 ; nodes non rapporté ; temps de résolution 5.2 s (non déterministe)
+- Durée de l'exécution : 215.8 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:23 — bench2_stag5_s07
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 5, graine 7.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag5_s07.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag5_s07_212323.json`
+- Instance : bench_2 ; graine 7 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 554 appels ; failures 10115 ; propagations 8137927 ; nodes non rapporté ; temps de résolution 6.0 s (non déterministe)
+- Durée de l'exécution : 222.0 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:23 — bench2_stag5_s08
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 5, graine 8.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag5_s08.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag5_s08_212324.json`
+- Instance : bench_2 ; graine 8 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 554 appels ; failures 10522 ; propagations 7630798 ; nodes non rapporté ; temps de résolution 5.7 s (non déterministe)
+- Durée de l'exécution : 221.6 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:23 — bench2_stag5_s09
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 5, graine 9.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag5_s09.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag5_s09_212324.json`
+- Instance : bench_2 ; graine 9 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 554 appels ; failures 9340 ; propagations 7176353 ; nodes non rapporté ; temps de résolution 5.4 s (non déterministe)
+- Durée de l'exécution : 220.4 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:23 — bench2_stag5_s10
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 5, graine 10.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag5_s10.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag5_s10_212324.json`
+- Instance : bench_2 ; graine 10 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 554 appels ; failures 9624 ; propagations 7833069 ; nodes non rapporté ; temps de résolution 5.8 s (non déterministe)
+- Durée de l'exécution : 223.2 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:23 — bench2_stag5_s11
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 5, graine 11.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag5_s11.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag5_s11_212324.json`
+- Instance : bench_2 ; graine 11 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 554 appels ; failures 10577 ; propagations 7518063 ; nodes non rapporté ; temps de résolution 5.8 s (non déterministe)
+- Durée de l'exécution : 221.6 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:23 — bench2_stag5_s12
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 5, graine 12.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag5_s12.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag5_s12_212324.json`
+- Instance : bench_2 ; graine 12 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 554 appels ; failures 10188 ; propagations 7457942 ; nodes non rapporté ; temps de résolution 5.8 s (non déterministe)
+- Durée de l'exécution : 220.6 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:23 — bench2_stag5_s13
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 5, graine 13.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag5_s13.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag5_s13_212324.json`
+- Instance : bench_2 ; graine 13 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 554 appels ; failures 10464 ; propagations 7379360 ; nodes non rapporté ; temps de résolution 5.6 s (non déterministe)
+- Durée de l'exécution : 221.4 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:23 — bench2_stag5_s14
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 5, graine 14.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag5_s14.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag5_s14_212324.json`
+- Instance : bench_2 ; graine 14 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 554 appels ; failures 10261 ; propagations 7533679 ; nodes non rapporté ; temps de résolution 5.7 s (non déterministe)
+- Durée de l'exécution : 221.0 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:23 — bench2_stag5_s15
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 5, graine 15.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag5_s15.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag5_s15_212324.json`
+- Instance : bench_2 ; graine 15 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 3 restart(s)
+- **Effort cumulé du solveur** : 537 appels ; failures 8853 ; propagations 6334036 ; nodes non rapporté ; temps de résolution 4.9 s (non déterministe)
+- Durée de l'exécution : 215.0 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:23 — bench2_stag5_s16
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 5, graine 16.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag5_s16.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag5_s16_212325.json`
+- Instance : bench_2 ; graine 16 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 3 restart(s)
+- **Effort cumulé du solveur** : 537 appels ; failures 10028 ; propagations 7187221 ; nodes non rapporté ; temps de résolution 5.4 s (non déterministe)
+- Durée de l'exécution : 214.5 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:23 — bench2_stag5_s17
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 5, graine 17.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag5_s17.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag5_s17_212325.json`
+- Instance : bench_2 ; graine 17 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 554 appels ; failures 9002 ; propagations 7053604 ; nodes non rapporté ; temps de résolution 5.4 s (non déterministe)
+- Durée de l'exécution : 220.9 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:23 — bench2_stag5_s18
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 5, graine 18.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag5_s18.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag5_s18_212325.json`
+- Instance : bench_2 ; graine 18 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 554 appels ; failures 11080 ; propagations 8056232 ; nodes non rapporté ; temps de résolution 5.9 s (non déterministe)
+- Durée de l'exécution : 221.9 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:26 — bench2_stag5_s19
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 5, graine 19.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag5_s19.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag5_s19_212653.json`
+- Instance : bench_2 ; graine 19 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 554 appels ; failures 11186 ; propagations 8238916 ; nodes non rapporté ; temps de résolution 5.8 s (non déterministe)
+- Durée de l'exécution : 220.2 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 21:26 — bench2_stag5_s20
+
+Comparaison des seuils de stagnation sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 5, graine 20.
+
+- Configuration : `experiments/config/bench2_stagnation/bench2_stag5_s20.json`
+- Résultats : `experiments/results/2026-11-24/bench2_stag5_s20_212654.json`
+- Instance : bench_2 ; graine 20 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 3 restart(s)
+- **Effort cumulé du solveur** : 537 appels ; failures 9680 ; propagations 7346464 ; nodes non rapporté ; temps de résolution 5.5 s (non déterministe)
+- Durée de l'exécution : 214.4 s ; commit `a2ff03f18937a644776a20e33ceccdeebee02b1e`
+
+## 2026-11-24 — Synthese : seuil de stagnation sur bench_2
+
+Comparaison des seuils de stagnation 3, 5, 10 et 15
+avec une population de 18, 26 generations, 6 croisements,
+6 mutations et un voisinage de taille 1.
+
+Chaque configuration est evaluee sur les graines 0 a 20.
+Les 21 executions du seuil 10 sont reutilisees.
+Les 63 autres executions sont nouvelles.
+
+| Seuil | Optimums | Generation optimale moyenne | Redemarrages moyens | Propagations moyennes | Temps solveur moyen (s) |
+|---:|---:|---:|---:|---:|---:|
+| 3 | 21/21 | 5.10 | 5.71 | 8955900 | 6.4581 |
+| 5 | 21/21 | 4.52 | 3.67 | 7442355 | 5.5892 |
+| 10 | 21/21 | 4.48 | 1.67 | 5982586 | 4.531 |
+| 15 | 21/21 | 4.71 | 1 | 5412059 | 4.1674 |
+
+Toutes les configurations atteignent l'optimum de 38.
+
+Les redemarrages frequents augmentent la diversite
+genotypique finale, mais egalement l'effort du solveur,
+sans ameliorer le taux de succes.
+
+Le seuil 10 presente la meilleure convergence moyenne.
+Le seuil 15 presente le plus faible effort cumule.
+
+Le seuil 10 est retenu provisoirement comme compromis
+entre convergence, diversite et effort de resolution.
+
+Les differences de convergence entre les seuils 5,
+10 et 15 restent faibles et leur significativite
+statistique n'est pas etablie.
+
+Analyse detaillee : `experiments/analysis/bench2_stagnation.md`.
+
+Script reproductible : `experiments/analysis/analyze_stagnation.py`.
