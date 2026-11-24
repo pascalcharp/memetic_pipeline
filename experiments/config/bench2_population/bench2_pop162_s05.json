@@ -1,0 +1,13 @@
+{
+  "description": "Comparaison population-generations sur bench_2 : population 162, 2 generations, NR=54, NM=54, budget nominal 486, graine 5.",
+  "instance": "bench_2",
+  "settings": {
+    "population_size": 162,
+    "generations": 2,
+    "crossover_count": 54,
+    "mutation_count": 54,
+    "master_seed": 5,
+    "stagnation_generations": 10,
+    "neighborhood_size": 1
+  }
+}
