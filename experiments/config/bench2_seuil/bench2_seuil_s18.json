@@ -1,0 +1,5 @@
+{
+  "description": "Seuil générationnel sur bench_2 (optimum prouvé 38) : réglages par défaut de l'assemblage (population 6, NR = 2, NM = 2, stagnation 10, voisinage 1), 80 générations, graine 18. On lit la première génération où le meilleur coût atteint 38 dans cost_statistics.",
+  "instance": "bench_2",
+  "settings": {"generations": 80, "master_seed": 18}
+}
