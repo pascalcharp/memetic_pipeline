@@ -1052,3 +1052,15 @@ Aucun changement de comportement. Suite complète verte.
 - Arbres de `CLAUDE.md` et `docs/PROJECT_STRUCT.md`, titre de l'étape 10 au TODO ; 10b tranché : le script de tracé ira dans `experiments/analysis/`.
 
 **Validation.** Suite complète verte : 570 tests en local ; 570 tests dans Docker, `OK (skipped=6)`.
+
+## 2026-11-23 — Étape 10 : seuil générationnel sur bench_2 (Pascal et Claude)
+
+**Question.** Mély a observé qu'une exécution sur bench_2 échoue à 6 générations et réussit à 30. Combien de générations faut-il pour atteindre l'optimum prouvé (38, TP précédent : modèle dur, CP-SAT 8 threads) ?
+
+**Méthode.** 21 graines (0 à 20), réglages par défaut de l'assemblage, 80 générations ; configurations dans `experiments/config/bench2_seuil/`, commitées avant le lancement (`e522073`, copie de travail propre), 6 exécutions en parallèle (CP-SAT monothread sous limite déterministe : le parallélisme ne change pas les résultats). Une exécution par graine suffit : le nombre de générations demandé n'en change pas le début, donc la première génération à 38 est aussi celle d'un essai plus court. Vérifié : les statistiques par génération sont identiques, sur la partie commune, à celles d'essais exploratoires à 6, 40, 60 et 80 générations. Les entrées des exécutions parallèles ont été écrites dans des journaux séparés, puis ajoutées à `EXPLOG.md` dans l'ordre des graines (des ajouts concurrents au même fichier pourraient s'entremêler).
+
+**Résultats** (détail et synthèse dans `experiments/EXPLOG.md`). Les 21 graines atteignent 38, sans seuil net : génération du succès min 2, médiane 8, max 68 ; environ 40 % de succès à 6 générations, 80 % à 30, 100 % à 68. La faisabilité est acquise dès la génération 0 à 4 ; les retards viennent de plateaux à 39 ou 40, longs de 10 à 35 générations, que les restarts (élite gardée) ne débloquent pas vite.
+
+**CP-SAT seul sur bench_2** (mesures hors `run_experiment`, modèle dur) : en monothread, pas de preuve d'optimalité en 200 unités déterministes (environ 150 s de résolution, 240 M propagations, meilleure solution 38, graines 0 et 1) ; avec 8 threads, preuve en 1,0 à 1,5 s, comme au TP. Avec plusieurs threads, CP-SAT ne rapporte les statistiques que d'un seul thread : seul le monothread donne une mesure d'effort comparable. Le mémétique fait 80 générations en 2,5 à 3,8 s de résolution cumulée (3,4 à 4,9 M propagations), sans preuve. Reste à mesurer quand CP-SAT monothread *trouve* 38 (courbes « meilleur coût en fonction de l'effort », au TODO).
+
+**Blocage.** `xargs -I {}` de macOS refuse les commandes de plus de 255 octets (« command line cannot be assembled, too long ») : la première série ne s'est pas lancée. Correctif : `xargs -n 1 sh -c '...' _`, le fichier passé en argument.
