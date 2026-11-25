@@ -1,6 +1,7 @@
 """Tests du script d'expériences ``experiments/drivers/run_experiment.py`` (étape 10a).
 
-Sans MiniZinc : lecture et validation de la configuration, chemins par défaut, écriture des résultats, journal.
+Sans MiniZinc : lecture et validation de la configuration (dont les stratégies choisies par leur nom, étape 10c), chemins
+par défaut, écriture des résultats, journal.
 Avec MiniZinc et CP-SAT (``TestRunExperimentEndToEnd``, quelques secondes) : une exécution complète et courte sur
 bench_1, de la ligne de commande jusqu'au fichier de résultats et à l'entrée d'EXPLOG.md, dans un répertoire
 temporaire.
@@ -30,6 +31,7 @@ from experiments.drivers.run_experiment import (
     write_results,
 )
 from src.memetic.assembly import AssemblyDefaults, AssemblySettings
+from src.memetic.catalog import CatalogDefaults, StrategyChoice, StrategyChoices, StrategyKeys, StrategyNames, StrategyRoles
 from src.observability.collectors import SolverEffortFields
 
 BASE_CONFIG: Path = ProjectPaths.EXPERIMENT_CONFIG_DIR / "integration_bench1.json"
@@ -49,6 +51,8 @@ SHORT_SETTINGS: dict = {
     "generations": 1,
     "master_seed": 3,
 }
+# Exécution réelle : une mutation choisie par son nom, autre que celle de l'assemblage de référence.
+SHORT_STRATEGIES: dict = {StrategyRoles.MUTATION: StrategyNames.BLOCK_BOUNDARY}
 CHILDREN_PER_CROSSOVER: int = 2
 BENCH_1_EMPLOYEES: int = 3
 
@@ -133,6 +137,69 @@ class TestLoadExperimentConfig(unittest.TestCase):
         for key, value in cases.items():
             with self.subTest(key=key):
                 self.assert_invalid(valid_content(**{key: value}), key)
+
+    # --- Stratégies (étape 10c) ---------------------------------------------------------------------------------
+
+    def with_strategies(self, strategies: object) -> dict:
+        return valid_content() | {ConfigKeys.STRATEGIES: strategies}
+
+    def test_givenNoStrategiesKey_whenLoaded_thenReferenceAssemblyStrategies(self) -> None:
+        config = load_experiment_config(write_config(self.root, valid_content()))
+        self.assertEqual(config.strategies, StrategyChoices())
+
+    def test_givenShortForm_whenLoaded_thenChosenNameAndOtherRolesKeepTheirDefault(self) -> None:
+        content = self.with_strategies({StrategyRoles.MUTATION: StrategyNames.ACTIVITY})
+        config = load_experiment_config(write_config(self.root, content))
+        self.assertEqual(config.strategies.mutation, StrategyChoice(StrategyNames.ACTIVITY))
+        self.assertEqual(config.strategies.crossover, StrategyChoice(CatalogDefaults.CROSSOVER))
+
+    def test_givenObjectForm_whenLoaded_thenNameAndParametersAreKept(self) -> None:
+        content = self.with_strategies({
+            StrategyRoles.CROSSOVER: {StrategyKeys.NAME: StrategyNames.UNIFORM_GENE, StrategyKeys.PARAMETERS: {}},
+            StrategyRoles.MUTATION: {StrategyKeys.NAME: StrategyNames.BLOCK_BOUNDARY},
+        })
+        config = load_experiment_config(write_config(self.root, content))
+        self.assertEqual(config.strategies, StrategyChoices(
+            crossover=StrategyChoice(StrategyNames.UNIFORM_GENE), mutation=StrategyChoice(StrategyNames.BLOCK_BOUNDARY)
+        ))
+
+    def test_givenUnknownRole_whenLoaded_thenRaisesWithTheRoleAndTheKnownRoles(self) -> None:
+        self.assert_invalid(self.with_strategies({"selection": "tournoi"}), "selection", StrategyRoles.MUTATION)
+
+    def test_givenUnknownName_whenLoaded_thenRaisesWithTheNameAndTheKnownNames(self) -> None:
+        content = self.with_strategies({StrategyRoles.MUTATION: "mutation_inexistante"})
+        self.assert_invalid(content, StrategyRoles.MUTATION, "mutation_inexistante", StrategyNames.SHIFT_START)
+
+    def test_givenUnexpectedParameter_whenLoaded_thenRaisesWithTheParameter(self) -> None:
+        content = self.with_strategies({StrategyRoles.CROSSOVER: {
+            StrategyKeys.NAME: StrategyNames.UNIFORM_GENE, StrategyKeys.PARAMETERS: {"taux": 0.8},
+        }})
+        self.assert_invalid(content, StrategyRoles.CROSSOVER, "taux")
+
+    def test_givenReservedContextParameter_whenLoaded_thenRaisesWithTheParameter(self) -> None:
+        content = self.with_strategies({StrategyRoles.MUTATION: {
+            StrategyKeys.NAME: StrategyNames.ACTIVITY, StrategyKeys.PARAMETERS: {CatalogDefaults.CONTEXT_PARAMETER: 1},
+        }})
+        self.assert_invalid(content, CatalogDefaults.CONTEXT_PARAMETER)
+
+    def test_givenMalformedStrategies_whenLoaded_thenRaisesWithTheKey(self) -> None:
+        mutation = StrategyRoles.MUTATION
+        cases = {
+            "strategies pas un objet": ([StrategyNames.ACTIVITY], ConfigKeys.STRATEGIES),
+            "choix ni texte ni objet": ({mutation: 3}, mutation),
+            "nom pas un texte": ({mutation: {StrategyKeys.NAME: 3}}, StrategyKeys.NAME),
+            "nom absent": ({mutation: {StrategyKeys.PARAMETERS: {}}}, StrategyKeys.NAME),
+            "paramètres pas un objet": (
+                {mutation: {StrategyKeys.NAME: StrategyNames.ACTIVITY, StrategyKeys.PARAMETERS: [1]}},
+                StrategyKeys.PARAMETERS,
+            ),
+            "clé inconnue dans le choix": (
+                {mutation: {StrategyKeys.NAME: StrategyNames.ACTIVITY, "taux": 1}}, "taux",
+            ),
+        }
+        for case, (strategies, expected) in cases.items():
+            with self.subTest(case=case):
+                self.assert_invalid(self.with_strategies(strategies), expected)
 
     def test_givenNonStringDescriptionOrSettingsNotAnObject_whenLoaded_thenRaises(self) -> None:
         self.assert_invalid(valid_content() | {ConfigKeys.DESCRIPTION: 42}, ConfigKeys.DESCRIPTION)
@@ -240,7 +307,8 @@ class TestRunExperimentEndToEnd(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.directory = tempfile.TemporaryDirectory()
         cls.root = Path(cls.directory.name)
-        config_path = write_config(cls.root, valid_content(**SHORT_SETTINGS))
+        content = valid_content(**SHORT_SETTINGS) | {ConfigKeys.STRATEGIES: SHORT_STRATEGIES}
+        config_path = write_config(cls.root, content)
         cls.log_path = cls.root / "EXPLOG.md"
         results_root = cls.root / "results"
         with mock.patch.object(ExperimentDefaults, "RESULTS_ROOT", results_root), \
@@ -269,6 +337,13 @@ class TestRunExperimentEndToEnd(unittest.TestCase):
             self.assertIn(key, self.document)
         # None hors d'un dépôt Git : c'est le cas dans l'image Docker de la CI, sans git ni .git/.
         self.assertIn(self.document[ResultKeys.GIT_DIRTY], (True, False, None))
+
+    def test_givenChosenStrategies_whenReadingResultsAndLog_thenEveryRoleIsRecorded(self) -> None:
+        expected = StrategyChoices(mutation=StrategyChoice(StrategyNames.BLOCK_BOUNDARY)).to_json()
+        self.assertEqual(self.document[ResultKeys.STRATEGIES], expected)
+        for name in (StrategyNames.UNIFORM_GENE, StrategyNames.BLOCK_BOUNDARY):
+            with self.subTest(name=name):
+                self.assertIn(name, self.log_text)
 
     def test_givenRun_whenReadingTheLog_thenTheGitStateMentionMatchesTheResults(self) -> None:
         self.assertIn(git_state_text(self.document[ResultKeys.GIT_DIRTY]) + "\n", self.log_text)

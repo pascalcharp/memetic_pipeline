@@ -19,6 +19,7 @@ from src.ga.operators import VariationOperator
 from src.ga.registry import (
     DuplicateOperatorError,
     IncompatibleOperatorError,
+    InvalidOperatorParametersError,
     OperatorRegistry,
     RegistryError,
     UnknownOperatorError,
@@ -65,7 +66,8 @@ class TestScaffoldContract(unittest.TestCase):
         self.assertEqual(OperatorRegistry(REGISTRY_NAME).name, REGISTRY_NAME)
 
     def test_givenRegistryErrors_whenCheckingHierarchy_thenEveryErrorIsARegistryError(self) -> None:
-        for error in (DuplicateOperatorError, UnknownOperatorError, IncompatibleOperatorError):
+        for error in (DuplicateOperatorError, UnknownOperatorError, IncompatibleOperatorError,
+                      InvalidOperatorParametersError):
             with self.subTest(error=error.__name__):
                 self.assertTrue(issubclass(error, RegistryError))
 
@@ -172,6 +174,54 @@ class TestRegistryErrors(unittest.TestCase):
     def test_givenUnknownName_whenCreate_thenErrorIsARegistryError(self) -> None:
         with self.assertRaises(RegistryError):
             registry().create(UNKNOWN_NAME)
+
+
+class TestCheckParameters(unittest.TestCase):
+    """``check_parameters`` (étape 10c) : vérifie les paramètres d'une fabrique sans créer l'opérateur, pour qu'une
+    configuration d'expérience soit refusée avant toute exécution."""
+
+    def test_givenValidOrDefaultedParameters_whenCheckParameters_thenPasses(self) -> None:
+        operators = registry()
+        operators.register(SELECTOR_NAME, TournamentSelector)
+        operators.check_parameters(SELECTOR_NAME, size=TOURNAMENT_SIZE)
+        operators.check_parameters(SELECTOR_NAME)
+
+    def test_givenUnexpectedParameter_whenCheckParameters_thenRaisesNamingOperatorRegistryAndParameter(self) -> None:
+        operators = registry()
+        operators.register(SELECTOR_NAME, TournamentSelector)
+        with self.assertRaises(InvalidOperatorParametersError) as context:
+            operators.check_parameters(SELECTOR_NAME, taille_inconnue=TOURNAMENT_SIZE)
+        error = context.exception
+        self.assertEqual(error.operator_name, SELECTOR_NAME)
+        self.assertEqual(error.registry_name, REGISTRY_NAME)
+        for text in (SELECTOR_NAME, REGISTRY_NAME, "taille_inconnue"):
+            self.assertIn(text, str(error))
+
+    def test_givenMissingRequiredParameter_whenCheckParameters_thenRaisesNamingTheParameter(self) -> None:
+        def factory(size: int) -> TournamentSelector:
+            return TournamentSelector(size=size)
+
+        operators = registry()
+        operators.register(SELECTOR_NAME, factory)
+        with self.assertRaises(InvalidOperatorParametersError) as context:
+            operators.check_parameters(SELECTOR_NAME)
+        self.assertIn("size", str(context.exception))
+
+    def test_givenUnknownName_whenCheckParameters_thenRaisesUnknownOperatorError(self) -> None:
+        with self.assertRaises(UnknownOperatorError):
+            registry().check_parameters(UNKNOWN_NAME)
+
+    def test_givenFactory_whenCheckParameters_thenFactoryIsNotCalled(self) -> None:
+        calls: list[int] = []
+
+        def factory(size: int = TOURNAMENT_SIZE) -> TournamentSelector:
+            calls.append(size)
+            return TournamentSelector(size=size)
+
+        operators = registry()
+        operators.register(SELECTOR_NAME, factory)
+        operators.check_parameters(SELECTOR_NAME, size=TOURNAMENT_SIZE)
+        self.assertEqual(calls, [])
 
 
 class TestCheckCompatibility(unittest.TestCase):
