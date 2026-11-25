@@ -3659,3 +3659,276 @@ expériences. Les conclusions restent propres à l'instance étudiée.
 - Script : `experiments/analysis/analyze_ratio.py`
 - Configurations : `experiments/config/bench2_ratio/`
 - Nouvelles exécutions : 42.
+
+## 2026-11-25 20:35 — bench2_validation_s00
+
+Validation de l'architecture configurable sur bench_2 : population 18, 26 generations, NR=3, NM=12, croisement uniform_gene, mutation shift_start, graine 0.
+
+- Configuration : `experiments/config/bench2_validation/bench2_validation_s00.json`
+- Résultats : `experiments/results/2026-11-25/bench2_validation_s00_203516.json`
+- Instance : bench_2 ; graine 0 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 7803 ; propagations 5112379 ; nodes non rapporté ; temps de résolution 4.4 s (non déterministe)
+- Durée de l'exécution : 205.7 s ; commit `c83303203eee69756b04f491783f360f5f882c76`
+
+## 2026-11-25 20:35 — bench2_validation_s01
+
+Validation de l'architecture configurable sur bench_2 : population 18, 26 generations, NR=3, NM=12, croisement uniform_gene, mutation shift_start, graine 1.
+
+- Configuration : `experiments/config/bench2_validation/bench2_validation_s01.json`
+- Résultats : `experiments/results/2026-11-25/bench2_validation_s01_203516.json`
+- Instance : bench_2 ; graine 1 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 6829 ; propagations 4553453 ; nodes non rapporté ; temps de résolution 3.9 s (non déterministe)
+- Durée de l'exécution : 199.0 s ; commit `c83303203eee69756b04f491783f360f5f882c76`
+
+## 2026-11-25 20:35 — bench2_validation_s02
+
+Validation de l'architecture configurable sur bench_2 : population 18, 26 generations, NR=3, NM=12, croisement uniform_gene, mutation shift_start, graine 2.
+
+- Configuration : `experiments/config/bench2_validation/bench2_validation_s02.json`
+- Résultats : `experiments/results/2026-11-25/bench2_validation_s02_203515.json`
+- Instance : bench_2 ; graine 2 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 7323 ; propagations 4925590 ; nodes non rapporté ; temps de résolution 4.1 s (non déterministe)
+- Durée de l'exécution : 205.2 s ; commit `c83303203eee69756b04f491783f360f5f882c76`
+
+## 2026-11-25 20:35 — bench2_validation_s03
+
+Validation de l'architecture configurable sur bench_2 : population 18, 26 generations, NR=3, NM=12, croisement uniform_gene, mutation shift_start, graine 3.
+
+- Configuration : `experiments/config/bench2_validation/bench2_validation_s03.json`
+- Résultats : `experiments/results/2026-11-25/bench2_validation_s03_203515.json`
+- Instance : bench_2 ; graine 3 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 6189 ; propagations 3724284 ; nodes non rapporté ; temps de résolution 3.5 s (non déterministe)
+- Durée de l'exécution : 198.2 s ; commit `c83303203eee69756b04f491783f360f5f882c76`
+
+## 2026-11-25 20:35 — bench2_validation_s04
+
+Validation de l'architecture configurable sur bench_2 : population 18, 26 generations, NR=3, NM=12, croisement uniform_gene, mutation shift_start, graine 4.
+
+- Configuration : `experiments/config/bench2_validation/bench2_validation_s04.json`
+- Résultats : `experiments/results/2026-11-25/bench2_validation_s04_203515.json`
+- Instance : bench_2 ; graine 4 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 6860 ; propagations 4544181 ; nodes non rapporté ; temps de résolution 4.1 s (non déterministe)
+- Durée de l'exécution : 204.9 s ; commit `c83303203eee69756b04f491783f360f5f882c76`
+
+## 2026-11-25 20:35 — bench2_validation_s05
+
+Validation de l'architecture configurable sur bench_2 : population 18, 26 generations, NR=3, NM=12, croisement uniform_gene, mutation shift_start, graine 5.
+
+- Configuration : `experiments/config/bench2_validation/bench2_validation_s05.json`
+- Résultats : `experiments/results/2026-11-25/bench2_validation_s05_203515.json`
+- Instance : bench_2 ; graine 5 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 5647 ; propagations 3618497 ; nodes non rapporté ; temps de résolution 3.3 s (non déterministe)
+- Durée de l'exécution : 198.1 s ; commit `c83303203eee69756b04f491783f360f5f882c76`
+
+## 2026-11-25 20:35 — bench2_validation_s06
+
+Validation de l'architecture configurable sur bench_2 : population 18, 26 generations, NR=3, NM=12, croisement uniform_gene, mutation shift_start, graine 6.
+
+- Configuration : `experiments/config/bench2_validation/bench2_validation_s06.json`
+- Résultats : `experiments/results/2026-11-25/bench2_validation_s06_203515.json`
+- Instance : bench_2 ; graine 6 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 7277 ; propagations 5034749 ; nodes non rapporté ; temps de résolution 4.3 s (non déterministe)
+- Durée de l'exécution : 206.7 s ; commit `c83303203eee69756b04f491783f360f5f882c76`
+
+## 2026-11-25 20:35 — bench2_validation_s07
+
+Validation de l'architecture configurable sur bench_2 : population 18, 26 generations, NR=3, NM=12, croisement uniform_gene, mutation shift_start, graine 7.
+
+- Configuration : `experiments/config/bench2_validation/bench2_validation_s07.json`
+- Résultats : `experiments/results/2026-11-25/bench2_validation_s07_203515.json`
+- Instance : bench_2 ; graine 7 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 6730 ; propagations 4557849 ; nodes non rapporté ; temps de résolution 4.1 s (non déterministe)
+- Durée de l'exécution : 205.4 s ; commit `c83303203eee69756b04f491783f360f5f882c76`
+
+## 2026-11-25 20:35 — bench2_validation_s08
+
+Validation de l'architecture configurable sur bench_2 : population 18, 26 generations, NR=3, NM=12, croisement uniform_gene, mutation shift_start, graine 8.
+
+- Configuration : `experiments/config/bench2_validation/bench2_validation_s08.json`
+- Résultats : `experiments/results/2026-11-25/bench2_validation_s08_203516.json`
+- Instance : bench_2 ; graine 8 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 5830 ; propagations 3852412 ; nodes non rapporté ; temps de résolution 3.7 s (non déterministe)
+- Durée de l'exécution : 198.5 s ; commit `c83303203eee69756b04f491783f360f5f882c76`
+
+## 2026-11-25 20:35 — bench2_validation_s09
+
+Validation de l'architecture configurable sur bench_2 : population 18, 26 generations, NR=3, NM=12, croisement uniform_gene, mutation shift_start, graine 9.
+
+- Configuration : `experiments/config/bench2_validation/bench2_validation_s09.json`
+- Résultats : `experiments/results/2026-11-25/bench2_validation_s09_203516.json`
+- Instance : bench_2 ; graine 9 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 7028 ; propagations 4763969 ; nodes non rapporté ; temps de résolution 4.1 s (non déterministe)
+- Durée de l'exécution : 206.3 s ; commit `c83303203eee69756b04f491783f360f5f882c76`
+
+## 2026-11-25 20:35 — bench2_validation_s10
+
+Validation de l'architecture configurable sur bench_2 : population 18, 26 generations, NR=3, NM=12, croisement uniform_gene, mutation shift_start, graine 10.
+
+- Configuration : `experiments/config/bench2_validation/bench2_validation_s10.json`
+- Résultats : `experiments/results/2026-11-25/bench2_validation_s10_203515.json`
+- Instance : bench_2 ; graine 10 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 7991 ; propagations 5492029 ; nodes non rapporté ; temps de résolution 4.5 s (non déterministe)
+- Durée de l'exécution : 206.3 s ; commit `c83303203eee69756b04f491783f360f5f882c76`
+
+## 2026-11-25 20:35 — bench2_validation_s11
+
+Validation de l'architecture configurable sur bench_2 : population 18, 26 generations, NR=3, NM=12, croisement uniform_gene, mutation shift_start, graine 11.
+
+- Configuration : `experiments/config/bench2_validation/bench2_validation_s11.json`
+- Résultats : `experiments/results/2026-11-25/bench2_validation_s11_203515.json`
+- Instance : bench_2 ; graine 11 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 6353 ; propagations 4183291 ; nodes non rapporté ; temps de résolution 3.9 s (non déterministe)
+- Durée de l'exécution : 205.5 s ; commit `c83303203eee69756b04f491783f360f5f882c76`
+
+## 2026-11-25 20:35 — bench2_validation_s12
+
+Validation de l'architecture configurable sur bench_2 : population 18, 26 generations, NR=3, NM=12, croisement uniform_gene, mutation shift_start, graine 12.
+
+- Configuration : `experiments/config/bench2_validation/bench2_validation_s12.json`
+- Résultats : `experiments/results/2026-11-25/bench2_validation_s12_203515.json`
+- Instance : bench_2 ; graine 12 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 5971 ; propagations 4073492 ; nodes non rapporté ; temps de résolution 3.8 s (non déterministe)
+- Durée de l'exécution : 204.1 s ; commit `c83303203eee69756b04f491783f360f5f882c76`
+
+## 2026-11-25 20:35 — bench2_validation_s13
+
+Validation de l'architecture configurable sur bench_2 : population 18, 26 generations, NR=3, NM=12, croisement uniform_gene, mutation shift_start, graine 13.
+
+- Configuration : `experiments/config/bench2_validation/bench2_validation_s13.json`
+- Résultats : `experiments/results/2026-11-25/bench2_validation_s13_203515.json`
+- Instance : bench_2 ; graine 13 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 6750 ; propagations 4657267 ; nodes non rapporté ; temps de résolution 4.0 s (non déterministe)
+- Durée de l'exécution : 206.3 s ; commit `c83303203eee69756b04f491783f360f5f882c76`
+
+## 2026-11-25 20:35 — bench2_validation_s14
+
+Validation de l'architecture configurable sur bench_2 : population 18, 26 generations, NR=3, NM=12, croisement uniform_gene, mutation shift_start, graine 14.
+
+- Configuration : `experiments/config/bench2_validation/bench2_validation_s14.json`
+- Résultats : `experiments/results/2026-11-25/bench2_validation_s14_203515.json`
+- Instance : bench_2 ; graine 14 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 6446 ; propagations 4406032 ; nodes non rapporté ; temps de résolution 4.1 s (non déterministe)
+- Durée de l'exécution : 206.1 s ; commit `c83303203eee69756b04f491783f360f5f882c76`
+
+## 2026-11-25 20:35 — bench2_validation_s15
+
+Validation de l'architecture configurable sur bench_2 : population 18, 26 generations, NR=3, NM=12, croisement uniform_gene, mutation shift_start, graine 15.
+
+- Configuration : `experiments/config/bench2_validation/bench2_validation_s15.json`
+- Résultats : `experiments/results/2026-11-25/bench2_validation_s15_203516.json`
+- Instance : bench_2 ; graine 15 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 6191 ; propagations 3642661 ; nodes non rapporté ; temps de résolution 3.6 s (non déterministe)
+- Durée de l'exécution : 205.5 s ; commit `c83303203eee69756b04f491783f360f5f882c76`
+
+## 2026-11-25 20:35 — bench2_validation_s16
+
+Validation de l'architecture configurable sur bench_2 : population 18, 26 generations, NR=3, NM=12, croisement uniform_gene, mutation shift_start, graine 16.
+
+- Configuration : `experiments/config/bench2_validation/bench2_validation_s16.json`
+- Résultats : `experiments/results/2026-11-25/bench2_validation_s16_203515.json`
+- Instance : bench_2 ; graine 16 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 7829 ; propagations 4795852 ; nodes non rapporté ; temps de résolution 4.2 s (non déterministe)
+- Durée de l'exécution : 206.0 s ; commit `c83303203eee69756b04f491783f360f5f882c76`
+
+## 2026-11-25 20:35 — bench2_validation_s17
+
+Validation de l'architecture configurable sur bench_2 : population 18, 26 generations, NR=3, NM=12, croisement uniform_gene, mutation shift_start, graine 17.
+
+- Configuration : `experiments/config/bench2_validation/bench2_validation_s17.json`
+- Résultats : `experiments/results/2026-11-25/bench2_validation_s17_203515.json`
+- Instance : bench_2 ; graine 17 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 6703 ; propagations 4824181 ; nodes non rapporté ; temps de résolution 4.1 s (non déterministe)
+- Durée de l'exécution : 206.4 s ; commit `c83303203eee69756b04f491783f360f5f882c76`
+
+## 2026-11-25 20:35 — bench2_validation_s18
+
+Validation de l'architecture configurable sur bench_2 : population 18, 26 generations, NR=3, NM=12, croisement uniform_gene, mutation shift_start, graine 18.
+
+- Configuration : `experiments/config/bench2_validation/bench2_validation_s18.json`
+- Résultats : `experiments/results/2026-11-25/bench2_validation_s18_203515.json`
+- Instance : bench_2 ; graine 18 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 6878 ; propagations 4847615 ; nodes non rapporté ; temps de résolution 4.1 s (non déterministe)
+- Durée de l'exécution : 205.6 s ; commit `c83303203eee69756b04f491783f360f5f882c76`
+
+## 2026-11-25 20:35 — bench2_validation_s19
+
+Validation de l'architecture configurable sur bench_2 : population 18, 26 generations, NR=3, NM=12, croisement uniform_gene, mutation shift_start, graine 19.
+
+- Configuration : `experiments/config/bench2_validation/bench2_validation_s19.json`
+- Résultats : `experiments/results/2026-11-25/bench2_validation_s19_203515.json`
+- Instance : bench_2 ; graine 19 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 6833 ; propagations 4805958 ; nodes non rapporté ; temps de résolution 4.1 s (non déterministe)
+- Durée de l'exécution : 205.7 s ; commit `c83303203eee69756b04f491783f360f5f882c76`
+
+## 2026-11-25 20:38 — bench2_validation_s20
+
+Validation de l'architecture configurable sur bench_2 : population 18, 26 generations, NR=3, NM=12, croisement uniform_gene, mutation shift_start, graine 20.
+
+- Configuration : `experiments/config/bench2_validation/bench2_validation_s20.json`
+- Résultats : `experiments/results/2026-11-25/bench2_validation_s20_203834.json`
+- Instance : bench_2 ; graine 20 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 6221 ; propagations 4172063 ; nodes non rapporté ; temps de résolution 3.1 s (non déterministe)
+- Durée de l'exécution : 155.0 s ; commit `c83303203eee69756b04f491783f360f5f882c76`
+
+## 2026-11-25 — Synthèse : validation des stratégies configurables
+
+Validation de l'architecture introduite à l'étape 10c,
+avec les stratégies uniform_gene et shift_start.
+
+Les 21 nouvelles exécutions reproduisent exactement les
+résultats algorithmiques comparés de la configuration
+NR=3 et NM=12 sur bench_2.
+
+Aucune différence observée dans les solutions, la convergence,
+la diversité, la faisabilité et les compteurs du solveur.
+Les mesures de temps sont exclues de la comparaison.
+
+Cette validation permet de disposer d'une référence pour
+la comparaison des opérateurs de mutation.
+
+- Rapport : `experiments/analysis/bench2_validation.md`
+- Script : `experiments/analysis/analyze_validation.py`
+- Configurations : `experiments/config/bench2_validation/`
+- Nouvelles exécutions : 21.
