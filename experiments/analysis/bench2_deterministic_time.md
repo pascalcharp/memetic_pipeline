@@ -196,4 +196,3 @@ originaux ont toutefois ete conserves et analyses.
 Script d'analyse :
 
     python3 experiments/analysis/analyze_deterministic_time.py
-
