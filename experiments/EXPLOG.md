@@ -3178,3 +3178,484 @@ les journaux temporaires n'etaient plus disponibles.
 Analyse detaillee : `experiments/analysis/bench2_deterministic_time.md`.
 
 Script reproductible : `experiments/analysis/analyze_deterministic_time.py`.
+
+## 2026-11-25 17:31 — bench2_nr3_nm12_s00
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, budget nominal 486, graine 0.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr3_nm12_s00.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr3_nm12_s00_173109.json`
+- Instance : bench_2 ; graine 0 ; population 18, NR = 3, NM = 12, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 7803 ; propagations 5112379 ; nodes non rapporté ; temps de résolution 4.4 s (non déterministe)
+- Durée de l'exécution : 205.6 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:31 — bench2_nr3_nm12_s01
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, budget nominal 486, graine 1.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr3_nm12_s01.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr3_nm12_s01_173109.json`
+- Instance : bench_2 ; graine 1 ; population 18, NR = 3, NM = 12, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 6829 ; propagations 4553453 ; nodes non rapporté ; temps de résolution 4.0 s (non déterministe)
+- Durée de l'exécution : 199.0 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:31 — bench2_nr3_nm12_s02
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, budget nominal 486, graine 2.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr3_nm12_s02.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr3_nm12_s02_173108.json`
+- Instance : bench_2 ; graine 2 ; population 18, NR = 3, NM = 12, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 7323 ; propagations 4925590 ; nodes non rapporté ; temps de résolution 4.2 s (non déterministe)
+- Durée de l'exécution : 205.7 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:31 — bench2_nr3_nm12_s03
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, budget nominal 486, graine 3.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr3_nm12_s03.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr3_nm12_s03_173109.json`
+- Instance : bench_2 ; graine 3 ; population 18, NR = 3, NM = 12, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 6189 ; propagations 3724284 ; nodes non rapporté ; temps de résolution 3.6 s (non déterministe)
+- Durée de l'exécution : 196.6 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:31 — bench2_nr3_nm12_s04
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, budget nominal 486, graine 4.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr3_nm12_s04.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr3_nm12_s04_173109.json`
+- Instance : bench_2 ; graine 4 ; population 18, NR = 3, NM = 12, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 6860 ; propagations 4544181 ; nodes non rapporté ; temps de résolution 4.1 s (non déterministe)
+- Durée de l'exécution : 205.5 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:31 — bench2_nr3_nm12_s05
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, budget nominal 486, graine 5.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr3_nm12_s05.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr3_nm12_s05_173108.json`
+- Instance : bench_2 ; graine 5 ; population 18, NR = 3, NM = 12, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 5647 ; propagations 3618497 ; nodes non rapporté ; temps de résolution 3.3 s (non déterministe)
+- Durée de l'exécution : 198.6 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:31 — bench2_nr3_nm12_s06
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, budget nominal 486, graine 6.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr3_nm12_s06.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr3_nm12_s06_173108.json`
+- Instance : bench_2 ; graine 6 ; population 18, NR = 3, NM = 12, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 7277 ; propagations 5034749 ; nodes non rapporté ; temps de résolution 4.3 s (non déterministe)
+- Durée de l'exécution : 204.5 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:31 — bench2_nr3_nm12_s07
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, budget nominal 486, graine 7.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr3_nm12_s07.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr3_nm12_s07_173109.json`
+- Instance : bench_2 ; graine 7 ; population 18, NR = 3, NM = 12, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 6730 ; propagations 4557849 ; nodes non rapporté ; temps de résolution 4.1 s (non déterministe)
+- Durée de l'exécution : 210.0 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:31 — bench2_nr3_nm12_s08
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, budget nominal 486, graine 8.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr3_nm12_s08.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr3_nm12_s08_173109.json`
+- Instance : bench_2 ; graine 8 ; population 18, NR = 3, NM = 12, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 5830 ; propagations 3852412 ; nodes non rapporté ; temps de résolution 3.6 s (non déterministe)
+- Durée de l'exécution : 197.9 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:31 — bench2_nr3_nm12_s09
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, budget nominal 486, graine 9.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr3_nm12_s09.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr3_nm12_s09_173108.json`
+- Instance : bench_2 ; graine 9 ; population 18, NR = 3, NM = 12, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 7028 ; propagations 4763969 ; nodes non rapporté ; temps de résolution 4.1 s (non déterministe)
+- Durée de l'exécution : 205.8 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:31 — bench2_nr3_nm12_s10
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, budget nominal 486, graine 10.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr3_nm12_s10.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr3_nm12_s10_173108.json`
+- Instance : bench_2 ; graine 10 ; population 18, NR = 3, NM = 12, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 7991 ; propagations 5492029 ; nodes non rapporté ; temps de résolution 4.4 s (non déterministe)
+- Durée de l'exécution : 206.5 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:31 — bench2_nr3_nm12_s11
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, budget nominal 486, graine 11.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr3_nm12_s11.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr3_nm12_s11_173108.json`
+- Instance : bench_2 ; graine 11 ; population 18, NR = 3, NM = 12, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 6353 ; propagations 4183291 ; nodes non rapporté ; temps de résolution 3.9 s (non déterministe)
+- Durée de l'exécution : 205.1 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:31 — bench2_nr3_nm12_s12
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, budget nominal 486, graine 12.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr3_nm12_s12.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr3_nm12_s12_173108.json`
+- Instance : bench_2 ; graine 12 ; population 18, NR = 3, NM = 12, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 5971 ; propagations 4073492 ; nodes non rapporté ; temps de résolution 3.8 s (non déterministe)
+- Durée de l'exécution : 204.7 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:31 — bench2_nr3_nm12_s13
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, budget nominal 486, graine 13.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr3_nm12_s13.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr3_nm12_s13_173108.json`
+- Instance : bench_2 ; graine 13 ; population 18, NR = 3, NM = 12, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 6750 ; propagations 4657267 ; nodes non rapporté ; temps de résolution 4.0 s (non déterministe)
+- Durée de l'exécution : 204.2 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:31 — bench2_nr3_nm12_s14
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, budget nominal 486, graine 14.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr3_nm12_s14.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr3_nm12_s14_173109.json`
+- Instance : bench_2 ; graine 14 ; population 18, NR = 3, NM = 12, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 6446 ; propagations 4406032 ; nodes non rapporté ; temps de résolution 4.2 s (non déterministe)
+- Durée de l'exécution : 208.1 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:31 — bench2_nr3_nm12_s15
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, budget nominal 486, graine 15.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr3_nm12_s15.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr3_nm12_s15_173108.json`
+- Instance : bench_2 ; graine 15 ; population 18, NR = 3, NM = 12, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 6191 ; propagations 3642661 ; nodes non rapporté ; temps de résolution 3.7 s (non déterministe)
+- Durée de l'exécution : 204.7 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:31 — bench2_nr3_nm12_s16
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, budget nominal 486, graine 16.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr3_nm12_s16.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr3_nm12_s16_173108.json`
+- Instance : bench_2 ; graine 16 ; population 18, NR = 3, NM = 12, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 7829 ; propagations 4795852 ; nodes non rapporté ; temps de résolution 4.1 s (non déterministe)
+- Durée de l'exécution : 205.4 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:31 — bench2_nr3_nm12_s17
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, budget nominal 486, graine 17.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr3_nm12_s17.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr3_nm12_s17_173108.json`
+- Instance : bench_2 ; graine 17 ; population 18, NR = 3, NM = 12, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 6703 ; propagations 4824181 ; nodes non rapporté ; temps de résolution 4.1 s (non déterministe)
+- Durée de l'exécution : 205.6 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:31 — bench2_nr3_nm12_s18
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, budget nominal 486, graine 18.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr3_nm12_s18.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr3_nm12_s18_173109.json`
+- Instance : bench_2 ; graine 18 ; population 18, NR = 3, NM = 12, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 6878 ; propagations 4847615 ; nodes non rapporté ; temps de résolution 4.1 s (non déterministe)
+- Durée de l'exécution : 204.8 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:31 — bench2_nr3_nm12_s19
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, budget nominal 486, graine 19.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr3_nm12_s19.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr3_nm12_s19_173109.json`
+- Instance : bench_2 ; graine 19 ; population 18, NR = 3, NM = 12, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 6833 ; propagations 4805958 ; nodes non rapporté ; temps de résolution 4.1 s (non déterministe)
+- Durée de l'exécution : 206.0 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:34 — bench2_nr3_nm12_s20
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, budget nominal 486, graine 20.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr3_nm12_s20.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr3_nm12_s20_173426.json`
+- Instance : bench_2 ; graine 20 ; population 18, NR = 3, NM = 12, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 6221 ; propagations 4172063 ; nodes non rapporté ; temps de résolution 4.0 s (non déterministe)
+- Durée de l'exécution : 206.0 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:34 — bench2_nr8_nm2_s00
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=8, NM=2, budget nominal 486, graine 0.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr8_nm2_s00.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr8_nm2_s00_173428.json`
+- Instance : bench_2 ; graine 0 ; population 18, NR = 8, NM = 2, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 9826 ; propagations 7481201 ; nodes non rapporté ; temps de résolution 5.6 s (non déterministe)
+- Durée de l'exécution : 213.5 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:34 — bench2_nr8_nm2_s01
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=8, NM=2, budget nominal 486, graine 1.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr8_nm2_s01.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr8_nm2_s01_173428.json`
+- Instance : bench_2 ; graine 1 ; population 18, NR = 8, NM = 2, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 9847 ; propagations 7334199 ; nodes non rapporté ; temps de résolution 5.4 s (non déterministe)
+- Durée de l'exécution : 213.6 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:34 — bench2_nr8_nm2_s02
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=8, NM=2, budget nominal 486, graine 2.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr8_nm2_s02.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr8_nm2_s02_173429.json`
+- Instance : bench_2 ; graine 2 ; population 18, NR = 8, NM = 2, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 10060 ; propagations 6864703 ; nodes non rapporté ; temps de résolution 5.0 s (non déterministe)
+- Durée de l'exécution : 207.8 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:34 — bench2_nr8_nm2_s03
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=8, NM=2, budget nominal 486, graine 3.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr8_nm2_s03.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr8_nm2_s03_173433.json`
+- Instance : bench_2 ; graine 3 ; population 18, NR = 8, NM = 2, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 7482 ; propagations 4908161 ; nodes non rapporté ; temps de résolution 4.1 s (non déterministe)
+- Durée de l'exécution : 205.7 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:34 — bench2_nr8_nm2_s04
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=8, NM=2, budget nominal 486, graine 4.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr8_nm2_s04.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr8_nm2_s04_173434.json`
+- Instance : bench_2 ; graine 4 ; population 18, NR = 8, NM = 2, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 9808 ; propagations 6969070 ; nodes non rapporté ; temps de résolution 5.4 s (non déterministe)
+- Durée de l'exécution : 214.6 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:34 — bench2_nr8_nm2_s05
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=8, NM=2, budget nominal 486, graine 5.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr8_nm2_s05.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr8_nm2_s05_173434.json`
+- Instance : bench_2 ; graine 5 ; population 18, NR = 8, NM = 2, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 8617 ; propagations 5944199 ; nodes non rapporté ; temps de résolution 4.4 s (non déterministe)
+- Durée de l'exécution : 206.7 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:34 — bench2_nr8_nm2_s06
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=8, NM=2, budget nominal 486, graine 6.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr8_nm2_s06.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr8_nm2_s06_173434.json`
+- Instance : bench_2 ; graine 6 ; population 18, NR = 8, NM = 2, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 11103 ; propagations 7381081 ; nodes non rapporté ; temps de résolution 5.7 s (non déterministe)
+- Durée de l'exécution : 215.7 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:34 — bench2_nr8_nm2_s07
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=8, NM=2, budget nominal 486, graine 7.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr8_nm2_s07.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr8_nm2_s07_173435.json`
+- Instance : bench_2 ; graine 7 ; population 18, NR = 8, NM = 2, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 8613 ; propagations 6630605 ; nodes non rapporté ; temps de résolution 5.3 s (non déterministe)
+- Durée de l'exécution : 207.4 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:34 — bench2_nr8_nm2_s08
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=8, NM=2, budget nominal 486, graine 8.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr8_nm2_s08.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr8_nm2_s08_173435.json`
+- Instance : bench_2 ; graine 8 ; population 18, NR = 8, NM = 2, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 10189 ; propagations 6787308 ; nodes non rapporté ; temps de résolution 5.4 s (non déterministe)
+- Durée de l'exécution : 214.6 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:34 — bench2_nr8_nm2_s09
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=8, NM=2, budget nominal 486, graine 9.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr8_nm2_s09.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr8_nm2_s09_173435.json`
+- Instance : bench_2 ; graine 9 ; population 18, NR = 8, NM = 2, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 10401 ; propagations 7697341 ; nodes non rapporté ; temps de résolution 5.6 s (non déterministe)
+- Durée de l'exécution : 215.5 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:34 — bench2_nr8_nm2_s10
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=8, NM=2, budget nominal 486, graine 10.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr8_nm2_s10.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr8_nm2_s10_173435.json`
+- Instance : bench_2 ; graine 10 ; population 18, NR = 8, NM = 2, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 9321 ; propagations 7057019 ; nodes non rapporté ; temps de résolution 5.4 s (non déterministe)
+- Durée de l'exécution : 213.6 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:34 — bench2_nr8_nm2_s11
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=8, NM=2, budget nominal 486, graine 11.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr8_nm2_s11.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr8_nm2_s11_173435.json`
+- Instance : bench_2 ; graine 11 ; population 18, NR = 8, NM = 2, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 9029 ; propagations 6402980 ; nodes non rapporté ; temps de résolution 4.9 s (non déterministe)
+- Durée de l'exécution : 206.7 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:34 — bench2_nr8_nm2_s12
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=8, NM=2, budget nominal 486, graine 12.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr8_nm2_s12.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr8_nm2_s12_173436.json`
+- Instance : bench_2 ; graine 12 ; population 18, NR = 8, NM = 2, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8444 ; propagations 6665474 ; nodes non rapporté ; temps de résolution 5.2 s (non déterministe)
+- Durée de l'exécution : 213.9 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:34 — bench2_nr8_nm2_s13
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=8, NM=2, budget nominal 486, graine 13.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr8_nm2_s13.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr8_nm2_s13_173436.json`
+- Instance : bench_2 ; graine 13 ; population 18, NR = 8, NM = 2, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 9933 ; propagations 7195911 ; nodes non rapporté ; temps de résolution 5.3 s (non déterministe)
+- Durée de l'exécution : 214.6 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:34 — bench2_nr8_nm2_s14
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=8, NM=2, budget nominal 486, graine 14.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr8_nm2_s14.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr8_nm2_s14_173436.json`
+- Instance : bench_2 ; graine 14 ; population 18, NR = 8, NM = 2, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 10351 ; propagations 7064516 ; nodes non rapporté ; temps de résolution 5.1 s (non déterministe)
+- Durée de l'exécution : 208.0 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:34 — bench2_nr8_nm2_s15
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=8, NM=2, budget nominal 486, graine 15.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr8_nm2_s15.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr8_nm2_s15_173436.json`
+- Instance : bench_2 ; graine 15 ; population 18, NR = 8, NM = 2, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 5881 ; propagations 4066673 ; nodes non rapporté ; temps de résolution 4.0 s (non déterministe)
+- Durée de l'exécution : 206.3 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:34 — bench2_nr8_nm2_s16
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=8, NM=2, budget nominal 486, graine 16.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr8_nm2_s16.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr8_nm2_s16_173436.json`
+- Instance : bench_2 ; graine 16 ; population 18, NR = 8, NM = 2, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 9331 ; propagations 6812091 ; nodes non rapporté ; temps de résolution 5.1 s (non déterministe)
+- Durée de l'exécution : 214.4 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:34 — bench2_nr8_nm2_s17
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=8, NM=2, budget nominal 486, graine 17.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr8_nm2_s17.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr8_nm2_s17_173438.json`
+- Instance : bench_2 ; graine 17 ; population 18, NR = 8, NM = 2, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 9885 ; propagations 6975688 ; nodes non rapporté ; temps de résolution 5.3 s (non déterministe)
+- Durée de l'exécution : 213.2 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:34 — bench2_nr8_nm2_s18
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=8, NM=2, budget nominal 486, graine 18.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr8_nm2_s18.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr8_nm2_s18_173440.json`
+- Instance : bench_2 ; graine 18 ; population 18, NR = 8, NM = 2, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 9967 ; propagations 7510691 ; nodes non rapporté ; temps de résolution 5.4 s (non déterministe)
+- Durée de l'exécution : 213.1 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:37 — bench2_nr8_nm2_s19
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=8, NM=2, budget nominal 486, graine 19.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr8_nm2_s19.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr8_nm2_s19_173754.json`
+- Instance : bench_2 ; graine 19 ; population 18, NR = 8, NM = 2, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 10211 ; propagations 6906295 ; nodes non rapporté ; temps de résolution 4.2 s (non déterministe)
+- Durée de l'exécution : 155.1 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 17:37 — bench2_nr8_nm2_s20
+
+Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=8, NM=2, budget nominal 486, graine 20.
+
+- Configuration : `experiments/config/bench2_ratio/bench2_nr8_nm2_s20.json`
+- Résultats : `experiments/results/2026-11-25/bench2_nr8_nm2_s20_173758.json`
+- Instance : bench_2 ; graine 20 ; population 18, NR = 8, NM = 2, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 11156 ; propagations 8385743 ; nodes non rapporté ; temps de résolution 4.6 s (non déterministe)
+- Durée de l'exécution : 159.4 s ; commit `38872e8ac23f13594d8ddff86337d26072c27e93`
+
+## 2026-11-25 — Synthèse : ratio croisement-mutation sur bench_2
+
+Comparaison de trois couples (NR, NM) : (3, 12), (6, 6) et (8, 2),
+avec un budget nominal constant de 486 individus et 21 graines
+par configuration.
+
+Les trois configurations atteignent systématiquement l'optimum 38.
+Le couple (3, 12) réduit de 24,7 % le nombre moyen de propagations
+par rapport à la référence (6, 6), avec une convergence moyenne
+légèrement meilleure.
+
+Le couple (3, 12) est retenu provisoirement pour la suite des
+expériences. Les conclusions restent propres à l'instance étudiée.
+
+- Analyse : `experiments/analysis/bench2_ratio.md`
+- Script : `experiments/analysis/analyze_ratio.py`
+- Configurations : `experiments/config/bench2_ratio/`
+- Nouvelles exécutions : 42.
