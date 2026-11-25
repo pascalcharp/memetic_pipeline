@@ -2442,3 +2442,739 @@ statistique n'est pas etablie.
 Analyse detaillee : `experiments/analysis/bench2_stagnation.md`.
 
 Script reproductible : `experiments/analysis/analyze_stagnation.py`.
+
+<!-- Entrees reconstruites a partir des JSON originaux avec la fonction officielle explog_entry. -->
+
+## 2026-11-24 22:09 — bench2_dt10_s00
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 10.0, graine 0.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt10_s00.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt10_s00_220955.json`
+- Instance : bench_2 ; graine 0 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8784 ; propagations 6596583 ; nodes non rapporté ; temps de résolution 5.0 s (non déterministe)
+- Durée de l'exécution : 207.2 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:10 — bench2_dt10_s01
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 10.0, graine 1.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt10_s01.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt10_s01_221000.json`
+- Instance : bench_2 ; graine 1 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 8940 ; propagations 6710191 ; nodes non rapporté ; temps de résolution 4.7 s (non déterministe)
+- Durée de l'exécution : 200.2 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:10 — bench2_dt10_s02
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 10.0, graine 2.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt10_s02.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt10_s02_221001.json`
+- Instance : bench_2 ; graine 2 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8950 ; propagations 5922095 ; nodes non rapporté ; temps de résolution 4.5 s (non déterministe)
+- Durée de l'exécution : 206.7 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:10 — bench2_dt10_s03
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 10.0, graine 3.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt10_s03.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt10_s03_221002.json`
+- Instance : bench_2 ; graine 3 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 7401 ; propagations 5225477 ; nodes non rapporté ; temps de résolution 4.2 s (non déterministe)
+- Durée de l'exécution : 200.9 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:10 — bench2_dt10_s04
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 10.0, graine 4.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt10_s04.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt10_s04_221002.json`
+- Instance : bench_2 ; graine 4 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 7575 ; propagations 5051174 ; nodes non rapporté ; temps de résolution 4.3 s (non déterministe)
+- Durée de l'exécution : 200.8 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:10 — bench2_dt10_s05
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 10.0, graine 5.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt10_s05.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt10_s05_221002.json`
+- Instance : bench_2 ; graine 5 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8436 ; propagations 6244840 ; nodes non rapporté ; temps de résolution 4.7 s (non déterministe)
+- Durée de l'exécution : 209.0 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:10 — bench2_dt10_s06
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 10.0, graine 6.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt10_s06.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt10_s06_221004.json`
+- Instance : bench_2 ; graine 6 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 7277 ; propagations 5001464 ; nodes non rapporté ; temps de résolution 4.3 s (non déterministe)
+- Durée de l'exécution : 200.4 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:10 — bench2_dt10_s07
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 10.0, graine 7.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt10_s07.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt10_s07_221004.json`
+- Instance : bench_2 ; graine 7 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8945 ; propagations 6509362 ; nodes non rapporté ; temps de résolution 4.8 s (non déterministe)
+- Durée de l'exécution : 208.2 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:10 — bench2_dt10_s08
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 10.0, graine 8.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt10_s08.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt10_s08_221004.json`
+- Instance : bench_2 ; graine 8 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8788 ; propagations 6354606 ; nodes non rapporté ; temps de résolution 4.9 s (non déterministe)
+- Durée de l'exécution : 208.6 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:10 — bench2_dt10_s09
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 10.0, graine 9.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt10_s09.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt10_s09_221008.json`
+- Instance : bench_2 ; graine 9 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8118 ; propagations 5414001 ; nodes non rapporté ; temps de résolution 4.3 s (non déterministe)
+- Durée de l'exécution : 205.8 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:10 — bench2_dt10_s10
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 10.0, graine 10.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt10_s10.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt10_s10_221010.json`
+- Instance : bench_2 ; graine 10 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 9532 ; propagations 6757795 ; nodes non rapporté ; temps de résolution 5.1 s (non déterministe)
+- Durée de l'exécution : 208.1 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:10 — bench2_dt10_s11
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 10.0, graine 11.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt10_s11.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt10_s11_221010.json`
+- Instance : bench_2 ; graine 11 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 5939 ; propagations 4069242 ; nodes non rapporté ; temps de résolution 3.7 s (non déterministe)
+- Durée de l'exécution : 199.7 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:10 — bench2_dt10_s12
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 10.0, graine 12.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt10_s12.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt10_s12_221010.json`
+- Instance : bench_2 ; graine 12 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8775 ; propagations 6157587 ; nodes non rapporté ; temps de résolution 4.8 s (non déterministe)
+- Durée de l'exécution : 207.5 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:10 — bench2_dt10_s13
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 10.0, graine 13.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt10_s13.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt10_s13_221010.json`
+- Instance : bench_2 ; graine 13 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 9203 ; propagations 6510006 ; nodes non rapporté ; temps de résolution 4.9 s (non déterministe)
+- Durée de l'exécution : 207.1 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:10 — bench2_dt10_s14
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 10.0, graine 14.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt10_s14.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt10_s14_221011.json`
+- Instance : bench_2 ; graine 14 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 9221 ; propagations 6769722 ; nodes non rapporté ; temps de résolution 5.0 s (non déterministe)
+- Durée de l'exécution : 207.5 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:10 — bench2_dt10_s15
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 10.0, graine 15.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt10_s15.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt10_s15_221011.json`
+- Instance : bench_2 ; graine 15 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 7205 ; propagations 4973883 ; nodes non rapporté ; temps de résolution 4.0 s (non déterministe)
+- Durée de l'exécution : 200.4 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:10 — bench2_dt10_s16
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 10.0, graine 16.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt10_s16.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt10_s16_221012.json`
+- Instance : bench_2 ; graine 16 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 8337 ; propagations 5892877 ; nodes non rapporté ; temps de résolution 4.4 s (non déterministe)
+- Durée de l'exécution : 200.6 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:10 — bench2_dt10_s17
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 10.0, graine 17.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt10_s17.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt10_s17_221012.json`
+- Instance : bench_2 ; graine 17 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8001 ; propagations 5856102 ; nodes non rapporté ; temps de résolution 4.6 s (non déterministe)
+- Durée de l'exécution : 206.4 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:13 — bench2_dt10_s18
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 10.0, graine 18.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt10_s18.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt10_s18_221322.json`
+- Instance : bench_2 ; graine 18 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8893 ; propagations 6357625 ; nodes non rapporté ; temps de résolution 4.0 s (non déterministe)
+- Durée de l'exécution : 162.0 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:13 — bench2_dt10_s19
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 10.0, graine 19.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt10_s19.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt10_s19_221324.json`
+- Instance : bench_2 ; graine 19 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 9625 ; propagations 6731378 ; nodes non rapporté ; temps de résolution 4.1 s (non déterministe)
+- Durée de l'exécution : 161.4 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:13 — bench2_dt10_s20
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 10.0, graine 20.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt10_s20.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt10_s20_221324.json`
+- Instance : bench_2 ; graine 20 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8304 ; propagations 6528298 ; nodes non rapporté ; temps de résolution 4.0 s (non déterministe)
+- Durée de l'exécution : 161.3 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:03 — bench2_dt1_s00
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 1.0, graine 0.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt1_s00.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt1_s00_220314.json`
+- Instance : bench_2 ; graine 0 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8784 ; propagations 6596583 ; nodes non rapporté ; temps de résolution 5.0 s (non déterministe)
+- Durée de l'exécution : 207.0 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:03 — bench2_dt1_s01
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 1.0, graine 1.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt1_s01.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt1_s01_220313.json`
+- Instance : bench_2 ; graine 1 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 8940 ; propagations 6710191 ; nodes non rapporté ; temps de résolution 4.6 s (non déterministe)
+- Durée de l'exécution : 199.7 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:03 — bench2_dt1_s02
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 1.0, graine 2.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt1_s02.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt1_s02_220313.json`
+- Instance : bench_2 ; graine 2 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8950 ; propagations 5922095 ; nodes non rapporté ; temps de résolution 4.5 s (non déterministe)
+- Durée de l'exécution : 207.1 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:03 — bench2_dt1_s03
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 1.0, graine 3.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt1_s03.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt1_s03_220314.json`
+- Instance : bench_2 ; graine 3 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 7401 ; propagations 5225477 ; nodes non rapporté ; temps de résolution 4.2 s (non déterministe)
+- Durée de l'exécution : 198.5 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:03 — bench2_dt1_s04
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 1.0, graine 4.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt1_s04.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt1_s04_220314.json`
+- Instance : bench_2 ; graine 4 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 7575 ; propagations 5051174 ; nodes non rapporté ; temps de résolution 4.4 s (non déterministe)
+- Durée de l'exécution : 199.6 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:03 — bench2_dt1_s05
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 1.0, graine 5.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt1_s05.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt1_s05_220314.json`
+- Instance : bench_2 ; graine 5 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8436 ; propagations 6244840 ; nodes non rapporté ; temps de résolution 4.8 s (non déterministe)
+- Durée de l'exécution : 205.7 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:03 — bench2_dt1_s06
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 1.0, graine 6.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt1_s06.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt1_s06_220314.json`
+- Instance : bench_2 ; graine 6 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 7277 ; propagations 5001464 ; nodes non rapporté ; temps de résolution 4.2 s (non déterministe)
+- Durée de l'exécution : 198.9 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:03 — bench2_dt1_s07
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 1.0, graine 7.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt1_s07.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt1_s07_220313.json`
+- Instance : bench_2 ; graine 7 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8945 ; propagations 6509362 ; nodes non rapporté ; temps de résolution 4.9 s (non déterministe)
+- Durée de l'exécution : 207.7 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:03 — bench2_dt1_s08
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 1.0, graine 8.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt1_s08.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt1_s08_220314.json`
+- Instance : bench_2 ; graine 8 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8788 ; propagations 6354606 ; nodes non rapporté ; temps de résolution 4.9 s (non déterministe)
+- Durée de l'exécution : 207.0 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:03 — bench2_dt1_s09
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 1.0, graine 9.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt1_s09.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt1_s09_220314.json`
+- Instance : bench_2 ; graine 9 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8118 ; propagations 5414001 ; nodes non rapporté ; temps de résolution 4.3 s (non déterministe)
+- Durée de l'exécution : 205.1 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:03 — bench2_dt1_s10
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 1.0, graine 10.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt1_s10.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt1_s10_220314.json`
+- Instance : bench_2 ; graine 10 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 9532 ; propagations 6757795 ; nodes non rapporté ; temps de résolution 5.1 s (non déterministe)
+- Durée de l'exécution : 207.5 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:03 — bench2_dt1_s11
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 1.0, graine 11.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt1_s11.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt1_s11_220313.json`
+- Instance : bench_2 ; graine 11 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 5939 ; propagations 4069242 ; nodes non rapporté ; temps de résolution 3.7 s (non déterministe)
+- Durée de l'exécution : 198.5 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:03 — bench2_dt1_s12
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 1.0, graine 12.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt1_s12.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt1_s12_220314.json`
+- Instance : bench_2 ; graine 12 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8775 ; propagations 6157587 ; nodes non rapporté ; temps de résolution 4.8 s (non déterministe)
+- Durée de l'exécution : 206.4 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:03 — bench2_dt1_s13
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 1.0, graine 13.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt1_s13.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt1_s13_220313.json`
+- Instance : bench_2 ; graine 13 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 9203 ; propagations 6510006 ; nodes non rapporté ; temps de résolution 4.8 s (non déterministe)
+- Durée de l'exécution : 206.8 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:03 — bench2_dt1_s14
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 1.0, graine 14.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt1_s14.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt1_s14_220313.json`
+- Instance : bench_2 ; graine 14 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 9221 ; propagations 6769722 ; nodes non rapporté ; temps de résolution 5.1 s (non déterministe)
+- Durée de l'exécution : 207.6 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:03 — bench2_dt1_s15
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 1.0, graine 15.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt1_s15.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt1_s15_220314.json`
+- Instance : bench_2 ; graine 15 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 7205 ; propagations 4973883 ; nodes non rapporté ; temps de résolution 4.0 s (non déterministe)
+- Durée de l'exécution : 199.2 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:03 — bench2_dt1_s16
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 1.0, graine 16.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt1_s16.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt1_s16_220314.json`
+- Instance : bench_2 ; graine 16 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 8337 ; propagations 5892877 ; nodes non rapporté ; temps de résolution 4.5 s (non déterministe)
+- Durée de l'exécution : 200.2 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:03 — bench2_dt1_s17
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 1.0, graine 17.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt1_s17.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt1_s17_220314.json`
+- Instance : bench_2 ; graine 17 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8001 ; propagations 5856102 ; nodes non rapporté ; temps de résolution 4.7 s (non déterministe)
+- Durée de l'exécution : 207.6 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:03 — bench2_dt1_s18
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 1.0, graine 18.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt1_s18.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt1_s18_220314.json`
+- Instance : bench_2 ; graine 18 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8893 ; propagations 6357625 ; nodes non rapporté ; temps de résolution 5.0 s (non déterministe)
+- Durée de l'exécution : 205.9 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:03 — bench2_dt1_s19
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 1.0, graine 19.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt1_s19.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt1_s19_220314.json`
+- Instance : bench_2 ; graine 19 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 9625 ; propagations 6731378 ; nodes non rapporté ; temps de résolution 5.0 s (non déterministe)
+- Durée de l'exécution : 207.3 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:06 — bench2_dt1_s20
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 1.0, graine 20.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt1_s20.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt1_s20_220633.json`
+- Instance : bench_2 ; graine 20 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8304 ; propagations 6528298 ; nodes non rapporté ; temps de résolution 4.8 s (non déterministe)
+- Durée de l'exécution : 207.6 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:06 — bench2_dt2p5_s00
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 2.5, graine 0.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt2p5_s00.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt2p5_s00_220634.json`
+- Instance : bench_2 ; graine 0 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8784 ; propagations 6596583 ; nodes non rapporté ; temps de résolution 5.0 s (non déterministe)
+- Durée de l'exécution : 207.2 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:06 — bench2_dt2p5_s01
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 2.5, graine 1.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt2p5_s01.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt2p5_s01_220634.json`
+- Instance : bench_2 ; graine 1 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 8940 ; propagations 6710191 ; nodes non rapporté ; temps de résolution 4.7 s (non déterministe)
+- Durée de l'exécution : 200.1 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:06 — bench2_dt2p5_s02
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 2.5, graine 2.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt2p5_s02.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt2p5_s02_220634.json`
+- Instance : bench_2 ; graine 2 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8950 ; propagations 5922095 ; nodes non rapporté ; temps de résolution 4.5 s (non déterministe)
+- Durée de l'exécution : 205.2 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:06 — bench2_dt2p5_s03
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 2.5, graine 3.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt2p5_s03.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt2p5_s03_220634.json`
+- Instance : bench_2 ; graine 3 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 7401 ; propagations 5225477 ; nodes non rapporté ; temps de résolution 4.2 s (non déterministe)
+- Durée de l'exécution : 198.3 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:06 — bench2_dt2p5_s04
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 2.5, graine 4.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt2p5_s04.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt2p5_s04_220635.json`
+- Instance : bench_2 ; graine 4 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 7575 ; propagations 5051174 ; nodes non rapporté ; temps de résolution 4.3 s (non déterministe)
+- Durée de l'exécution : 199.5 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:06 — bench2_dt2p5_s05
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 2.5, graine 5.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt2p5_s05.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt2p5_s05_220635.json`
+- Instance : bench_2 ; graine 5 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8436 ; propagations 6244840 ; nodes non rapporté ; temps de résolution 4.8 s (non déterministe)
+- Durée de l'exécution : 207.6 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:06 — bench2_dt2p5_s06
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 2.5, graine 6.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt2p5_s06.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt2p5_s06_220640.json`
+- Instance : bench_2 ; graine 6 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 7277 ; propagations 5001464 ; nodes non rapporté ; temps de résolution 4.2 s (non déterministe)
+- Durée de l'exécution : 199.8 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:06 — bench2_dt2p5_s07
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 2.5, graine 7.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt2p5_s07.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt2p5_s07_220640.json`
+- Instance : bench_2 ; graine 7 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8945 ; propagations 6509362 ; nodes non rapporté ; temps de résolution 4.9 s (non déterministe)
+- Durée de l'exécution : 208.1 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:06 — bench2_dt2p5_s08
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 2.5, graine 8.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt2p5_s08.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt2p5_s08_220641.json`
+- Instance : bench_2 ; graine 8 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8788 ; propagations 6354606 ; nodes non rapporté ; temps de résolution 4.9 s (non déterministe)
+- Durée de l'exécution : 207.8 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:06 — bench2_dt2p5_s09
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 2.5, graine 9.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt2p5_s09.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt2p5_s09_220641.json`
+- Instance : bench_2 ; graine 9 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8118 ; propagations 5414001 ; nodes non rapporté ; temps de résolution 4.3 s (non déterministe)
+- Durée de l'exécution : 206.1 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:06 — bench2_dt2p5_s10
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 2.5, graine 10.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt2p5_s10.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt2p5_s10_220641.json`
+- Instance : bench_2 ; graine 10 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 9532 ; propagations 6757795 ; nodes non rapporté ; temps de résolution 5.1 s (non déterministe)
+- Durée de l'exécution : 207.9 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:06 — bench2_dt2p5_s11
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 2.5, graine 11.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt2p5_s11.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt2p5_s11_220641.json`
+- Instance : bench_2 ; graine 11 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 5939 ; propagations 4069242 ; nodes non rapporté ; temps de résolution 3.7 s (non déterministe)
+- Durée de l'exécution : 199.9 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:06 — bench2_dt2p5_s12
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 2.5, graine 12.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt2p5_s12.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt2p5_s12_220642.json`
+- Instance : bench_2 ; graine 12 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8775 ; propagations 6157587 ; nodes non rapporté ; temps de résolution 4.8 s (non déterministe)
+- Durée de l'exécution : 207.1 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:06 — bench2_dt2p5_s13
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 2.5, graine 13.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt2p5_s13.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt2p5_s13_220643.json`
+- Instance : bench_2 ; graine 13 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 9203 ; propagations 6510006 ; nodes non rapporté ; temps de résolution 4.9 s (non déterministe)
+- Durée de l'exécution : 207.6 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:06 — bench2_dt2p5_s14
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 2.5, graine 14.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt2p5_s14.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt2p5_s14_220642.json`
+- Instance : bench_2 ; graine 14 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 9221 ; propagations 6769722 ; nodes non rapporté ; temps de résolution 5.0 s (non déterministe)
+- Durée de l'exécution : 208.2 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:06 — bench2_dt2p5_s15
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 2.5, graine 15.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt2p5_s15.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt2p5_s15_220643.json`
+- Instance : bench_2 ; graine 15 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 7205 ; propagations 4973883 ; nodes non rapporté ; temps de résolution 4.0 s (non déterministe)
+- Durée de l'exécution : 200.0 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:06 — bench2_dt2p5_s16
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 2.5, graine 16.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt2p5_s16.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt2p5_s16_220643.json`
+- Instance : bench_2 ; graine 16 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 8337 ; propagations 5892877 ; nodes non rapporté ; temps de résolution 4.4 s (non déterministe)
+- Durée de l'exécution : 199.8 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:06 — bench2_dt2p5_s17
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 2.5, graine 17.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt2p5_s17.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt2p5_s17_220643.json`
+- Instance : bench_2 ; graine 17 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8001 ; propagations 5856102 ; nodes non rapporté ; temps de résolution 4.7 s (non déterministe)
+- Durée de l'exécution : 207.1 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:06 — bench2_dt2p5_s18
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 2.5, graine 18.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt2p5_s18.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt2p5_s18_220643.json`
+- Instance : bench_2 ; graine 18 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8893 ; propagations 6357625 ; nodes non rapporté ; temps de résolution 5.0 s (non déterministe)
+- Durée de l'exécution : 208.1 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:09 — bench2_dt2p5_s19
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 2.5, graine 19.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt2p5_s19.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt2p5_s19_220954.json`
+- Instance : bench_2 ; graine 19 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 9625 ; propagations 6731378 ; nodes non rapporté ; temps de résolution 5.1 s (non déterministe)
+- Durée de l'exécution : 208.5 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 22:09 — bench2_dt2p5_s20
+
+Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 2.5, graine 20.
+
+- Configuration : `experiments/config/bench2_deterministic_time/bench2_dt2p5_s20.json`
+- Résultats : `experiments/results/2026-11-24/bench2_dt2p5_s20_220955.json`
+- Instance : bench_2 ; graine 20 ; population 18, NR = 6, NM = 6, 26 générations
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8304 ; propagations 6528298 ; nodes non rapporté ; temps de résolution 4.8 s (non déterministe)
+- Durée de l'exécution : 208.3 s ; commit `405eb47b22bbad8f6d59d0e7214c5f1788438338`
+
+## 2026-11-24 — Synthese : temps deterministe sur bench_2
+
+Comparaison des budgets deterministes 1, 2.5, 5 et 10
+avec une population de 18, 26 generations, 6 croisements,
+6 mutations, un voisinage de taille 1 et un seuil
+de stagnation de 10.
+
+Chaque configuration est evaluee sur les graines 0 a 20.
+Les 21 executions du budget 5 sont reutilisees.
+Les 63 autres executions sont nouvelles.
+
+| Budget | Optimums | Generation optimale moyenne | Appels moyens | Propagations moyennes | Temps solveur moyen (s) |
+|---:|---:|---:|---:|---:|---:|
+| 1 | 21/21 | 4.48 | 514.33 | 5982586 | 4.6266 |
+| 2.5 | 21/21 | 4.48 | 514.33 | 5982586 | 4.6417 |
+| 5 | 21/21 | 4.48 | 514.33 | 5982586 | 4.5310 |
+| 10 | 21/21 | 4.48 | 514.33 | 5982586 | 4.4983 |
+
+Toutes les configurations atteignent l'optimum de 38.
+
+La comparaison individuelle des 21 graines ne revele
+aucune difference sur les indicateurs compares,
+a l'exception des temps mesures en secondes, exclus
+de cette comparaison.
+
+Le budget deterministe ne semble pas contraignant
+dans les conditions experimentales testees.
+Les motifs d'arret individuels du solveur n'ont
+toutefois pas ete verifies.
+
+Le budget de 5 est conserve provisoirement.
+
+Les 63 entrees individuelles du journal ont ete
+reconstruites a partir des fichiers JSON originaux
+avec la fonction officielle explog_entry, puisque
+les journaux temporaires n'etaient plus disponibles.
+
+Analyse detaillee : `experiments/analysis/bench2_deterministic_time.md`.
+
+Script reproductible : `experiments/analysis/analyze_deterministic_time.py`.
