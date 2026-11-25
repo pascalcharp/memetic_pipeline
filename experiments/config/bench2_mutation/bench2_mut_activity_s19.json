@@ -1,0 +1,17 @@
+{
+  "description": "Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation activity, graine 19.",
+  "instance": "bench_2",
+  "settings": {
+    "population_size": 18,
+    "generations": 26,
+    "crossover_count": 3,
+    "mutation_count": 12,
+    "master_seed": 19,
+    "stagnation_generations": 10,
+    "neighborhood_size": 1
+  },
+  "strategies": {
+    "crossover": "uniform_gene",
+    "mutation": "activity"
+  }
+}
