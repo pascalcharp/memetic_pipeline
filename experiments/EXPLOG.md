@@ -3932,3 +3932,535 @@ la comparaison des opérateurs de mutation.
 - Script : `experiments/analysis/analyze_validation.py`
 - Configurations : `experiments/config/bench2_validation/`
 - Nouvelles exécutions : 21.
+
+## 2026-11-25 20:44 — bench2_mut_block_boundary_s00
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation block_boundary, graine 0.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_block_boundary_s00.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_block_boundary_s00_204456.json`
+- Instance : bench_2 ; graine 0 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `block_boundary`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 7752 ; propagations 4859721 ; nodes non rapporté ; temps de résolution 4.4 s (non déterministe)
+- Durée de l'exécution : 203.9 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:44 — bench2_mut_block_boundary_s01
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation block_boundary, graine 1.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_block_boundary_s01.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_block_boundary_s01_204457.json`
+- Instance : bench_2 ; graine 1 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `block_boundary`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 6439 ; propagations 4319758 ; nodes non rapporté ; temps de résolution 4.0 s (non déterministe)
+- Durée de l'exécution : 206.2 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:44 — bench2_mut_block_boundary_s02
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation block_boundary, graine 2.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_block_boundary_s02.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_block_boundary_s02_204456.json`
+- Instance : bench_2 ; graine 2 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `block_boundary`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 5747 ; propagations 3614163 ; nodes non rapporté ; temps de résolution 3.7 s (non déterministe)
+- Durée de l'exécution : 199.6 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:44 — bench2_mut_block_boundary_s03
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation block_boundary, graine 3.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_block_boundary_s03.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_block_boundary_s03_204456.json`
+- Instance : bench_2 ; graine 3 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `block_boundary`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 6948 ; propagations 4346201 ; nodes non rapporté ; temps de résolution 4.2 s (non déterministe)
+- Durée de l'exécution : 206.1 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:44 — bench2_mut_block_boundary_s04
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation block_boundary, graine 4.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_block_boundary_s04.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_block_boundary_s04_204456.json`
+- Instance : bench_2 ; graine 4 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `block_boundary`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 5373 ; propagations 3542184 ; nodes non rapporté ; temps de résolution 3.5 s (non déterministe)
+- Durée de l'exécution : 199.6 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:44 — bench2_mut_block_boundary_s05
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation block_boundary, graine 5.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_block_boundary_s05.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_block_boundary_s05_204456.json`
+- Instance : bench_2 ; graine 5 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `block_boundary`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 6335 ; propagations 4089048 ; nodes non rapporté ; temps de résolution 3.8 s (non déterministe)
+- Durée de l'exécution : 199.2 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:44 — bench2_mut_block_boundary_s06
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation block_boundary, graine 6.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_block_boundary_s06.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_block_boundary_s06_204456.json`
+- Instance : bench_2 ; graine 6 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `block_boundary`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8040 ; propagations 5088662 ; nodes non rapporté ; temps de résolution 4.4 s (non déterministe)
+- Durée de l'exécution : 206.9 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:44 — bench2_mut_block_boundary_s07
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation block_boundary, graine 7.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_block_boundary_s07.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_block_boundary_s07_204456.json`
+- Instance : bench_2 ; graine 7 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `block_boundary`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 7086 ; propagations 4873842 ; nodes non rapporté ; temps de résolution 4.4 s (non déterministe)
+- Durée de l'exécution : 207.2 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:44 — bench2_mut_block_boundary_s08
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation block_boundary, graine 8.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_block_boundary_s08.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_block_boundary_s08_204456.json`
+- Instance : bench_2 ; graine 8 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `block_boundary`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8275 ; propagations 4954380 ; nodes non rapporté ; temps de résolution 4.5 s (non déterministe)
+- Durée de l'exécution : 206.5 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:44 — bench2_mut_block_boundary_s09
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation block_boundary, graine 9.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_block_boundary_s09.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_block_boundary_s09_204457.json`
+- Instance : bench_2 ; graine 9 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `block_boundary`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 6287 ; propagations 4092846 ; nodes non rapporté ; temps de résolution 4.1 s (non déterministe)
+- Durée de l'exécution : 204.6 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:44 — bench2_mut_block_boundary_s10
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation block_boundary, graine 10.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_block_boundary_s10.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_block_boundary_s10_204457.json`
+- Instance : bench_2 ; graine 10 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `block_boundary`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8133 ; propagations 5387963 ; nodes non rapporté ; temps de résolution 4.4 s (non déterministe)
+- Durée de l'exécution : 206.1 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:44 — bench2_mut_block_boundary_s11
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation block_boundary, graine 11.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_block_boundary_s11.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_block_boundary_s11_204456.json`
+- Instance : bench_2 ; graine 11 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `block_boundary`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 7657 ; propagations 4929705 ; nodes non rapporté ; temps de résolution 4.4 s (non déterministe)
+- Durée de l'exécution : 205.8 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:44 — bench2_mut_block_boundary_s12
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation block_boundary, graine 12.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_block_boundary_s12.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_block_boundary_s12_204456.json`
+- Instance : bench_2 ; graine 12 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `block_boundary`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8087 ; propagations 5124221 ; nodes non rapporté ; temps de résolution 4.6 s (non déterministe)
+- Durée de l'exécution : 206.5 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:44 — bench2_mut_block_boundary_s13
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation block_boundary, graine 13.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_block_boundary_s13.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_block_boundary_s13_204456.json`
+- Instance : bench_2 ; graine 13 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `block_boundary`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 7096 ; propagations 4987058 ; nodes non rapporté ; temps de résolution 4.2 s (non déterministe)
+- Durée de l'exécution : 206.9 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:44 — bench2_mut_block_boundary_s14
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation block_boundary, graine 14.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_block_boundary_s14.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_block_boundary_s14_204456.json`
+- Instance : bench_2 ; graine 14 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `block_boundary`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 6728 ; propagations 4392641 ; nodes non rapporté ; temps de résolution 4.1 s (non déterministe)
+- Durée de l'exécution : 205.9 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:44 — bench2_mut_block_boundary_s15
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation block_boundary, graine 15.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_block_boundary_s15.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_block_boundary_s15_204457.json`
+- Instance : bench_2 ; graine 15 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `block_boundary`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 6109 ; propagations 3680036 ; nodes non rapporté ; temps de résolution 3.8 s (non déterministe)
+- Durée de l'exécution : 198.9 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:44 — bench2_mut_block_boundary_s16
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation block_boundary, graine 16.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_block_boundary_s16.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_block_boundary_s16_204456.json`
+- Instance : bench_2 ; graine 16 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `block_boundary`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8318 ; propagations 5134224 ; nodes non rapporté ; temps de résolution 4.5 s (non déterministe)
+- Durée de l'exécution : 209.3 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:44 — bench2_mut_block_boundary_s17
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation block_boundary, graine 17.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_block_boundary_s17.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_block_boundary_s17_204456.json`
+- Instance : bench_2 ; graine 17 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `block_boundary`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 5329 ; propagations 3208146 ; nodes non rapporté ; temps de résolution 3.5 s (non déterministe)
+- Durée de l'exécution : 198.9 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:44 — bench2_mut_block_boundary_s18
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation block_boundary, graine 18.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_block_boundary_s18.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_block_boundary_s18_204456.json`
+- Instance : bench_2 ; graine 18 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `block_boundary`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 7180 ; propagations 4547709 ; nodes non rapporté ; temps de résolution 4.3 s (non déterministe)
+- Durée de l'exécution : 207.0 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:44 — bench2_mut_block_boundary_s19
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation block_boundary, graine 19.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_block_boundary_s19.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_block_boundary_s19_204456.json`
+- Instance : bench_2 ; graine 19 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `block_boundary`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 7803 ; propagations 4992542 ; nodes non rapporté ; temps de résolution 4.4 s (non déterministe)
+- Durée de l'exécution : 207.5 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:48 — bench2_mut_activity_s00
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation activity, graine 0.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_activity_s00.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_activity_s00_204817.json`
+- Instance : bench_2 ; graine 0 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `activity`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 9180 ; propagations 6313892 ; nodes non rapporté ; temps de résolution 5.1 s (non déterministe)
+- Durée de l'exécution : 207.5 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:48 — bench2_mut_activity_s01
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation activity, graine 1.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_activity_s01.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_activity_s01_204817.json`
+- Instance : bench_2 ; graine 1 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `activity`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 8944 ; propagations 5778809 ; nodes non rapporté ; temps de résolution 4.6 s (non déterministe)
+- Durée de l'exécution : 201.9 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:48 — bench2_mut_activity_s02
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation activity, graine 2.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_activity_s02.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_activity_s02_204817.json`
+- Instance : bench_2 ; graine 2 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `activity`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 9756 ; propagations 6518096 ; nodes non rapporté ; temps de résolution 4.9 s (non déterministe)
+- Durée de l'exécution : 207.0 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:48 — bench2_mut_activity_s03
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation activity, graine 3.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_activity_s03.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_activity_s03_204817.json`
+- Instance : bench_2 ; graine 3 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `activity`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 9390 ; propagations 6545481 ; nodes non rapporté ; temps de résolution 5.1 s (non déterministe)
+- Durée de l'exécution : 208.4 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:48 — bench2_mut_activity_s04
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation activity, graine 4.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_activity_s04.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_activity_s04_204821.json`
+- Instance : bench_2 ; graine 4 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `activity`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 9037 ; propagations 5792064 ; nodes non rapporté ; temps de résolution 4.6 s (non déterministe)
+- Durée de l'exécution : 201.1 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:48 — bench2_mut_activity_s05
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation activity, graine 5.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_activity_s05.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_activity_s05_204822.json`
+- Instance : bench_2 ; graine 5 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `activity`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 9072 ; propagations 5903416 ; nodes non rapporté ; temps de résolution 4.6 s (non déterministe)
+- Durée de l'exécution : 200.0 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:48 — bench2_mut_activity_s06
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation activity, graine 6.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_activity_s06.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_activity_s06_204823.json`
+- Instance : bench_2 ; graine 6 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `activity`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 8011 ; propagations 5728516 ; nodes non rapporté ; temps de résolution 4.4 s (non déterministe)
+- Durée de l'exécution : 202.0 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:48 — bench2_mut_activity_s07
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation activity, graine 7.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_activity_s07.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_activity_s07_204823.json`
+- Instance : bench_2 ; graine 7 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `activity`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 9639 ; propagations 6763826 ; nodes non rapporté ; temps de résolution 5.1 s (non déterministe)
+- Durée de l'exécution : 208.3 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:48 — bench2_mut_activity_s08
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation activity, graine 8.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_activity_s08.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_activity_s08_204823.json`
+- Instance : bench_2 ; graine 8 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `activity`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 9186 ; propagations 6276316 ; nodes non rapporté ; temps de résolution 5.0 s (non déterministe)
+- Durée de l'exécution : 208.4 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:48 — bench2_mut_activity_s09
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation activity, graine 9.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_activity_s09.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_activity_s09_204824.json`
+- Instance : bench_2 ; graine 9 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `activity`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 9418 ; propagations 6471437 ; nodes non rapporté ; temps de résolution 5.0 s (non déterministe)
+- Durée de l'exécution : 208.3 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:48 — bench2_mut_activity_s10
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation activity, graine 10.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_activity_s10.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_activity_s10_204824.json`
+- Instance : bench_2 ; graine 10 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `activity`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 10740 ; propagations 7099225 ; nodes non rapporté ; temps de résolution 5.3 s (non déterministe)
+- Durée de l'exécution : 208.4 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:48 — bench2_mut_activity_s11
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation activity, graine 11.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_activity_s11.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_activity_s11_204824.json`
+- Instance : bench_2 ; graine 11 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `activity`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 8367 ; propagations 5569443 ; nodes non rapporté ; temps de résolution 4.5 s (non déterministe)
+- Durée de l'exécution : 200.6 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:48 — bench2_mut_activity_s12
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation activity, graine 12.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_activity_s12.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_activity_s12_204824.json`
+- Instance : bench_2 ; graine 12 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `activity`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 9656 ; propagations 6511133 ; nodes non rapporté ; temps de résolution 4.9 s (non déterministe)
+- Durée de l'exécution : 207.4 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:48 — bench2_mut_activity_s13
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation activity, graine 13.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_activity_s13.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_activity_s13_204825.json`
+- Instance : bench_2 ; graine 13 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `activity`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8906 ; propagations 5888689 ; nodes non rapporté ; temps de résolution 4.8 s (non déterministe)
+- Durée de l'exécution : 206.8 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:48 — bench2_mut_activity_s14
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation activity, graine 14.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_activity_s14.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_activity_s14_204825.json`
+- Instance : bench_2 ; graine 14 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `activity`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 9749 ; propagations 6457838 ; nodes non rapporté ; temps de résolution 5.1 s (non déterministe)
+- Durée de l'exécution : 207.6 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:48 — bench2_mut_activity_s15
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation activity, graine 15.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_activity_s15.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_activity_s15_204825.json`
+- Instance : bench_2 ; graine 15 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `activity`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 9244 ; propagations 5479272 ; nodes non rapporté ; temps de résolution 4.5 s (non déterministe)
+- Durée de l'exécution : 200.9 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:48 — bench2_mut_activity_s16
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation activity, graine 16.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_activity_s16.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_activity_s16_204825.json`
+- Instance : bench_2 ; graine 16 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `activity`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 9738 ; propagations 5598967 ; nodes non rapporté ; temps de résolution 4.6 s (non déterministe)
+- Durée de l'exécution : 201.8 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:48 — bench2_mut_activity_s17
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation activity, graine 17.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_activity_s17.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_activity_s17_204825.json`
+- Instance : bench_2 ; graine 17 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `activity`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 9896 ; propagations 6262093 ; nodes non rapporté ; temps de résolution 4.9 s (non déterministe)
+- Durée de l'exécution : 207.2 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:48 — bench2_mut_activity_s18
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation activity, graine 18.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_activity_s18.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_activity_s18_204827.json`
+- Instance : bench_2 ; graine 18 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `activity`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 9514 ; propagations 6177342 ; nodes non rapporté ; temps de résolution 4.7 s (non déterministe)
+- Durée de l'exécution : 200.6 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:48 — bench2_mut_block_boundary_s20
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation block_boundary, graine 20.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_block_boundary_s20.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_block_boundary_s20_204816.json`
+- Instance : bench_2 ; graine 20 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `block_boundary`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 6053 ; propagations 4373612 ; nodes non rapporté ; temps de résolution 4.0 s (non déterministe)
+- Durée de l'exécution : 199.9 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:51 — bench2_mut_activity_s19
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation activity, graine 19.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_activity_s19.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_activity_s19_205137.json`
+- Instance : bench_2 ; graine 19 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `activity`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 9254 ; propagations 6469748 ; nodes non rapporté ; temps de résolution 4.1 s (non déterministe)
+- Durée de l'exécution : 152.7 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 20:51 — bench2_mut_activity_s20
+
+Comparaison des operateurs de mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, mutation activity, graine 20.
+
+- Configuration : `experiments/config/bench2_mutation/bench2_mut_activity_s20.json`
+- Résultats : `experiments/results/2026-11-25/bench2_mut_activity_s20_205140.json`
+- Instance : bench_2 ; graine 20 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `activity`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 10178 ; propagations 6046891 ; nodes non rapporté ; temps de résolution 3.8 s (non déterministe)
+- Durée de l'exécution : 151.6 s ; commit `4478121565a0c4317fe59d1034c8ff7a0d2532c8`
+
+## 2026-11-25 — Synthèse : comparaison des opérateurs de mutation sur bench_2
+
+Comparaison de shift_start, block_boundary et activity,
+avec une population de 18, 26 générations, NR=3 et NM=12.
+
+Les trois opérateurs atteignent l'optimum 38 pour les
+21 graines étudiées.
+
+Shift_start et block_boundary présentent une convergence
+moyenne identique et un effort de propagation comparable.
+
+Activity nécessite environ 37.1 % plus de propagations
+que shift_start et converge moins rapidement en moyenne.
+
+Shift_start présente les meilleurs taux de faisabilité
+des mutations avant et après recherche locale.
+
+Shift_start est retenu provisoirement pour la suite.
+Block_boundary demeure une alternative compétitive.
+Aucune supériorité générale ne peut être établie sur
+la base de cette seule instance.
+
+- Rapport : `experiments/analysis/bench2_mutation.md`
+- Script : `experiments/analysis/analyze_mutation.py`
+- Configurations : `experiments/config/bench2_mutation/`
+- Nouvelles exécutions : 42.
+- Exécutions de référence réutilisées : 21.
