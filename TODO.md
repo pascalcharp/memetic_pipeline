@@ -336,3 +336,12 @@ But : voir la convergence, l'effondrement de la diversité et l'effet des restar
 ## Étape 11 — Documentation **(C)**
 - [ ] README : construction Docker, lancement des tests, lancement des expériences
 - [ ] DEVLOG à jour
+
+## Étape 12 — Performance et parallélisme **(P)** — proposition de Pascal, 2026-11-25
+
+### 12-0 — Réutiliser le `minizinc.Model` **(C)** — Pascal et Claude, branche `etape-12-0-modele-reutilise`
+Mesure du 2026-11-25 : chaque appel à `SolverAdapter.solve` lance trois processus `minizinc`. Deux sont des analyses d'interface (`--model-interface-only`, environ 0,14 s chacune), la troisième est la compilation suivie de la résolution. Sur bench_2 avec un voisinage de 1, 97 à 99 % du temps réel d'une exécution se passe hors de CP-SAT. La première analyse vient du `minizinc.Model` neuf créé à chaque appel ; la seconde, du fait que `add_string` efface le cache d'analyse de l'`Instance` (elle reste en place jusqu'à 12-1).
+- [x] `SolverAdapter` construit son `minizinc.Model` une seule fois et le réutilise à chaque `solve` ; l'`Instance` reste neuve à chaque appel (données et contraintes ajoutées propres à l'appel)
+- [x] Tests : une seule analyse d'interface par appel à partir du deuxième appel ; les contraintes et données d'un appel ne fuient pas dans le suivant (un appel insatisfiable, puis un appel sans contrainte : solution) ; deux adaptateurs donnent le même résultat
+- [x] Vérification : une exécution de la série de Mély (`bench2_pop18_s00`) refaite après le changement donne des résultats identiques (tout sauf les durées) ; gain en temps réel mesuré. Fait : identiques ; 249 s → 173 s (−30 %)
+- [ ] Suite (à planifier) : consigner les versions de MiniZinc et de CP-SAT dans le fichier de résultats (voir DEVLOG du 2026-11-25)
