@@ -1,0 +1,14 @@
+{
+  "description": "Comparaison du temps deterministe sur bench_2 : population 18, 26 generations, NR=6, NM=6, voisinage 1, stagnation 10, temps deterministe 1.0, graine 4.",
+  "instance": "bench_2",
+  "settings": {
+    "population_size": 18,
+    "generations": 26,
+    "crossover_count": 6,
+    "mutation_count": 6,
+    "master_seed": 4,
+    "stagnation_generations": 10,
+    "neighborhood_size": 1,
+    "deterministic_time_units": 1.0
+  }
+}
