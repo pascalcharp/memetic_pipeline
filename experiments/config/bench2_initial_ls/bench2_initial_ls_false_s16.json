@@ -1,0 +1,18 @@
+{
+  "description": "Influence de la recherche locale initiale sur bench_2 : population 18, 26 generations, NR=3, NM=12, recherche locale initiale desactivee, graine 16.",
+  "instance": "bench_2",
+  "settings": {
+    "population_size": 18,
+    "generations": 26,
+    "crossover_count": 3,
+    "mutation_count": 12,
+    "master_seed": 16,
+    "stagnation_generations": 10,
+    "neighborhood_size": 1,
+    "initial_local_search": false
+  },
+  "strategies": {
+    "crossover": "uniform_gene",
+    "mutation": "shift_start"
+  }
+}
