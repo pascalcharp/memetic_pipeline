@@ -4464,3 +4464,283 @@ la base de cette seule instance.
 - Configurations : `experiments/config/bench2_mutation/`
 - Nouvelles exécutions : 42.
 - Exécutions de référence réutilisées : 21.
+
+## 2026-11-25 20:59 — bench2_initial_ls_false_s00
+
+Influence de la recherche locale initiale sur bench_2 : population 18, 26 generations, NR=3, NM=12, recherche locale initiale desactivee, graine 0.
+
+- Configuration : `experiments/config/bench2_initial_ls/bench2_initial_ls_false_s00.json`
+- Résultats : `experiments/results/2026-11-25/bench2_initial_ls_false_s00_205941.json`
+- Instance : bench_2 ; graine 0 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 468 appels ; failures 6341 ; propagations 4236861 ; nodes non rapporté ; temps de résolution 3.8 s (non déterministe)
+- Durée de l'exécution : 185.5 s ; commit `9440573a71ce20c9cbfbd68dfe648bc93b005d67`
+
+## 2026-11-25 20:59 — bench2_initial_ls_false_s01
+
+Influence de la recherche locale initiale sur bench_2 : population 18, 26 generations, NR=3, NM=12, recherche locale initiale desactivee, graine 1.
+
+- Configuration : `experiments/config/bench2_initial_ls/bench2_initial_ls_false_s01.json`
+- Résultats : `experiments/results/2026-11-25/bench2_initial_ls_false_s01_205940.json`
+- Instance : bench_2 ; graine 1 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 468 appels ; failures 6132 ; propagations 3793375 ; nodes non rapporté ; temps de résolution 3.6 s (non déterministe)
+- Durée de l'exécution : 184.9 s ; commit `9440573a71ce20c9cbfbd68dfe648bc93b005d67`
+
+## 2026-11-25 20:59 — bench2_initial_ls_false_s02
+
+Influence de la recherche locale initiale sur bench_2 : population 18, 26 generations, NR=3, NM=12, recherche locale initiale desactivee, graine 2.
+
+- Configuration : `experiments/config/bench2_initial_ls/bench2_initial_ls_false_s02.json`
+- Résultats : `experiments/results/2026-11-25/bench2_initial_ls_false_s02_205941.json`
+- Instance : bench_2 ; graine 2 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 468 appels ; failures 4339 ; propagations 3090260 ; nodes non rapporté ; temps de résolution 3.1 s (non déterministe)
+- Durée de l'exécution : 184.6 s ; commit `9440573a71ce20c9cbfbd68dfe648bc93b005d67`
+
+## 2026-11-25 20:59 — bench2_initial_ls_false_s03
+
+Influence de la recherche locale initiale sur bench_2 : population 18, 26 generations, NR=3, NM=12, recherche locale initiale desactivee, graine 3.
+
+- Configuration : `experiments/config/bench2_initial_ls/bench2_initial_ls_false_s03.json`
+- Résultats : `experiments/results/2026-11-25/bench2_initial_ls_false_s03_205941.json`
+- Instance : bench_2 ; graine 3 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 468 appels ; failures 6445 ; propagations 4076101 ; nodes non rapporté ; temps de résolution 3.8 s (non déterministe)
+- Durée de l'exécution : 184.3 s ; commit `9440573a71ce20c9cbfbd68dfe648bc93b005d67`
+
+## 2026-11-25 20:59 — bench2_initial_ls_false_s04
+
+Influence de la recherche locale initiale sur bench_2 : population 18, 26 generations, NR=3, NM=12, recherche locale initiale desactivee, graine 4.
+
+- Configuration : `experiments/config/bench2_initial_ls/bench2_initial_ls_false_s04.json`
+- Résultats : `experiments/results/2026-11-25/bench2_initial_ls_false_s04_205941.json`
+- Instance : bench_2 ; graine 4 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 468 appels ; failures 5120 ; propagations 2961186 ; nodes non rapporté ; temps de résolution 3.1 s (non déterministe)
+- Durée de l'exécution : 184.2 s ; commit `9440573a71ce20c9cbfbd68dfe648bc93b005d67`
+
+## 2026-11-25 20:59 — bench2_initial_ls_false_s05
+
+Influence de la recherche locale initiale sur bench_2 : population 18, 26 generations, NR=3, NM=12, recherche locale initiale desactivee, graine 5.
+
+- Configuration : `experiments/config/bench2_initial_ls/bench2_initial_ls_false_s05.json`
+- Résultats : `experiments/results/2026-11-25/bench2_initial_ls_false_s05_205941.json`
+- Instance : bench_2 ; graine 5 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 468 appels ; failures 5091 ; propagations 3168564 ; nodes non rapporté ; temps de résolution 3.1 s (non déterministe)
+- Durée de l'exécution : 185.2 s ; commit `9440573a71ce20c9cbfbd68dfe648bc93b005d67`
+
+## 2026-11-25 20:59 — bench2_initial_ls_false_s06
+
+Influence de la recherche locale initiale sur bench_2 : population 18, 26 generations, NR=3, NM=12, recherche locale initiale desactivee, graine 6.
+
+- Configuration : `experiments/config/bench2_initial_ls/bench2_initial_ls_false_s06.json`
+- Résultats : `experiments/results/2026-11-25/bench2_initial_ls_false_s06_205941.json`
+- Instance : bench_2 ; graine 6 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 468 appels ; failures 5431 ; propagations 3438716 ; nodes non rapporté ; temps de résolution 3.4 s (non déterministe)
+- Durée de l'exécution : 183.8 s ; commit `9440573a71ce20c9cbfbd68dfe648bc93b005d67`
+
+## 2026-11-25 20:59 — bench2_initial_ls_false_s07
+
+Influence de la recherche locale initiale sur bench_2 : population 18, 26 generations, NR=3, NM=12, recherche locale initiale desactivee, graine 7.
+
+- Configuration : `experiments/config/bench2_initial_ls/bench2_initial_ls_false_s07.json`
+- Résultats : `experiments/results/2026-11-25/bench2_initial_ls_false_s07_205941.json`
+- Instance : bench_2 ; graine 7 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 468 appels ; failures 5405 ; propagations 3368440 ; nodes non rapporté ; temps de résolution 3.3 s (non déterministe)
+- Durée de l'exécution : 185.3 s ; commit `9440573a71ce20c9cbfbd68dfe648bc93b005d67`
+
+## 2026-11-25 20:59 — bench2_initial_ls_false_s08
+
+Influence de la recherche locale initiale sur bench_2 : population 18, 26 generations, NR=3, NM=12, recherche locale initiale desactivee, graine 8.
+
+- Configuration : `experiments/config/bench2_initial_ls/bench2_initial_ls_false_s08.json`
+- Résultats : `experiments/results/2026-11-25/bench2_initial_ls_false_s08_205941.json`
+- Instance : bench_2 ; graine 8 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 468 appels ; failures 5242 ; propagations 3247419 ; nodes non rapporté ; temps de résolution 3.1 s (non déterministe)
+- Durée de l'exécution : 184.8 s ; commit `9440573a71ce20c9cbfbd68dfe648bc93b005d67`
+
+## 2026-11-25 20:59 — bench2_initial_ls_false_s09
+
+Influence de la recherche locale initiale sur bench_2 : population 18, 26 generations, NR=3, NM=12, recherche locale initiale desactivee, graine 9.
+
+- Configuration : `experiments/config/bench2_initial_ls/bench2_initial_ls_false_s09.json`
+- Résultats : `experiments/results/2026-11-25/bench2_initial_ls_false_s09_205941.json`
+- Instance : bench_2 ; graine 9 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 468 appels ; failures 6747 ; propagations 4100116 ; nodes non rapporté ; temps de résolution 3.6 s (non déterministe)
+- Durée de l'exécution : 184.8 s ; commit `9440573a71ce20c9cbfbd68dfe648bc93b005d67`
+
+## 2026-11-25 20:59 — bench2_initial_ls_false_s10
+
+Influence de la recherche locale initiale sur bench_2 : population 18, 26 generations, NR=3, NM=12, recherche locale initiale desactivee, graine 10.
+
+- Configuration : `experiments/config/bench2_initial_ls/bench2_initial_ls_false_s10.json`
+- Résultats : `experiments/results/2026-11-25/bench2_initial_ls_false_s10_205940.json`
+- Instance : bench_2 ; graine 10 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 468 appels ; failures 6453 ; propagations 3884679 ; nodes non rapporté ; temps de résolution 3.6 s (non déterministe)
+- Durée de l'exécution : 185.4 s ; commit `9440573a71ce20c9cbfbd68dfe648bc93b005d67`
+
+## 2026-11-25 20:59 — bench2_initial_ls_false_s11
+
+Influence de la recherche locale initiale sur bench_2 : population 18, 26 generations, NR=3, NM=12, recherche locale initiale desactivee, graine 11.
+
+- Configuration : `experiments/config/bench2_initial_ls/bench2_initial_ls_false_s11.json`
+- Résultats : `experiments/results/2026-11-25/bench2_initial_ls_false_s11_205941.json`
+- Instance : bench_2 ; graine 11 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 468 appels ; failures 6382 ; propagations 3865359 ; nodes non rapporté ; temps de résolution 3.5 s (non déterministe)
+- Durée de l'exécution : 185.5 s ; commit `9440573a71ce20c9cbfbd68dfe648bc93b005d67`
+
+## 2026-11-25 20:59 — bench2_initial_ls_false_s12
+
+Influence de la recherche locale initiale sur bench_2 : population 18, 26 generations, NR=3, NM=12, recherche locale initiale desactivee, graine 12.
+
+- Configuration : `experiments/config/bench2_initial_ls/bench2_initial_ls_false_s12.json`
+- Résultats : `experiments/results/2026-11-25/bench2_initial_ls_false_s12_205941.json`
+- Instance : bench_2 ; graine 12 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 468 appels ; failures 4899 ; propagations 2988652 ; nodes non rapporté ; temps de résolution 3.1 s (non déterministe)
+- Durée de l'exécution : 183.2 s ; commit `9440573a71ce20c9cbfbd68dfe648bc93b005d67`
+
+## 2026-11-25 20:59 — bench2_initial_ls_false_s13
+
+Influence de la recherche locale initiale sur bench_2 : population 18, 26 generations, NR=3, NM=12, recherche locale initiale desactivee, graine 13.
+
+- Configuration : `experiments/config/bench2_initial_ls/bench2_initial_ls_false_s13.json`
+- Résultats : `experiments/results/2026-11-25/bench2_initial_ls_false_s13_205941.json`
+- Instance : bench_2 ; graine 13 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 468 appels ; failures 5349 ; propagations 3630449 ; nodes non rapporté ; temps de résolution 3.3 s (non déterministe)
+- Durée de l'exécution : 184.5 s ; commit `9440573a71ce20c9cbfbd68dfe648bc93b005d67`
+
+## 2026-11-25 20:59 — bench2_initial_ls_false_s14
+
+Influence de la recherche locale initiale sur bench_2 : population 18, 26 generations, NR=3, NM=12, recherche locale initiale desactivee, graine 14.
+
+- Configuration : `experiments/config/bench2_initial_ls/bench2_initial_ls_false_s14.json`
+- Résultats : `experiments/results/2026-11-25/bench2_initial_ls_false_s14_205941.json`
+- Instance : bench_2 ; graine 14 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 468 appels ; failures 6052 ; propagations 4185780 ; nodes non rapporté ; temps de résolution 3.6 s (non déterministe)
+- Durée de l'exécution : 184.7 s ; commit `9440573a71ce20c9cbfbd68dfe648bc93b005d67`
+
+## 2026-11-25 20:59 — bench2_initial_ls_false_s15
+
+Influence de la recherche locale initiale sur bench_2 : population 18, 26 generations, NR=3, NM=12, recherche locale initiale desactivee, graine 15.
+
+- Configuration : `experiments/config/bench2_initial_ls/bench2_initial_ls_false_s15.json`
+- Résultats : `experiments/results/2026-11-25/bench2_initial_ls_false_s15_205941.json`
+- Instance : bench_2 ; graine 15 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 468 appels ; failures 4907 ; propagations 3145344 ; nodes non rapporté ; temps de résolution 3.3 s (non déterministe)
+- Durée de l'exécution : 185.5 s ; commit `9440573a71ce20c9cbfbd68dfe648bc93b005d67`
+
+## 2026-11-25 20:59 — bench2_initial_ls_false_s16
+
+Influence de la recherche locale initiale sur bench_2 : population 18, 26 generations, NR=3, NM=12, recherche locale initiale desactivee, graine 16.
+
+- Configuration : `experiments/config/bench2_initial_ls/bench2_initial_ls_false_s16.json`
+- Résultats : `experiments/results/2026-11-25/bench2_initial_ls_false_s16_205940.json`
+- Instance : bench_2 ; graine 16 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 468 appels ; failures 6715 ; propagations 4196266 ; nodes non rapporté ; temps de résolution 3.7 s (non déterministe)
+- Durée de l'exécution : 185.5 s ; commit `9440573a71ce20c9cbfbd68dfe648bc93b005d67`
+
+## 2026-11-25 20:59 — bench2_initial_ls_false_s17
+
+Influence de la recherche locale initiale sur bench_2 : population 18, 26 generations, NR=3, NM=12, recherche locale initiale desactivee, graine 17.
+
+- Configuration : `experiments/config/bench2_initial_ls/bench2_initial_ls_false_s17.json`
+- Résultats : `experiments/results/2026-11-25/bench2_initial_ls_false_s17_205941.json`
+- Instance : bench_2 ; graine 17 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 468 appels ; failures 6801 ; propagations 4724807 ; nodes non rapporté ; temps de résolution 3.9 s (non déterministe)
+- Durée de l'exécution : 184.3 s ; commit `9440573a71ce20c9cbfbd68dfe648bc93b005d67`
+
+## 2026-11-25 20:59 — bench2_initial_ls_false_s18
+
+Influence de la recherche locale initiale sur bench_2 : population 18, 26 generations, NR=3, NM=12, recherche locale initiale desactivee, graine 18.
+
+- Configuration : `experiments/config/bench2_initial_ls/bench2_initial_ls_false_s18.json`
+- Résultats : `experiments/results/2026-11-25/bench2_initial_ls_false_s18_205941.json`
+- Instance : bench_2 ; graine 18 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 468 appels ; failures 5511 ; propagations 3235218 ; nodes non rapporté ; temps de résolution 3.3 s (non déterministe)
+- Durée de l'exécution : 185.5 s ; commit `9440573a71ce20c9cbfbd68dfe648bc93b005d67`
+
+## 2026-11-25 20:59 — bench2_initial_ls_false_s19
+
+Influence de la recherche locale initiale sur bench_2 : population 18, 26 generations, NR=3, NM=12, recherche locale initiale desactivee, graine 19.
+
+- Configuration : `experiments/config/bench2_initial_ls/bench2_initial_ls_false_s19.json`
+- Résultats : `experiments/results/2026-11-25/bench2_initial_ls_false_s19_205940.json`
+- Instance : bench_2 ; graine 19 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 468 appels ; failures 3943 ; propagations 2331583 ; nodes non rapporté ; temps de résolution 2.8 s (non déterministe)
+- Durée de l'exécution : 185.1 s ; commit `9440573a71ce20c9cbfbd68dfe648bc93b005d67`
+
+## 2026-11-25 21:02 — bench2_initial_ls_false_s20
+
+Influence de la recherche locale initiale sur bench_2 : population 18, 26 generations, NR=3, NM=12, recherche locale initiale desactivee, graine 20.
+
+- Configuration : `experiments/config/bench2_initial_ls/bench2_initial_ls_false_s20.json`
+- Résultats : `experiments/results/2026-11-25/bench2_initial_ls_false_s20_210245.json`
+- Instance : bench_2 ; graine 20 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 468 appels ; failures 6413 ; propagations 4077708 ; nodes non rapporté ; temps de résolution 2.9 s (non déterministe)
+- Durée de l'exécution : 139.2 s ; commit `9440573a71ce20c9cbfbd68dfe648bc93b005d67`
+
+## 2026-11-25 — Synthèse : recherche locale initiale sur bench_2
+
+Comparaison de initial_local_search=True et False,
+avec une population de 18, 26 générations, NR=3 et NM=12.
+
+Les deux configurations atteignent l'optimum 38 pour
+les 21 graines étudiées.
+
+La désactivation de la recherche locale initiale réduit
+les appels au solveur de 9.3 %, les propagations de 19.9 %
+et le temps de résolution cumulé de 14.6 %.
+
+La convergence moyenne est légèrement moins rapide,
+mais la médiane et le pire cas observé sont identiques.
+
+Ce paramètre contrôle la recherche locale à l'initialisation
+et lors des redémarrages, sans désactiver celle appliquée
+après les croisements et les mutations.
+
+La configuration False est retenue provisoirement.
+Une validation sur d'autres instances reste nécessaire.
+
+- Rapport : `experiments/analysis/bench2_initial_ls.md`
+- Script : `experiments/analysis/analyze_initial_ls.py`
+- Configurations : `experiments/config/bench2_initial_ls/`
+- Nouvelles exécutions : 21.
+- Exécutions de référence réutilisées : 21.
