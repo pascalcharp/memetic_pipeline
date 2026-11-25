@@ -45,6 +45,7 @@ memetic_pipeline/
 │   ├── memetic/                # Couplage mémétique, recherche locale et moteur
 │   │   ├── __init__.py
 │   │   ├── assembly.py         # Assemblage de référence avec les vrais composants : AssemblySettings, build_block_memetic_config (9-intégration)
+│   │   ├── catalog.py          # Catalogue des stratégies choisies par leur nom : StrategyCatalog, StrategyChoices, BuildContext (étape 10c)
 │   │   ├── config.py           # MemeticConfig : stratégies, paramètres et hub d'observation d'une exécution (étape 9)
 │   │   ├── engine.py           # Moteur Memetic(NR, NM), lots NR et NM (D7), MemeticResult (étape 9)
 │   │   ├── executor.py         # Exécution des lots : Executor, SequentialExecutor (D7)
@@ -76,6 +77,7 @@ memetic_pipeline/
 │   ├── __init__.py
 │   ├── fixtures.py             # Outil de test (pas un test) : individus aux coûts choisis, génome de référence, faux objets (LocalSolver, opérateurs, stratégies de population, collecteur)
 │   ├── minizinc_probe.py       # Outil de test (pas un test) : sonde horaire.mzn pour vérifier la cohérence avec Python
+│   ├── test_catalog.py         # Catalogue des stratégies (étape 10c) : noms, création avec le contexte, vérification des paramètres, choix par défaut
 │   ├── test_chromosome.py      # Génotype : allers-retours, génomes infaisables, conditions de D1, solutions MiniZinc
 │   ├── test_collectors.py      # Collecteurs (étape 8b) : événements construits à la main, valeurs attendues calculées à la main
 │   ├── test_engine.py          # Moteur (étape 9) : faux objets, lots NR et NM, graines, événements (initialisation et restart compris), reproductibilité
@@ -93,8 +95,8 @@ memetic_pipeline/
 │   ├── test_observability.py   # Observabilité : schéma, destinations, ObservationHub, journal, répertoire d'exécution
 │   ├── test_operators.py       # Variation (étape 7b) : propriétés avec un vrai Random, cas limites, messages
 │   ├── test_population.py      # Population (étape 8) : sélecteurs (doublons, peine de mort), stagnation, restart (élite, nouveaux, recherches)
-│   ├── test_run_experiment.py  # Script d'expériences (étape 10a) : configuration, chemins, résultats, journal, exécution courte sur bench_1
-│   ├── test_registry.py        # Registre (étape 7a) : enregistrement et création par nom, compatibilité opérateur / encodage
+│   ├── test_run_experiment.py  # Script d'expériences (étapes 10a, 10c) : configuration et stratégies, chemins, résultats, journal, exécution courte sur bench_1
+│   ├── test_registry.py        # Registre (étapes 7a, 10c) : enregistrement et création par nom, vérification des paramètres, compatibilité opérateur / encodage
 │   ├── test_selection.py       # Sélection (étape 7a) : check_selectable, tournoi, tirage uniforme, reproductibilité
 │   ├── test_shift_rules.py     # Constantes du domaine et sondes de cohérence avec horaire.mzn
 │   ├── test_smoke_minizinc.py  # Test de fumée : CP-SAT résout horaire.mzn sur bench_1 (optimum 94)

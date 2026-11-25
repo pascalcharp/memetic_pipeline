@@ -1,10 +1,12 @@
 # Stratégies disponibles
 
-Catalogue de ce que le pipeline offre déjà, rôle par rôle : la classe, son fichier, ses paramètres (avec leur valeur par défaut), ce qu'elle fait, ce qu'elle garantit, et si l'assemblage de référence (`build_block_memetic_config`, `src/memetic/assembly.py`) l'utilise. État au 22 novembre 2026.
+Catalogue de ce que le pipeline offre déjà, rôle par rôle : la classe, son fichier, ses paramètres (avec leur valeur par défaut), ce qu'elle fait, ce qu'elle garantit, et si l'assemblage de référence (`build_block_memetic_config`, `src/memetic/assembly.py`) l'utilise. État au 23 novembre 2026.
 
 Pour **brancher** une stratégie, ou en **écrire** une nouvelle, voir [`HOWTO.md`](HOWTO.md). Pour la correspondance entre les rôles et le pseudo-code, voir [`ALGO.md`](ALGO.md). La dernière section liste les stratégies **prévues** mais pas encore écrites.
 
 Légende de la colonne « Réf. » : ✅ utilisée par l'assemblage de référence ; ➖ disponible, à brancher soi-même.
+
+La colonne « Nom » donne le nom stable d'une stratégie dans le catalogue (`src/memetic/catalog.py`, étape 10c) : c'est ce qu'on écrit dans la clé `strategies` d'une configuration d'expérience pour la choisir sans code (voir [`HOWTO.md`, section 1](HOWTO.md#1-je-veux-lancer-une-expérience)). Pour l'instant, seuls le croisement et la mutation sont au catalogue.
 
 1. [Encodage](#1-encodage)
 2. [Initialisation](#2-initialisation)
@@ -69,9 +71,9 @@ Commun à tous les sélecteurs : `check_selectable(population, count)` lève `In
 
 Rôle `crossover`, interface `Crossover[G]` (`src/ga/operators.py`). Le moteur fait exactement **NR croisements par génération** (`crossover_count`) ; il n'y a pas de probabilité de croisement (voir [`HOWTO.md`, section 3](HOWTO.md#3-je-veux-modifier-la-probabilité-de-crossover)).
 
-| Classe | Encodage | Parents → enfants | Paramètres | Réf. |
-|---|---|---|---|---|
-| `UniformGeneCrossover` | `BlockEncoding` | 2 → 2 | aucun | ✅ |
+| Classe | Nom | Encodage | Parents → enfants | Paramètres | Réf. |
+|---|---|---|---|---|---|
+| `UniformGeneCrossover` | `uniform_gene` | `BlockEncoding` | 2 → 2 | aucun | ✅ |
 
 **`UniformGeneCrossover`** (croisement uniforme, Syswerda 1989). Pour chaque employé, un tirage décide si les deux enfants échangent le gène de cet employé. Rend deux enfants complémentaires.
 - Échange des **gènes entiers** : chaque quart reste faisable, seule la couverture change.
@@ -96,11 +98,11 @@ Rôle `mutable_selector`, interface `MutableSelector[G]` (`src/ga/selection.py`)
 
 Rôle `mutation`, interface `Mutation[G]` (`src/ga/operators.py`). Le moteur fait exactement **NM mutations par génération** (`mutation_count`). Chaque opérateur ci-dessous modifie **un seul gène** (un seul employé) par appel, et lève `EmptyGenomeError` pour un génome vide. Les amplitudes sont des constantes de `OperatorDefaults`.
 
-| Classe | Encodage | Paramètres | Réf. |
-|---|---|---|---|
-| `ShiftStartMutation` | `BlockEncoding` | `instance` | ✅ |
-| `BlockBoundaryMutation` | `BlockEncoding` | aucun | ➖ |
-| `ActivityMutation` | `BlockEncoding` | `instance` | ➖ |
+| Classe | Nom | Encodage | Paramètres | Réf. |
+|---|---|---|---|---|
+| `ShiftStartMutation` | `shift_start` | `BlockEncoding` | `instance` (fournie par le catalogue) | ✅ |
+| `BlockBoundaryMutation` | `block_boundary` | `BlockEncoding` | aucun | ➖ |
+| `ActivityMutation` | `activity` | `BlockEncoding` | `instance` (fournie par le catalogue) | ➖ |
 
 **`ShiftStartMutation`**. Décale le quart entier d'un employé tiré au hasard, de 1 à 3 périodes (`MIN_SHIFT_AMPLITUDE`, `MAX_SHIFT_AMPLITUDE`) vers le plus tôt ou le plus tard. Le décalage est borné pour que le quart reste dans les fenêtres de début et de fin de l'instance. Les durées ne changent pas.
 

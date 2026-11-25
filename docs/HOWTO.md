@@ -1,6 +1,6 @@
 # Comment faire ?
 
-Guide pratique pour utiliser et modifier le pipeline. Chaque section dit **quels fichiers modifier**, **quelle interface dériver** et donne **au moins un exemple**. Tous les exemples de code ont été exécutés sur `bench_1` le 22 novembre 2026.
+Guide pratique pour utiliser et modifier le pipeline. Chaque section dit **quels fichiers modifier**, **quelle interface dériver** et donne **au moins un exemple**. Tous les exemples de code ont été exécutés sur `bench_1` le 22 novembre 2026 (section 1 et catalogue des stratégies : le 23 novembre).
 
 Pour savoir ce qui existe déjà avant d'écrire une nouvelle stratégie : [`AVAILABLE_STRATEGIES.md`](AVAILABLE_STRATEGIES.md).
 
@@ -66,7 +66,8 @@ Pour brancher un composant à vous, deux façons de faire :
 {
   "description": "Ce que l'expérience cherche à montrer, en une ou deux phrases.",
   "instance": "bench_3",
-  "settings": {"population_size": 10, "crossover_count": 3, "mutation_count": 2, "generations": 20, "master_seed": 1}
+  "settings": {"population_size": 10, "crossover_count": 3, "mutation_count": 2, "generations": 20, "master_seed": 1},
+  "strategies": {"mutation": "activity"}
 }
 ```
 
@@ -75,6 +76,7 @@ Pour brancher un composant à vous, deux façons de faire :
 | `description` | oui | texte lisible, recopié dans les résultats et dans `EXPLOG.md` |
 | `instance` | oui | nom d'un fichier de `data/` sans extension (`bench_1` … `bench_5`) |
 | `settings` | non | paramètres de l'assemblage de référence (`AssemblySettings`) ; les champs absents gardent leur valeur par défaut |
+| `strategies` | non | stratégies choisies par leur nom, rôle par rôle ; les rôles absents gardent la stratégie de l'assemblage de référence (ci-dessous) |
 
 Paramètres de `settings` et valeurs par défaut (`AssemblyDefaults`, `src/memetic/assembly.py`) :
 
@@ -92,7 +94,20 @@ Paramètres de `settings` et valeurs par défaut (`AssemblyDefaults`, `src/memet
 | `deterministic_time_units` | réel | 5.0 | budget de CP-SAT par appel (limite déterministe) |
 | `initial_local_search` | booléen | `true` | passer aussi les individus initiaux et ceux du restart par le `LocalSolver` |
 
-Une clé inconnue, une clé obligatoire absente, une valeur du mauvais type ou une instance introuvable sont refusées **avant toute exécution** (`InvalidExperimentConfigError`, avec le chemin et la clé en cause dans le message). Les domaines (par exemple une taille au moins 1) sont vérifiés à la construction du moteur.
+**Choisir les stratégies** (`strategies`, catalogue `src/memetic/catalog.py`). Pour chaque rôle, le nom seul (forme courte) ou un objet avec le nom et les paramètres de la fabrique (forme objet) :
+
+```json
+"strategies": {"crossover": "uniform_gene", "mutation": {"name": "block_boundary", "parameters": {}}}
+```
+
+| Rôle | Noms | Défaut (assemblage de référence) |
+|---|---|---|
+| `crossover` | `uniform_gene` | `uniform_gene` |
+| `mutation` | `shift_start`, `block_boundary`, `activity` | `shift_start` |
+
+Ce que fait chaque stratégie : [`AVAILABLE_STRATEGIES.md`](AVAILABLE_STRATEGIES.md), colonne « Nom ». Aucune stratégie du catalogue n'a encore de paramètre ; l'instance, quand une stratégie en a besoin, est fournie par le catalogue. Les autres rôles (sélecteurs, survivants, restart, voisinage) ne sont pas encore au catalogue : pour les changer, passer par Python. Les stratégies choisies sont notées dans le fichier de résultats (`strategies`) et dans l'entrée d'`EXPLOG.md`.
+
+Une clé inconnue, une clé obligatoire absente, une valeur du mauvais type, une stratégie inconnue (le message liste les noms permis), des paramètres de stratégie qui ne conviennent pas ou une instance introuvable sont refusés **avant toute exécution** (`InvalidExperimentConfigError`, avec le chemin et la clé en cause dans le message). Les domaines (par exemple une taille au moins 1) sont vérifiés à la construction du moteur.
 
 **2. Commiter le code.** `git_dirty` vaut `true` si la copie de travail a des modifications non commitées au lancement (hors `experiments/results/` et `EXPLOG.md`). Le résultat ne peut alors pas être reproduit à partir du seul commit noté, et l'entrée d'`EXPLOG.md` le signale en gras.
 
@@ -144,7 +159,7 @@ docker run --rm -v "$PWD":/app memetic-pipeline python -m experiments.drivers.ru
 
 L'image ne contient pas Git : `git_commit` y vaut `inconnu` et `git_dirty`, `null`. L'heure est celle du conteneur (UTC), ce qui change le répertoire du jour et le nom du fichier. Pour une expérience à citer, lancer plutôt en local.
 
-**Ce que `run_experiment` ne fait pas (encore).** Il utilise toujours l'assemblage de référence (`build_block_memetic_config`) : on ne choisit pas les opérateurs, l'encodage ou le solveur dans la configuration (prévu à l'étape 10, via le registre). Pour essayer un autre composant, passer par Python ([section 2](#2-je-veux-faire-rouler-la-boucle-mémétique-depuis-python), puis sections 3 à 11) ; pour un choix durable, modifier `build_block_memetic_config` ([section 0](#0-le-principe--tout-passe-par-memeticconfig)), et `run_experiment` en profite.
+**Ce que `run_experiment` ne fait pas (encore).** Seuls le croisement et la mutation se choisissent dans la configuration ; l'encodage, les sélecteurs, la population, le voisinage et le solveur restent ceux de l'assemblage de référence (`build_block_memetic_config`). Pour essayer un autre composant, passer par Python ([section 2](#2-je-veux-faire-rouler-la-boucle-mémétique-depuis-python), puis sections 3 à 11) ; pour un choix durable, l'ajouter au catalogue (une fabrique et un nom dans `src/memetic/catalog.py`) ou modifier `build_block_memetic_config` ([section 0](#0-le-principe--tout-passe-par-memeticconfig)).
 
 ---
 
@@ -294,7 +309,8 @@ Valeur par défaut : `AssemblyDefaults.MUTATION_COUNT` dans `src/memetic/assembl
 **Fichiers** :
 - `src/ga/operators.py` : la nouvelle classe, ses constantes dans `OperatorDefaults`, ses éventuelles exceptions (dérivées de `OperatorError`) et leurs messages dans `OperatorMessages` ;
 - `tests/test_operators.py` : ses tests ;
-- pour l'adopter durablement : `build_block_memetic_config` dans `src/memetic/assembly.py`.
+- pour le choisir par son nom dans une expérience : `src/memetic/catalog.py` (un nom et une fabrique, voir plus bas) et `tests/test_catalog.py` ;
+- pour en faire le défaut de l'assemblage de référence : `CatalogDefaults.CROSSOVER` dans `src/memetic/catalog.py`.
 
 **Interface** : `Crossover[G]` (`src/ga/operators.py`), avec trois méthodes :
 
@@ -337,13 +353,33 @@ config = dataclasses.replace(build_block_memetic_config(instance, settings), cro
 result = Memetic(config).run()
 ```
 
+**Pour le choisir dans une configuration d'expérience**, l'ajouter au catalogue (`src/memetic/catalog.py`) : un nom stable dans `StrategyNames`, une fabrique qui reçoit le contexte de construction (`context.instance`, `context.encoding`) et les éventuels paramètres du choix, et une ligne dans `CROSSOVER_FACTORIES` :
+
+```python
+class StrategyNames:
+    ...
+    ONE_POINT_GENE: str = "one_point_gene"
+
+
+def one_point_gene_crossover(context: BuildContext) -> OnePointGeneCrossover:
+    return OnePointGeneCrossover()
+
+
+CROSSOVER_FACTORIES = {
+    StrategyNames.UNIFORM_GENE: uniform_gene_crossover,
+    StrategyNames.ONE_POINT_GENE: one_point_gene_crossover,
+}
+```
+
+Puis `"strategies": {"crossover": "one_point_gene"}` dans la configuration. Si le croisement a des paramètres, la fabrique les déclare après `context` (par exemple `def ...(context: BuildContext, probability: float = 0.8)`), et la configuration les donne sous la forme objet : `{"name": "...", "parameters": {"probability": 0.6}}`. Ajouter le nom dans `EXPECTED_CLASSES` de `tests/test_catalog.py`, et dans la colonne « Nom » d'[`AVAILABLE_STRATEGIES.md`](AVAILABLE_STRATEGIES.md).
+
 **Tests à écrire au minimum** (voir ceux de `UniformGeneCrossover` dans `tests/test_operators.py`) : enfants structurellement faisables (`FeasibilityChecker(instance).violations(encoding.decode(enfant)) == []`), parents non modifiés, même graine ⇒ mêmes enfants, mauvais nombre de parents ⇒ `WrongParentCountError`, cas limites (parents identiques, un seul employé).
 
 ---
 
 ## 6. Je veux créer un nouvel opérateur de mutation
 
-**Fichiers** : les mêmes que pour un croisement : `src/ga/operators.py`, `tests/test_operators.py`, et `src/memetic/assembly.py` pour l'adopter durablement.
+**Fichiers** : les mêmes que pour un croisement : `src/ga/operators.py`, `tests/test_operators.py`, et le catalogue (`src/memetic/catalog.py`, `MUTATION_FACTORIES`, `tests/test_catalog.py`) pour la choisir par son nom dans une expérience ([section 5](#5-je-veux-créer-un-nouveau-crossover)) ; `CatalogDefaults.MUTATION` pour en faire le défaut.
 
 **Interface** : `Mutation[G]` (`src/ga/operators.py`) :
 

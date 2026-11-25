@@ -1064,3 +1064,20 @@ Aucun changement de comportement. Suite complète verte.
 **CP-SAT seul sur bench_2** (mesures hors `run_experiment`, modèle dur) : en monothread, pas de preuve d'optimalité en 200 unités déterministes (environ 150 s de résolution, 240 M propagations, meilleure solution 38, graines 0 et 1) ; avec 8 threads, preuve en 1,0 à 1,5 s, comme au TP. Avec plusieurs threads, CP-SAT ne rapporte les statistiques que d'un seul thread : seul le monothread donne une mesure d'effort comparable. Le mémétique fait 80 générations en 2,5 à 3,8 s de résolution cumulée (3,4 à 4,9 M propagations), sans preuve. Reste à mesurer quand CP-SAT monothread *trouve* 38 (courbes « meilleur coût en fonction de l'effort », au TODO).
 
 **Blocage.** `xargs -I {}` de macOS refuse les commandes de plus de 255 octets (« command line cannot be assembled, too long ») : la première série ne s'est pas lancée. Correctif : `xargs -n 1 sh -c '...' _`, le fichier passé en argument.
+
+## 2026-11-23 — Étape 10c : stratégies configurables dans `run_experiment` (Pascal et Claude)
+
+**But (Pascal).** Choisir les stratégies dans le fichier de configuration d'une expérience, par leur nom, sans modifier l'assemblage. On commence par le croisement et la mutation. À partir de cette sous-étape, Claude écrit les tests **et** l'implémentation (pédagogie assouplie, le temps est serré).
+
+**Décision : une fabrique par nom, avec le registre existant.** Le registre de 7a (`OperatorRegistry`, D5) associe déjà un nom à une fabrique : c'est la *factory* proposée. On n'utilise pas de réflexion (`getattr` sur le nom d'une classe) : les noms stables écrits dans les configurations et les résultats ne dépendent pas des noms de classes, et le registre contrôle ce qui est permis.
+
+**Changements.**
+- `src/ga/registry.py` : `factory(name)` et `check_parameters(name, **parameters)`, qui vérifie la signature de la fabrique (`inspect.signature(...).bind`) sans créer l'opérateur ; nouvelle `InvalidOperatorParametersError`. Changement d'un module partagé, mais rétrocompatible (ajouts seulement).
+- `src/memetic/catalog.py` (nouveau) : `StrategyRoles` (`crossover`, `mutation`), `StrategyNames` (`uniform_gene` ; `shift_start`, `block_boundary`, `activity`), `StrategyCatalog` (un registre par rôle, sans état global), `BuildContext` (instance, encodage), `StrategyChoice(name, parameters)`, `StrategyChoices` (défauts = assemblage de référence). Chaque fabrique reçoit le contexte sous le nom réservé `context` (`CatalogDefaults.CONTEXT_PARAMETER`), en plus des paramètres du choix ; un paramètre JSON de ce nom est refusé (`ReservedStrategyParameterError`).
+- `build_block_memetic_config(..., strategies=StrategyChoices())` : croisement et mutation créés par le catalogue ; sans `strategies`, rien ne change (les configurations existantes et la série bench_2 restent reproductibles). La compatibilité avec l'encodage reste vérifiée par `MemeticConfig.validate`.
+- `run_experiment` : clé facultative `strategies`, forme courte (`"mutation": "activity"`) ou objet (`{"name": ..., "parameters": {...}}`). Tout est vérifié avant l'exécution : rôle inconnu, nom inconnu (le message liste les noms permis), paramètres qui ne conviennent pas, clé inconnue dans un choix, `name` absent, types. Les stratégies sont notées dans le fichier de résultats (`strategies`) et dans l'entrée d'EXPLOG.md (ligne « Stratégies »).
+- Documentation : HOWTO (section 1 : clé `strategies` et noms ; sections 5 et 6 : ajouter un opérateur au catalogue, exemple exécuté avec un paramètre), AVAILABLE_STRATEGIES (colonne « Nom »), PROJECT_STRUCT, CLAUDE.md.
+
+**Validation.** 606 tests, verts en local et dans Docker (`OK (skipped=6)`). Lancement réel par la ligne de commande sur bench_2 avec `"mutation": "activity"` : la stratégie apparaît dans les résultats et dans le journal ; une mutation inconnue (`swap`) est refusée avant l'exécution, avec la liste `activity, block_boundary, shift_start`.
+
+**Suite.** Les autres rôles (sélecteurs, survivants, restart, convergence, voisinage) suivront le même patron : un nom dans `StrategyRoles`, un dictionnaire de fabriques, un champ dans `StrategyChoices`.
