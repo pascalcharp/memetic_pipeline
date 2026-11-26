@@ -18,7 +18,9 @@ from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
 from typing import Any
 
-from src.ga.chromosome import Encoding
+from src.ga.baselines import RandomGenomeCrossover, RandomGenomeMutation
+from src.ga.chromosome import BlockEncoding, Encoding
+from src.ga.initialization import RandomBlockInitializer
 from src.ga.operators import (
     ActivityMutation,
     BlockBoundaryMutation,
@@ -48,6 +50,8 @@ class StrategyNames:
     SHIFT_START: str = "shift_start"
     BLOCK_BOUNDARY: str = "block_boundary"
     ACTIVITY: str = "activity"
+    # Témoin (étape 10d), pour les deux rôles : un génome aléatoire neuf, sans hériter des parents
+    RANDOM_GENOME: str = "random_genome"
 
 
 class StrategyKeys:
@@ -75,6 +79,7 @@ class CatalogMessages:
     """Gabarits des messages d'erreur du catalogue."""
 
     UNKNOWN_ROLE: str = "Rôle de stratégie « {role} » inconnu ; rôles connus : {known}."
+    BLOCK_ENCODING_REQUIRED: str = "La stratégie « {name} » tire des génomes de BlockEncoding ; encodage reçu : {encoding}."
     RESERVED_PARAMETER: str = (
         "Le paramètre « {parameter} » de la stratégie « {name} » ({role}) est réservé : le catalogue y passe le "
         "contexte de construction."
@@ -87,6 +92,10 @@ class StrategyError(Exception):
 
 class UnknownStrategyRoleError(StrategyError):
     """Le catalogue ne connaît pas ce rôle."""
+
+
+class IncompatibleStrategyEncodingError(StrategyError):
+    """La stratégie ne sait pas construire de génomes pour l'encodage du contexte."""
 
 
 class ReservedStrategyParameterError(StrategyError):
@@ -147,13 +156,32 @@ def activity_mutation(context: BuildContext) -> ActivityMutation:
     return ActivityMutation(context.instance)
 
 
+def random_genome_generator(context: BuildContext) -> RandomBlockInitializer:
+    """Le tireur de génomes aléatoires des opérateurs témoins : sans LocalSolver, le moteur s'en charge."""
+    if not isinstance(context.encoding, BlockEncoding):
+        raise IncompatibleStrategyEncodingError(CatalogMessages.BLOCK_ENCODING_REQUIRED.format(
+            name=StrategyNames.RANDOM_GENOME, encoding=type(context.encoding).__name__
+        ))
+    return RandomBlockInitializer(context.instance, context.encoding)
+
+
+def random_genome_crossover(context: BuildContext) -> RandomGenomeCrossover:
+    return RandomGenomeCrossover(random_genome_generator(context))
+
+
+def random_genome_mutation(context: BuildContext) -> RandomGenomeMutation:
+    return RandomGenomeMutation(random_genome_generator(context))
+
+
 CROSSOVER_FACTORIES: dict[str, Callable[..., Crossover]] = {
     StrategyNames.UNIFORM_GENE: uniform_gene_crossover,
+    StrategyNames.RANDOM_GENOME: random_genome_crossover,
 }
 MUTATION_FACTORIES: dict[str, Callable[..., Mutation]] = {
     StrategyNames.SHIFT_START: shift_start_mutation,
     StrategyNames.BLOCK_BOUNDARY: block_boundary_mutation,
     StrategyNames.ACTIVITY: activity_mutation,
+    StrategyNames.RANDOM_GENOME: random_genome_mutation,
 }
 
 

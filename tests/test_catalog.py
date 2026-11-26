@@ -7,12 +7,14 @@ paramètres sans création, choix par défaut (ceux de l'assemblage de référen
 import unittest
 
 from src.config import ProjectPaths
-from src.ga.chromosome import BlockEncoding
+from src.ga.baselines import RandomGenomeCrossover, RandomGenomeMutation
+from src.ga.chromosome import BlockEncoding, Encoding
 from src.ga.operators import ActivityMutation, BlockBoundaryMutation, ShiftStartMutation, UniformGeneCrossover
 from src.ga.registry import InvalidOperatorParametersError, UnknownOperatorError
 from src.memetic.catalog import (
     BuildContext,
     CatalogDefaults,
+    IncompatibleStrategyEncodingError,
     ReservedStrategyParameterError,
     StrategyCatalog,
     StrategyChoice,
@@ -29,11 +31,15 @@ UNKNOWN_ROLE: str = "sélection_magique"
 UNKNOWN_NAME: str = "croisement_inexistant"
 UNEXPECTED_PARAMETER: str = "taux"
 EXPECTED_CLASSES: dict[str, dict[str, type]] = {
-    StrategyRoles.CROSSOVER: {StrategyNames.UNIFORM_GENE: UniformGeneCrossover},
+    StrategyRoles.CROSSOVER: {
+        StrategyNames.UNIFORM_GENE: UniformGeneCrossover,
+        StrategyNames.RANDOM_GENOME: RandomGenomeCrossover,
+    },
     StrategyRoles.MUTATION: {
         StrategyNames.SHIFT_START: ShiftStartMutation,
         StrategyNames.BLOCK_BOUNDARY: BlockBoundaryMutation,
         StrategyNames.ACTIVITY: ActivityMutation,
+        StrategyNames.RANDOM_GENOME: RandomGenomeMutation,
     },
 }
 
@@ -56,7 +62,7 @@ class TestCatalogNames(unittest.TestCase):
             self.assertIn(text, str(context.exception))
 
     def test_givenStrategyErrors_whenCheckingHierarchy_thenEveryErrorIsAStrategyError(self) -> None:
-        for error in (UnknownStrategyRoleError, ReservedStrategyParameterError):
+        for error in (UnknownStrategyRoleError, ReservedStrategyParameterError, IncompatibleStrategyEncodingError):
             with self.subTest(error=error.__name__):
                 self.assertTrue(issubclass(error, StrategyError))
 
@@ -82,6 +88,28 @@ class TestCatalogCreate(unittest.TestCase):
             with self.subTest(name=name):
                 mutation = self.catalog.create(StrategyRoles.MUTATION, StrategyChoice(name), self.context)
                 self.assertIs(mutation.instance, self.instance)
+
+    def test_givenRandomGenome_whenCreate_thenItsGeneratorUsesTheContextInstanceAndEncodingWithoutLocalSolver(self) -> None:
+        for role in StrategyRoles.ALL:
+            with self.subTest(role=role):
+                operator = self.catalog.create(role, StrategyChoice(StrategyNames.RANDOM_GENOME), self.context)
+                self.assertIs(operator.generator.instance, self.instance)
+                self.assertIs(operator.generator.encoding, self.encoding)
+                self.assertIsNone(operator.generator.local_solver)
+
+    def test_givenOtherEncoding_whenCreateRandomGenome_thenRaisesNamingTheStrategyAndTheEncoding(self) -> None:
+        class OtherEncoding(Encoding[int]):
+            def encode(self, horaire):
+                raise NotImplementedError
+
+            def decode(self, genome):
+                raise NotImplementedError
+
+        context = BuildContext(instance=self.instance, encoding=OtherEncoding())
+        with self.assertRaises(IncompatibleStrategyEncodingError) as raised:
+            self.catalog.create(StrategyRoles.MUTATION, StrategyChoice(StrategyNames.RANDOM_GENOME), context)
+        self.assertIn(StrategyNames.RANDOM_GENOME, str(raised.exception))
+        self.assertIn("OtherEncoding", str(raised.exception))
 
     def test_givenSameChoice_whenCreateTwice_thenTwoDistinctOperators(self) -> None:
         choice = StrategyChoice(StrategyNames.SHIFT_START)

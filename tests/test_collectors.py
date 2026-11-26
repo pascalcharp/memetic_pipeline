@@ -426,12 +426,12 @@ class TestSolverEffortCollector(unittest.TestCase):
         return [
             GenerationEnded(generation=0, population=population),
             local_search_done(1, Origins.CROSSOVER, CROSSOVER_NAME, statistics=SolverStatistics(
-                nodes=None, failures=5, propagations=100, solve_time=timedelta(seconds=0.5))),
+                nodes=None, failures=5, propagations=100, solve_time=timedelta(seconds=0.5), deterministic_time=0.2)),
             local_search_done(1, Origins.MUTATION, MUTATION_NAME, statistics=SolverStatistics(
                 nodes=None, failures=3, propagations=None, solve_time=timedelta(seconds=0.25))),
             GenerationEnded(generation=1, population=population),
             local_search_done(2, Origins.CROSSOVER, CROSSOVER_NAME, statistics=SolverStatistics(
-                nodes=None, failures=1, propagations=50, solve_time=None)),
+                nodes=None, failures=1, propagations=50, solve_time=None, deterministic_time=0.05)),
             GenerationEnded(generation=2, population=population),
             RunEnded(generations=2, best=population[0]),
         ]
@@ -445,7 +445,7 @@ class TestSolverEffortCollector(unittest.TestCase):
         record = generation_zero[0]
         self.assertEqual(record[SolverEffortFields.CALLS], 0)
         for field in (SolverEffortFields.NODES, SolverEffortFields.FAILURES, SolverEffortFields.PROPAGATIONS,
-                      SolverEffortFields.SOLVE_TIME_SECONDS):
+                      SolverEffortFields.SOLVE_TIME_SECONDS, SolverEffortFields.DETERMINISTIC_TIME):
             self.assertIsNone(record[field])
 
     def test_givenCalls_whenGenerationEnded_thenSumsOnlyReportedStatisticsOfThatGeneration(self) -> None:
@@ -473,6 +473,14 @@ class TestSolverEffortCollector(unittest.TestCase):
         self.assertEqual(record[SolverEffortFields.PROPAGATIONS], 150)
         self.assertAlmostEqual(record[SolverEffortFields.SOLVE_TIME_SECONDS], 0.75, places=PLACES)
 
+
+    def test_givenDeterministicTimes_whenObserved_thenSummedPerGenerationAndForTheRunIgnoringNone(self) -> None:
+        # Étape 10d : la mutation de la génération 1 ne rapporte pas de temps déterministe.
+        by_generation = {r[RecordFields.GENERATION]: r for r in self.records(Scopes.GENERATION)}
+        self.assertAlmostEqual(by_generation[1][SolverEffortFields.DETERMINISTIC_TIME], 0.2, places=PLACES)
+        self.assertAlmostEqual(by_generation[2][SolverEffortFields.DETERMINISTIC_TIME], 0.05, places=PLACES)
+        (cumulative,) = self.records(Scopes.CUMULATIVE)
+        self.assertAlmostEqual(cumulative[SolverEffortFields.DETERMINISTIC_TIME], 0.25, places=PLACES)
 
     def test_givenRunStarted_whenNewRunBegins_thenSolverEffortIsReset(self) -> None:
         collector = SolverEffortCollector()

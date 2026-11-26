@@ -365,6 +365,8 @@ class TestRunExperimentEndToEnd(unittest.TestCase):
         else:
             self.assertGreater(effort[SolverEffortFields.CALLS], expected_calls)
         self.assertIsNotNone(effort[SolverEffortFields.FAILURES])
+        # Étape 10d : le temps déterministe cumulé est rapporté avec CP-SAT.
+        self.assertGreater(effort[SolverEffortFields.DETERMINISTIC_TIME], 0.0)
 
     def test_givenRun_whenReadingResults_thenPerGenerationRecordsArePresent(self) -> None:
         generations = SHORT_SETTINGS["generations"] + 1
@@ -377,7 +379,7 @@ class TestRunExperimentEndToEnd(unittest.TestCase):
         best_total = self.document[ResultKeys.BEST][ResultKeys.BEST_COST][ResultKeys.TOTAL]
         calls = self.document[ResultKeys.SOLVER_EFFORT][SolverEffortFields.CALLS]
         for text in (DESCRIPTION, EXPERIMENT_NAME, self.document[ResultKeys.CONFIG_PATH],
-                     f"Coût obtenu : {best_total}", f"{calls} appels", "2026-11-22 14:30"):
+                     f"Coût obtenu : {best_total}", f"{calls} appels", "2026-11-22 14:30", "temps déterministe"):
             with self.subTest(text=text):
                 self.assertIn(text, self.log_text)
         self.assertIn(self.results_path.resolve().as_posix(), self.log_text)

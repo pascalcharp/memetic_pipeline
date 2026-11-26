@@ -343,6 +343,15 @@ But (Pascal, 2026-11-23) : choisir les stratégies dans le fichier de configurat
 - [x] Documentation : HOWTO (section 1 : clé `strategies` et noms permis), AVAILABLE_STRATEGIES (nom de chaque stratégie), PROJECT_STRUCT, CLAUDE.md
   - validé le 2026-11-23 : 606 tests (36 nouveaux : 5 dans `test_registry`, 20 dans `test_catalog`, 2 dans `TestAssembly`, 9 dans `test_run_experiment`), suite complète verte en local et dans Docker (`OK (skipped=6)`)
 
+### 10d — Témoins aléatoires : mémétique contre hasard **(C)** — Pascal et Claude, branche `etape-10d-temoin-aleatoire`
+Question (objectif 1 de l'étape 10) : le mémétique bat-il le hasard, à budget égal d'appels au LocalSolver ? Deux témoins, du plus simple au plus sévère (décision de Pascal, 2026-11-26) : d'abord les redémarrages aléatoires, puis la marche aléatoire.
+- [x] Temps déterministe cumulé, en plus des échecs et des propagations (demande de Pascal) : CP-SAT le rapporte seulement dans son journal (`--verbose-solving`) ; `CommentCapturingInstance` garde les commentaires du flux JSON, `CpSatAdapter.deterministic_time_of` les lit ; `SolverStatistics.deterministic_time`, `SolverEffortFields.DETERMINISTIC_TIME`, résultats et EXPLOG.md. Vérifié : le journal ne change pas la recherche (mêmes échecs, propagations et solution)
+- [x] Témoin 1, **redémarrages aléatoires** : `RandomGenomeCrossover` et `RandomGenomeMutation` (`src/ga/baselines.py`, nom `random_genome` au catalogue) ignorent leurs entrées et rendent des génomes aléatoires neufs ; le moteur, le LocalSolver, la sélection et la mesure restent ceux du mémétique (même budget : 2·NR + NM appels par génération)
+- [x] Tests : opérateurs témoins, catalogue, lecture du temps déterministe, collecteur, résultats et journal ; suite complète verte en local et dans Docker (630 tests)
+- [ ] Expérience bench_2, 21 graines, 80 générations : `experiments/config/bench2_temoin_redemarrages/` contre `experiments/config/bench2_memetique_ref/` (le mémétique de référence relancé pour avoir le temps déterministe) ; taux de succès, génération du succès, effort cumulé (appels, échecs, propagations, temps déterministe)
+- [ ] Témoin 2, **marche aléatoire** (plus sévère) : depuis l'individu courant, mutation + LocalSolver, nouveau point toujours accepté ; meilleur vu gardé
+- [ ] Documentation : HOWTO, AVAILABLE_STRATEGIES (témoins, temps déterministe), PROJECT_STRUCT
+
 ## Étape 11 — Documentation **(C)**
 - [ ] README : construction Docker, lancement des tests, lancement des expériences
 - [ ] DEVLOG à jour

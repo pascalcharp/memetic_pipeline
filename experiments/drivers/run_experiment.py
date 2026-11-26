@@ -94,6 +94,7 @@ class ExperimentDefaults:
     JSON_INDENT: int = 2
     ENCODING: str = "utf-8"
     DURATION_DECIMALS: int = 1
+    DETERMINISTIC_TIME_DECIMALS: int = 3
 
 
 class ConfigKeys:
@@ -156,7 +157,7 @@ class ExplogTexts:
         "- Stratégies : {strategies}\n"
         "- **Coût obtenu : {best_total}** ({feasibility}) ; {generations} générations, {restarts} restart(s)\n"
         "- **Effort cumulé du solveur** : {calls} appels ; failures {failures} ; propagations {propagations} ; "
-        "nodes {nodes} ; temps de résolution {solve_time} s (non déterministe)\n"
+        "nodes {nodes} ; temps déterministe {deterministic_time} ; temps de résolution {solve_time} s (non déterministe)\n"
         "- Durée de l'exécution : {duration} s ; commit `{git_commit}`{git_state}\n"
     )
     GIT_CLEAN: str = ""
@@ -522,6 +523,7 @@ def explog_entry(
         failures=reported(effort[SolverEffortFields.FAILURES]),
         propagations=reported(effort[SolverEffortFields.PROPAGATIONS]),
         nodes=reported(effort[SolverEffortFields.NODES]),
+        deterministic_time=reported(rounded(effort[SolverEffortFields.DETERMINISTIC_TIME])),
         solve_time=reported(None if solve_time is None else round(solve_time, ExperimentDefaults.DURATION_DECIMALS)),
         duration=round(document[ResultKeys.DURATION_SECONDS], ExperimentDefaults.DURATION_DECIMALS),
         git_commit=document[ResultKeys.GIT_COMMIT],
@@ -538,6 +540,11 @@ def strategies_text(strategies: StrategyChoices) -> str:
             parameters = ExplogTexts.STRATEGY_PARAMETERS.format(parameters=json.dumps(dict(choice.parameters)))
         items.append(ExplogTexts.STRATEGY_ITEM.format(role=role, name=choice.name, parameters=parameters))
     return ExplogTexts.STRATEGY_SEPARATOR.join(items)
+
+
+def rounded(value: float | None) -> float | None:
+    """``value`` arrondi pour le journal (``ExperimentDefaults.DETERMINISTIC_TIME_DECIMALS``) ; ``None`` reste ``None``."""
+    return None if value is None else round(value, ExperimentDefaults.DETERMINISTIC_TIME_DECIMALS)
 
 
 def git_state_text(git_dirty: bool | None) -> str:
