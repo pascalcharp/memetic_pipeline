@@ -14,7 +14,7 @@ def load_results():
     groups = {v: [] for v in NEIGHBORHOODS}
 
     for path in sorted(RESULTS.rglob("*.json")):
-        if path.name.startswith(("bench3_pop18_", "bench3_vois")):
+        if path.name.startswith(("bench3_pop18_", "bench3_vois2_s", "bench3_vois3_s", "bench3_vois4_s")):
             data = json.loads(path.read_text())
             pop = data["settings"]["neighborhood_size"]
             groups[pop].append(data)

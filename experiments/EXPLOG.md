@@ -8072,3 +8072,775 @@ Comparaison des budgets deterministes sur bench_3 : budget 2.5, voisinage 1, pop
 - Rapport : experiments/analysis/bench3_deterministic_time.md.
 - Script : experiments/analysis/analyze_bench3_deterministic_time.py.
 - Comparaison par graine : experiments/analysis/compare_bench3_deterministic_time.py.
+
+## 2026-11-26 20:46 — bench3_vois2_dt10_s00
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 10.0, population 18, 26 generations, NR=6, NM=6, graine 0.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt10_s00.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt10_s00_204601.json`
+- Instance : bench_3 ; graine 0 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 22** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 1268490 ; propagations 8405530317 ; nodes non rapporté ; temps de résolution 3662.6 s (non déterministe)
+- Durée de l'exécution : 3919.8 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:46 — bench3_vois2_dt10_s01
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 10.0, population 18, 26 generations, NR=6, NM=6, graine 1.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt10_s01.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt10_s01_204632.json`
+- Instance : bench_3 ; graine 1 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 22** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 1197562 ; propagations 8826409148 ; nodes non rapporté ; temps de résolution 3790.5 s (non déterministe)
+- Durée de l'exécution : 4053.7 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:47 — bench3_vois2_dt10_s02
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 10.0, population 18, 26 generations, NR=6, NM=6, graine 2.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt10_s02.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt10_s02_204708.json`
+- Instance : bench_3 ; graine 2 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 23** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 1213771 ; propagations 8032471587 ; nodes non rapporté ; temps de résolution 3558.3 s (non déterministe)
+- Durée de l'exécution : 3811.9 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:47 — bench3_vois2_dt10_s03
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 10.0, population 18, 26 generations, NR=6, NM=6, graine 3.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt10_s03.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt10_s03_204710.json`
+- Instance : bench_3 ; graine 3 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 26** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 1430636 ; propagations 8404576130 ; nodes non rapporté ; temps de résolution 3743.6 s (non déterministe)
+- Durée de l'exécution : 3994.8 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:47 — bench3_vois2_dt10_s04
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 10.0, population 18, 26 generations, NR=6, NM=6, graine 4.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt10_s04.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt10_s04_204719.json`
+- Instance : bench_3 ; graine 4 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 23** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 1240449 ; propagations 8329532634 ; nodes non rapporté ; temps de résolution 3608.0 s (non déterministe)
+- Durée de l'exécution : 3861.4 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:47 — bench3_vois2_dt10_s05
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 10.0, population 18, 26 generations, NR=6, NM=6, graine 5.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt10_s05.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt10_s05_204724.json`
+- Instance : bench_3 ; graine 5 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 18** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 1148425 ; propagations 7744386127 ; nodes non rapporté ; temps de résolution 3444.4 s (non déterministe)
+- Durée de l'exécution : 3702.3 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:47 — bench3_vois2_dt10_s06
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 10.0, population 18, 26 generations, NR=6, NM=6, graine 6.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt10_s06.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt10_s06_204726.json`
+- Instance : bench_3 ; graine 6 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 21** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 1347113 ; propagations 7591435430 ; nodes non rapporté ; temps de résolution 3493.5 s (non déterministe)
+- Durée de l'exécution : 3748.2 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:47 — bench3_vois2_dt10_s07
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 10.0, population 18, 26 generations, NR=6, NM=6, graine 7.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt10_s07.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt10_s07_204729.json`
+- Instance : bench_3 ; graine 7 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 21** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 1337058 ; propagations 7809865966 ; nodes non rapporté ; temps de résolution 3605.1 s (non déterministe)
+- Durée de l'exécution : 3856.5 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:47 — bench3_vois2_dt10_s08
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 10.0, population 18, 26 generations, NR=6, NM=6, graine 8.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt10_s08.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt10_s08_204736.json`
+- Instance : bench_3 ; graine 8 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 19** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 1114434 ; propagations 7761069096 ; nodes non rapporté ; temps de résolution 3394.2 s (non déterministe)
+- Durée de l'exécution : 3649.9 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:47 — bench3_vois2_dt10_s09
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 10.0, population 18, 26 generations, NR=6, NM=6, graine 9.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt10_s09.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt10_s09_204738.json`
+- Instance : bench_3 ; graine 9 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 20** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 1221399 ; propagations 7707163792 ; nodes non rapporté ; temps de résolution 3533.5 s (non déterministe)
+- Durée de l'exécution : 3787.5 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:47 — bench3_vois2_dt10_s10
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 10.0, population 18, 26 generations, NR=6, NM=6, graine 10.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt10_s10.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt10_s10_204738.json`
+- Instance : bench_3 ; graine 10 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 17** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 1227836 ; propagations 7961911657 ; nodes non rapporté ; temps de résolution 3530.1 s (non déterministe)
+- Durée de l'exécution : 3784.1 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:47 — bench3_vois2_dt10_s11
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 10.0, population 18, 26 generations, NR=6, NM=6, graine 11.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt10_s11.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt10_s11_204745.json`
+- Instance : bench_3 ; graine 11 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 19** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 1136651 ; propagations 8162247896 ; nodes non rapporté ; temps de résolution 3616.5 s (non déterministe)
+- Durée de l'exécution : 3871.9 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:47 — bench3_vois2_dt10_s12
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 10.0, population 18, 26 generations, NR=6, NM=6, graine 12.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt10_s12.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt10_s12_204757.json`
+- Instance : bench_3 ; graine 12 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 22** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 1110733 ; propagations 7981040876 ; nodes non rapporté ; temps de résolution 3430.1 s (non déterministe)
+- Durée de l'exécution : 3686.2 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:48 — bench3_vois2_dt10_s13
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 10.0, population 18, 26 generations, NR=6, NM=6, graine 13.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt10_s13.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt10_s13_204818.json`
+- Instance : bench_3 ; graine 13 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 19** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 1276441 ; propagations 8076757752 ; nodes non rapporté ; temps de résolution 3653.0 s (non déterministe)
+- Durée de l'exécution : 3907.0 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:48 — bench3_vois2_dt10_s14
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 10.0, population 18, 26 generations, NR=6, NM=6, graine 14.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt10_s14.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt10_s14_204848.json`
+- Instance : bench_3 ; graine 14 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 27** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 1497019 ; propagations 8888615061 ; nodes non rapporté ; temps de résolution 3877.5 s (non déterministe)
+- Durée de l'exécution : 4125.9 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:49 — bench3_vois2_dt10_s15
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 10.0, population 18, 26 generations, NR=6, NM=6, graine 15.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt10_s15.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt10_s15_204904.json`
+- Instance : bench_3 ; graine 15 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 21** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 1225986 ; propagations 8157126836 ; nodes non rapporté ; temps de résolution 3578.4 s (non déterministe)
+- Durée de l'exécution : 3830.3 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:49 — bench3_vois2_dt10_s16
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 10.0, population 18, 26 generations, NR=6, NM=6, graine 16.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt10_s16.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt10_s16_204940.json`
+- Instance : bench_3 ; graine 16 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 18** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 1271988 ; propagations 8783798146 ; nodes non rapporté ; temps de résolution 3727.2 s (non déterministe)
+- Durée de l'exécution : 3974.0 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:50 — bench3_vois2_dt10_s17
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 10.0, population 18, 26 generations, NR=6, NM=6, graine 17.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt10_s17.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt10_s17_205040.json`
+- Instance : bench_3 ; graine 17 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 20** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 1382978 ; propagations 8882785919 ; nodes non rapporté ; temps de résolution 3938.0 s (non déterministe)
+- Durée de l'exécution : 4194.3 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 21:03 — bench3_vois2_dt10_s18
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 10.0, population 18, 26 generations, NR=6, NM=6, graine 18.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt10_s18.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt10_s18_210322.json`
+- Instance : bench_3 ; graine 18 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 17** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 1456890 ; propagations 8317241728 ; nodes non rapporté ; temps de résolution 3606.0 s (non déterministe)
+- Durée de l'exécution : 3835.4 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 21:11 — bench3_vois2_dt10_s19
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 10.0, population 18, 26 generations, NR=6, NM=6, graine 19.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt10_s19.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt10_s19_211154.json`
+- Instance : bench_3 ; graine 19 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 21** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 1240008 ; propagations 8606610265 ; nodes non rapporté ; temps de résolution 3380.6 s (non déterministe)
+- Durée de l'exécution : 3601.6 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 21:48 — bench3_vois2_dt10_s20
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 10.0, population 18, 26 generations, NR=6, NM=6, graine 20.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt10_s20.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt10_s20_214827.json`
+- Instance : bench_3 ; graine 20 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 20** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 1204982 ; propagations 8389209947 ; nodes non rapporté ; temps de résolution 2898.2 s (non déterministe)
+- Durée de l'exécution : 3076.7 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:07 — bench3_vois2_dt1_s00
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 1.0, population 18, 26 generations, NR=6, NM=6, graine 0.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt1_s00.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt1_s00_200735.json`
+- Instance : bench_3 ; graine 0 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 13000090** (infaisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 329581 ; propagations 1385978699 ; nodes non rapporté ; temps de résolution 600.7 s (non déterministe)
+- Durée de l'exécution : 844.2 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:07 — bench3_vois2_dt1_s01
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 1.0, population 18, 26 generations, NR=6, NM=6, graine 1.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt1_s01.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt1_s01_200734.json`
+- Instance : bench_3 ; graine 1 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 11000053** (infaisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 323776 ; propagations 1391681668 ; nodes non rapporté ; temps de résolution 592.5 s (non déterministe)
+- Durée de l'exécution : 837.8 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:07 — bench3_vois2_dt1_s02
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 1.0, population 18, 26 generations, NR=6, NM=6, graine 2.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt1_s02.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt1_s02_200734.json`
+- Instance : bench_3 ; graine 2 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 7000063** (infaisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 327238 ; propagations 1365548103 ; nodes non rapporté ; temps de résolution 596.3 s (non déterministe)
+- Durée de l'exécution : 838.4 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:07 — bench3_vois2_dt1_s03
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 1.0, population 18, 26 generations, NR=6, NM=6, graine 3.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt1_s03.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt1_s03_200734.json`
+- Instance : bench_3 ; graine 3 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 27000108** (infaisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 283895 ; propagations 1473436585 ; nodes non rapporté ; temps de résolution 569.8 s (non déterministe)
+- Durée de l'exécution : 811.6 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:07 — bench3_vois2_dt1_s04
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 1.0, population 18, 26 generations, NR=6, NM=6, graine 4.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt1_s04.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt1_s04_200735.json`
+- Instance : bench_3 ; graine 4 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 13000062** (infaisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 327978 ; propagations 1371658058 ; nodes non rapporté ; temps de résolution 576.2 s (non déterministe)
+- Durée de l'exécution : 822.0 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:07 — bench3_vois2_dt1_s05
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 1.0, population 18, 26 generations, NR=6, NM=6, graine 5.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt1_s05.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt1_s05_200735.json`
+- Instance : bench_3 ; graine 5 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 4000048** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 329233 ; propagations 1370592727 ; nodes non rapporté ; temps de résolution 581.2 s (non déterministe)
+- Durée de l'exécution : 824.8 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:07 — bench3_vois2_dt1_s06
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 1.0, population 18, 26 generations, NR=6, NM=6, graine 6.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt1_s06.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt1_s06_200734.json`
+- Instance : bench_3 ; graine 6 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 13000054** (infaisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 296234 ; propagations 1422939324 ; nodes non rapporté ; temps de résolution 572.1 s (non déterministe)
+- Durée de l'exécution : 815.3 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:07 — bench3_vois2_dt1_s07
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 1.0, population 18, 26 generations, NR=6, NM=6, graine 7.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt1_s07.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt1_s07_200735.json`
+- Instance : bench_3 ; graine 7 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 11000038** (infaisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 360567 ; propagations 1315776851 ; nodes non rapporté ; temps de résolution 593.1 s (non déterministe)
+- Durée de l'exécution : 835.3 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:07 — bench3_vois2_dt1_s08
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 1.0, population 18, 26 generations, NR=6, NM=6, graine 8.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt1_s08.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt1_s08_200735.json`
+- Instance : bench_3 ; graine 8 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 14000055** (infaisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 260901 ; propagations 1440933376 ; nodes non rapporté ; temps de résolution 556.0 s (non déterministe)
+- Durée de l'exécution : 799.5 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:07 — bench3_vois2_dt1_s09
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 1.0, population 18, 26 generations, NR=6, NM=6, graine 9.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt1_s09.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt1_s09_200734.json`
+- Instance : bench_3 ; graine 9 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 13000048** (infaisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 319588 ; propagations 1291506052 ; nodes non rapporté ; temps de résolution 578.1 s (non déterministe)
+- Durée de l'exécution : 823.6 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:07 — bench3_vois2_dt1_s10
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 1.0, population 18, 26 generations, NR=6, NM=6, graine 10.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt1_s10.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt1_s10_200734.json`
+- Instance : bench_3 ; graine 10 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 14000082** (infaisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 279779 ; propagations 1421852721 ; nodes non rapporté ; temps de résolution 573.5 s (non déterministe)
+- Durée de l'exécution : 817.5 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:07 — bench3_vois2_dt1_s11
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 1.0, population 18, 26 generations, NR=6, NM=6, graine 11.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt1_s11.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt1_s11_200734.json`
+- Instance : bench_3 ; graine 11 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 11000047** (infaisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 268369 ; propagations 1425149897 ; nodes non rapporté ; temps de résolution 550.2 s (non déterministe)
+- Durée de l'exécution : 796.8 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:07 — bench3_vois2_dt1_s12
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 1.0, population 18, 26 generations, NR=6, NM=6, graine 12.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt1_s12.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt1_s12_200734.json`
+- Instance : bench_3 ; graine 12 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 20000083** (infaisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 365340 ; propagations 1405770003 ; nodes non rapporté ; temps de résolution 623.5 s (non déterministe)
+- Durée de l'exécution : 872.9 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:07 — bench3_vois2_dt1_s13
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 1.0, population 18, 26 generations, NR=6, NM=6, graine 13.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt1_s13.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt1_s13_200734.json`
+- Instance : bench_3 ; graine 13 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 4000063** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 362842 ; propagations 1358656081 ; nodes non rapporté ; temps de résolution 605.0 s (non déterministe)
+- Durée de l'exécution : 847.9 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:07 — bench3_vois2_dt1_s14
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 1.0, population 18, 26 generations, NR=6, NM=6, graine 14.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt1_s14.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt1_s14_200734.json`
+- Instance : bench_3 ; graine 14 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 21000081** (infaisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 443202 ; propagations 1403364737 ; nodes non rapporté ; temps de résolution 663.6 s (non déterministe)
+- Durée de l'exécution : 907.8 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:07 — bench3_vois2_dt1_s15
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 1.0, population 18, 26 generations, NR=6, NM=6, graine 15.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt1_s15.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt1_s15_200735.json`
+- Instance : bench_3 ; graine 15 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 10000074** (infaisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 361887 ; propagations 1353980980 ; nodes non rapporté ; temps de résolution 609.1 s (non déterministe)
+- Durée de l'exécution : 853.4 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:07 — bench3_vois2_dt1_s16
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 1.0, population 18, 26 generations, NR=6, NM=6, graine 16.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt1_s16.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt1_s16_200735.json`
+- Instance : bench_3 ; graine 16 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 10000117** (infaisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 362221 ; propagations 1397660291 ; nodes non rapporté ; temps de résolution 607.8 s (non déterministe)
+- Durée de l'exécution : 850.4 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:07 — bench3_vois2_dt1_s17
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 1.0, population 18, 26 generations, NR=6, NM=6, graine 17.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt1_s17.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt1_s17_200735.json`
+- Instance : bench_3 ; graine 17 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 4000056** (infaisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 387842 ; propagations 1357133564 ; nodes non rapporté ; temps de résolution 623.7 s (non déterministe)
+- Durée de l'exécution : 867.6 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:07 — bench3_vois2_dt1_s18
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 1.0, population 18, 26 generations, NR=6, NM=6, graine 18.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt1_s18.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt1_s18_200734.json`
+- Instance : bench_3 ; graine 18 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 12000060** (infaisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 345963 ; propagations 1395177344 ; nodes non rapporté ; temps de résolution 608.9 s (non déterministe)
+- Durée de l'exécution : 852.2 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:07 — bench3_vois2_dt1_s19
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 1.0, population 18, 26 generations, NR=6, NM=6, graine 19.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt1_s19.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt1_s19_200734.json`
+- Instance : bench_3 ; graine 19 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 19000053** (infaisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 285731 ; propagations 1453923077 ; nodes non rapporté ; temps de résolution 571.6 s (non déterministe)
+- Durée de l'exécution : 815.4 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:20 — bench3_vois2_dt1_s20
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 1.0, population 18, 26 generations, NR=6, NM=6, graine 20.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt1_s20.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt1_s20_202052.json`
+- Instance : bench_3 ; graine 20 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 14000062** (infaisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 284003 ; propagations 1450142638 ; nodes non rapporté ; temps de résolution 586.5 s (non déterministe)
+- Durée de l'exécution : 836.7 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:20 — bench3_vois2_dt2p5_s00
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 2.5, population 18, 26 generations, NR=6, NM=6, graine 0.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt2p5_s00.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt2p5_s00_202055.json`
+- Instance : bench_3 ; graine 0 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 30** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 544279 ; propagations 3083522063 ; nodes non rapporté ; temps de résolution 1256.0 s (non déterministe)
+- Durée de l'exécution : 1504.9 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:21 — bench3_vois2_dt2p5_s01
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 2.5, population 18, 26 generations, NR=6, NM=6, graine 1.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt2p5_s01.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt2p5_s01_202107.json`
+- Instance : bench_3 ; graine 1 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 29** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 629784 ; propagations 2901677503 ; nodes non rapporté ; temps de résolution 1311.7 s (non déterministe)
+- Durée de l'exécution : 1559.9 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:21 — bench3_vois2_dt2p5_s02
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 2.5, population 18, 26 generations, NR=6, NM=6, graine 2.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt2p5_s02.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt2p5_s02_202110.json`
+- Instance : bench_3 ; graine 2 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 36** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 655993 ; propagations 3034809859 ; nodes non rapporté ; temps de résolution 1328.4 s (non déterministe)
+- Durée de l'exécution : 1574.6 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:21 — bench3_vois2_dt2p5_s03
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 2.5, population 18, 26 generations, NR=6, NM=6, graine 3.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt2p5_s03.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt2p5_s03_202111.json`
+- Instance : bench_3 ; graine 3 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 25** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 709951 ; propagations 3010927035 ; nodes non rapporté ; temps de résolution 1339.1 s (non déterministe)
+- Durée de l'exécution : 1586.3 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:21 — bench3_vois2_dt2p5_s04
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 2.5, population 18, 26 generations, NR=6, NM=6, graine 4.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt2p5_s04.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt2p5_s04_202112.json`
+- Instance : bench_3 ; graine 4 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 17** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 456347 ; propagations 2763660197 ; nodes non rapporté ; temps de résolution 1178.8 s (non déterministe)
+- Durée de l'exécution : 1430.0 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:21 — bench3_vois2_dt2p5_s05
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 2.5, population 18, 26 generations, NR=6, NM=6, graine 5.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt2p5_s05.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt2p5_s05_202118.json`
+- Instance : bench_3 ; graine 5 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 36** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 810278 ; propagations 3019639605 ; nodes non rapporté ; temps de résolution 1328.0 s (non déterministe)
+- Durée de l'exécution : 1576.9 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:21 — bench3_vois2_dt2p5_s06
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 2.5, population 18, 26 generations, NR=6, NM=6, graine 6.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt2p5_s06.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt2p5_s06_202118.json`
+- Instance : bench_3 ; graine 6 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 45** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 742874 ; propagations 2944235937 ; nodes non rapporté ; temps de résolution 1371.1 s (non déterministe)
+- Durée de l'exécution : 1617.7 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:21 — bench3_vois2_dt2p5_s07
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 2.5, population 18, 26 generations, NR=6, NM=6, graine 7.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt2p5_s07.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt2p5_s07_202121.json`
+- Instance : bench_3 ; graine 7 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 99** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 618180 ; propagations 2969716423 ; nodes non rapporté ; temps de résolution 1300.3 s (non déterministe)
+- Durée de l'exécution : 1547.7 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:21 — bench3_vois2_dt2p5_s08
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 2.5, population 18, 26 generations, NR=6, NM=6, graine 8.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt2p5_s08.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt2p5_s08_202131.json`
+- Instance : bench_3 ; graine 8 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 31** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 570775 ; propagations 3184564542 ; nodes non rapporté ; temps de résolution 1307.1 s (non déterministe)
+- Durée de l'exécution : 1552.2 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:21 — bench3_vois2_dt2p5_s09
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 2.5, population 18, 26 generations, NR=6, NM=6, graine 9.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt2p5_s09.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt2p5_s09_202133.json`
+- Instance : bench_3 ; graine 9 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 27** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 639518 ; propagations 2990577156 ; nodes non rapporté ; temps de résolution 1308.4 s (non déterministe)
+- Durée de l'exécution : 1554.8 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:21 — bench3_vois2_dt2p5_s10
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 2.5, population 18, 26 generations, NR=6, NM=6, graine 10.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt2p5_s10.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt2p5_s10_202134.json`
+- Instance : bench_3 ; graine 10 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 26** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 670615 ; propagations 2971634238 ; nodes non rapporté ; temps de résolution 1321.8 s (non déterministe)
+- Durée de l'exécution : 1569.4 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:21 — bench3_vois2_dt2p5_s11
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 2.5, population 18, 26 generations, NR=6, NM=6, graine 11.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt2p5_s11.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt2p5_s11_202140.json`
+- Instance : bench_3 ; graine 11 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 39** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 695182 ; propagations 2951086896 ; nodes non rapporté ; temps de résolution 1291.9 s (non déterministe)
+- Durée de l'exécution : 1538.0 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:21 — bench3_vois2_dt2p5_s12
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 2.5, population 18, 26 generations, NR=6, NM=6, graine 12.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt2p5_s12.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt2p5_s12_202143.json`
+- Instance : bench_3 ; graine 12 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 1000029** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 675537 ; propagations 2922523128 ; nodes non rapporté ; temps de résolution 1325.0 s (non déterministe)
+- Durée de l'exécution : 1572.2 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:21 — bench3_vois2_dt2p5_s13
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 2.5, population 18, 26 generations, NR=6, NM=6, graine 13.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt2p5_s13.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt2p5_s13_202146.json`
+- Instance : bench_3 ; graine 13 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 20** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 527226 ; propagations 2876375290 ; nodes non rapporté ; temps de résolution 1236.6 s (non déterministe)
+- Durée de l'exécution : 1484.5 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:21 — bench3_vois2_dt2p5_s14
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 2.5, population 18, 26 generations, NR=6, NM=6, graine 14.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt2p5_s14.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt2p5_s14_202148.json`
+- Instance : bench_3 ; graine 14 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 1000031** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 803083 ; propagations 3103219582 ; nodes non rapporté ; temps de résolution 1425.3 s (non déterministe)
+- Durée de l'exécution : 1671.7 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:21 — bench3_vois2_dt2p5_s15
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 2.5, population 18, 26 generations, NR=6, NM=6, graine 15.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt2p5_s15.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt2p5_s15_202149.json`
+- Instance : bench_3 ; graine 15 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 45** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 607580 ; propagations 3173559704 ; nodes non rapporté ; temps de résolution 1297.4 s (non déterministe)
+- Durée de l'exécution : 1547.6 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:22 — bench3_vois2_dt2p5_s16
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 2.5, population 18, 26 generations, NR=6, NM=6, graine 16.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt2p5_s16.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt2p5_s16_202203.json`
+- Instance : bench_3 ; graine 16 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 45** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 704276 ; propagations 3073132611 ; nodes non rapporté ; temps de résolution 1372.0 s (non déterministe)
+- Durée de l'exécution : 1619.7 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:22 — bench3_vois2_dt2p5_s17
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 2.5, population 18, 26 generations, NR=6, NM=6, graine 17.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt2p5_s17.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt2p5_s17_202208.json`
+- Instance : bench_3 ; graine 17 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 1000038** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 842480 ; propagations 3073921199 ; nodes non rapporté ; temps de résolution 1462.2 s (non déterministe)
+- Durée de l'exécution : 1711.1 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:22 — bench3_vois2_dt2p5_s18
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 2.5, population 18, 26 generations, NR=6, NM=6, graine 18.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt2p5_s18.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt2p5_s18_202243.json`
+- Instance : bench_3 ; graine 18 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 50** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 607949 ; propagations 3106425852 ; nodes non rapporté ; temps de résolution 1315.0 s (non déterministe)
+- Durée de l'exécution : 1564.1 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:34 — bench3_vois2_dt2p5_s19
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 2.5, population 18, 26 generations, NR=6, NM=6, graine 19.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt2p5_s19.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt2p5_s19_203450.json`
+- Instance : bench_3 ; graine 19 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 7000058** (infaisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 738357 ; propagations 3140626411 ; nodes non rapporté ; temps de résolution 1456.5 s (non déterministe)
+- Durée de l'exécution : 1710.9 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## 2026-11-26 20:45 — bench3_vois2_dt2p5_s20
+
+Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 2.5, population 18, 26 generations, NR=6, NM=6, graine 20.
+
+- Configuration : `experiments/config/bench3_voisinage_budget/bench3_vois2_dt2p5_s20.json`
+- Résultats : `experiments/results/2026-11-26/bench3_vois2_dt2p5_s20_204504.json`
+- Instance : bench_3 ; graine 20 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 48** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 586581 ; propagations 3036876306 ; nodes non rapporté ; temps de résolution 1350.9 s (non déterministe)
+- Durée de l'exécution : 1609.7 s ; commit `96c603cc45b5bcc1a6198bdd354b20c7763a9b57`
+
+## Synthese - Interaction voisinage-budget sur bench_3
+
+- 63 nouvelles executions et 105 references reutilisees.
+- Comparaison de huit combinaisons sur 21 graines.
+- Aucun optimum atteint (optimum documente : 16).
+- Interaction importante entre voisinage et budget.
+- Voisinage 2, budget 1 : aucune solution sans violation quasi stricte.
+- Voisinage 2, budget 5 : cout moyen de 23.1429.
+- Voisinage 2, budget 10 : cout moyen de 20.7619.
+- Budgets 5 et 10 avec voisinage 2 : 21/21 solutions sans violation.
+- Le passage du budget 5 a 10 reduit le cout moyen de 10.29 %,
+  mais augmente les propagations de 65.52 %.
+- Voisinage 1 et budget 5 conserves pour les prochaines series.
+- Rapport : experiments/analysis/bench3_neighborhood_budget.md.
+- Script : experiments/analysis/analyze_bench3_neighborhood_budget.py.
