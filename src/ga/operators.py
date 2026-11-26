@@ -12,6 +12,10 @@ Opérateurs pour l'encodage par blocs (D1) ; un gène est le quart complet d'un 
     - ``ShiftStartMutation`` : décale un quart entier ;
     - ``BlockBoundaryMutation`` : déplace la frontière entre deux blocs voisins (Σd conservée) ;
     - ``ActivityMutation`` : change l'activité d'un bloc.
+Opérateurs témoins (étape 10d) : ils ignorent leurs entrées et rendent des génomes tirés au hasard, comme à
+l'initialisation, pour mesurer ce que les vrais opérateurs apportent :
+    - ``RandomGenomeCrossover`` : deux génomes aléatoires, quels que soient les parents ;
+    - ``RandomGenomeMutation`` : un génome aléatoire, quel que soit le génome reçu.
 Un opérateur peut produire un génome infaisable (D6) ; la première expérience de l'étape 10 mesurera le taux
 de faisabilité des enfants par opérateur.
 """
@@ -22,6 +26,7 @@ from collections.abc import Sequence
 from typing import Generator, Literal
 
 from src.ga.chromosome import ActivityBlock, BlockEncoding, BlockGene, BlockGenome, Encoding
+from src.ga.initialization import RandomBlockInitializer
 from src.model.shift_rules import ModelIndexing, ShiftStructure
 from src.utils.io import ProblemInstance
 
@@ -31,6 +36,10 @@ class OperatorDefaults:
 
     # Les croisements de ce module prennent deux parents.
     CROSSOVER_PARENT_COUNT: int = 2
+
+    # RandomGenomeCrossover rend autant d'enfants que UniformGeneCrossover : le témoin de l'étape 10d soumet ainsi
+    # au solveur le même nombre d'individus par génération (2 × NR) que le mémétique.
+    RANDOM_CROSSOVER_CHILD_COUNT: int = 2
 
     # BlockBoundaryMutation : nombre de périodes déplacées d'un bloc à l'autre, tiré dans cet intervalle (bornes
     # incluses). Une petite amplitude garde la mutation locale (voir TODO.md, 7b, pour une amplitude calculée).
@@ -351,3 +360,72 @@ class ActivityMutation(Mutation[BlockGenome]):
         return tuple(mutated)
 
 
+# ---------------------------------------------------------------------------------------------------------------------
+# Opérateurs témoins pour BlockEncoding (étape 10d)
+# ---------------------------------------------------------------------------------------------------------------------
+
+class RandomGenomeCrossover(Crossover[BlockGenome]):
+    """Croisement témoin (étape 10d) : ignore les gènes de ses parents et rend deux génomes tirés au hasard.
+
+    Les génomes suivent exactement la loi de l'initialisation : ce sont ceux que rendrait
+    ``RandomBlockInitializer.random_genome`` avec le même ``rng``. Garde le nombre de parents et d'enfants de
+    ``UniformGeneCrossover`` (2 → 2) : le remplacer ne change ni la sélection des parents ni le nombre d'appels au
+    solveur par génération.
+
+    Contrat de ``recombine`` :
+        - vérifie seulement le nombre de parents, sans lire leurs gènes ;
+        - premier enfant : ``random_genome(rng)`` ; deuxième : le tirage ``random_genome(rng)`` suivant ;
+        - ne consomme rien d'autre dans ``rng`` : la recherche locale qui suit, dans la même tâche, voit le même état
+          du générateur qu'après deux appels à ``random_genome``.
+
+    Raises (``recombine``):
+        WrongParentCountError: si le nombre de parents n'est pas 2.
+    """
+
+    def __init__(self, instance: ProblemInstance) -> None:
+        self.instance = instance
+        # Composition : le tirage est celui de l'initialiseur, sans LocalSolver (le moteur s'en charge ensuite).
+        self.generator = RandomBlockInitializer(instance, BlockEncoding())
+
+    @classmethod
+    def encoding_type(cls) -> type[Encoding[BlockGenome]]:
+        return BlockEncoding
+
+    def parent_count(self) -> int:
+        return OperatorDefaults.CROSSOVER_PARENT_COUNT
+
+    def recombine(self, parents: Sequence[BlockGenome], rng: random.Random) -> tuple[BlockGenome, ...]:
+        # Seul le nombre de parents compte : leurs gènes ne sont jamais lus.
+        if len(parents) != self.parent_count():
+            raise WrongParentCountError(OperatorMessages.WRONG_PARENT_COUNT.format(
+                operator=type(self).__name__, expected=self.parent_count(), found=len(parents)
+            ))
+        children = []
+        for _ in range(OperatorDefaults.RANDOM_CROSSOVER_CHILD_COUNT):
+            children.append(self.generator.random_genome(rng))
+        return tuple(children)
+
+
+class RandomGenomeMutation(Mutation[BlockGenome]):
+    """Mutation témoin (étape 10d) : ignore le génome reçu et rend un génome tiré au hasard.
+
+    Le génome suit exactement la loi de l'initialisation : c'est celui que rendrait
+    ``RandomBlockInitializer.random_genome`` avec le même ``rng``. Contrairement aux autres mutations, un génome
+    vide est accepté, puisqu'il n'est pas lu.
+
+    Contrat de ``mutate`` :
+        - rend ``random_genome(rng)`` ;
+        - ne consomme rien d'autre dans ``rng``.
+    """
+
+    def __init__(self, instance: ProblemInstance) -> None:
+        self.instance = instance
+        self.generator = RandomBlockInitializer(instance, BlockEncoding())
+
+    @classmethod
+    def encoding_type(cls) -> type[Encoding[BlockGenome]]:
+        return BlockEncoding
+
+    def mutate(self, genome: BlockGenome, rng: random.Random) -> BlockGenome:
+        # Le génome reçu n'est pas lu : un génome vide est accepté.
+        return self.generator.random_genome(rng)
