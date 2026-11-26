@@ -6533,3 +6533,772 @@ Comparaison des tailles de voisinage sur bench_3 : voisinage 4, population 18, 2
 - Voisinage 1 conserve pour reproduire le protocole bench_2.
 - Rapport : experiments/analysis/bench3_voisinage.md.
 - Script : experiments/analysis/analyze_bench3_neighborhood.py.
+
+## 2026-11-26 19:05 — bench3_stag15_s00
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 15, population 18, 26 generations, NR=6, NM=6, graine 0.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag15_s00.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag15_s00_190506.json`
+- Instance : bench_3 ; graine 0 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 42** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 73438 ; propagations 325403676 ; nodes non rapporté ; temps de résolution 168.1 s (non déterministe)
+- Durée de l'exécution : 403.5 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 19:05 — bench3_stag15_s01
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 15, population 18, 26 generations, NR=6, NM=6, graine 1.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag15_s01.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag15_s01_190515.json`
+- Instance : bench_3 ; graine 1 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 44420 ; propagations 192093915 ; nodes non rapporté ; temps de résolution 96.5 s (non déterministe)
+- Durée de l'exécution : 327.7 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 19:05 — bench3_stag15_s02
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 15, population 18, 26 generations, NR=6, NM=6, graine 2.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag15_s02.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag15_s02_190516.json`
+- Instance : bench_3 ; graine 2 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 34** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 61738 ; propagations 275871246 ; nodes non rapporté ; temps de résolution 138.2 s (non déterministe)
+- Durée de l'exécution : 376.7 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 19:05 — bench3_stag15_s03
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 15, population 18, 26 generations, NR=6, NM=6, graine 3.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag15_s03.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag15_s03_190538.json`
+- Instance : bench_3 ; graine 3 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 41** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 56182 ; propagations 255380403 ; nodes non rapporté ; temps de résolution 129.1 s (non déterministe)
+- Durée de l'exécution : 364.5 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 19:05 — bench3_stag15_s04
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 15, population 18, 26 generations, NR=6, NM=6, graine 4.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag15_s04.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag15_s04_190550.json`
+- Instance : bench_3 ; graine 4 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 43** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 112570 ; propagations 467527220 ; nodes non rapporté ; temps de résolution 235.7 s (non déterministe)
+- Durée de l'exécution : 484.3 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 19:05 — bench3_stag15_s05
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 15, population 18, 26 generations, NR=6, NM=6, graine 5.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag15_s05.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag15_s05_190553.json`
+- Instance : bench_3 ; graine 5 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 35** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 48817 ; propagations 234309898 ; nodes non rapporté ; temps de résolution 114.5 s (non déterministe)
+- Durée de l'exécution : 349.4 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 19:06 — bench3_stag15_s06
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 15, population 18, 26 generations, NR=6, NM=6, graine 6.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag15_s06.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag15_s06_190623.json`
+- Instance : bench_3 ; graine 6 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 35** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 67151 ; propagations 319410608 ; nodes non rapporté ; temps de résolution 159.5 s (non déterministe)
+- Durée de l'exécution : 394.6 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 19:06 — bench3_stag15_s07
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 15, population 18, 26 generations, NR=6, NM=6, graine 7.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag15_s07.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag15_s07_190626.json`
+- Instance : bench_3 ; graine 7 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 52** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 63965 ; propagations 281508326 ; nodes non rapporté ; temps de résolution 140.4 s (non déterministe)
+- Durée de l'exécution : 375.8 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 19:06 — bench3_stag15_s08
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 15, population 18, 26 generations, NR=6, NM=6, graine 8.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag15_s08.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag15_s08_190633.json`
+- Instance : bench_3 ; graine 8 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 28** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 67955 ; propagations 302375771 ; nodes non rapporté ; temps de résolution 147.3 s (non déterministe)
+- Durée de l'exécution : 384.8 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 19:06 — bench3_stag15_s09
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 15, population 18, 26 generations, NR=6, NM=6, graine 9.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag15_s09.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag15_s09_190644.json`
+- Instance : bench_3 ; graine 9 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 43** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 71746 ; propagations 298970724 ; nodes non rapporté ; temps de résolution 144.7 s (non déterministe)
+- Durée de l'exécution : 380.1 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 19:07 — bench3_stag15_s10
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 15, population 18, 26 generations, NR=6, NM=6, graine 10.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag15_s10.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag15_s10_190704.json`
+- Instance : bench_3 ; graine 10 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 33** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 52330 ; propagations 236122936 ; nodes non rapporté ; temps de résolution 120.4 s (non déterministe)
+- Durée de l'exécution : 355.5 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 19:07 — bench3_stag15_s11
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 15, population 18, 26 generations, NR=6, NM=6, graine 11.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag15_s11.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag15_s11_190710.json`
+- Instance : bench_3 ; graine 11 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 46** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 60757 ; propagations 276710927 ; nodes non rapporté ; temps de résolution 138.1 s (non déterministe)
+- Durée de l'exécution : 371.8 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 19:07 — bench3_stag15_s12
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 15, population 18, 26 generations, NR=6, NM=6, graine 12.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag15_s12.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag15_s12_190731.json`
+- Instance : bench_3 ; graine 12 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 45** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 85110 ; propagations 398299027 ; nodes non rapporté ; temps de résolution 197.2 s (non déterministe)
+- Durée de l'exécution : 424.8 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 19:07 — bench3_stag15_s13
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 15, population 18, 26 generations, NR=6, NM=6, graine 13.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag15_s13.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag15_s13_190735.json`
+- Instance : bench_3 ; graine 13 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 35** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 80053 ; propagations 354884380 ; nodes non rapporté ; temps de résolution 178.3 s (non déterministe)
+- Durée de l'exécution : 412.2 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 19:07 — bench3_stag15_s14
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 15, population 18, 26 generations, NR=6, NM=6, graine 14.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag15_s14.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag15_s14_190744.json`
+- Instance : bench_3 ; graine 14 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 88** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 87399 ; propagations 399283246 ; nodes non rapporté ; temps de résolution 197.7 s (non déterministe)
+- Durée de l'exécution : 423.7 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 19:07 — bench3_stag15_s15
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 15, population 18, 26 generations, NR=6, NM=6, graine 15.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag15_s15.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag15_s15_190751.json`
+- Instance : bench_3 ; graine 15 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 48** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 52734 ; propagations 228761563 ; nodes non rapporté ; temps de résolution 115.5 s (non déterministe)
+- Durée de l'exécution : 348.9 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 19:08 — bench3_stag15_s16
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 15, population 18, 26 generations, NR=6, NM=6, graine 16.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag15_s16.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag15_s16_190811.json`
+- Instance : bench_3 ; graine 16 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 45** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 94417 ; propagations 429995934 ; nodes non rapporté ; temps de résolution 208.5 s (non déterministe)
+- Durée de l'exécution : 431.6 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 19:08 — bench3_stag15_s17
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 15, population 18, 26 generations, NR=6, NM=6, graine 17.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag15_s17.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag15_s17_190830.json`
+- Instance : bench_3 ; graine 17 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 41** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 49617 ; propagations 222101256 ; nodes non rapporté ; temps de résolution 112.7 s (non déterministe)
+- Durée de l'exécution : 341.4 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 19:10 — bench3_stag15_s18
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 15, population 18, 26 generations, NR=6, NM=6, graine 18.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag15_s18.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag15_s18_191044.json`
+- Instance : bench_3 ; graine 18 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 36** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 49380 ; propagations 227795908 ; nodes non rapporté ; temps de résolution 105.0 s (non déterministe)
+- Durée de l'exécution : 309.2 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 19:11 — bench3_stag15_s19
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 15, population 18, 26 generations, NR=6, NM=6, graine 19.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag15_s19.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag15_s19_191134.json`
+- Instance : bench_3 ; graine 19 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 30** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 69485 ; propagations 297197700 ; nodes non rapporté ; temps de résolution 131.7 s (non déterministe)
+- Durée de l'exécution : 325.1 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 19:11 — bench3_stag15_s20
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 15, population 18, 26 generations, NR=6, NM=6, graine 20.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag15_s20.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag15_s20_191143.json`
+- Instance : bench_3 ; graine 20 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 43** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 92471 ; propagations 432050119 ; nodes non rapporté ; temps de résolution 188.6 s (non déterministe)
+- Durée de l'exécution : 378.8 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:49 — bench3_stag3_s00
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 3, population 18, 26 generations, NR=6, NM=6, graine 0.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag3_s00.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag3_s00_184926.json`
+- Instance : bench_3 ; graine 0 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 42** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 114722 ; propagations 519922835 ; nodes non rapporté ; temps de résolution 267.9 s (non déterministe)
+- Durée de l'exécution : 513.7 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:49 — bench3_stag3_s01
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 3, population 18, 26 generations, NR=6, NM=6, graine 1.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag3_s01.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag3_s01_184926.json`
+- Instance : bench_3 ; graine 1 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 35** (faisable) ; 26 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 554 appels ; failures 150732 ; propagations 657991716 ; nodes non rapporté ; temps de résolution 339.9 s (non déterministe)
+- Durée de l'exécution : 609.4 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:49 — bench3_stag3_s02
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 3, population 18, 26 generations, NR=6, NM=6, graine 2.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag3_s02.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag3_s02_184926.json`
+- Instance : bench_3 ; graine 2 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 45** (faisable) ; 26 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 554 appels ; failures 145342 ; propagations 645834742 ; nodes non rapporté ; temps de résolution 327.8 s (non déterministe)
+- Durée de l'exécution : 590.7 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:49 — bench3_stag3_s03
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 3, population 18, 26 generations, NR=6, NM=6, graine 3.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag3_s03.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag3_s03_184926.json`
+- Instance : bench_3 ; graine 3 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 37** (faisable) ; 26 générations, 3 restart(s)
+- **Effort cumulé du solveur** : 537 appels ; failures 107710 ; propagations 486124039 ; nodes non rapporté ; temps de résolution 245.5 s (non déterministe)
+- Durée de l'exécution : 499.3 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:49 — bench3_stag3_s04
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 3, population 18, 26 generations, NR=6, NM=6, graine 4.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag3_s04.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag3_s04_184926.json`
+- Instance : bench_3 ; graine 4 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 43** (faisable) ; 26 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 554 appels ; failures 170514 ; propagations 720383435 ; nodes non rapporté ; temps de résolution 365.4 s (non déterministe)
+- Durée de l'exécution : 626.6 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:49 — bench3_stag3_s05
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 3, population 18, 26 generations, NR=6, NM=6, graine 5.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag3_s05.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag3_s05_184926.json`
+- Instance : bench_3 ; graine 5 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 35** (faisable) ; 26 générations, 3 restart(s)
+- **Effort cumulé du solveur** : 537 appels ; failures 122993 ; propagations 559716590 ; nodes non rapporté ; temps de résolution 278.0 s (non déterministe)
+- Durée de l'exécution : 530.6 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:49 — bench3_stag3_s06
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 3, population 18, 26 generations, NR=6, NM=6, graine 6.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag3_s06.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag3_s06_184926.json`
+- Instance : bench_3 ; graine 6 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 35** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 113466 ; propagations 534867002 ; nodes non rapporté ; temps de résolution 268.5 s (non déterministe)
+- Durée de l'exécution : 514.5 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:49 — bench3_stag3_s07
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 3, population 18, 26 generations, NR=6, NM=6, graine 7.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag3_s07.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag3_s07_184926.json`
+- Instance : bench_3 ; graine 7 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 52** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 121780 ; propagations 511339034 ; nodes non rapporté ; temps de résolution 258.8 s (non déterministe)
+- Durée de l'exécution : 505.2 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:49 — bench3_stag3_s08
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 3, population 18, 26 generations, NR=6, NM=6, graine 8.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag3_s08.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag3_s08_184926.json`
+- Instance : bench_3 ; graine 8 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 46** (faisable) ; 26 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 554 appels ; failures 155467 ; propagations 686958218 ; nodes non rapporté ; temps de résolution 346.9 s (non déterministe)
+- Durée de l'exécution : 609.7 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:49 — bench3_stag3_s09
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 3, population 18, 26 generations, NR=6, NM=6, graine 9.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag3_s09.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag3_s09_184926.json`
+- Instance : bench_3 ; graine 9 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 45** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 107088 ; propagations 458082943 ; nodes non rapporté ; temps de résolution 226.2 s (non déterministe)
+- Durée de l'exécution : 470.9 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:49 — bench3_stag3_s10
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 3, population 18, 26 generations, NR=6, NM=6, graine 10.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag3_s10.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag3_s10_184926.json`
+- Instance : bench_3 ; graine 10 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 34** (faisable) ; 26 générations, 3 restart(s)
+- **Effort cumulé du solveur** : 537 appels ; failures 132256 ; propagations 579036790 ; nodes non rapporté ; temps de résolution 293.0 s (non déterministe)
+- Durée de l'exécution : 546.4 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:49 — bench3_stag3_s11
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 3, population 18, 26 generations, NR=6, NM=6, graine 11.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag3_s11.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag3_s11_184926.json`
+- Instance : bench_3 ; graine 11 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 41** (faisable) ; 26 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 554 appels ; failures 148141 ; propagations 641810946 ; nodes non rapporté ; temps de résolution 321.4 s (non déterministe)
+- Durée de l'exécution : 582.0 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:49 — bench3_stag3_s12
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 3, population 18, 26 generations, NR=6, NM=6, graine 12.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag3_s12.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag3_s12_184926.json`
+- Instance : bench_3 ; graine 12 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 45** (faisable) ; 26 générations, 3 restart(s)
+- **Effort cumulé du solveur** : 537 appels ; failures 123131 ; propagations 564621476 ; nodes non rapporté ; temps de résolution 281.4 s (non déterministe)
+- Durée de l'exécution : 535.1 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:49 — bench3_stag3_s13
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 3, population 18, 26 generations, NR=6, NM=6, graine 13.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag3_s13.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag3_s13_184926.json`
+- Instance : bench_3 ; graine 13 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 41** (faisable) ; 26 générations, 3 restart(s)
+- **Effort cumulé du solveur** : 537 appels ; failures 133292 ; propagations 587586863 ; nodes non rapporté ; temps de résolution 298.5 s (non déterministe)
+- Durée de l'exécution : 552.8 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:49 — bench3_stag3_s14
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 3, population 18, 26 generations, NR=6, NM=6, graine 14.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag3_s14.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag3_s14_184925.json`
+- Instance : bench_3 ; graine 14 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 88** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 108844 ; propagations 493212714 ; nodes non rapporté ; temps de résolution 249.9 s (non déterministe)
+- Durée de l'exécution : 489.9 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:49 — bench3_stag3_s15
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 3, population 18, 26 generations, NR=6, NM=6, graine 15.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag3_s15.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag3_s15_184926.json`
+- Instance : bench_3 ; graine 15 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 48** (faisable) ; 26 générations, 3 restart(s)
+- **Effort cumulé du solveur** : 537 appels ; failures 125707 ; propagations 542060760 ; nodes non rapporté ; temps de résolution 274.7 s (non déterministe)
+- Durée de l'exécution : 527.2 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:49 — bench3_stag3_s16
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 3, population 18, 26 generations, NR=6, NM=6, graine 16.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag3_s16.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag3_s16_184925.json`
+- Instance : bench_3 ; graine 16 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 46** (faisable) ; 26 générations, 3 restart(s)
+- **Effort cumulé du solveur** : 537 appels ; failures 138401 ; propagations 632772954 ; nodes non rapporté ; temps de résolution 317.1 s (non déterministe)
+- Durée de l'exécution : 570.2 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:49 — bench3_stag3_s17
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 3, population 18, 26 generations, NR=6, NM=6, graine 17.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag3_s17.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag3_s17_184925.json`
+- Instance : bench_3 ; graine 17 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 41** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 96087 ; propagations 428140381 ; nodes non rapporté ; temps de résolution 217.1 s (non déterministe)
+- Durée de l'exécution : 462.0 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:49 — bench3_stag3_s18
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 3, population 18, 26 generations, NR=6, NM=6, graine 18.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag3_s18.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag3_s18_184926.json`
+- Instance : bench_3 ; graine 18 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 36** (faisable) ; 26 générations, 3 restart(s)
+- **Effort cumulé du solveur** : 537 appels ; failures 118441 ; propagations 537460942 ; nodes non rapporté ; temps de résolution 264.0 s (non déterministe)
+- Durée de l'exécution : 517.1 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:49 — bench3_stag3_s19
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 3, population 18, 26 generations, NR=6, NM=6, graine 19.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag3_s19.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag3_s19_184926.json`
+- Instance : bench_3 ; graine 19 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 43** (faisable) ; 26 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 554 appels ; failures 142769 ; propagations 617286972 ; nodes non rapporté ; temps de résolution 310.1 s (non déterministe)
+- Durée de l'exécution : 571.4 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:57 — bench3_stag3_s20
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 3, population 18, 26 generations, NR=6, NM=6, graine 20.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag3_s20.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag3_s20_185709.json`
+- Instance : bench_3 ; graine 20 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 47** (faisable) ; 26 générations, 3 restart(s)
+- **Effort cumulé du solveur** : 537 appels ; failures 134397 ; propagations 579662031 ; nodes non rapporté ; temps de résolution 296.1 s (non déterministe)
+- Durée de l'exécution : 556.5 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:57 — bench3_stag5_s00
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 5, population 18, 26 generations, NR=6, NM=6, graine 0.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag5_s00.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag5_s00_185718.json`
+- Instance : bench_3 ; graine 0 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 42** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 95663 ; propagations 432032160 ; nodes non rapporté ; temps de résolution 222.9 s (non déterministe)
+- Durée de l'exécution : 466.9 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:57 — bench3_stag5_s01
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 5, population 18, 26 generations, NR=6, NM=6, graine 1.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag5_s01.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag5_s01_185736.json`
+- Instance : bench_3 ; graine 1 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 39** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 96735 ; propagations 399321057 ; nodes non rapporté ; temps de résolution 207.6 s (non déterministe)
+- Durée de l'exécution : 458.3 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:57 — bench3_stag5_s02
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 5, population 18, 26 generations, NR=6, NM=6, graine 2.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag5_s02.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag5_s02_185746.json`
+- Instance : bench_3 ; graine 2 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 34** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 78780 ; propagations 345922746 ; nodes non rapporté ; temps de résolution 173.2 s (non déterministe)
+- Durée de l'exécution : 416.6 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:57 — bench3_stag5_s03
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 5, population 18, 26 generations, NR=6, NM=6, graine 3.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag5_s03.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag5_s03_185753.json`
+- Instance : bench_3 ; graine 3 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 41** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 111737 ; propagations 509372806 ; nodes non rapporté ; temps de résolution 258.1 s (non déterministe)
+- Durée de l'exécution : 509.4 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:58 — bench3_stag5_s04
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 5, population 18, 26 generations, NR=6, NM=6, graine 4.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag5_s04.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag5_s04_185800.json`
+- Instance : bench_3 ; graine 4 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 43** (faisable) ; 26 générations, 3 restart(s)
+- **Effort cumulé du solveur** : 537 appels ; failures 151486 ; propagations 637618484 ; nodes non rapporté ; temps de résolution 329.7 s (non déterministe)
+- Durée de l'exécution : 590.0 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:58 — bench3_stag5_s05
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 5, population 18, 26 generations, NR=6, NM=6, graine 5.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag5_s05.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag5_s05_185801.json`
+- Instance : bench_3 ; graine 5 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 35** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 98465 ; propagations 438230946 ; nodes non rapporté ; temps de résolution 219.0 s (non déterministe)
+- Durée de l'exécution : 470.6 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:58 — bench3_stag5_s06
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 5, population 18, 26 generations, NR=6, NM=6, graine 6.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag5_s06.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag5_s06_185804.json`
+- Instance : bench_3 ; graine 6 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 35** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 94317 ; propagations 435649902 ; nodes non rapporté ; temps de résolution 221.2 s (non déterministe)
+- Durée de l'exécution : 464.7 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:58 — bench3_stag5_s07
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 5, population 18, 26 generations, NR=6, NM=6, graine 7.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag5_s07.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag5_s07_185815.json`
+- Instance : bench_3 ; graine 7 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 52** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 80033 ; propagations 342852309 ; nodes non rapporté ; temps de résolution 173.6 s (non déterministe)
+- Durée de l'exécution : 419.0 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:58 — bench3_stag5_s08
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 5, population 18, 26 generations, NR=6, NM=6, graine 8.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag5_s08.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag5_s08_185818.json`
+- Instance : bench_3 ; graine 8 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 28** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 67955 ; propagations 302375771 ; nodes non rapporté ; temps de résolution 149.3 s (non déterministe)
+- Durée de l'exécution : 387.2 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:58 — bench3_stag5_s09
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 5, population 18, 26 generations, NR=6, NM=6, graine 9.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag5_s09.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag5_s09_185822.json`
+- Instance : bench_3 ; graine 9 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 45** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 89200 ; propagations 379214600 ; nodes non rapporté ; temps de résolution 190.1 s (non déterministe)
+- Durée de l'exécution : 434.6 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:58 — bench3_stag5_s10
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 5, population 18, 26 generations, NR=6, NM=6, graine 10.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag5_s10.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag5_s10_185833.json`
+- Instance : bench_3 ; graine 10 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 34** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 105094 ; propagations 461158689 ; nodes non rapporté ; temps de résolution 236.7 s (non déterministe)
+- Durée de l'exécution : 489.7 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:58 — bench3_stag5_s11
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 5, population 18, 26 generations, NR=6, NM=6, graine 11.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag5_s11.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag5_s11_185840.json`
+- Instance : bench_3 ; graine 11 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 51** (faisable) ; 26 générations, 3 restart(s)
+- **Effort cumulé du solveur** : 537 appels ; failures 136145 ; propagations 607480416 ; nodes non rapporté ; temps de résolution 308.8 s (non déterministe)
+- Durée de l'exécution : 569.9 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:58 — bench3_stag5_s12
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 5, population 18, 26 generations, NR=6, NM=6, graine 12.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag5_s12.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag5_s12_185857.json`
+- Instance : bench_3 ; graine 12 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 43** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 116388 ; propagations 536837978 ; nodes non rapporté ; temps de résolution 267.5 s (non déterministe)
+- Durée de l'exécution : 517.4 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:58 — bench3_stag5_s13
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 5, population 18, 26 generations, NR=6, NM=6, graine 13.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag5_s13.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag5_s13_185858.json`
+- Instance : bench_3 ; graine 13 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 35** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 117256 ; propagations 515756431 ; nodes non rapporté ; temps de résolution 260.7 s (non déterministe)
+- Durée de l'exécution : 511.6 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:59 — bench3_stag5_s14
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 5, population 18, 26 generations, NR=6, NM=6, graine 14.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag5_s14.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag5_s14_185909.json`
+- Instance : bench_3 ; graine 14 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 88** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 98755 ; propagations 447793022 ; nodes non rapporté ; temps de résolution 229.4 s (non déterministe)
+- Durée de l'exécution : 473.4 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:59 — bench3_stag5_s15
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 5, population 18, 26 generations, NR=6, NM=6, graine 15.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag5_s15.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag5_s15_185918.json`
+- Instance : bench_3 ; graine 15 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 48** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 103198 ; propagations 435767142 ; nodes non rapporté ; temps de résolution 219.8 s (non déterministe)
+- Durée de l'exécution : 470.6 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:59 — bench3_stag5_s16
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 5, population 18, 26 generations, NR=6, NM=6, graine 16.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag5_s16.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag5_s16_185937.json`
+- Instance : bench_3 ; graine 16 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 46** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 121930 ; propagations 553222119 ; nodes non rapporté ; temps de résolution 281.9 s (non déterministe)
+- Durée de l'exécution : 532.5 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:59 — bench3_stag5_s17
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 5, population 18, 26 generations, NR=6, NM=6, graine 17.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag5_s17.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag5_s17_185937.json`
+- Instance : bench_3 ; graine 17 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 41** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 75603 ; propagations 338748926 ; nodes non rapporté ; temps de résolution 172.0 s (non déterministe)
+- Durée de l'exécution : 414.5 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 18:59 — bench3_stag5_s18
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 5, population 18, 26 generations, NR=6, NM=6, graine 18.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag5_s18.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag5_s18_185954.json`
+- Instance : bench_3 ; graine 18 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 36** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 98899 ; propagations 432869807 ; nodes non rapporté ; temps de résolution 216.7 s (non déterministe)
+- Durée de l'exécution : 469.1 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 19:04 — bench3_stag5_s19
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 5, population 18, 26 generations, NR=6, NM=6, graine 19.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag5_s19.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag5_s19_190444.json`
+- Instance : bench_3 ; graine 19 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 43** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 119198 ; propagations 521662189 ; nodes non rapporté ; temps de résolution 267.9 s (non déterministe)
+- Durée de l'exécution : 521.3 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## 2026-11-26 19:04 — bench3_stag5_s20
+
+Comparaison des seuils de stagnation sur bench_3 : stagnation 5, population 18, 26 generations, NR=6, NM=6, graine 20.
+
+- Configuration : `experiments/config/bench3_stagnation/bench3_stag5_s20.json`
+- Résultats : `experiments/results/2026-11-26/bench3_stag5_s20_190446.json`
+- Instance : bench_3 ; graine 20 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 41** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 105099 ; propagations 475029604 ; nodes non rapporté ; temps de résolution 240.8 s (non déterministe)
+- Durée de l'exécution : 482.4 s ; commit `f9376a7dbd6984b86138e4e045ca102d1a2bb52f`
+
+## Synthese - Seuil de stagnation sur bench_3
+
+- 63 nouvelles executions et 21 references reutilisees.
+- Toutes les solutions finales sont faisables et sans violation quasi stricte.
+- Aucun optimum atteint (optimum documente : 16).
+- Seuil 10 : meilleur cout moyen (41.2857).
+- Seuil 15 : effort solveur minimal.
+- Seuil 3 : 68.7 % plus de propagations que le seuil 10.
+- Les redemarrages frequents ne procurent pas de gain observable.
+- Seuil 10 conserve comme reference.
+- Rapport : experiments/analysis/bench3_stagnation.md.
+- Script : experiments/analysis/analyze_bench3_stagnation.py.
