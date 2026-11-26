@@ -9,7 +9,8 @@ Le registre vérifie aussi, à l'assemblage, qu'un opérateur de variation est c
 une incompatibilité est découverte avant l'exécution, pas au milieu (``IncompatibleOperatorError``).
 """
 
-from collections.abc import Callable, Iterable
+import inspect
+from collections.abc import Callable, Iterable, Mapping
 from typing import Any
 
 from src.ga.chromosome import Encoding
@@ -21,6 +22,9 @@ class RegistryMessages:
 
     DUPLICATE_NAME: str = "Le registre {registry} contient déjà un opérateur nommé « {name} »."
     UNKNOWN_NAME: str = "Le registre {registry} ne contient aucun opérateur nommé « {name} » ; noms connus : {known}."
+    INVALID_PARAMETERS: str = (
+        "Paramètres {parameters} invalides pour l'opérateur « {name} » du registre {registry} : {detail}."
+    )
     INCOMPATIBLE_OPERATOR: str = (
         "L'opérateur {operator} manipule des génomes de {expected} ; il est incompatible avec l'encodage {found}."
     )
@@ -48,6 +52,21 @@ class UnknownOperatorError(RegistryError):
             registry=registry_name,
             name=operator_name,
             known=", ".join(self.known)
+        ))
+
+
+class InvalidOperatorParametersError(RegistryError):
+    """Les paramètres ne conviennent pas à la fabrique de l'opérateur : paramètre inattendu ou paramètre obligatoire
+    absent (étape 10c)."""
+    def __init__(self, registry_name: str, operator_name: str, parameters: Mapping[str, Any], detail: str) -> None:
+        self.registry_name = registry_name
+        self.operator_name = operator_name
+        self.parameters = dict(parameters)
+        super().__init__(RegistryMessages.INVALID_PARAMETERS.format(
+            parameters=self.parameters,
+            name=operator_name,
+            registry=registry_name,
+            detail=detail,
         ))
 
 
@@ -95,9 +114,32 @@ class OperatorRegistry:
         Raises:
             UnknownOperatorError: si ``operator_name`` n'est pas enregistré (les noms connus sont dans le message).
         """
+        return self.factory(operator_name)(**parameters)
+
+    def factory(self, operator_name: str) -> Callable[..., Any]:
+        """La fabrique enregistrée sous ``operator_name``.
+
+        Raises:
+            UnknownOperatorError: si ``operator_name`` n'est pas enregistré (les noms connus sont dans le message).
+        """
         if operator_name not in self._factories:
             raise UnknownOperatorError(self.name, operator_name, self._factories.keys())
-        return self._factories[operator_name](**parameters)
+        return self._factories[operator_name]
+
+    def check_parameters(self, operator_name: str, **parameters: Any) -> None:
+        """Vérifie, sans créer l'opérateur, que ``parameters`` conviennent à la fabrique de ``operator_name`` : aucun
+        paramètre inattendu, aucun paramètre obligatoire absent. Les valeurs, elles, ne sont vérifiées qu'à la création.
+
+        Raises:
+            UnknownOperatorError: si ``operator_name`` n'est pas enregistré.
+            InvalidOperatorParametersError: si les paramètres ne conviennent pas ; le message nomme l'opérateur, le
+                registre et le paramètre en cause.
+        """
+        factory = self.factory(operator_name)
+        try:
+            inspect.signature(factory).bind(**parameters)
+        except TypeError as error:
+            raise InvalidOperatorParametersError(self.name, operator_name, parameters, str(error)) from error
 
     @staticmethod
     def check_compatibility(operator: VariationOperator, encoding: Encoding) -> None:
