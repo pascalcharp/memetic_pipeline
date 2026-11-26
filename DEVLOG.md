@@ -1095,3 +1095,16 @@ Aucun changement de comportement. Suite complète verte.
 - `PlusSurvivorSelector` garde le parent en cas d'égalité (tri stable) ; pour 10e, il faudra une sélection qui accepte l'enfant à coût égal.
 
 **Coordination.** Mély a une branche en cours (`etape-10-validation-strategies` : ratios NR/NM, opérateurs de mutation, recherche locale initiale), sans recouvrement avec ce témoin.
+
+## 2026-11-25 — Étape 10d : scaffold et tests des opérateurs témoins (Claude, pour Pascal)
+
+**Scaffold.** `RandomGenomeCrossover` et `RandomGenomeMutation` dans `src/ga/operators.py` : constructeur (`instance`), `encoding_type` (`BlockEncoding`), `parent_count` (2, comme `UniformGeneCrossover`) et le contrat dans la docstring ; `recombine` et `mutate` lèvent `NotImplementedError` (Pascal). `OperatorDefaults.RANDOM_CROSSOVER_CHILD_COUNT` (2). Au catalogue, le nom `random_genome` pour les deux rôles et deux fabriques qui passent l'instance du contexte. `docs/AVAILABLE_STRATEGIES.md` à jour.
+
+**Contrat retenu.** Les génomes suivent exactement la loi de l'initialisation : avec un `rng` dans le même état, le croisement rend deux tirages successifs de `RandomBlockInitializer.random_genome`, la mutation un tirage, et aucun des deux ne consomme autre chose dans `rng`. La recherche locale qui suit dans la même tâche voit donc un état du générateur bien défini. Le croisement vérifie le nombre de parents, sans lire leurs gènes ; la mutation accepte un génome vide.
+
+**Tests** (écrits par Claude, validés contre une implantation jetable hors du dépôt, injectée en mémoire) :
+- `tests/test_operators.py`, `TestRandomGenomeOperators`, 15 tests : compatibilité d'encodage, nombre de parents et d'enfants, égalité avec les tirages de l'initialiseur, état du `rng` après l'appel, entrées ignorées (parents différents ou génome vide : même résultat ; des parents dont la lecture d'un gène échoue), mauvais nombre de parents (message avec l'opérateur et les nombres), reproductibilité, tirages différents selon la graine, faisabilité structurelle de 200 tirages sur bench_2 et bench_5.
+- `tests/test_catalog.py` : les deux noms ajoutés aux classes attendues, et un test qui vérifie que l'instance du contexte est transmise.
+- `tests/test_integration.py`, `TestRandomGenomeWitnessOnBench1`, 5 tests avec MiniZinc (environ 30 s) : exécution complète sur bench_1 avec les deux stratégies, même nombre de recherches locales par génération que le mémétique (2 × NR et NM), individus structurellement faisables, reproductibilité.
+
+**Import.** `operators.py` importe maintenant `RandomBlockInitializer` (`src/ga/initialization.py`) ; pas de cycle, puisque `initialization` n'importe pas `operators`.

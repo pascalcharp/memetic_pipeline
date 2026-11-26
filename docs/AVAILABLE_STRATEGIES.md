@@ -74,11 +74,14 @@ Rôle `crossover`, interface `Crossover[G]` (`src/ga/operators.py`). Le moteur f
 | Classe | Nom | Encodage | Parents → enfants | Paramètres | Réf. |
 |---|---|---|---|---|---|
 | `UniformGeneCrossover` | `uniform_gene` | `BlockEncoding` | 2 → 2 | aucun | ✅ |
+| `RandomGenomeCrossover` | `random_genome` | `BlockEncoding` | 2 → 2 | `instance` (fournie par le catalogue) | ➖ témoin |
 
 **`UniformGeneCrossover`** (croisement uniforme, Syswerda 1989). Pour chaque employé, un tirage décide si les deux enfants échangent le gène de cet employé. Rend deux enfants complémentaires.
 - Échange des **gènes entiers** : chaque quart reste faisable, seule la couverture change.
 - Lève `WrongParentCountError` (pas exactement 2 parents) et `ParentLengthMismatchError` (parents de longueurs différentes).
 - Limite connue (D3) : les employés sont interchangeables, et deux parents peuvent décrire presque le même horaire avec les employés permutés ; le croisement ne les aligne pas.
+
+**`RandomGenomeCrossover`** (témoin, étape 10d). Ignore les gènes des parents et rend deux génomes tirés au hasard, selon la loi de l'initialisation (`RandomBlockInitializer.random_genome`, deux tirages successifs avec le `rng` de la tâche). Garde 2 parents et 2 enfants, pour que le témoin soumette au solveur autant d'individus par génération que le mémétique. Lève `WrongParentCountError` si le nombre de parents n'est pas 2.
 
 ---
 
@@ -103,6 +106,7 @@ Rôle `mutation`, interface `Mutation[G]` (`src/ga/operators.py`). Le moteur fai
 | `ShiftStartMutation` | `shift_start` | `BlockEncoding` | `instance` (fournie par le catalogue) | ✅ |
 | `BlockBoundaryMutation` | `block_boundary` | `BlockEncoding` | aucun | ➖ |
 | `ActivityMutation` | `activity` | `BlockEncoding` | `instance` (fournie par le catalogue) | ➖ |
+| `RandomGenomeMutation` | `random_genome` | `BlockEncoding` | `instance` (fournie par le catalogue) | ➖ témoin |
 
 **`ShiftStartMutation`**. Décale le quart entier d'un employé tiré au hasard, de 1 à 3 périodes (`MIN_SHIFT_AMPLITUDE`, `MAX_SHIFT_AMPLITUDE`) vers le plus tôt ou le plus tard. Le décalage est borné pour que le quart reste dans les fenêtres de début et de fin de l'instance. Les durées ne changent pas.
 
@@ -110,6 +114,8 @@ Rôle `mutation`, interface `Mutation[G]` (`src/ga/operators.py`). Le moteur fai
 - Limite connue : le déplacement d'une pause ou du dîner peut sortir de sa fenêtre ; une amplitude calculée à partir des contraintes du quart est prévue (TODO, étape 7b).
 
 **`ActivityMutation`**. Change l'activité d'un bloc tiré au hasard pour une **autre** activité de l'instance. Les jalons ne changent pas, donc le quart reste faisable. Sur une instance à une seule activité (`bench_1`), le génome est rendu inchangé.
+
+**`RandomGenomeMutation`** (témoin, étape 10d). Ignore le génome reçu et rend un génome tiré au hasard, selon la loi de l'initialisation (`RandomBlockInitializer.random_genome` avec le `rng` de la tâche). Exception à la règle de la section : elle ne modifie pas un seul gène, et accepte un génome vide, puisqu'elle ne le lit pas.
 
 ---
 

@@ -25,7 +25,13 @@ from minizinc.error import MiniZincWarning
 from src.config import ProjectPaths
 from src.ga.chromosome import BlockEncoding
 from src.ga.initialization import RandomBlockInitializer
-from src.ga.operators import ActivityMutation, ShiftStartMutation, UniformGeneCrossover
+from src.ga.operators import (
+    ActivityMutation,
+    RandomGenomeCrossover,
+    RandomGenomeMutation,
+    ShiftStartMutation,
+    UniformGeneCrossover,
+)
 from src.ga.population import EliteRestart, PlusSurvivorSelector, StagnationCriterion
 from src.ga.selection import TournamentSelector, UniformMutableSelector
 from src.memetic.assembly import AssemblyDefaults, AssemblySettings, build_block_memetic_config
@@ -396,6 +402,82 @@ class TestMemeticOnBench1(unittest.TestCase):
         field = RecordSchema.EVENT_FIELD
         self.assertEqual([line[field] for line in self.jsonl_lines], [record[field] for record in self.memory.records])
 
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Témoin « individus aléatoires + LocalSolver » (étape 10d), avec MiniZinc et CP-SAT
+# ---------------------------------------------------------------------------------------------------------------------
+
+RANDOM_GENOME_WITNESS = StrategyChoices(
+    crossover=StrategyChoice(StrategyNames.RANDOM_GENOME),
+    mutation=StrategyChoice(StrategyNames.RANDOM_GENOME),
+)
+
+
+class TestRandomGenomeWitnessOnBench1(unittest.TestCase):
+    """Le moteur, assemblé avec les stratégies ``random_genome``, fait une exécution complète sur bench_1.
+
+    On vérifie ce dont le témoin a besoin pour être comparable au mémétique : mêmes réglages, même nombre de
+    recherches locales par génération (2 × NR enfants de croisement, NM mutants), individus structurellement
+    faisables, reproductibilité. Une exécution, faite une seule fois dans ``setUpClass``.
+    """
+
+    instance: ProblemInstance
+    result: MemeticResult
+    events: list[Event]
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.instance = bench_1()
+        recorder = RecordingCollector()
+        config = build_block_memetic_config(
+            cls.instance, INTEGRATION_SETTINGS, ObservationHub((recorder,)), strategies=RANDOM_GENOME_WITNESS
+        )
+        cls.config = config
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", MiniZincWarning)
+            cls.result = Memetic(config).run()
+        cls.events = recorder.events
+
+    def test_givenWitnessStrategies_whenBuilding_thenRandomOperatorsReceiveTheInstance(self) -> None:
+        self.assertIsInstance(self.config.crossover, RandomGenomeCrossover)
+        self.assertIsInstance(self.config.mutation, RandomGenomeMutation)
+        self.assertIs(self.config.crossover.instance, self.instance)
+        self.assertIs(self.config.mutation.instance, self.instance)
+
+    def test_givenWitnessRun_whenFinished_thenGenerationCountAndPopulationSizeAreKept(self) -> None:
+        self.assertEqual(self.result.generations, INTEGRATION_SETTINGS.generations)
+        self.assertEqual(len(self.result.population), INTEGRATION_SETTINGS.population_size)
+
+    def test_givenWitnessRun_whenCountingLocalSearches_thenSameBudgetPerGenerationAsTheMemetic(self) -> None:
+        expected = {
+            Origins.CROSSOVER.value: CHILDREN_PER_CROSSOVER * INTEGRATION_SETTINGS.crossover_count,
+            Origins.MUTATION.value: INTEGRATION_SETTINGS.mutation_count,
+        }
+        searches = [event for event in self.events if isinstance(event, LocalSearchDone)]
+        for generation in range(1, INTEGRATION_SETTINGS.generations + 1):
+            for origin, count in expected.items():
+                with self.subTest(generation=generation, origin=origin):
+                    found = [event for event in searches if event.generation == generation and event.origin == origin]
+                    self.assertEqual(len(found), count)
+
+    def test_givenWitnessRun_whenFinished_thenEveryIndividualIsStructurallyFeasible(self) -> None:
+        checker = FeasibilityChecker(self.instance)
+        created = [event.individual for event in self.events if isinstance(event, IndividualCreated)]
+        for index, individual in enumerate(created):
+            with self.subTest(index=index):
+                self.assertTrue(checker.is_feasible(individual.horaire))
+
+    def test_givenSameSeed_whenWitnessRunsTwice_thenSameResult(self) -> None:
+        config = build_block_memetic_config(self.instance, INTEGRATION_SETTINGS, strategies=RANDOM_GENOME_WITNESS)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", MiniZincWarning)
+            again = Memetic(config).run()
+        self.assertEqual(again.best.genome, self.result.best.genome)
+        self.assertEqual(
+            [individual.genome for individual in again.population],
+            [individual.genome for individual in self.result.population],
+        )
 
 if __name__ == "__main__":
     unittest.main()
