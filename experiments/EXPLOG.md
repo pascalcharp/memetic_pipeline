@@ -9364,3 +9364,267 @@ Comparaison des ratios NR/NM sur bench_3 : NR=8, NM=2, population 18, 26 generat
 - Ratio 3/12 retenu, en coherence avec bench_2.
 - Rapport : experiments/analysis/bench3_ratio.md.
 - Script : experiments/analysis/analyze_bench3_ratio.py.
+
+## 2026-11-26 23:06 — bench3_validation_s00
+
+Validation des strategies implicites sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 0.
+
+- Configuration : `experiments/config/bench3_validation/bench3_validation_s00.json`
+- Résultats : `experiments/results/2026-11-26/bench3_validation_s00_230651.json`
+- Instance : bench_3 ; graine 0 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 42** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 55278 ; propagations 249086663 ; nodes non rapporté ; temps de résolution 120.6 s (non déterministe)
+- Durée de l'exécution : 358.1 s ; commit `27f6efe1212ea1dbf8715433d61bb95402c83fd9`
+
+## 2026-11-26 23:06 — bench3_validation_s01
+
+Validation des strategies implicites sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 1.
+
+- Configuration : `experiments/config/bench3_validation/bench3_validation_s01.json`
+- Résultats : `experiments/results/2026-11-26/bench3_validation_s01_230651.json`
+- Instance : bench_3 ; graine 1 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 47** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 53565 ; propagations 258610643 ; nodes non rapporté ; temps de résolution 130.6 s (non déterministe)
+- Durée de l'exécution : 370.3 s ; commit `27f6efe1212ea1dbf8715433d61bb95402c83fd9`
+
+## 2026-11-26 23:06 — bench3_validation_s02
+
+Validation des strategies implicites sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 2.
+
+- Configuration : `experiments/config/bench3_validation/bench3_validation_s02.json`
+- Résultats : `experiments/results/2026-11-26/bench3_validation_s02_230651.json`
+- Instance : bench_3 ; graine 2 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 30** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 56135 ; propagations 254823781 ; nodes non rapporté ; temps de résolution 126.9 s (non déterministe)
+- Durée de l'exécution : 366.6 s ; commit `27f6efe1212ea1dbf8715433d61bb95402c83fd9`
+
+## 2026-11-26 23:06 — bench3_validation_s03
+
+Validation des strategies implicites sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 3.
+
+- Configuration : `experiments/config/bench3_validation/bench3_validation_s03.json`
+- Résultats : `experiments/results/2026-11-26/bench3_validation_s03_230650.json`
+- Instance : bench_3 ; graine 3 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 49** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 79893 ; propagations 344010583 ; nodes non rapporté ; temps de résolution 169.7 s (non déterministe)
+- Durée de l'exécution : 411.1 s ; commit `27f6efe1212ea1dbf8715433d61bb95402c83fd9`
+
+## 2026-11-26 23:06 — bench3_validation_s04
+
+Validation des strategies implicites sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 4.
+
+- Configuration : `experiments/config/bench3_validation/bench3_validation_s04.json`
+- Résultats : `experiments/results/2026-11-26/bench3_validation_s04_230651.json`
+- Instance : bench_3 ; graine 4 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 28** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 70653 ; propagations 296966183 ; nodes non rapporté ; temps de résolution 147.8 s (non déterministe)
+- Durée de l'exécution : 386.6 s ; commit `27f6efe1212ea1dbf8715433d61bb95402c83fd9`
+
+## 2026-11-26 23:06 — bench3_validation_s05
+
+Validation des strategies implicites sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 5.
+
+- Configuration : `experiments/config/bench3_validation/bench3_validation_s05.json`
+- Résultats : `experiments/results/2026-11-26/bench3_validation_s05_230651.json`
+- Instance : bench_3 ; graine 5 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 51** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 87505 ; propagations 381620126 ; nodes non rapporté ; temps de résolution 190.2 s (non déterministe)
+- Durée de l'exécution : 429.5 s ; commit `27f6efe1212ea1dbf8715433d61bb95402c83fd9`
+
+## 2026-11-26 23:06 — bench3_validation_s06
+
+Validation des strategies implicites sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 6.
+
+- Configuration : `experiments/config/bench3_validation/bench3_validation_s06.json`
+- Résultats : `experiments/results/2026-11-26/bench3_validation_s06_230651.json`
+- Instance : bench_3 ; graine 6 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 29** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 62911 ; propagations 282433672 ; nodes non rapporté ; temps de résolution 139.4 s (non déterministe)
+- Durée de l'exécution : 377.8 s ; commit `27f6efe1212ea1dbf8715433d61bb95402c83fd9`
+
+## 2026-11-26 23:06 — bench3_validation_s07
+
+Validation des strategies implicites sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 7.
+
+- Configuration : `experiments/config/bench3_validation/bench3_validation_s07.json`
+- Résultats : `experiments/results/2026-11-26/bench3_validation_s07_230651.json`
+- Instance : bench_3 ; graine 7 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 41** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 59695 ; propagations 279789962 ; nodes non rapporté ; temps de résolution 137.7 s (non déterministe)
+- Durée de l'exécution : 377.4 s ; commit `27f6efe1212ea1dbf8715433d61bb95402c83fd9`
+
+## 2026-11-26 23:06 — bench3_validation_s08
+
+Validation des strategies implicites sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 8.
+
+- Configuration : `experiments/config/bench3_validation/bench3_validation_s08.json`
+- Résultats : `experiments/results/2026-11-26/bench3_validation_s08_230650.json`
+- Instance : bench_3 ; graine 8 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 35** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 59176 ; propagations 276024279 ; nodes non rapporté ; temps de résolution 137.8 s (non déterministe)
+- Durée de l'exécution : 376.7 s ; commit `27f6efe1212ea1dbf8715433d61bb95402c83fd9`
+
+## 2026-11-26 23:06 — bench3_validation_s09
+
+Validation des strategies implicites sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 9.
+
+- Configuration : `experiments/config/bench3_validation/bench3_validation_s09.json`
+- Résultats : `experiments/results/2026-11-26/bench3_validation_s09_230651.json`
+- Instance : bench_3 ; graine 9 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 37** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 58479 ; propagations 256483629 ; nodes non rapporté ; temps de résolution 125.3 s (non déterministe)
+- Durée de l'exécution : 364.0 s ; commit `27f6efe1212ea1dbf8715433d61bb95402c83fd9`
+
+## 2026-11-26 23:06 — bench3_validation_s10
+
+Validation des strategies implicites sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 10.
+
+- Configuration : `experiments/config/bench3_validation/bench3_validation_s10.json`
+- Résultats : `experiments/results/2026-11-26/bench3_validation_s10_230651.json`
+- Instance : bench_3 ; graine 10 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 27** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 63714 ; propagations 289844552 ; nodes non rapporté ; temps de résolution 142.4 s (non déterministe)
+- Durée de l'exécution : 380.5 s ; commit `27f6efe1212ea1dbf8715433d61bb95402c83fd9`
+
+## 2026-11-26 23:06 — bench3_validation_s11
+
+Validation des strategies implicites sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 11.
+
+- Configuration : `experiments/config/bench3_validation/bench3_validation_s11.json`
+- Résultats : `experiments/results/2026-11-26/bench3_validation_s11_230650.json`
+- Instance : bench_3 ; graine 11 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 23** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 82592 ; propagations 356830900 ; nodes non rapporté ; temps de résolution 178.4 s (non déterministe)
+- Durée de l'exécution : 419.4 s ; commit `27f6efe1212ea1dbf8715433d61bb95402c83fd9`
+
+## 2026-11-26 23:06 — bench3_validation_s12
+
+Validation des strategies implicites sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 12.
+
+- Configuration : `experiments/config/bench3_validation/bench3_validation_s12.json`
+- Résultats : `experiments/results/2026-11-26/bench3_validation_s12_230651.json`
+- Instance : bench_3 ; graine 12 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 29** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 81676 ; propagations 352089837 ; nodes non rapporté ; temps de résolution 172.7 s (non déterministe)
+- Durée de l'exécution : 415.7 s ; commit `27f6efe1212ea1dbf8715433d61bb95402c83fd9`
+
+## 2026-11-26 23:06 — bench3_validation_s13
+
+Validation des strategies implicites sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 13.
+
+- Configuration : `experiments/config/bench3_validation/bench3_validation_s13.json`
+- Résultats : `experiments/results/2026-11-26/bench3_validation_s13_230651.json`
+- Instance : bench_3 ; graine 13 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 41** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 71941 ; propagations 303916201 ; nodes non rapporté ; temps de résolution 152.8 s (non déterministe)
+- Durée de l'exécution : 390.0 s ; commit `27f6efe1212ea1dbf8715433d61bb95402c83fd9`
+
+## 2026-11-26 23:06 — bench3_validation_s14
+
+Validation des strategies implicites sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 14.
+
+- Configuration : `experiments/config/bench3_validation/bench3_validation_s14.json`
+- Résultats : `experiments/results/2026-11-26/bench3_validation_s14_230651.json`
+- Instance : bench_3 ; graine 14 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 40** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 60647 ; propagations 277238550 ; nodes non rapporté ; temps de résolution 139.9 s (non déterministe)
+- Durée de l'exécution : 378.0 s ; commit `27f6efe1212ea1dbf8715433d61bb95402c83fd9`
+
+## 2026-11-26 23:06 — bench3_validation_s15
+
+Validation des strategies implicites sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 15.
+
+- Configuration : `experiments/config/bench3_validation/bench3_validation_s15.json`
+- Résultats : `experiments/results/2026-11-26/bench3_validation_s15_230650.json`
+- Instance : bench_3 ; graine 15 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 46** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 52410 ; propagations 221204075 ; nodes non rapporté ; temps de résolution 111.0 s (non déterministe)
+- Durée de l'exécution : 350.4 s ; commit `27f6efe1212ea1dbf8715433d61bb95402c83fd9`
+
+## 2026-11-26 23:06 — bench3_validation_s16
+
+Validation des strategies implicites sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 16.
+
+- Configuration : `experiments/config/bench3_validation/bench3_validation_s16.json`
+- Résultats : `experiments/results/2026-11-26/bench3_validation_s16_230651.json`
+- Instance : bench_3 ; graine 16 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 48** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 59840 ; propagations 278177266 ; nodes non rapporté ; temps de résolution 137.4 s (non déterministe)
+- Durée de l'exécution : 376.4 s ; commit `27f6efe1212ea1dbf8715433d61bb95402c83fd9`
+
+## 2026-11-26 23:06 — bench3_validation_s17
+
+Validation des strategies implicites sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 17.
+
+- Configuration : `experiments/config/bench3_validation/bench3_validation_s17.json`
+- Résultats : `experiments/results/2026-11-26/bench3_validation_s17_230650.json`
+- Instance : bench_3 ; graine 17 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 50** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 85291 ; propagations 372107325 ; nodes non rapporté ; temps de résolution 183.7 s (non déterministe)
+- Durée de l'exécution : 434.1 s ; commit `27f6efe1212ea1dbf8715433d61bb95402c83fd9`
+
+## 2026-11-26 23:06 — bench3_validation_s18
+
+Validation des strategies implicites sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 18.
+
+- Configuration : `experiments/config/bench3_validation/bench3_validation_s18.json`
+- Résultats : `experiments/results/2026-11-26/bench3_validation_s18_230651.json`
+- Instance : bench_3 ; graine 18 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 22** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 57598 ; propagations 263783862 ; nodes non rapporté ; temps de résolution 130.4 s (non déterministe)
+- Durée de l'exécution : 370.2 s ; commit `27f6efe1212ea1dbf8715433d61bb95402c83fd9`
+
+## 2026-11-26 23:06 — bench3_validation_s19
+
+Validation des strategies implicites sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 19.
+
+- Configuration : `experiments/config/bench3_validation/bench3_validation_s19.json`
+- Résultats : `experiments/results/2026-11-26/bench3_validation_s19_230651.json`
+- Instance : bench_3 ; graine 19 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 60884 ; propagations 257562362 ; nodes non rapporté ; temps de résolution 125.8 s (non déterministe)
+- Durée de l'exécution : 365.2 s ; commit `27f6efe1212ea1dbf8715433d61bb95402c83fd9`
+
+## 2026-11-26 23:12 — bench3_validation_s20
+
+Validation des strategies implicites sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 20.
+
+- Configuration : `experiments/config/bench3_validation/bench3_validation_s20.json`
+- Résultats : `experiments/results/2026-11-26/bench3_validation_s20_231242.json`
+- Instance : bench_3 ; graine 20 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 81675 ; propagations 363453118 ; nodes non rapporté ; temps de résolution 149.1 s (non déterministe)
+- Durée de l'exécution : 331.9 s ; commit `27f6efe1212ea1dbf8715433d61bb95402c83fd9`
+
+## Synthese - Validation des strategies sur bench_3
+
+- 21 nouvelles executions et 21 references reutilisees.
+- Comparaison des strategies implicites et explicites.
+- Ratio NR/NM : 3/12.
+- Equivalence observee pour les 21 graines.
+- Aucune difference sur les indicateurs algorithmiques compares.
+- Mesures temporelles et metadonnees exclues.
+- Strategies explicites conservees pour les prochaines series.
+- Rapport : experiments/analysis/bench3_validation.md.
+- Script : experiments/analysis/analyze_bench3_validation.py.
