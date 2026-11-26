@@ -163,6 +163,14 @@ class TestLoadExperimentConfig(unittest.TestCase):
             crossover=StrategyChoice(StrategyNames.UNIFORM_GENE), mutation=StrategyChoice(StrategyNames.BLOCK_BOUNDARY)
         ))
 
+    def test_givenSurvivorSelectorWithParameter_whenLoaded_thenChoiceKeepsTheParameter(self) -> None:
+        # Étape 10e : sélection des survivants au catalogue, avec le paramètre prefer_newest.
+        content = self.with_strategies({StrategyRoles.SURVIVOR_SELECTOR: {
+            StrategyKeys.NAME: StrategyNames.PLUS, StrategyKeys.PARAMETERS: {"prefer_newest": True},
+        }})
+        config = load_experiment_config(write_config(self.root, content))
+        self.assertEqual(config.strategies.survivor_selector, StrategyChoice(StrategyNames.PLUS, {"prefer_newest": True}))
+
     def test_givenUnknownRole_whenLoaded_thenRaisesWithTheRoleAndTheKnownRoles(self) -> None:
         self.assert_invalid(self.with_strategies({"selection": "tournoi"}), "selection", StrategyRoles.MUTATION)
 

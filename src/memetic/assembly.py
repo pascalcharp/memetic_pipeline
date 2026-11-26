@@ -14,7 +14,7 @@ from dataclasses import dataclass
 
 from src.ga.chromosome import BlockGenome, BlockEncoding
 from src.ga.initialization import RandomBlockInitializer
-from src.ga.population import PopulationDefaults, PlusSurvivorSelector, StagnationCriterion, EliteRestart
+from src.ga.population import PopulationDefaults, StagnationCriterion, EliteRestart
 from src.ga.selection import SelectionDefaults, TournamentSelector, UniformMutableSelector
 from src.memetic.catalog import BuildContext, StrategyCatalog, StrategyChoices, StrategyRoles
 from src.memetic.config import MemeticConfig
@@ -87,7 +87,8 @@ def build_block_memetic_config(
         - sélection : ``TournamentSelector(settings.tournament_size)`` et ``UniformMutableSelector()`` ;
         - variation : créés par le catalogue (``StrategyCatalog``) à partir de ``strategies`` ; par défaut
           ``UniformGeneCrossover()`` et ``ShiftStartMutation(instance)`` ;
-        - population : ``PlusSurvivorSelector()``, ``StagnationCriterion(settings.stagnation_generations)``,
+        - population : sélection des survivants créée par le catalogue (par défaut ``PlusSurvivorSelector()``),
+          ``StagnationCriterion(settings.stagnation_generations)``,
           ``EliteRestart(initializer, evaluator, settings.elite_count)`` ;
         - arrêt : ``GenerationLimit(settings.generations)`` ;
         - ``dispatcher`` : celui reçu, ou un ``ObservationHub()`` neuf s'il vaut ``None``.
@@ -112,6 +113,7 @@ def build_block_memetic_config(
     context = BuildContext(instance=instance, encoding=encoding)
     crossover = catalog.create(StrategyRoles.CROSSOVER, strategies.crossover, context)
     mutation = catalog.create(StrategyRoles.MUTATION, strategies.mutation, context)
+    survivor_selector = catalog.create(StrategyRoles.SURVIVOR_SELECTOR, strategies.survivor_selector, context)
 
     return MemeticConfig(
         encoding=encoding,
@@ -122,7 +124,7 @@ def build_block_memetic_config(
         mutation=mutation,
         local_solver=local_solver,
         evaluator=evaluator,
-        survivor_selector=PlusSurvivorSelector(),
+        survivor_selector=survivor_selector,
         convergence=StagnationCriterion(settings.stagnation_generations),
         restart=EliteRestart(initializer=initializer, evaluator=evaluator, elite_count=settings.elite_count),
         termination=GenerationLimit(settings.generations),

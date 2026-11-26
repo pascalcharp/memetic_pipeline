@@ -7,6 +7,7 @@ paramètres sans création, choix par défaut (ceux de l'assemblage de référen
 import unittest
 
 from src.config import ProjectPaths
+from src.ga.population import PlusSurvivorSelector
 from src.ga.chromosome import BlockEncoding
 from src.ga.operators import (
     ActivityMutation,
@@ -35,6 +36,7 @@ from src.utils.io import load_instance
 UNKNOWN_ROLE: str = "sélection_magique"
 UNKNOWN_NAME: str = "croisement_inexistant"
 UNEXPECTED_PARAMETER: str = "taux"
+PREFER_NEWEST: str = "prefer_newest"
 EXPECTED_CLASSES: dict[str, dict[str, type]] = {
     StrategyRoles.CROSSOVER: {
         StrategyNames.UNIFORM_GENE: UniformGeneCrossover,
@@ -182,7 +184,41 @@ class TestStrategyChoices(unittest.TestCase):
         self.assertEqual(choices.to_json(), {
             StrategyRoles.CROSSOVER: {StrategyKeys.NAME: StrategyNames.UNIFORM_GENE, StrategyKeys.PARAMETERS: {}},
             StrategyRoles.MUTATION: {StrategyKeys.NAME: StrategyNames.ACTIVITY, StrategyKeys.PARAMETERS: {}},
+            StrategyRoles.SURVIVOR_SELECTOR: {StrategyKeys.NAME: StrategyNames.PLUS, StrategyKeys.PARAMETERS: {}},
         })
+
+
+class TestSurvivorSelectorRole(unittest.TestCase):
+    """Étape 10e : la sélection des survivants se choisit au catalogue, avec un paramètre (``prefer_newest``)."""
+
+    def setUp(self) -> None:
+        self.catalog = StrategyCatalog()
+        self.context = BuildContext(
+            instance=load_instance(ProjectPaths.DATA_DIR / "bench_1.json"), encoding=BlockEncoding()
+        )
+
+    def test_givenCatalog_whenListingSurvivorSelectors_thenPlus(self) -> None:
+        self.assertIn(StrategyRoles.SURVIVOR_SELECTOR, StrategyRoles.ALL)
+        self.assertEqual(self.catalog.names(StrategyRoles.SURVIVOR_SELECTOR), (StrategyNames.PLUS,))
+
+    def test_givenDefaultChoices_whenBuilding_thenPlusWithoutPreferNewest(self) -> None:
+        self.assertEqual(StrategyChoices().survivor_selector, StrategyChoice(StrategyNames.PLUS))
+        self.assertEqual(CatalogDefaults.SURVIVOR_SELECTOR, StrategyNames.PLUS)
+        selector = self.catalog.create(StrategyRoles.SURVIVOR_SELECTOR, StrategyChoice(StrategyNames.PLUS), self.context)
+        self.assertIsInstance(selector, PlusSurvivorSelector)
+        self.assertFalse(selector.prefer_newest)
+
+    def test_givenPreferNewestParameter_whenCreate_thenSelectorPrefersNewest(self) -> None:
+        choice = StrategyChoice(StrategyNames.PLUS, {PREFER_NEWEST: True})
+        self.catalog.check(StrategyRoles.SURVIVOR_SELECTOR, choice)
+        selector = self.catalog.create(StrategyRoles.SURVIVOR_SELECTOR, choice, self.context)
+        self.assertTrue(selector.prefer_newest)
+
+    def test_givenUnexpectedParameter_whenCheck_thenRaisesNamingTheParameter(self) -> None:
+        choice = StrategyChoice(StrategyNames.PLUS, {UNEXPECTED_PARAMETER: True})
+        with self.assertRaises(InvalidOperatorParametersError) as context:
+            self.catalog.check(StrategyRoles.SURVIVOR_SELECTOR, choice)
+        self.assertIn(UNEXPECTED_PARAMETER, str(context.exception))
 
 
 if __name__ == "__main__":

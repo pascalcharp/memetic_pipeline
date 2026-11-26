@@ -9,8 +9,8 @@ Le catalogue tient un registre (``OperatorRegistry``, étape 7a) par **rôle** d
 viennent pas du fichier de configuration) et les paramètres du choix. Les noms sont stables : ils figurent dans les
 configurations et dans les fichiers de résultats ; ils ne dépendent pas du nom des classes.
 
-Rôles couverts : le croisement et la mutation. Les autres rôles (sélecteurs, survivants, restart, voisinage) suivront
-le même patron : un nom dans ``StrategyRoles``, un registre dans ``StrategyCatalog``, un champ dans
+Rôles couverts : le croisement, la mutation et la sélection des survivants (étape 10e). Les autres rôles
+(sélecteurs des parents et des mutables, convergence, restart, voisinage) suivront le même patron : un nom dans ``StrategyRoles``, un registre dans ``StrategyCatalog``, un champ dans
 ``StrategyChoices``.
 """
 
@@ -29,6 +29,7 @@ from src.ga.operators import (
     ShiftStartMutation,
     UniformGeneCrossover,
 )
+from src.ga.population import PlusSurvivorSelector, SurvivorSelector
 from src.ga.registry import OperatorRegistry
 from src.utils.io import ProblemInstance
 
@@ -38,7 +39,8 @@ class StrategyRoles:
 
     CROSSOVER: str = "crossover"
     MUTATION: str = "mutation"
-    ALL: tuple[str, ...] = (CROSSOVER, MUTATION)
+    SURVIVOR_SELECTOR: str = "survivor_selector"
+    ALL: tuple[str, ...] = (CROSSOVER, MUTATION, SURVIVOR_SELECTOR)
 
 
 class StrategyNames:
@@ -48,6 +50,8 @@ class StrategyNames:
     UNIFORM_GENE: str = "uniform_gene"
     # Témoin de l'étape 10d, même nom pour le croisement et pour la mutation : des génomes tirés au hasard
     RANDOM_GENOME: str = "random_genome"
+    # Sélection des survivants (étape 10e)
+    PLUS: str = "plus"
     # Mutations
     SHIFT_START: str = "shift_start"
     BLOCK_BOUNDARY: str = "block_boundary"
@@ -67,11 +71,13 @@ class CatalogDefaults:
 
     CROSSOVER: str = StrategyNames.UNIFORM_GENE
     MUTATION: str = StrategyNames.SHIFT_START
+    SURVIVOR_SELECTOR: str = StrategyNames.PLUS
     # Nom réservé : chaque fabrique reçoit le contexte de construction sous ce nom, en plus des paramètres du choix.
     CONTEXT_PARAMETER: str = "context"
     REGISTRY_NAMES: dict[str, str] = {
         StrategyRoles.CROSSOVER: "croisements",
         StrategyRoles.MUTATION: "mutations",
+        StrategyRoles.SURVIVOR_SELECTOR: "sélections des survivants",
     }
 
 
@@ -122,10 +128,15 @@ class StrategyChoices:
 
     crossover: StrategyChoice = field(default_factory=lambda: StrategyChoice(CatalogDefaults.CROSSOVER))
     mutation: StrategyChoice = field(default_factory=lambda: StrategyChoice(CatalogDefaults.MUTATION))
+    survivor_selector: StrategyChoice = field(default_factory=lambda: StrategyChoice(CatalogDefaults.SURVIVOR_SELECTOR))
 
     def by_role(self) -> dict[str, StrategyChoice]:
         """Le choix de chaque rôle, dans l'ordre de ``StrategyRoles.ALL``."""
-        return {StrategyRoles.CROSSOVER: self.crossover, StrategyRoles.MUTATION: self.mutation}
+        return {
+            StrategyRoles.CROSSOVER: self.crossover,
+            StrategyRoles.MUTATION: self.mutation,
+            StrategyRoles.SURVIVOR_SELECTOR: self.survivor_selector,
+        }
 
     def to_json(self) -> dict[str, dict[str, Any]]:
         return {role: choice.to_json() for role, choice in self.by_role().items()}
@@ -159,6 +170,10 @@ def random_genome_mutation(context: BuildContext) -> RandomGenomeMutation:
     return RandomGenomeMutation(context.instance)
 
 
+def plus_survivor_selector(context: BuildContext, prefer_newest: bool = False) -> PlusSurvivorSelector:
+    return PlusSurvivorSelector(prefer_newest=prefer_newest)
+
+
 CROSSOVER_FACTORIES: dict[str, Callable[..., Crossover]] = {
     StrategyNames.UNIFORM_GENE: uniform_gene_crossover,
     StrategyNames.RANDOM_GENOME: random_genome_crossover,
@@ -170,6 +185,9 @@ MUTATION_FACTORIES: dict[str, Callable[..., Mutation]] = {
     StrategyNames.RANDOM_GENOME: random_genome_mutation,
 }
 
+SURVIVOR_SELECTOR_FACTORIES: dict[str, Callable[..., SurvivorSelector]] = {
+    StrategyNames.PLUS: plus_survivor_selector,
+}
 
 class StrategyCatalog:
     """Un registre par rôle, rempli avec les stratégies disponibles.
@@ -181,6 +199,7 @@ class StrategyCatalog:
         factories_by_role = {
             StrategyRoles.CROSSOVER: CROSSOVER_FACTORIES,
             StrategyRoles.MUTATION: MUTATION_FACTORIES,
+            StrategyRoles.SURVIVOR_SELECTOR: SURVIVOR_SELECTOR_FACTORIES,
         }
         self._registries: dict[str, OperatorRegistry] = {}
         for role, factories in factories_by_role.items():

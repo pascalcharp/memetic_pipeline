@@ -378,10 +378,14 @@ Bench_2 est saturé : le mémétique atteint 38 dans 21 cas sur 21. La comparais
 - [x] Rapport `experiments/analysis/bench2_temoin_aleatoire.md`, synthèse dans EXPLOG.md, DEVLOG
   - résultat (2026-11-26) : mémétique 21/21 succès (72 appels avant 38 en médiane), témoin 1/21 ; Wilcoxon apparié p = 9,5 × 10⁻⁷ sur les appels, les propagations et le temps déterministe avant 38. Rapport : `experiments/analysis/bench2_temoin_aleatoire.md`
 
-### 10e — Témoin fort : recherche locale itérée (1+1) **(C→P)** — après 10d
-- [ ] Population 1, NR = 0, NM = 1 (accepté par `MemeticDefaults`), `shift_start`, sans restart (seuil de stagnation plus grand que le budget), budget de 520 appels (1 + 519 générations)
-- [ ] Sélection des survivants qui accepte l'enfant **à coût égal** : `PlusSurvivorSelector` trie de façon stable et garde le parent en cas d'égalité, ce qui bloquerait la recherche sur les plateaux à 39 et 40 observés sur bench_2. Nouveau rôle au catalogue (sélection des survivants) ou nouvelle stratégie, à décider
-- [ ] Même analyse qu'en 10d
+### 10e — Témoin fort : recherche locale itérée (1+1) **(C)** — Pascal et Claude, branche `etape-10e-temoin-fort` (partie de `etape-10d-temoin-aleatoire`, PR #17)
+Le témoin garde l'hérédité par la mutation, mais n'a ni population, ni croisement, ni sélection des parents : on part d'un individu, on le mute, on passe l'enfant au LocalSolver, et on garde l'enfant s'il n'est **pas pire**.
+- [x] Population 1, NR = 0, NM = 1 (accepté par `MemeticDefaults`), `shift_start`, sans restart (seuil de stagnation 1000, plus grand que le budget), budget de 520 appels (1 + 519 générations)
+- [x] Sélection des survivants qui accepte l'enfant **à coût égal** (décidé le 2026-11-26) : paramètre `PlusSurvivorSelector(prefer_newest=True)`, qui départage les égalités en faveur du dernier arrivé (le moteur ajoute les nouveaux après les parents) ; nouveau rôle `survivor_selector` au catalogue, nom `plus`, paramètre `prefer_newest` (premier usage des paramètres de 10c). Sans `strategies`, l'assemblage ne change pas
+- [x] Tests : sélection (égalités, coûts stricts, doublons), catalogue, assemblage, `run_experiment`, exécution (1+1) sur bench_1 (une recherche locale par génération, un seul individu, pas de restart, l'enfant gardé s'il n'est pas pire) ; 656 tests verts en local et dans Docker
+- [ ] Expérience : `experiments/config/bench2_ils/` (21 graines, 519 générations), contre `bench2_memetique_pop18` (10d), au même nombre d'appels cumulés
+- [ ] Même analyse qu'en 10d : meilleur coût en fonction des appels, effort avant 38, Wilcoxon apparié, faisabilité ; rapport `experiments/analysis/bench2_ils.md`, synthèse dans EXPLOG.md, DEVLOG
+- [ ] Documentation : AVAILABLE_STRATEGIES (sélection des survivants au catalogue, `prefer_newest`), HOWTO (section 1 : rôle `survivor_selector`)
 
 ## Étape 11 — Documentation **(C)**
 - [ ] README : construction Docker, lancement des tests, lancement des expériences

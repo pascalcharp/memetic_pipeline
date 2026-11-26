@@ -185,6 +185,14 @@ class TestAssembly(unittest.TestCase):
         self.assertIsInstance(config.crossover, type(self.config.crossover))
         self.assertIsInstance(config.mutation, type(self.config.mutation))
 
+    def test_givenSurvivorSelectorChoice_whenBuilding_thenTheCatalogCreatesItWithItsParameter(self) -> None:
+        # Étape 10e : par défaut, la sélection des survivants de référence ; avec prefer_newest, l'enfant à coût égal.
+        self.assertFalse(self.config.survivor_selector.prefer_newest)
+        strategies = StrategyChoices(survivor_selector=StrategyChoice(StrategyNames.PLUS, {"prefer_newest": True}))
+        config = build_block_memetic_config(self.instance, CUSTOM_SETTINGS, strategies=strategies)
+        self.assertIsInstance(config.survivor_selector, PlusSurvivorSelector)
+        self.assertTrue(config.survivor_selector.prefer_newest)
+
     def test_givenNoDispatcher_whenBuilding_thenEachConfigHasItsOwnHub(self) -> None:
         first = build_block_memetic_config(self.instance)
         second = build_block_memetic_config(self.instance)
@@ -478,6 +486,61 @@ class TestRandomGenomeWitnessOnBench1(unittest.TestCase):
             [individual.genome for individual in again.population],
             [individual.genome for individual in self.result.population],
         )
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Témoin fort : recherche locale itérée (1+1) (étape 10e), avec MiniZinc et CP-SAT
+# ---------------------------------------------------------------------------------------------------------------------
+
+ITERATED_LOCAL_SEARCH_SETTINGS = AssemblySettings(
+    population_size=1, crossover_count=0, mutation_count=1, generations=6, master_seed=5,
+    stagnation_generations=1000,
+)
+ITERATED_LOCAL_SEARCH = StrategyChoices(survivor_selector=StrategyChoice(StrategyNames.PLUS, {"prefer_newest": True}))
+
+
+class TestIteratedLocalSearchOnBench1(unittest.TestCase):
+    """Le moteur en recherche locale itérée (1+1) : population 1, NR = 0, NM = 1, l'enfant gardé s'il n'est pas pire,
+    pas de restart. Une seule exécution, dans ``setUpClass``."""
+
+    result: MemeticResult
+    events: list[Event]
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        recorder = RecordingCollector()
+        config = build_block_memetic_config(
+            bench_1(), ITERATED_LOCAL_SEARCH_SETTINGS, ObservationHub((recorder,)), strategies=ITERATED_LOCAL_SEARCH
+        )
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", MiniZincWarning)
+            cls.result = Memetic(config).run()
+        cls.events = recorder.events
+
+    def test_givenRun_whenCountingLocalSearches_thenOnePerGenerationPlusTheInitialOne(self) -> None:
+        searches = [event for event in self.events if isinstance(event, LocalSearchDone)]
+        self.assertEqual(len(searches), 1 + ITERATED_LOCAL_SEARCH_SETTINGS.generations)
+        self.assertEqual({event.origin for event in searches if event.generation > 0}, {Origins.MUTATION.value})
+
+    def test_givenRun_whenFinished_thenASingleIndividualAndNoRestart(self) -> None:
+        self.assertEqual(self.result.restarts, 0)
+        for event in self.events:
+            if isinstance(event, GenerationEnded):
+                self.assertEqual(len(event.population), 1)
+
+    def test_givenRun_whenFollowingTheCurrentIndividual_thenItIsTheChildUnlessTheChildIsWorse(self) -> None:
+        current = None
+        for event in self.events:
+            if isinstance(event, IndividualCreated) and event.generation > 0:
+                child = event.individual
+            if isinstance(event, GenerationEnded):
+                (survivor,) = event.population
+                if current is not None:
+                    expected = child if child.cost.total <= current.cost.total else current
+                    with self.subTest(generation=event.generation):
+                        self.assertEqual(survivor.genome, expected.genome)
+                        self.assertLessEqual(survivor.cost.total, current.cost.total)
+                current = survivor
+
 
 if __name__ == "__main__":
     unittest.main()

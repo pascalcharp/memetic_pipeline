@@ -344,6 +344,50 @@ class TestCommonSurvivorSelectors(unittest.TestCase):
 # PlusSurvivorSelector
 # ---------------------------------------------------------------------------------------------------------------------
 
+class TestPlusSurvivorSelectorPreferNewest(unittest.TestCase):
+    """Étape 10e : avec ``prefer_newest``, à coût égal, l'individu arrivé le plus tard dans la population l'emporte.
+    Le moteur ajoute les nouveaux individus après les parents : à coût égal, l'enfant remplace le parent, ce qui
+    permet à une recherche (1+1) de se déplacer sur un plateau."""
+
+    def setUp(self) -> None:
+        self.rng = random.Random(SEED)
+
+    def test_givenDefault_whenConstructed_thenOldestWinsTiesAsBefore(self) -> None:
+        self.assertFalse(PlusSurvivorSelector().prefer_newest)
+        population = [individual(ID_A, COST_MEDIUM), individual(ID_B, COST_MEDIUM)]
+        self.assertEqual(ids(PlusSurvivorSelector().select(population, 1, self.rng)), [ID_A])
+
+    def test_givenParentThenChildOfEqualCost_whenSelectOne_thenChildIsKept(self) -> None:
+        population = [individual(ID_A, COST_MEDIUM), individual(ID_B, COST_MEDIUM)]
+        selected = PlusSurvivorSelector(prefer_newest=True).select(population, 1, self.rng)
+        self.assertEqual(ids(selected), [ID_B])
+
+    def test_givenStrictlyBetterParent_whenSelectOne_thenParentIsKept(self) -> None:
+        population = [individual(ID_A, COST_LOW), individual(ID_B, COST_MEDIUM)]
+        selected = PlusSurvivorSelector(prefer_newest=True).select(population, 1, self.rng)
+        self.assertEqual(ids(selected), [ID_A])
+
+    def test_givenStrictlyBetterChild_whenSelectOne_thenChildIsKept(self) -> None:
+        population = [individual(ID_A, COST_MEDIUM), individual(ID_B, COST_LOW)]
+        selected = PlusSurvivorSelector(prefer_newest=True).select(population, 1, self.rng)
+        self.assertEqual(ids(selected), [ID_B])
+
+    def test_givenMixedCosts_whenSelect_thenAscendingCostAndNewestFirstWithinTies(self) -> None:
+        population = [
+            individual(ID_A, COST_MEDIUM),
+            individual(ID_B, COST_LOWEST),
+            individual(ID_C, COST_MEDIUM),
+            individual(ID_D, COST_HIGH),
+        ]
+        selected = PlusSurvivorSelector(prefer_newest=True).select(population, 3, self.rng)
+        self.assertEqual(ids(selected), [ID_B, ID_C, ID_A])
+
+    def test_givenDuplicates_whenSelect_thenStillOneCopyOfEachGenomeThenDuplicates(self) -> None:
+        population = [individual(ID_A, COST_LOW), individual(ID_A, COST_LOW)]
+        selected = PlusSurvivorSelector(prefer_newest=True).select(population, 2, self.rng)
+        self.assertEqual(ids(selected), [ID_A, ID_A])
+
+
 class TestPlusSurvivorSelector(unittest.TestCase):
 
     def setUp(self) -> None:

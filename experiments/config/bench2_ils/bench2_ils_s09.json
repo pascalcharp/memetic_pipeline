@@ -1,0 +1,22 @@
+{
+  "description": "Témoin fort, recherche locale itérée (1+1) sur bench_2 (optimum prouvé 38) : population 1, NR = 0, NM = 1, mutation shift_start, LocalSolver voisinage 1, enfant gardé s'il n'est pas pire (plus, prefer_newest), sans restart (stagnation 1000), 519 générations, soit 520 appels ; graine 9. Comparé à bench2_memetique_pop18 au même nombre d'appels.",
+  "instance": "bench_2",
+  "settings": {
+    "population_size": 1,
+    "crossover_count": 0,
+    "mutation_count": 1,
+    "generations": 519,
+    "master_seed": 9,
+    "stagnation_generations": 1000,
+    "neighborhood_size": 1
+  },
+  "strategies": {
+    "mutation": "shift_start",
+    "survivor_selector": {
+      "name": "plus",
+      "parameters": {
+        "prefer_newest": true
+      }
+    }
+  }
+}

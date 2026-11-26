@@ -165,7 +165,15 @@ class PlusSurvivorSelector[G](SurvivorSelector[G]):
     """(μ+λ) sans doublons (D4) : tri stable par ``cost.total`` croissant, un seul exemplaire de chaque génome
     identique, les ``size`` meilleurs. S'il y a moins de ``size`` génomes distincts, complète avec des doublons,
     dans l'ordre des coûts.
+
+    À coût égal, l'ordre d'arrivée départage : par défaut, le premier arrivé (le parent) l'emporte. Avec
+    ``prefer_newest`` (étape 10e), c'est le dernier arrivé. Le moteur ajoute les nouveaux individus après les parents
+    (``population + enfants + mutants``) : à coût égal, l'enfant remplace alors le parent, ce qui permet à une
+    recherche locale itérée (1+1) de se déplacer sur un plateau au lieu d'y rester bloquée.
     """
+
+    def __init__(self, prefer_newest: bool = False) -> None:
+        self.prefer_newest = prefer_newest
 
     def select(self, population: Sequence[Individu[G]], size: int, rng: random.Random) -> tuple[Individu[G], ...]:
         """Les ``size`` meilleurs individus distincts de ``population``, complétés par des doublons si besoin.
@@ -174,7 +182,9 @@ class PlusSurvivorSelector[G](SurvivorSelector[G]):
             voir ``src.ga.selection.check_selectable``.
         """
         check_selectable(population, size)
-        ordered: list[Individu[G]] = sorted(population, key=lambda individu: individu.cost.total)
+        # Le tri est stable : parcourir la population à rebours fait passer, à coût égal, le dernier arrivé devant.
+        arrival_order = list(reversed(population)) if self.prefer_newest else list(population)
+        ordered: list[Individu[G]] = sorted(arrival_order, key=lambda individu: individu.cost.total)
         return _distinct_by_cost(ordered, size, fill_duplicates=True)
 
 
