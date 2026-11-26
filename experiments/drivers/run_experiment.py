@@ -134,6 +134,7 @@ class ResultKeys:
     GENERATIONS: str = "generations"
     RESTARTS: str = "restarts"
     SOLVER_EFFORT: str = "solver_effort"
+    SOLVER_EFFORT_BY_GENERATION: str = "solver_effort_by_generation"
     FEASIBILITY_RATES: str = "feasibility_rates"
     COST_STATISTICS: str = "cost_statistics"
     DIVERSITY: str = "diversity"
@@ -419,6 +420,12 @@ def cumulative_record(outcome: ExperimentOutcome, record_name: str) -> list[dict
     return [record for record in records_of(outcome, record_name) if record[RecordFields.SCOPE] == Scopes.CUMULATIVE]
 
 
+def generation_records(outcome: ExperimentOutcome, record_name: str) -> list[dict[str, Any]]:
+    """Les enregistrements de portée génération (un par génération, la génération 0 comprise) de type
+    ``record_name``."""
+    return [record for record in records_of(outcome, record_name) if record[RecordFields.SCOPE] == Scopes.GENERATION]
+
+
 def cost_to_json(cost: CostBreakdown) -> dict[str, Any]:
     """Le coût décomposé, avec ``total`` et ``is_feasible`` (propriétés calculées)."""
     return dataclasses.asdict(cost) | {ResultKeys.TOTAL: cost.total, ResultKeys.IS_FEASIBLE: cost.is_feasible}
@@ -426,7 +433,8 @@ def cost_to_json(cost: CostBreakdown) -> dict[str, Any]:
 
 def results_document(config: ExperimentConfig, outcome: ExperimentOutcome) -> dict[str, Any]:
     """Le contenu du fichier de résultats : configuration complète, provenance, meilleur individu, effort cumulé du
-    solveur, taux de faisabilité cumulés, et les statistiques de chaque génération."""
+    solveur, taux de faisabilité cumulés, et pour chaque génération les statistiques de coût, la diversité et
+    l'effort du solveur (étape 10d)."""
     best = outcome.result.best
     (solver_effort,) = cumulative_record(outcome, RecordNames.SOLVER_EFFORT)
     return {
@@ -450,6 +458,7 @@ def results_document(config: ExperimentConfig, outcome: ExperimentOutcome) -> di
         ResultKeys.GENERATIONS: outcome.result.generations,
         ResultKeys.RESTARTS: outcome.result.restarts,
         ResultKeys.SOLVER_EFFORT: solver_effort,
+        ResultKeys.SOLVER_EFFORT_BY_GENERATION: generation_records(outcome, RecordNames.SOLVER_EFFORT),
         ResultKeys.FEASIBILITY_RATES: cumulative_record(outcome, RecordNames.FEASIBILITY_RATES),
         ResultKeys.COST_STATISTICS: records_of(outcome, RecordNames.COST_STATISTICS),
         ResultKeys.DIVERSITY: records_of(outcome, RecordNames.DIVERSITY),
