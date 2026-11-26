@@ -10416,3 +10416,18 @@ Recherche locale initiale desactivee sur bench_3 : NR=3, NM=12, population 18, 2
   contrairement au choix False sur bench_2.
 - Rapport : experiments/analysis/bench3_initial_ls.md.
 - Script : experiments/analysis/analyze_bench3_initial_ls.py.
+
+## Synthese comparative finale - bench_2 et bench_3
+
+- 378 nouvelles executions sur bench_2.
+- 462 nouvelles executions sur bench_3.
+- 840 nouvelles executions au total.
+- Verification d'integrite bench_3 reussie.
+- Ratio NR/NM 3/12 favorable sur les deux instances.
+- Seuil de stagnation de 10 conserve.
+- Mutation shift_start conservee.
+- Interaction importante entre voisinage et budget deterministe.
+- Recherche locale initiale : False sur bench_2, True sur bench_3.
+- Recommandations dependantes du compromis qualite-effort.
+- Les combinaisons non testees restent des configurations candidates.
+- Synthese : experiments/analysis/synthese_bench2_bench3.md.
