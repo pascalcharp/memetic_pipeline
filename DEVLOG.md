@@ -1081,3 +1081,17 @@ Aucun changement de comportement. Suite complète verte.
 **Validation.** 606 tests, verts en local et dans Docker (`OK (skipped=6)`). Lancement réel par la ligne de commande sur bench_2 avec `"mutation": "activity"` : la stratégie apparaît dans les résultats et dans le journal ; une mutation inconnue (`swap`) est refusée avant l'exécution, avec la liste `activity, block_boundary, shift_start`.
 
 **Suite.** Les autres rôles (sélecteurs, survivants, restart, convergence, voisinage) suivront le même patron : un nom dans `StrategyRoles`, un dictionnaire de fabriques, un champ dans `StrategyChoices`.
+
+## 2026-11-25 — Étape 10d : plan du témoin « individus aléatoires + LocalSolver » (Pascal et Claude)
+
+**Question (Pascal).** L'algorithme fait-il mieux qu'une marche aléatoire ? On se concentre sur bench_2, et le témoin doit soumettre au solveur autant d'individus qu'une exécution du mémétique.
+
+**Décision.** Le premier témoin garde la boucle mémétique entière et remplace seulement le croisement et la mutation par des stratégies qui rendent des génomes aléatoires (`random_genome`, choisies par la clé `strategies` de 10c). Le budget est le même par construction (2 × NR + NM appels par génération), et la comparaison isole l'apport des opérateurs. Plan au TODO (10d).
+
+**Précisions.**
+- Ce témoin est un échantillonnage aléatoire, pas une marche aléatoire au sens strict : les nouveaux individus ne dépendent pas de la population. Le témoin fort, une recherche locale itérée (1+1) sur un seul individu, est planifié en 10e.
+- Bench_2 étant saturé (38 dans 21 cas sur 21 pour le mémétique), on comparera le meilleur coût en fonction des appels cumulés et le nombre d'appels avant l'optimum, pas seulement le coût final.
+- Voisinage 1 : à partir de V3, le solveur trouve l'optimum seul dès la génération 0 et les opérateurs ne jouent plus de rôle.
+- `PlusSurvivorSelector` garde le parent en cas d'égalité (tri stable) ; pour 10e, il faudra une sélection qui accepte l'enfant à coût égal.
+
+**Coordination.** Mély a une branche en cours (`etape-10-validation-strategies` : ratios NR/NM, opérateurs de mutation, recherche locale initiale), sans recouvrement avec ce témoin.
