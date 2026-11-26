@@ -4744,3 +4744,1024 @@ Une validation sur d'autres instances reste nécessaire.
 - Configurations : `experiments/config/bench2_initial_ls/`
 - Nouvelles exécutions : 21.
 - Exécutions de référence réutilisées : 21.
+
+## 2026-11-26 13:29 — bench3_pop162_s00
+
+Comparaison population-generations sur bench_3 : population 162, 2 generations, NR=54, NM=54, budget nominal 486, graine 0.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop162_s00.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop162_s00_132907.json`
+- Instance : bench_3 ; graine 0 ; population 162, NR = 54, NM = 54, 2 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 4000077** (faisable) ; 2 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 194451 ; propagations 854345680 ; nodes non rapporté ; temps de résolution 434.0 s (non déterministe)
+- Durée de l'exécution : 663.8 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:29 — bench3_pop162_s01
+
+Comparaison population-generations sur bench_3 : population 162, 2 generations, NR=54, NM=54, budget nominal 486, graine 1.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop162_s01.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop162_s01_132908.json`
+- Instance : bench_3 ; graine 1 ; population 162, NR = 54, NM = 54, 2 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 2000068** (infaisable) ; 2 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 191752 ; propagations 837907412 ; nodes non rapporté ; temps de résolution 428.8 s (non déterministe)
+- Durée de l'exécution : 657.8 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:29 — bench3_pop162_s02
+
+Comparaison population-generations sur bench_3 : population 162, 2 generations, NR=54, NM=54, budget nominal 486, graine 2.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop162_s02.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop162_s02_132915.json`
+- Instance : bench_3 ; graine 2 ; population 162, NR = 54, NM = 54, 2 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 3000049** (infaisable) ; 2 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 207989 ; propagations 881432364 ; nodes non rapporté ; temps de résolution 456.0 s (non déterministe)
+- Durée de l'exécution : 686.8 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:29 — bench3_pop162_s03
+
+Comparaison population-generations sur bench_3 : population 162, 2 generations, NR=54, NM=54, budget nominal 486, graine 3.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop162_s03.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop162_s03_132920.json`
+- Instance : bench_3 ; graine 3 ; population 162, NR = 54, NM = 54, 2 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 2000084** (infaisable) ; 2 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 201577 ; propagations 848187884 ; nodes non rapporté ; temps de résolution 438.0 s (non déterministe)
+- Durée de l'exécution : 667.4 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:29 — bench3_pop162_s04
+
+Comparaison population-generations sur bench_3 : population 162, 2 generations, NR=54, NM=54, budget nominal 486, graine 4.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop162_s04.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop162_s04_132924.json`
+- Instance : bench_3 ; graine 4 ; population 162, NR = 54, NM = 54, 2 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 3000092** (faisable) ; 2 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 189334 ; propagations 798922024 ; nodes non rapporté ; temps de résolution 414.2 s (non déterministe)
+- Durée de l'exécution : 643.0 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:29 — bench3_pop162_s05
+
+Comparaison population-generations sur bench_3 : population 162, 2 generations, NR=54, NM=54, budget nominal 486, graine 5.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop162_s05.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop162_s05_132926.json`
+- Instance : bench_3 ; graine 5 ; population 162, NR = 54, NM = 54, 2 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 3000067** (infaisable) ; 2 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 190321 ; propagations 811362086 ; nodes non rapporté ; temps de résolution 419.5 s (non déterministe)
+- Durée de l'exécution : 650.1 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:29 — bench3_pop162_s06
+
+Comparaison population-generations sur bench_3 : population 162, 2 generations, NR=54, NM=54, budget nominal 486, graine 6.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop162_s06.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop162_s06_132928.json`
+- Instance : bench_3 ; graine 6 ; population 162, NR = 54, NM = 54, 2 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 3000069** (infaisable) ; 2 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 190984 ; propagations 844294653 ; nodes non rapporté ; temps de résolution 430.5 s (non déterministe)
+- Durée de l'exécution : 660.6 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:29 — bench3_pop162_s07
+
+Comparaison population-generations sur bench_3 : population 162, 2 generations, NR=54, NM=54, budget nominal 486, graine 7.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop162_s07.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop162_s07_132934.json`
+- Instance : bench_3 ; graine 7 ; population 162, NR = 54, NM = 54, 2 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 4000062** (infaisable) ; 2 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 181431 ; propagations 801419649 ; nodes non rapporté ; temps de résolution 404.9 s (non déterministe)
+- Durée de l'exécution : 633.9 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:29 — bench3_pop162_s08
+
+Comparaison population-generations sur bench_3 : population 162, 2 generations, NR=54, NM=54, budget nominal 486, graine 8.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop162_s08.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop162_s08_132935.json`
+- Instance : bench_3 ; graine 8 ; population 162, NR = 54, NM = 54, 2 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 4000066** (infaisable) ; 2 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 203890 ; propagations 866307651 ; nodes non rapporté ; temps de résolution 442.3 s (non déterministe)
+- Durée de l'exécution : 671.8 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:30 — bench3_pop162_s09
+
+Comparaison population-generations sur bench_3 : population 162, 2 generations, NR=54, NM=54, budget nominal 486, graine 9.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop162_s09.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop162_s09_133002.json`
+- Instance : bench_3 ; graine 9 ; population 162, NR = 54, NM = 54, 2 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 2000099** (infaisable) ; 2 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 193994 ; propagations 823608855 ; nodes non rapporté ; temps de résolution 431.9 s (non déterministe)
+- Durée de l'exécution : 662.4 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:30 — bench3_pop162_s10
+
+Comparaison population-generations sur bench_3 : population 162, 2 generations, NR=54, NM=54, budget nominal 486, graine 10.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop162_s10.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop162_s10_133011.json`
+- Instance : bench_3 ; graine 10 ; population 162, NR = 54, NM = 54, 2 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 46** (faisable) ; 2 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 207311 ; propagations 873272893 ; nodes non rapporté ; temps de résolution 449.2 s (non déterministe)
+- Durée de l'exécution : 677.9 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:30 — bench3_pop162_s11
+
+Comparaison population-generations sur bench_3 : population 162, 2 generations, NR=54, NM=54, budget nominal 486, graine 11.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop162_s11.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop162_s11_133014.json`
+- Instance : bench_3 ; graine 11 ; population 162, NR = 54, NM = 54, 2 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 3000043** (faisable) ; 2 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 190044 ; propagations 829064643 ; nodes non rapporté ; temps de résolution 426.7 s (non déterministe)
+- Durée de l'exécution : 656.8 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:30 — bench3_pop162_s12
+
+Comparaison population-generations sur bench_3 : population 162, 2 generations, NR=54, NM=54, budget nominal 486, graine 12.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop162_s12.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop162_s12_133014.json`
+- Instance : bench_3 ; graine 12 ; population 162, NR = 54, NM = 54, 2 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 4000055** (faisable) ; 2 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 195043 ; propagations 859394286 ; nodes non rapporté ; temps de résolution 448.3 s (non déterministe)
+- Durée de l'exécution : 677.1 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:30 — bench3_pop162_s13
+
+Comparaison population-generations sur bench_3 : population 162, 2 generations, NR=54, NM=54, budget nominal 486, graine 13.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop162_s13.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop162_s13_133033.json`
+- Instance : bench_3 ; graine 13 ; population 162, NR = 54, NM = 54, 2 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 2000078** (infaisable) ; 2 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 191520 ; propagations 836707376 ; nodes non rapporté ; temps de résolution 425.7 s (non déterministe)
+- Durée de l'exécution : 656.2 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:30 — bench3_pop162_s14
+
+Comparaison population-generations sur bench_3 : population 162, 2 generations, NR=54, NM=54, budget nominal 486, graine 14.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop162_s14.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop162_s14_133036.json`
+- Instance : bench_3 ; graine 14 ; population 162, NR = 54, NM = 54, 2 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 3000072** (infaisable) ; 2 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 197191 ; propagations 821753950 ; nodes non rapporté ; temps de résolution 424.6 s (non déterministe)
+- Durée de l'exécution : 652.4 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:30 — bench3_pop162_s15
+
+Comparaison population-generations sur bench_3 : population 162, 2 generations, NR=54, NM=54, budget nominal 486, graine 15.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop162_s15.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop162_s15_133040.json`
+- Instance : bench_3 ; graine 15 ; population 162, NR = 54, NM = 54, 2 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 2000062** (infaisable) ; 2 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 191717 ; propagations 801692179 ; nodes non rapporté ; temps de résolution 415.3 s (non déterministe)
+- Durée de l'exécution : 644.8 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:30 — bench3_pop162_s16
+
+Comparaison population-generations sur bench_3 : population 162, 2 generations, NR=54, NM=54, budget nominal 486, graine 16.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop162_s16.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop162_s16_133043.json`
+- Instance : bench_3 ; graine 16 ; population 162, NR = 54, NM = 54, 2 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 1000075** (infaisable) ; 2 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 196540 ; propagations 852786665 ; nodes non rapporté ; temps de résolution 439.0 s (non déterministe)
+- Durée de l'exécution : 665.9 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:30 — bench3_pop162_s17
+
+Comparaison population-generations sur bench_3 : population 162, 2 generations, NR=54, NM=54, budget nominal 486, graine 17.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop162_s17.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop162_s17_133046.json`
+- Instance : bench_3 ; graine 17 ; population 162, NR = 54, NM = 54, 2 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 2000077** (faisable) ; 2 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 210819 ; propagations 875361699 ; nodes non rapporté ; temps de résolution 447.2 s (non déterministe)
+- Durée de l'exécution : 670.6 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:35 — bench3_pop162_s18
+
+Comparaison population-generations sur bench_3 : population 162, 2 generations, NR=54, NM=54, budget nominal 486, graine 18.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop162_s18.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop162_s18_133544.json`
+- Instance : bench_3 ; graine 18 ; population 162, NR = 54, NM = 54, 2 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 2000048** (faisable) ; 2 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 189250 ; propagations 807466556 ; nodes non rapporté ; temps de résolution 379.4 s (non déterministe)
+- Durée de l'exécution : 579.9 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:38 — bench3_pop162_s19
+
+Comparaison population-generations sur bench_3 : population 162, 2 generations, NR=54, NM=54, budget nominal 486, graine 19.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop162_s19.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop162_s19_133827.json`
+- Instance : bench_3 ; graine 19 ; population 162, NR = 54, NM = 54, 2 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 4000069** (faisable) ; 2 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 195185 ; propagations 813836359 ; nodes non rapporté ; temps de résolution 351.5 s (non déterministe)
+- Durée de l'exécution : 540.2 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:40 — bench3_pop162_s20
+
+Comparaison population-generations sur bench_3 : population 162, 2 generations, NR=54, NM=54, budget nominal 486, graine 20.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop162_s20.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop162_s20_134007.json`
+- Instance : bench_3 ; graine 20 ; population 162, NR = 54, NM = 54, 2 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 2000107** (faisable) ; 2 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 197902 ; propagations 825661933 ; nodes non rapporté ; temps de résolution 340.3 s (non déterministe)
+- Durée de l'exécution : 520.9 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:13 — bench3_pop18_s00
+
+Comparaison population-generations sur bench_3 : population 18, 26 generations, NR=6, NM=6, budget nominal 486, graine 0.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop18_s00.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop18_s00_131327.json`
+- Instance : bench_3 ; graine 0 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 42** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 73438 ; propagations 325403676 ; nodes non rapporté ; temps de résolution 167.4 s (non déterministe)
+- Durée de l'exécution : 398.3 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:13 — bench3_pop18_s01
+
+Comparaison population-generations sur bench_3 : population 18, 26 generations, NR=6, NM=6, budget nominal 486, graine 1.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop18_s01.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop18_s01_131335.json`
+- Instance : bench_3 ; graine 1 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 44420 ; propagations 192093915 ; nodes non rapporté ; temps de résolution 95.9 s (non déterministe)
+- Durée de l'exécution : 322.3 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:13 — bench3_pop18_s02
+
+Comparaison population-generations sur bench_3 : population 18, 26 generations, NR=6, NM=6, budget nominal 486, graine 2.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop18_s02.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop18_s02_131343.json`
+- Instance : bench_3 ; graine 2 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 34** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 61738 ; propagations 275871246 ; nodes non rapporté ; temps de résolution 135.3 s (non déterministe)
+- Durée de l'exécution : 365.4 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:13 — bench3_pop18_s03
+
+Comparaison population-generations sur bench_3 : population 18, 26 generations, NR=6, NM=6, budget nominal 486, graine 3.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop18_s03.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop18_s03_131347.json`
+- Instance : bench_3 ; graine 3 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 41** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 80075 ; propagations 364838837 ; nodes non rapporté ; temps de résolution 185.6 s (non déterministe)
+- Durée de l'exécution : 423.1 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:13 — bench3_pop18_s04
+
+Comparaison population-generations sur bench_3 : population 18, 26 generations, NR=6, NM=6, budget nominal 486, graine 4.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop18_s04.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop18_s04_131348.json`
+- Instance : bench_3 ; graine 4 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 29** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 112690 ; propagations 491727402 ; nodes non rapporté ; temps de résolution 244.2 s (non déterministe)
+- Durée de l'exécution : 483.1 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:13 — bench3_pop18_s05
+
+Comparaison population-generations sur bench_3 : population 18, 26 generations, NR=6, NM=6, budget nominal 486, graine 5.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop18_s05.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop18_s05_131348.json`
+- Instance : bench_3 ; graine 5 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 35** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 69460 ; propagations 318486737 ; nodes non rapporté ; temps de résolution 158.4 s (non déterministe)
+- Durée de l'exécution : 394.4 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:13 — bench3_pop18_s06
+
+Comparaison population-generations sur bench_3 : population 18, 26 generations, NR=6, NM=6, budget nominal 486, graine 6.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop18_s06.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop18_s06_131350.json`
+- Instance : bench_3 ; graine 6 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 35** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 76704 ; propagations 356005195 ; nodes non rapporté ; temps de résolution 177.5 s (non déterministe)
+- Durée de l'exécution : 414.7 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:13 — bench3_pop18_s07
+
+Comparaison population-generations sur bench_3 : population 18, 26 generations, NR=6, NM=6, budget nominal 486, graine 7.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop18_s07.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop18_s07_131357.json`
+- Instance : bench_3 ; graine 7 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 52** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 63965 ; propagations 281508326 ; nodes non rapporté ; temps de résolution 139.1 s (non déterministe)
+- Durée de l'exécution : 369.3 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:14 — bench3_pop18_s08
+
+Comparaison population-generations sur bench_3 : population 18, 26 generations, NR=6, NM=6, budget nominal 486, graine 8.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop18_s08.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop18_s08_131402.json`
+- Instance : bench_3 ; graine 8 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 28** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 67955 ; propagations 302375771 ; nodes non rapporté ; temps de résolution 145.7 s (non déterministe)
+- Durée de l'exécution : 377.2 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:14 — bench3_pop18_s09
+
+Comparaison population-generations sur bench_3 : population 18, 26 generations, NR=6, NM=6, budget nominal 486, graine 9.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop18_s09.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop18_s09_131403.json`
+- Instance : bench_3 ; graine 9 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 43** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 71746 ; propagations 298970724 ; nodes non rapporté ; temps de résolution 144.8 s (non déterministe)
+- Durée de l'exécution : 372.9 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:14 — bench3_pop18_s10
+
+Comparaison population-generations sur bench_3 : population 18, 26 generations, NR=6, NM=6, budget nominal 486, graine 10.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop18_s10.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop18_s10_131403.json`
+- Instance : bench_3 ; graine 10 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 33** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 52330 ; propagations 236122936 ; nodes non rapporté ; temps de résolution 118.4 s (non déterministe)
+- Durée de l'exécution : 348.2 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:14 — bench3_pop18_s11
+
+Comparaison population-generations sur bench_3 : population 18, 26 generations, NR=6, NM=6, budget nominal 486, graine 11.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop18_s11.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop18_s11_131403.json`
+- Instance : bench_3 ; graine 11 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 46** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 77860 ; propagations 351567128 ; nodes non rapporté ; temps de résolution 173.7 s (non déterministe)
+- Durée de l'exécution : 412.9 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:14 — bench3_pop18_s12
+
+Comparaison population-generations sur bench_3 : population 18, 26 generations, NR=6, NM=6, budget nominal 486, graine 12.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop18_s12.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop18_s12_131408.json`
+- Instance : bench_3 ; graine 12 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 45** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 85110 ; propagations 398299027 ; nodes non rapporté ; temps de résolution 199.2 s (non déterministe)
+- Durée de l'exécution : 428.2 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:14 — bench3_pop18_s13
+
+Comparaison population-generations sur bench_3 : population 18, 26 generations, NR=6, NM=6, budget nominal 486, graine 13.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop18_s13.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop18_s13_131411.json`
+- Instance : bench_3 ; graine 13 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 35** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 98947 ; propagations 435310094 ; nodes non rapporté ; temps de résolution 223.3 s (non déterministe)
+- Durée de l'exécution : 461.4 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:14 — bench3_pop18_s14
+
+Comparaison population-generations sur bench_3 : population 18, 26 generations, NR=6, NM=6, budget nominal 486, graine 14.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop18_s14.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop18_s14_131415.json`
+- Instance : bench_3 ; graine 14 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 88** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 87399 ; propagations 399283246 ; nodes non rapporté ; temps de résolution 202.2 s (non déterministe)
+- Durée de l'exécution : 434.4 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:14 — bench3_pop18_s15
+
+Comparaison population-generations sur bench_3 : population 18, 26 generations, NR=6, NM=6, budget nominal 486, graine 15.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop18_s15.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop18_s15_131416.json`
+- Instance : bench_3 ; graine 15 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 48** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 75211 ; propagations 329094570 ; nodes non rapporté ; temps de résolution 163.4 s (non déterministe)
+- Durée de l'exécution : 402.2 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:14 — bench3_pop18_s16
+
+Comparaison population-generations sur bench_3 : population 18, 26 generations, NR=6, NM=6, budget nominal 486, graine 16.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop18_s16.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop18_s16_131419.json`
+- Instance : bench_3 ; graine 16 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 45** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 94417 ; propagations 429995934 ; nodes non rapporté ; temps de résolution 218.2 s (non déterministe)
+- Durée de l'exécution : 448.8 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:14 — bench3_pop18_s17
+
+Comparaison population-generations sur bench_3 : population 18, 26 generations, NR=6, NM=6, budget nominal 486, graine 17.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop18_s17.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop18_s17_131420.json`
+- Instance : bench_3 ; graine 17 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 41** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 58269 ; propagations 259728250 ; nodes non rapporté ; temps de résolution 132.3 s (non déterministe)
+- Durée de l'exécution : 369.1 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:14 — bench3_pop18_s18
+
+Comparaison population-generations sur bench_3 : population 18, 26 generations, NR=6, NM=6, budget nominal 486, graine 18.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop18_s18.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop18_s18_131428.json`
+- Instance : bench_3 ; graine 18 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 36** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 72584 ; propagations 326350251 ; nodes non rapporté ; temps de résolution 160.4 s (non déterministe)
+- Durée de l'exécution : 397.4 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:14 — bench3_pop18_s19
+
+Comparaison population-generations sur bench_3 : population 18, 26 generations, NR=6, NM=6, budget nominal 486, graine 19.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop18_s19.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop18_s19_131454.json`
+- Instance : bench_3 ; graine 19 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 30** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 69485 ; propagations 297197700 ; nodes non rapporté ; temps de résolution 148.2 s (non déterministe)
+- Durée de l'exécution : 377.8 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:18 — bench3_pop18_s20
+
+Comparaison population-generations sur bench_3 : population 18, 26 generations, NR=6, NM=6, budget nominal 486, graine 20.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop18_s20.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop18_s20_131858.json`
+- Instance : bench_3 ; graine 20 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 43** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 92471 ; propagations 432050119 ; nodes non rapporté ; temps de résolution 219.6 s (non déterministe)
+- Durée de l'exécution : 451.3 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:19 — bench3_pop54_s00
+
+Comparaison population-generations sur bench_3 : population 54, 8 generations, NR=18, NM=18, budget nominal 486, graine 0.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop54_s00.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop54_s00_131950.json`
+- Instance : bench_3 ; graine 0 ; population 54, NR = 18, NM = 18, 8 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 44** (faisable) ; 8 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 142060 ; propagations 628108424 ; nodes non rapporté ; temps de résolution 321.0 s (non déterministe)
+- Durée de l'exécution : 551.4 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:19 — bench3_pop54_s01
+
+Comparaison population-generations sur bench_3 : population 54, 8 generations, NR=18, NM=18, budget nominal 486, graine 1.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop54_s01.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop54_s01_131953.json`
+- Instance : bench_3 ; graine 1 ; population 54, NR = 18, NM = 18, 8 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 52** (faisable) ; 8 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 140878 ; propagations 646656763 ; nodes non rapporté ; temps de résolution 330.6 s (non déterministe)
+- Durée de l'exécution : 560.7 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:20 — bench3_pop54_s02
+
+Comparaison population-generations sur bench_3 : population 54, 8 generations, NR=18, NM=18, budget nominal 486, graine 2.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop54_s02.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop54_s02_132007.json`
+- Instance : bench_3 ; graine 2 ; population 54, NR = 18, NM = 18, 8 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 55** (faisable) ; 8 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 139565 ; propagations 611224377 ; nodes non rapporté ; temps de résolution 309.0 s (non déterministe)
+- Durée de l'exécution : 539.2 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:20 — bench3_pop54_s03
+
+Comparaison population-generations sur bench_3 : population 54, 8 generations, NR=18, NM=18, budget nominal 486, graine 3.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop54_s03.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop54_s03_132008.json`
+- Instance : bench_3 ; graine 3 ; population 54, NR = 18, NM = 18, 8 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 44** (faisable) ; 8 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 137635 ; propagations 609095016 ; nodes non rapporté ; temps de résolution 307.7 s (non déterministe)
+- Durée de l'exécution : 538.9 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:20 — bench3_pop54_s04
+
+Comparaison population-generations sur bench_3 : population 54, 8 generations, NR=18, NM=18, budget nominal 486, graine 4.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop54_s04.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop54_s04_132017.json`
+- Instance : bench_3 ; graine 4 ; population 54, NR = 18, NM = 18, 8 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 33** (faisable) ; 8 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 142708 ; propagations 624362342 ; nodes non rapporté ; temps de résolution 315.8 s (non déterministe)
+- Durée de l'exécution : 546.3 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:20 — bench3_pop54_s05
+
+Comparaison population-generations sur bench_3 : population 54, 8 generations, NR=18, NM=18, budget nominal 486, graine 5.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop54_s05.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop54_s05_132021.json`
+- Instance : bench_3 ; graine 5 ; population 54, NR = 18, NM = 18, 8 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 8 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 136936 ; propagations 620998082 ; nodes non rapporté ; temps de résolution 307.9 s (non déterministe)
+- Durée de l'exécution : 538.4 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:20 — bench3_pop54_s06
+
+Comparaison population-generations sur bench_3 : population 54, 8 generations, NR=18, NM=18, budget nominal 486, graine 6.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop54_s06.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop54_s06_132023.json`
+- Instance : bench_3 ; graine 6 ; population 54, NR = 18, NM = 18, 8 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 43** (faisable) ; 8 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 136212 ; propagations 609155644 ; nodes non rapporté ; temps de résolution 310.4 s (non déterministe)
+- Durée de l'exécution : 541.4 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:20 — bench3_pop54_s07
+
+Comparaison population-generations sur bench_3 : population 54, 8 generations, NR=18, NM=18, budget nominal 486, graine 7.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop54_s07.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop54_s07_132030.json`
+- Instance : bench_3 ; graine 7 ; population 54, NR = 18, NM = 18, 8 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 45** (faisable) ; 8 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 138771 ; propagations 620902473 ; nodes non rapporté ; temps de résolution 312.6 s (non déterministe)
+- Durée de l'exécution : 543.3 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:20 — bench3_pop54_s08
+
+Comparaison population-generations sur bench_3 : population 54, 8 generations, NR=18, NM=18, budget nominal 486, graine 8.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop54_s08.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop54_s08_132046.json`
+- Instance : bench_3 ; graine 8 ; population 54, NR = 18, NM = 18, 8 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 54** (faisable) ; 8 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 128992 ; propagations 585994708 ; nodes non rapporté ; temps de résolution 291.5 s (non déterministe)
+- Durée de l'exécution : 521.2 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:20 — bench3_pop54_s09
+
+Comparaison population-generations sur bench_3 : population 54, 8 generations, NR=18, NM=18, budget nominal 486, graine 9.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop54_s09.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop54_s09_132051.json`
+- Instance : bench_3 ; graine 9 ; population 54, NR = 18, NM = 18, 8 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 71** (faisable) ; 8 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 131705 ; propagations 575324415 ; nodes non rapporté ; temps de résolution 290.0 s (non déterministe)
+- Durée de l'exécution : 521.8 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:20 — bench3_pop54_s10
+
+Comparaison population-generations sur bench_3 : population 54, 8 generations, NR=18, NM=18, budget nominal 486, graine 10.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop54_s10.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop54_s10_132057.json`
+- Instance : bench_3 ; graine 10 ; population 54, NR = 18, NM = 18, 8 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 53** (faisable) ; 8 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 145852 ; propagations 654458586 ; nodes non rapporté ; temps de résolution 325.8 s (non déterministe)
+- Durée de l'exécution : 555.4 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:21 — bench3_pop54_s11
+
+Comparaison population-generations sur bench_3 : population 54, 8 generations, NR=18, NM=18, budget nominal 486, graine 11.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop54_s11.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop54_s11_132100.json`
+- Instance : bench_3 ; graine 11 ; population 54, NR = 18, NM = 18, 8 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 46** (faisable) ; 8 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 134185 ; propagations 606832862 ; nodes non rapporté ; temps de résolution 309.8 s (non déterministe)
+- Durée de l'exécution : 541.3 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:21 — bench3_pop54_s12
+
+Comparaison population-generations sur bench_3 : population 54, 8 generations, NR=18, NM=18, budget nominal 486, graine 12.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop54_s12.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop54_s12_132106.json`
+- Instance : bench_3 ; graine 12 ; population 54, NR = 18, NM = 18, 8 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 1000043** (faisable) ; 8 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 138691 ; propagations 619529966 ; nodes non rapporté ; temps de résolution 315.8 s (non déterministe)
+- Durée de l'exécution : 546.6 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:21 — bench3_pop54_s13
+
+Comparaison population-generations sur bench_3 : population 54, 8 generations, NR=18, NM=18, budget nominal 486, graine 13.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop54_s13.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop54_s13_132113.json`
+- Instance : bench_3 ; graine 13 ; population 54, NR = 18, NM = 18, 8 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 58** (faisable) ; 8 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 132233 ; propagations 607902451 ; nodes non rapporté ; temps de résolution 305.4 s (non déterministe)
+- Durée de l'exécution : 536.4 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:21 — bench3_pop54_s14
+
+Comparaison population-generations sur bench_3 : population 54, 8 generations, NR=18, NM=18, budget nominal 486, graine 14.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop54_s14.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop54_s14_132117.json`
+- Instance : bench_3 ; graine 14 ; population 54, NR = 18, NM = 18, 8 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 41** (faisable) ; 8 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 152512 ; propagations 655071974 ; nodes non rapporté ; temps de résolution 324.7 s (non déterministe)
+- Durée de l'exécution : 554.8 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:21 — bench3_pop54_s15
+
+Comparaison population-generations sur bench_3 : population 54, 8 generations, NR=18, NM=18, budget nominal 486, graine 15.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop54_s15.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop54_s15_132131.json`
+- Instance : bench_3 ; graine 15 ; population 54, NR = 18, NM = 18, 8 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 60** (faisable) ; 8 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 140003 ; propagations 628669585 ; nodes non rapporté ; temps de résolution 323.1 s (non déterministe)
+- Durée de l'exécution : 554.3 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:21 — bench3_pop54_s16
+
+Comparaison population-generations sur bench_3 : population 54, 8 generations, NR=18, NM=18, budget nominal 486, graine 16.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop54_s16.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop54_s16_132149.json`
+- Instance : bench_3 ; graine 16 ; population 54, NR = 18, NM = 18, 8 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 50** (faisable) ; 8 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 127117 ; propagations 583357795 ; nodes non rapporté ; temps de résolution 299.2 s (non déterministe)
+- Durée de l'exécution : 530.0 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:21 — bench3_pop54_s17
+
+Comparaison population-generations sur bench_3 : population 54, 8 generations, NR=18, NM=18, budget nominal 486, graine 17.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop54_s17.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop54_s17_132152.json`
+- Instance : bench_3 ; graine 17 ; population 54, NR = 18, NM = 18, 8 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 41** (faisable) ; 8 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 137409 ; propagations 594067866 ; nodes non rapporté ; temps de résolution 300.8 s (non déterministe)
+- Durée de l'exécution : 530.5 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:21 — bench3_pop54_s18
+
+Comparaison population-generations sur bench_3 : population 54, 8 generations, NR=18, NM=18, budget nominal 486, graine 18.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop54_s18.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop54_s18_132153.json`
+- Instance : bench_3 ; graine 18 ; population 54, NR = 18, NM = 18, 8 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 46** (faisable) ; 8 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 122239 ; propagations 574848546 ; nodes non rapporté ; temps de résolution 292.7 s (non déterministe)
+- Durée de l'exécution : 521.6 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:26 — bench3_pop54_s19
+
+Comparaison population-generations sur bench_3 : population 54, 8 generations, NR=18, NM=18, budget nominal 486, graine 19.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop54_s19.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop54_s19_132631.json`
+- Instance : bench_3 ; graine 19 ; population 54, NR = 18, NM = 18, 8 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 53** (faisable) ; 8 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 145686 ; propagations 647283577 ; nodes non rapporté ; temps de résolution 322.4 s (non déterministe)
+- Durée de l'exécution : 552.1 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:29 — bench3_pop54_s20
+
+Comparaison population-generations sur bench_3 : population 54, 8 generations, NR=18, NM=18, budget nominal 486, graine 20.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop54_s20.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop54_s20_132902.json`
+- Instance : bench_3 ; graine 20 ; population 54, NR = 18, NM = 18, 8 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 1000052** (faisable) ; 8 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 145183 ; propagations 654698915 ; nodes non rapporté ; temps de résolution 333.3 s (non déterministe)
+- Durée de l'exécution : 563.9 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:02 — bench3_pop6_s00
+
+Comparaison population-generations sur bench_3 : population 6, 80 generations, NR=2, NM=2, budget nominal 486, graine 0.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop6_s00.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop6_s00_130255.json`
+- Instance : bench_3 ; graine 0 ; population 6, NR = 2, NM = 2, 80 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 35** (faisable) ; 80 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 511 appels ; failures 50177 ; propagations 224121174 ; nodes non rapporté ; temps de résolution 84.7 s (non déterministe)
+- Durée de l'exécution : 265.1 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:07 — bench3_pop6_s01
+
+Comparaison population-generations sur bench_3 : population 6, 80 generations, NR=2, NM=2, budget nominal 486, graine 1.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop6_s01.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop6_s01_130756.json`
+- Instance : bench_3 ; graine 1 ; population 6, NR = 2, NM = 2, 80 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 44** (faisable) ; 80 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 506 appels ; failures 50098 ; propagations 224361531 ; nodes non rapporté ; temps de résolution 107.4 s (non déterministe)
+- Durée de l'exécution : 345.8 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:07 — bench3_pop6_s02
+
+Comparaison population-generations sur bench_3 : population 6, 80 generations, NR=2, NM=2, budget nominal 486, graine 2.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop6_s02.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop6_s02_130756.json`
+- Instance : bench_3 ; graine 2 ; population 6, NR = 2, NM = 2, 80 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 46** (faisable) ; 80 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 511 appels ; failures 58403 ; propagations 247654248 ; nodes non rapporté ; temps de résolution 123.9 s (non déterministe)
+- Durée de l'exécution : 365.9 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:07 — bench3_pop6_s03
+
+Comparaison population-generations sur bench_3 : population 6, 80 generations, NR=2, NM=2, budget nominal 486, graine 3.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop6_s03.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop6_s03_130756.json`
+- Instance : bench_3 ; graine 3 ; population 6, NR = 2, NM = 2, 80 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 35** (faisable) ; 80 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 511 appels ; failures 61618 ; propagations 257131509 ; nodes non rapporté ; temps de résolution 127.7 s (non déterministe)
+- Durée de l'exécution : 366.5 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:07 — bench3_pop6_s04
+
+Comparaison population-generations sur bench_3 : population 6, 80 generations, NR=2, NM=2, budget nominal 486, graine 4.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop6_s04.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop6_s04_130756.json`
+- Instance : bench_3 ; graine 4 ; population 6, NR = 2, NM = 2, 80 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 47** (faisable) ; 80 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 506 appels ; failures 47286 ; propagations 204029712 ; nodes non rapporté ; temps de résolution 100.3 s (non déterministe)
+- Durée de l'exécution : 338.0 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:07 — bench3_pop6_s05
+
+Comparaison population-generations sur bench_3 : population 6, 80 generations, NR=2, NM=2, budget nominal 486, graine 5.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop6_s05.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop6_s05_130755.json`
+- Instance : bench_3 ; graine 5 ; population 6, NR = 2, NM = 2, 80 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 32** (faisable) ; 80 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 511 appels ; failures 57745 ; propagations 253485567 ; nodes non rapporté ; temps de résolution 125.9 s (non déterministe)
+- Durée de l'exécution : 366.1 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:07 — bench3_pop6_s06
+
+Comparaison population-generations sur bench_3 : population 6, 80 generations, NR=2, NM=2, budget nominal 486, graine 6.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop6_s06.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop6_s06_130756.json`
+- Instance : bench_3 ; graine 6 ; population 6, NR = 2, NM = 2, 80 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 80 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 511 appels ; failures 67421 ; propagations 286775143 ; nodes non rapporté ; temps de résolution 142.1 s (non déterministe)
+- Durée de l'exécution : 382.2 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:07 — bench3_pop6_s07
+
+Comparaison population-generations sur bench_3 : population 6, 80 generations, NR=2, NM=2, budget nominal 486, graine 7.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop6_s07.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop6_s07_130756.json`
+- Instance : bench_3 ; graine 7 ; population 6, NR = 2, NM = 2, 80 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 1000041** (faisable) ; 80 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 496 appels ; failures 50523 ; propagations 244969094 ; nodes non rapporté ; temps de résolution 115.6 s (non déterministe)
+- Durée de l'exécution : 349.8 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:07 — bench3_pop6_s08
+
+Comparaison population-generations sur bench_3 : population 6, 80 generations, NR=2, NM=2, budget nominal 486, graine 8.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop6_s08.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop6_s08_130755.json`
+- Instance : bench_3 ; graine 8 ; population 6, NR = 2, NM = 2, 80 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 44** (faisable) ; 80 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 506 appels ; failures 65411 ; propagations 283090224 ; nodes non rapporté ; temps de résolution 137.9 s (non déterministe)
+- Durée de l'exécution : 374.5 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:07 — bench3_pop6_s09
+
+Comparaison population-generations sur bench_3 : population 6, 80 generations, NR=2, NM=2, budget nominal 486, graine 9.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop6_s09.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop6_s09_130755.json`
+- Instance : bench_3 ; graine 9 ; population 6, NR = 2, NM = 2, 80 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 80 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 506 appels ; failures 51412 ; propagations 231914456 ; nodes non rapporté ; temps de résolution 115.6 s (non déterministe)
+- Durée de l'exécution : 351.4 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:07 — bench3_pop6_s10
+
+Comparaison population-generations sur bench_3 : population 6, 80 generations, NR=2, NM=2, budget nominal 486, graine 10.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop6_s10.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop6_s10_130756.json`
+- Instance : bench_3 ; graine 10 ; population 6, NR = 2, NM = 2, 80 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 34** (faisable) ; 80 générations, 3 restart(s)
+- **Effort cumulé du solveur** : 501 appels ; failures 48952 ; propagations 193405834 ; nodes non rapporté ; temps de résolution 95.8 s (non déterministe)
+- Durée de l'exécution : 330.8 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:07 — bench3_pop6_s11
+
+Comparaison population-generations sur bench_3 : population 6, 80 generations, NR=2, NM=2, budget nominal 486, graine 11.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop6_s11.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop6_s11_130756.json`
+- Instance : bench_3 ; graine 11 ; population 6, NR = 2, NM = 2, 80 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 39** (faisable) ; 80 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 511 appels ; failures 56397 ; propagations 246091082 ; nodes non rapporté ; temps de résolution 119.4 s (non déterministe)
+- Durée de l'exécution : 360.2 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:07 — bench3_pop6_s12
+
+Comparaison population-generations sur bench_3 : population 6, 80 generations, NR=2, NM=2, budget nominal 486, graine 12.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop6_s12.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop6_s12_130756.json`
+- Instance : bench_3 ; graine 12 ; population 6, NR = 2, NM = 2, 80 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 27** (faisable) ; 80 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 506 appels ; failures 61652 ; propagations 284446631 ; nodes non rapporté ; temps de résolution 140.4 s (non déterministe)
+- Durée de l'exécution : 378.3 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:07 — bench3_pop6_s13
+
+Comparaison population-generations sur bench_3 : population 6, 80 generations, NR=2, NM=2, budget nominal 486, graine 13.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop6_s13.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop6_s13_130756.json`
+- Instance : bench_3 ; graine 13 ; population 6, NR = 2, NM = 2, 80 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 31** (faisable) ; 80 générations, 6 restart(s)
+- **Effort cumulé du solveur** : 516 appels ; failures 67222 ; propagations 282272240 ; nodes non rapporté ; temps de résolution 140.7 s (non déterministe)
+- Durée de l'exécution : 382.4 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:07 — bench3_pop6_s14
+
+Comparaison population-generations sur bench_3 : population 6, 80 generations, NR=2, NM=2, budget nominal 486, graine 14.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop6_s14.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop6_s14_130756.json`
+- Instance : bench_3 ; graine 14 ; population 6, NR = 2, NM = 2, 80 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 80 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 511 appels ; failures 66062 ; propagations 312742935 ; nodes non rapporté ; temps de résolution 150.3 s (non déterministe)
+- Durée de l'exécution : 390.5 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:07 — bench3_pop6_s15
+
+Comparaison population-generations sur bench_3 : population 6, 80 generations, NR=2, NM=2, budget nominal 486, graine 15.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop6_s15.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop6_s15_130756.json`
+- Instance : bench_3 ; graine 15 ; population 6, NR = 2, NM = 2, 80 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 45** (faisable) ; 80 générations, 3 restart(s)
+- **Effort cumulé du solveur** : 501 appels ; failures 58966 ; propagations 273458681 ; nodes non rapporté ; temps de résolution 135.3 s (non déterministe)
+- Durée de l'exécution : 370.8 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:07 — bench3_pop6_s16
+
+Comparaison population-generations sur bench_3 : population 6, 80 generations, NR=2, NM=2, budget nominal 486, graine 16.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop6_s16.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop6_s16_130756.json`
+- Instance : bench_3 ; graine 16 ; population 6, NR = 2, NM = 2, 80 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 45** (faisable) ; 80 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 506 appels ; failures 64727 ; propagations 281757953 ; nodes non rapporté ; temps de résolution 139.9 s (non déterministe)
+- Durée de l'exécution : 379.3 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:07 — bench3_pop6_s17
+
+Comparaison population-generations sur bench_3 : population 6, 80 generations, NR=2, NM=2, budget nominal 486, graine 17.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop6_s17.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop6_s17_130755.json`
+- Instance : bench_3 ; graine 17 ; population 6, NR = 2, NM = 2, 80 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 39** (faisable) ; 80 générations, 6 restart(s)
+- **Effort cumulé du solveur** : 516 appels ; failures 83273 ; propagations 351388482 ; nodes non rapporté ; temps de résolution 175.1 s (non déterministe)
+- Durée de l'exécution : 417.9 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:07 — bench3_pop6_s18
+
+Comparaison population-generations sur bench_3 : population 6, 80 generations, NR=2, NM=2, budget nominal 486, graine 18.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop6_s18.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop6_s18_130756.json`
+- Instance : bench_3 ; graine 18 ; population 6, NR = 2, NM = 2, 80 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 45** (faisable) ; 80 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 511 appels ; failures 53861 ; propagations 221154104 ; nodes non rapporté ; temps de résolution 111.2 s (non déterministe)
+- Durée de l'exécution : 350.0 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:07 — bench3_pop6_s19
+
+Comparaison population-generations sur bench_3 : population 6, 80 generations, NR=2, NM=2, budget nominal 486, graine 19.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop6_s19.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop6_s19_130756.json`
+- Instance : bench_3 ; graine 19 ; population 6, NR = 2, NM = 2, 80 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 31** (faisable) ; 80 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 511 appels ; failures 48036 ; propagations 230204564 ; nodes non rapporté ; temps de résolution 111.5 s (non déterministe)
+- Durée de l'exécution : 352.9 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## 2026-11-26 13:07 — bench3_pop6_s20
+
+Comparaison population-generations sur bench_3 : population 6, 80 generations, NR=2, NM=2, budget nominal 486, graine 20.
+
+- Configuration : `experiments/config/bench3_population/bench3_pop6_s20.json`
+- Résultats : `experiments/results/2026-11-26/bench3_pop6_s20_130756.json`
+- Instance : bench_3 ; graine 20 ; population 6, NR = 2, NM = 2, 80 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 45** (faisable) ; 80 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 506 appels ; failures 53502 ; propagations 244785482 ; nodes non rapporté ; temps de résolution 127.5 s (non déterministe)
+- Durée de l'exécution : 366.4 s ; commit `daaffa732dc66bc8a2273934aa47bdcc65b5d503`
+
+## Synthese - Population et generations sur bench_3
+
+- 84 executions : 4 configurations, 21 graines chacune.
+- Budget nominal identique de 486 individus.
+- Aucun optimum atteint (optimum documente : 16).
+- Population 6 : meilleur cout observe (27), meilleur cout
+  median et plus faible effort solveur.
+- Population 18 : 21/21 solutions faisables sans violation
+  quasi stricte.
+- Population 18 conservee pour reproduire le protocole bench_2.
+- Rapport : experiments/analysis/bench3_population.md.
+- Script : experiments/analysis/analyze_bench3_population.py.
