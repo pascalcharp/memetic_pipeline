@@ -26,7 +26,8 @@ memetic_pipeline/
 │   ├── EXPLOG.md               # Journal des expériences : une entrée par exécution, ajoutée par run_experiment
 │   ├── analysis/               # Scripts d'analyse (analyze_*.py) et rapports (bench2_*.md) des séries d'expériences
 │   │   ├── analyze_random_restarts.py, bench2_temoin_redemarrages.md # 10d : mémétique contre redémarrages aléatoires (population 6)
-│   │   └── analyze_random_witness.py, bench2_temoin_aleatoire.md     # 10d : mémétique contre individus aléatoires + LocalSolver (population 18)
+│   │   ├── analyze_random_witness.py, bench2_temoin_aleatoire.md     # 10d : mémétique contre individus aléatoires + LocalSolver (population 18)
+│   │   └── analyze_iterated_local_search.py, bench2_ils.md           # 10e : mémétique contre recherche locale itérée (1+1)
 │   ├── config/                 # Configurations JSON des expériences (description, instance, paramètres, stratégies), une série par répertoire
 │   │   └── integration_bench1.json # Configuration de base : les réglages de la 9-intégration sur bench_1
 │   ├── drivers/                # Scripts de pilotage des expériences

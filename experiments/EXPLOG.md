@@ -4219,3 +4219,270 @@ Séries `experiments/config/bench2_memetique_pop18/` et `experiments/config/benc
 - Wilcoxon apparié : le témoin dépense plus que le mémétique avant 38 (appels, propagations, temps déterministe) dans les 21 paires de graines, p = 9,5 × 10⁻⁷.
 - Faisabilité après le LocalSolver : croisement 51 %, mutation 72 % pour le mémétique, contre 0,9 % pour le témoin. La faisabilité vient des opérateurs.
 - Cohérent avec la série à population 6 (21/21 contre 1/21).
+
+## 2026-11-26 12:39 — bench2_ils_s00
+
+Témoin fort, recherche locale itérée (1+1) sur bench_2 (optimum prouvé 38) : population 1, NR = 0, NM = 1, mutation shift_start, LocalSolver voisinage 1, enfant gardé s'il n'est pas pire (plus, prefer_newest), sans restart (stagnation 1000), 519 générations, soit 520 appels ; graine 0. Comparé à bench2_memetique_pop18 au même nombre d'appels.
+
+- Configuration : `experiments/config/bench2_ils/bench2_ils_s00.json`
+- Résultats : `experiments/results/2026-11-26/bench2_ils_s00_123914.json`
+- Instance : bench_2 ; graine 0 ; population 1, NR = 0, NM = 1, 519 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start` ; survivor_selector `plus` {"prefer_newest": true}
+- **Coût obtenu : 42** (faisable) ; 519 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 573 ; propagations 159005 ; nodes non rapporté ; temps déterministe 0.105 ; temps de résolution 2.0 s (non déterministe)
+- Durée de l'exécution : 185.0 s ; commit `23f69d6e123c095b4529e1a975de6311f404af6c`
+
+## 2026-11-26 12:39 — bench2_ils_s01
+
+Témoin fort, recherche locale itérée (1+1) sur bench_2 (optimum prouvé 38) : population 1, NR = 0, NM = 1, mutation shift_start, LocalSolver voisinage 1, enfant gardé s'il n'est pas pire (plus, prefer_newest), sans restart (stagnation 1000), 519 générations, soit 520 appels ; graine 1. Comparé à bench2_memetique_pop18 au même nombre d'appels.
+
+- Configuration : `experiments/config/bench2_ils/bench2_ils_s01.json`
+- Résultats : `experiments/results/2026-11-26/bench2_ils_s01_123914.json`
+- Instance : bench_2 ; graine 1 ; population 1, NR = 0, NM = 1, 519 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start` ; survivor_selector `plus` {"prefer_newest": true}
+- **Coût obtenu : 39** (faisable) ; 519 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 887 ; propagations 131273 ; nodes non rapporté ; temps déterministe 0.1 ; temps de résolution 1.8 s (non déterministe)
+- Durée de l'exécution : 184.7 s ; commit `23f69d6e123c095b4529e1a975de6311f404af6c`
+
+## 2026-11-26 12:39 — bench2_ils_s02
+
+Témoin fort, recherche locale itérée (1+1) sur bench_2 (optimum prouvé 38) : population 1, NR = 0, NM = 1, mutation shift_start, LocalSolver voisinage 1, enfant gardé s'il n'est pas pire (plus, prefer_newest), sans restart (stagnation 1000), 519 générations, soit 520 appels ; graine 2. Comparé à bench2_memetique_pop18 au même nombre d'appels.
+
+- Configuration : `experiments/config/bench2_ils/bench2_ils_s02.json`
+- Résultats : `experiments/results/2026-11-26/bench2_ils_s02_123914.json`
+- Instance : bench_2 ; graine 2 ; population 1, NR = 0, NM = 1, 519 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start` ; survivor_selector `plus` {"prefer_newest": true}
+- **Coût obtenu : 41** (faisable) ; 519 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 560 ; propagations 152719 ; nodes non rapporté ; temps déterministe 0.1 ; temps de résolution 2.0 s (non déterministe)
+- Durée de l'exécution : 184.9 s ; commit `23f69d6e123c095b4529e1a975de6311f404af6c`
+
+## 2026-11-26 12:39 — bench2_ils_s03
+
+Témoin fort, recherche locale itérée (1+1) sur bench_2 (optimum prouvé 38) : population 1, NR = 0, NM = 1, mutation shift_start, LocalSolver voisinage 1, enfant gardé s'il n'est pas pire (plus, prefer_newest), sans restart (stagnation 1000), 519 générations, soit 520 appels ; graine 3. Comparé à bench2_memetique_pop18 au même nombre d'appels.
+
+- Configuration : `experiments/config/bench2_ils/bench2_ils_s03.json`
+- Résultats : `experiments/results/2026-11-26/bench2_ils_s03_123914.json`
+- Instance : bench_2 ; graine 3 ; population 1, NR = 0, NM = 1, 519 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start` ; survivor_selector `plus` {"prefer_newest": true}
+- **Coût obtenu : 40** (faisable) ; 519 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 145 ; propagations 89384 ; nodes non rapporté ; temps déterministe 0.095 ; temps de résolution 1.9 s (non déterministe)
+- Durée de l'exécution : 184.3 s ; commit `23f69d6e123c095b4529e1a975de6311f404af6c`
+
+## 2026-11-26 12:39 — bench2_ils_s04
+
+Témoin fort, recherche locale itérée (1+1) sur bench_2 (optimum prouvé 38) : population 1, NR = 0, NM = 1, mutation shift_start, LocalSolver voisinage 1, enfant gardé s'il n'est pas pire (plus, prefer_newest), sans restart (stagnation 1000), 519 générations, soit 520 appels ; graine 4. Comparé à bench2_memetique_pop18 au même nombre d'appels.
+
+- Configuration : `experiments/config/bench2_ils/bench2_ils_s04.json`
+- Résultats : `experiments/results/2026-11-26/bench2_ils_s04_123914.json`
+- Instance : bench_2 ; graine 4 ; population 1, NR = 0, NM = 1, 519 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start` ; survivor_selector `plus` {"prefer_newest": true}
+- **Coût obtenu : 42** (faisable) ; 519 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 404 ; propagations 136804 ; nodes non rapporté ; temps déterministe 0.101 ; temps de résolution 2.0 s (non déterministe)
+- Durée de l'exécution : 184.4 s ; commit `23f69d6e123c095b4529e1a975de6311f404af6c`
+
+## 2026-11-26 12:39 — bench2_ils_s05
+
+Témoin fort, recherche locale itérée (1+1) sur bench_2 (optimum prouvé 38) : population 1, NR = 0, NM = 1, mutation shift_start, LocalSolver voisinage 1, enfant gardé s'il n'est pas pire (plus, prefer_newest), sans restart (stagnation 1000), 519 générations, soit 520 appels ; graine 5. Comparé à bench2_memetique_pop18 au même nombre d'appels.
+
+- Configuration : `experiments/config/bench2_ils/bench2_ils_s05.json`
+- Résultats : `experiments/results/2026-11-26/bench2_ils_s05_123914.json`
+- Instance : bench_2 ; graine 5 ; population 1, NR = 0, NM = 1, 519 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start` ; survivor_selector `plus` {"prefer_newest": true}
+- **Coût obtenu : 38** (faisable) ; 519 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 1591 ; propagations 389453 ; nodes non rapporté ; temps déterministe 0.151 ; temps de résolution 2.0 s (non déterministe)
+- Durée de l'exécution : 184.9 s ; commit `23f69d6e123c095b4529e1a975de6311f404af6c`
+
+## 2026-11-26 12:42 — bench2_ils_s06
+
+Témoin fort, recherche locale itérée (1+1) sur bench_2 (optimum prouvé 38) : population 1, NR = 0, NM = 1, mutation shift_start, LocalSolver voisinage 1, enfant gardé s'il n'est pas pire (plus, prefer_newest), sans restart (stagnation 1000), 519 générations, soit 520 appels ; graine 6. Comparé à bench2_memetique_pop18 au même nombre d'appels.
+
+- Configuration : `experiments/config/bench2_ils/bench2_ils_s06.json`
+- Résultats : `experiments/results/2026-11-26/bench2_ils_s06_124219.json`
+- Instance : bench_2 ; graine 6 ; population 1, NR = 0, NM = 1, 519 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start` ; survivor_selector `plus` {"prefer_newest": true}
+- **Coût obtenu : 39** (faisable) ; 519 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 70 ; propagations 45744 ; nodes non rapporté ; temps déterministe 0.085 ; temps de résolution 2.0 s (non déterministe)
+- Durée de l'exécution : 198.8 s ; commit `23f69d6e123c095b4529e1a975de6311f404af6c`
+
+## 2026-11-26 12:42 — bench2_ils_s07
+
+Témoin fort, recherche locale itérée (1+1) sur bench_2 (optimum prouvé 38) : population 1, NR = 0, NM = 1, mutation shift_start, LocalSolver voisinage 1, enfant gardé s'il n'est pas pire (plus, prefer_newest), sans restart (stagnation 1000), 519 générations, soit 520 appels ; graine 7. Comparé à bench2_memetique_pop18 au même nombre d'appels.
+
+- Configuration : `experiments/config/bench2_ils/bench2_ils_s07.json`
+- Résultats : `experiments/results/2026-11-26/bench2_ils_s07_124219.json`
+- Instance : bench_2 ; graine 7 ; population 1, NR = 0, NM = 1, 519 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start` ; survivor_selector `plus` {"prefer_newest": true}
+- **Coût obtenu : 38** (faisable) ; 519 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 727 ; propagations 228602 ; nodes non rapporté ; temps déterministe 0.156 ; temps de résolution 2.1 s (non déterministe)
+- Durée de l'exécution : 198.1 s ; commit `23f69d6e123c095b4529e1a975de6311f404af6c`
+
+## 2026-11-26 12:42 — bench2_ils_s08
+
+Témoin fort, recherche locale itérée (1+1) sur bench_2 (optimum prouvé 38) : population 1, NR = 0, NM = 1, mutation shift_start, LocalSolver voisinage 1, enfant gardé s'il n'est pas pire (plus, prefer_newest), sans restart (stagnation 1000), 519 générations, soit 520 appels ; graine 8. Comparé à bench2_memetique_pop18 au même nombre d'appels.
+
+- Configuration : `experiments/config/bench2_ils/bench2_ils_s08.json`
+- Résultats : `experiments/results/2026-11-26/bench2_ils_s08_124219.json`
+- Instance : bench_2 ; graine 8 ; population 1, NR = 0, NM = 1, 519 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start` ; survivor_selector `plus` {"prefer_newest": true}
+- **Coût obtenu : 42** (faisable) ; 519 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 1095 ; propagations 202878 ; nodes non rapporté ; temps déterministe 0.104 ; temps de résolution 2.1 s (non déterministe)
+- Durée de l'exécution : 199.2 s ; commit `23f69d6e123c095b4529e1a975de6311f404af6c`
+
+## 2026-11-26 12:42 — bench2_ils_s09
+
+Témoin fort, recherche locale itérée (1+1) sur bench_2 (optimum prouvé 38) : population 1, NR = 0, NM = 1, mutation shift_start, LocalSolver voisinage 1, enfant gardé s'il n'est pas pire (plus, prefer_newest), sans restart (stagnation 1000), 519 générations, soit 520 appels ; graine 9. Comparé à bench2_memetique_pop18 au même nombre d'appels.
+
+- Configuration : `experiments/config/bench2_ils/bench2_ils_s09.json`
+- Résultats : `experiments/results/2026-11-26/bench2_ils_s09_124219.json`
+- Instance : bench_2 ; graine 9 ; population 1, NR = 0, NM = 1, 519 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start` ; survivor_selector `plus` {"prefer_newest": true}
+- **Coût obtenu : 42** (faisable) ; 519 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 499 ; propagations 146281 ; nodes non rapporté ; temps déterministe 0.101 ; temps de résolution 2.1 s (non déterministe)
+- Durée de l'exécution : 198.0 s ; commit `23f69d6e123c095b4529e1a975de6311f404af6c`
+
+## 2026-11-26 12:42 — bench2_ils_s10
+
+Témoin fort, recherche locale itérée (1+1) sur bench_2 (optimum prouvé 38) : population 1, NR = 0, NM = 1, mutation shift_start, LocalSolver voisinage 1, enfant gardé s'il n'est pas pire (plus, prefer_newest), sans restart (stagnation 1000), 519 générations, soit 520 appels ; graine 10. Comparé à bench2_memetique_pop18 au même nombre d'appels.
+
+- Configuration : `experiments/config/bench2_ils/bench2_ils_s10.json`
+- Résultats : `experiments/results/2026-11-26/bench2_ils_s10_124219.json`
+- Instance : bench_2 ; graine 10 ; population 1, NR = 0, NM = 1, 519 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start` ; survivor_selector `plus` {"prefer_newest": true}
+- **Coût obtenu : 39** (faisable) ; 519 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 988 ; propagations 184950 ; nodes non rapporté ; temps déterministe 0.115 ; temps de résolution 2.1 s (non déterministe)
+- Durée de l'exécution : 198.0 s ; commit `23f69d6e123c095b4529e1a975de6311f404af6c`
+
+## 2026-11-26 12:42 — bench2_ils_s11
+
+Témoin fort, recherche locale itérée (1+1) sur bench_2 (optimum prouvé 38) : population 1, NR = 0, NM = 1, mutation shift_start, LocalSolver voisinage 1, enfant gardé s'il n'est pas pire (plus, prefer_newest), sans restart (stagnation 1000), 519 générations, soit 520 appels ; graine 11. Comparé à bench2_memetique_pop18 au même nombre d'appels.
+
+- Configuration : `experiments/config/bench2_ils/bench2_ils_s11.json`
+- Résultats : `experiments/results/2026-11-26/bench2_ils_s11_124219.json`
+- Instance : bench_2 ; graine 11 ; population 1, NR = 0, NM = 1, 519 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start` ; survivor_selector `plus` {"prefer_newest": true}
+- **Coût obtenu : 43** (faisable) ; 519 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 148 ; propagations 95949 ; nodes non rapporté ; temps déterministe 0.08 ; temps de résolution 2.0 s (non déterministe)
+- Durée de l'exécution : 197.9 s ; commit `23f69d6e123c095b4529e1a975de6311f404af6c`
+
+## 2026-11-26 12:45 — bench2_ils_s12
+
+Témoin fort, recherche locale itérée (1+1) sur bench_2 (optimum prouvé 38) : population 1, NR = 0, NM = 1, mutation shift_start, LocalSolver voisinage 1, enfant gardé s'il n'est pas pire (plus, prefer_newest), sans restart (stagnation 1000), 519 générations, soit 520 appels ; graine 12. Comparé à bench2_memetique_pop18 au même nombre d'appels.
+
+- Configuration : `experiments/config/bench2_ils/bench2_ils_s12.json`
+- Résultats : `experiments/results/2026-11-26/bench2_ils_s12_124537.json`
+- Instance : bench_2 ; graine 12 ; population 1, NR = 0, NM = 1, 519 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start` ; survivor_selector `plus` {"prefer_newest": true}
+- **Coût obtenu : 38** (faisable) ; 519 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 64 ; propagations 61416 ; nodes non rapporté ; temps déterministe 0.092 ; temps de résolution 2.0 s (non déterministe)
+- Durée de l'exécution : 191.6 s ; commit `23f69d6e123c095b4529e1a975de6311f404af6c`
+
+## 2026-11-26 12:45 — bench2_ils_s13
+
+Témoin fort, recherche locale itérée (1+1) sur bench_2 (optimum prouvé 38) : population 1, NR = 0, NM = 1, mutation shift_start, LocalSolver voisinage 1, enfant gardé s'il n'est pas pire (plus, prefer_newest), sans restart (stagnation 1000), 519 générations, soit 520 appels ; graine 13. Comparé à bench2_memetique_pop18 au même nombre d'appels.
+
+- Configuration : `experiments/config/bench2_ils/bench2_ils_s13.json`
+- Résultats : `experiments/results/2026-11-26/bench2_ils_s13_124538.json`
+- Instance : bench_2 ; graine 13 ; population 1, NR = 0, NM = 1, 519 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start` ; survivor_selector `plus` {"prefer_newest": true}
+- **Coût obtenu : 38** (faisable) ; 519 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 841 ; propagations 142381 ; nodes non rapporté ; temps déterministe 0.095 ; temps de résolution 1.9 s (non déterministe)
+- Durée de l'exécution : 191.6 s ; commit `23f69d6e123c095b4529e1a975de6311f404af6c`
+
+## 2026-11-26 12:45 — bench2_ils_s14
+
+Témoin fort, recherche locale itérée (1+1) sur bench_2 (optimum prouvé 38) : population 1, NR = 0, NM = 1, mutation shift_start, LocalSolver voisinage 1, enfant gardé s'il n'est pas pire (plus, prefer_newest), sans restart (stagnation 1000), 519 générations, soit 520 appels ; graine 14. Comparé à bench2_memetique_pop18 au même nombre d'appels.
+
+- Configuration : `experiments/config/bench2_ils/bench2_ils_s14.json`
+- Résultats : `experiments/results/2026-11-26/bench2_ils_s14_124538.json`
+- Instance : bench_2 ; graine 14 ; population 1, NR = 0, NM = 1, 519 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start` ; survivor_selector `plus` {"prefer_newest": true}
+- **Coût obtenu : 39** (faisable) ; 519 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 1053 ; propagations 245057 ; nodes non rapporté ; temps déterministe 0.133 ; temps de résolution 2.1 s (non déterministe)
+- Durée de l'exécution : 191.7 s ; commit `23f69d6e123c095b4529e1a975de6311f404af6c`
+
+## 2026-11-26 12:45 — bench2_ils_s15
+
+Témoin fort, recherche locale itérée (1+1) sur bench_2 (optimum prouvé 38) : population 1, NR = 0, NM = 1, mutation shift_start, LocalSolver voisinage 1, enfant gardé s'il n'est pas pire (plus, prefer_newest), sans restart (stagnation 1000), 519 générations, soit 520 appels ; graine 15. Comparé à bench2_memetique_pop18 au même nombre d'appels.
+
+- Configuration : `experiments/config/bench2_ils/bench2_ils_s15.json`
+- Résultats : `experiments/results/2026-11-26/bench2_ils_s15_124538.json`
+- Instance : bench_2 ; graine 15 ; population 1, NR = 0, NM = 1, 519 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start` ; survivor_selector `plus` {"prefer_newest": true}
+- **Coût obtenu : 41** (faisable) ; 519 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 575 ; propagations 184281 ; nodes non rapporté ; temps déterministe 0.108 ; temps de résolution 2.1 s (non déterministe)
+- Durée de l'exécution : 192.0 s ; commit `23f69d6e123c095b4529e1a975de6311f404af6c`
+
+## 2026-11-26 12:45 — bench2_ils_s16
+
+Témoin fort, recherche locale itérée (1+1) sur bench_2 (optimum prouvé 38) : population 1, NR = 0, NM = 1, mutation shift_start, LocalSolver voisinage 1, enfant gardé s'il n'est pas pire (plus, prefer_newest), sans restart (stagnation 1000), 519 générations, soit 520 appels ; graine 16. Comparé à bench2_memetique_pop18 au même nombre d'appels.
+
+- Configuration : `experiments/config/bench2_ils/bench2_ils_s16.json`
+- Résultats : `experiments/results/2026-11-26/bench2_ils_s16_124538.json`
+- Instance : bench_2 ; graine 16 ; population 1, NR = 0, NM = 1, 519 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start` ; survivor_selector `plus` {"prefer_newest": true}
+- **Coût obtenu : 39** (faisable) ; 519 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 71 ; propagations 30195 ; nodes non rapporté ; temps déterministe 0.078 ; temps de résolution 1.9 s (non déterministe)
+- Durée de l'exécution : 190.8 s ; commit `23f69d6e123c095b4529e1a975de6311f404af6c`
+
+## 2026-11-26 12:45 — bench2_ils_s17
+
+Témoin fort, recherche locale itérée (1+1) sur bench_2 (optimum prouvé 38) : population 1, NR = 0, NM = 1, mutation shift_start, LocalSolver voisinage 1, enfant gardé s'il n'est pas pire (plus, prefer_newest), sans restart (stagnation 1000), 519 générations, soit 520 appels ; graine 17. Comparé à bench2_memetique_pop18 au même nombre d'appels.
+
+- Configuration : `experiments/config/bench2_ils/bench2_ils_s17.json`
+- Résultats : `experiments/results/2026-11-26/bench2_ils_s17_124539.json`
+- Instance : bench_2 ; graine 17 ; population 1, NR = 0, NM = 1, 519 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start` ; survivor_selector `plus` {"prefer_newest": true}
+- **Coût obtenu : 41** (faisable) ; 519 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 592 ; propagations 193740 ; nodes non rapporté ; temps déterministe 0.11 ; temps de résolution 2.1 s (non déterministe)
+- Durée de l'exécution : 191.6 s ; commit `23f69d6e123c095b4529e1a975de6311f404af6c`
+
+## 2026-11-26 12:48 — bench2_ils_s18
+
+Témoin fort, recherche locale itérée (1+1) sur bench_2 (optimum prouvé 38) : population 1, NR = 0, NM = 1, mutation shift_start, LocalSolver voisinage 1, enfant gardé s'il n'est pas pire (plus, prefer_newest), sans restart (stagnation 1000), 519 générations, soit 520 appels ; graine 18. Comparé à bench2_memetique_pop18 au même nombre d'appels.
+
+- Configuration : `experiments/config/bench2_ils/bench2_ils_s18.json`
+- Résultats : `experiments/results/2026-11-26/bench2_ils_s18_124849.json`
+- Instance : bench_2 ; graine 18 ; population 1, NR = 0, NM = 1, 519 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start` ; survivor_selector `plus` {"prefer_newest": true}
+- **Coût obtenu : 41** (faisable) ; 519 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 1101 ; propagations 263706 ; nodes non rapporté ; temps déterministe 0.121 ; temps de résolution 1.6 s (non déterministe)
+- Durée de l'exécution : 148.6 s ; commit `23f69d6e123c095b4529e1a975de6311f404af6c`
+
+## 2026-11-26 12:48 — bench2_ils_s19
+
+Témoin fort, recherche locale itérée (1+1) sur bench_2 (optimum prouvé 38) : population 1, NR = 0, NM = 1, mutation shift_start, LocalSolver voisinage 1, enfant gardé s'il n'est pas pire (plus, prefer_newest), sans restart (stagnation 1000), 519 générations, soit 520 appels ; graine 19. Comparé à bench2_memetique_pop18 au même nombre d'appels.
+
+- Configuration : `experiments/config/bench2_ils/bench2_ils_s19.json`
+- Résultats : `experiments/results/2026-11-26/bench2_ils_s19_124850.json`
+- Instance : bench_2 ; graine 19 ; population 1, NR = 0, NM = 1, 519 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start` ; survivor_selector `plus` {"prefer_newest": true}
+- **Coût obtenu : 41** (faisable) ; 519 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 596 ; propagations 171081 ; nodes non rapporté ; temps déterministe 0.104 ; temps de résolution 1.7 s (non déterministe)
+- Durée de l'exécution : 148.7 s ; commit `23f69d6e123c095b4529e1a975de6311f404af6c`
+
+## 2026-11-26 12:48 — bench2_ils_s20
+
+Témoin fort, recherche locale itérée (1+1) sur bench_2 (optimum prouvé 38) : population 1, NR = 0, NM = 1, mutation shift_start, LocalSolver voisinage 1, enfant gardé s'il n'est pas pire (plus, prefer_newest), sans restart (stagnation 1000), 519 générations, soit 520 appels ; graine 20. Comparé à bench2_memetique_pop18 au même nombre d'appels.
+
+- Configuration : `experiments/config/bench2_ils/bench2_ils_s20.json`
+- Résultats : `experiments/results/2026-11-26/bench2_ils_s20_124850.json`
+- Instance : bench_2 ; graine 20 ; population 1, NR = 0, NM = 1, 519 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start` ; survivor_selector `plus` {"prefer_newest": true}
+- **Coût obtenu : 38** (faisable) ; 519 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 769 ; propagations 131934 ; nodes non rapporté ; temps déterministe 0.095 ; temps de résolution 1.5 s (non déterministe)
+- Durée de l'exécution : 148.8 s ; commit `23f69d6e123c095b4529e1a975de6311f404af6c`
+
+## 2026-11-26 — Synthèse : mémétique contre recherche locale itérée (1+1) sur bench_2 (étape 10e)
+
+Série `experiments/config/bench2_ils/` (21 graines ; population 1, NR = 0, NM = 1, `shift_start`, enfant gardé s'il n'est pas pire, sans restart, 520 appels ; commit `23f69d6`, copie de travail propre), comparée à `bench2_memetique_pop18` (10d) au même nombre d'appels. Rapport : `experiments/analysis/bench2_ils.md`.
+
+| Indicateur | Mémétique | (1+1) |
+|---|---:|---:|
+| Optimum 38 atteint | 21/21 | 5/21 |
+| Meilleur coût médian à 18 / 72 / 520 appels | 2 000 055 / 38 / 38 | 40 / 40 / 40 |
+| Appels avant 38, exécutions réussies (médiane) | 72 | 6 |
+| Dernière amélioration du (1+1) (appels, médiane ; max) | — | 7 ; 19 |
+| Temps déterministe par appel (médiane) | 0,0031 | 0,00019 |
+
+- À budget égal d'appels, le mémétique bat le témoin fort (Wilcoxon apparié, p = 1,2 × 10⁻⁴) : le (1+1) descend très vite, puis reste bloqué dans un optimum local (39 à 43) après une vingtaine d'appels ; la population et le croisement en sortent.
+- Mais les appels du (1+1) coûtent environ 16 fois moins de temps déterministe : à temps déterministe égal, un (1+1) avec redémarrages reste à mesurer (il faut autoriser une élite de 0 au restart).

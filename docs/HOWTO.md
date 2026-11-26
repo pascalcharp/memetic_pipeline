@@ -102,10 +102,11 @@ Paramètres de `settings` et valeurs par défaut (`AssemblyDefaults`, `src/memet
 
 | Rôle | Noms | Défaut (assemblage de référence) |
 |---|---|---|
-| `crossover` | `uniform_gene` | `uniform_gene` |
-| `mutation` | `shift_start`, `block_boundary`, `activity` | `shift_start` |
+| `crossover` | `uniform_gene`, `random_genome` (témoin) | `uniform_gene` |
+| `mutation` | `shift_start`, `block_boundary`, `activity`, `random_genome` (témoin) | `shift_start` |
+| `survivor_selector` | `plus` (paramètre `prefer_newest`, faux par défaut) | `plus` |
 
-Ce que fait chaque stratégie : [`AVAILABLE_STRATEGIES.md`](AVAILABLE_STRATEGIES.md), colonne « Nom ». Aucune stratégie du catalogue n'a encore de paramètre ; l'instance, quand une stratégie en a besoin, est fournie par le catalogue. Les autres rôles (sélecteurs, survivants, restart, voisinage) ne sont pas encore au catalogue : pour les changer, passer par Python. Les stratégies choisies sont notées dans le fichier de résultats (`strategies`) et dans l'entrée d'`EXPLOG.md`.
+Ce que fait chaque stratégie : [`AVAILABLE_STRATEGIES.md`](AVAILABLE_STRATEGIES.md), colonne « Nom ». Seule `plus` a un paramètre (`prefer_newest` : à coût égal, l'enfant remplace le parent ; sert au témoin (1+1) de l'étape 10e) ; l'instance, quand une stratégie en a besoin, est fournie par le catalogue. Les autres rôles (sélecteurs des parents et des mutables, convergence, restart, voisinage) ne sont pas encore au catalogue : pour les changer, passer par Python. Les stratégies choisies sont notées dans le fichier de résultats (`strategies`) et dans l'entrée d'`EXPLOG.md`.
 
 Une clé inconnue, une clé obligatoire absente, une valeur du mauvais type, une stratégie inconnue (le message liste les noms permis), des paramètres de stratégie qui ne conviennent pas ou une instance introuvable sont refusés **avant toute exécution** (`InvalidExperimentConfigError`, avec le chemin et la clé en cause dans le message). Les domaines (par exemple une taille au moins 1) sont vérifiés à la construction du moteur.
 

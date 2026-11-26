@@ -383,9 +383,11 @@ Le témoin garde l'hérédité par la mutation, mais n'a ni population, ni crois
 - [x] Population 1, NR = 0, NM = 1 (accepté par `MemeticDefaults`), `shift_start`, sans restart (seuil de stagnation 1000, plus grand que le budget), budget de 520 appels (1 + 519 générations)
 - [x] Sélection des survivants qui accepte l'enfant **à coût égal** (décidé le 2026-11-26) : paramètre `PlusSurvivorSelector(prefer_newest=True)`, qui départage les égalités en faveur du dernier arrivé (le moteur ajoute les nouveaux après les parents) ; nouveau rôle `survivor_selector` au catalogue, nom `plus`, paramètre `prefer_newest` (premier usage des paramètres de 10c). Sans `strategies`, l'assemblage ne change pas
 - [x] Tests : sélection (égalités, coûts stricts, doublons), catalogue, assemblage, `run_experiment`, exécution (1+1) sur bench_1 (une recherche locale par génération, un seul individu, pas de restart, l'enfant gardé s'il n'est pas pire) ; 656 tests verts en local et dans Docker
-- [ ] Expérience : `experiments/config/bench2_ils/` (21 graines, 519 générations), contre `bench2_memetique_pop18` (10d), au même nombre d'appels cumulés
-- [ ] Même analyse qu'en 10d : meilleur coût en fonction des appels, effort avant 38, Wilcoxon apparié, faisabilité ; rapport `experiments/analysis/bench2_ils.md`, synthèse dans EXPLOG.md, DEVLOG
-- [ ] Documentation : AVAILABLE_STRATEGIES (sélection des survivants au catalogue, `prefer_newest`), HOWTO (section 1 : rôle `survivor_selector`)
+- [x] Expérience : `experiments/config/bench2_ils/` (21 graines, 519 générations), contre `bench2_memetique_pop18` (10d), au même nombre d'appels cumulés
+- [x] Même analyse qu'en 10d : meilleur coût en fonction des appels, effort avant 38, Wilcoxon apparié, faisabilité ; rapport `experiments/analysis/bench2_ils.md`, synthèse dans EXPLOG.md, DEVLOG
+  - résultat (2026-11-26) : mémétique 21/21, (1+1) 5/21 (p = 1,2 × 10⁻⁴) ; le (1+1) converge en au plus 19 appels puis reste bloqué dans un optimum local ; ses appels coûtent environ 16 fois moins de temps déterministe
+- [ ] **Suite proposée** : (1+1) avec redémarrages, comparé à temps déterministe égal (autoriser `elite_count = 0` dans `EliteRestart`, le meilleur restant suivi par le moteur), avant de conclure sur l'objectif 2
+- [x] Documentation : AVAILABLE_STRATEGIES (sélection des survivants au catalogue, `prefer_newest`), HOWTO (section 1 : rôle `survivor_selector`)
 
 ## Étape 11 — Documentation **(C)**
 - [ ] README : construction Docker, lancement des tests, lancement des expériences

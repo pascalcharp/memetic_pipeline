@@ -6,7 +6,7 @@ Pour **brancher** une stratégie, ou en **écrire** une nouvelle, voir [`HOWTO.m
 
 Légende de la colonne « Réf. » : ✅ utilisée par l'assemblage de référence ; ➖ disponible, à brancher soi-même.
 
-La colonne « Nom » donne le nom stable d'une stratégie dans le catalogue (`src/memetic/catalog.py`, étape 10c) : c'est ce qu'on écrit dans la clé `strategies` d'une configuration d'expérience pour la choisir sans code (voir [`HOWTO.md`, section 1](HOWTO.md#1-je-veux-lancer-une-expérience)). Pour l'instant, seuls le croisement et la mutation sont au catalogue.
+La colonne « Nom » donne le nom stable d'une stratégie dans le catalogue (`src/memetic/catalog.py`, étape 10c) : c'est ce qu'on écrit dans la clé `strategies` d'une configuration d'expérience pour la choisir sans code (voir [`HOWTO.md`, section 1](HOWTO.md#1-je-veux-lancer-une-expérience)). Pour l'instant, le croisement, la mutation et la sélection des survivants (étape 10e) sont au catalogue.
 
 1. [Encodage](#1-encodage)
 2. [Initialisation](#2-initialisation)
@@ -197,14 +197,15 @@ Rôle `evaluator` (`src/model/evaluation.py`). Il n'y a pas d'interface : une se
 
 Rôle `survivor_selector`, interface `SurvivorSelector[G]` (`src/ga/population.py`). `select(population, size, rng)` ramène parents et nouveaux individus à `size` individus. Les deux sélecteurs appellent `check_selectable`, ne modifient pas leur entrée, et rendent toujours `size` individus si la population en compte au moins autant.
 
-| Classe | Paramètres | Élitiste | Réf. |
-|---|---|---|---|
-| `PlusSurvivorSelector` | aucun | oui | ✅ |
-| `DeathPenaltySurvivorSelector` | aucun | parmi les faisables | ➖ |
+| Classe | Nom | Paramètres | Élitiste | Réf. |
+|---|---|---|---|---|
+| `PlusSurvivorSelector` | `plus` | `prefer_newest: bool = False` | oui | ✅ |
+| `DeathPenaltySurvivorSelector` | — | aucun | parmi les faisables | ➖ |
 
 **`PlusSurvivorSelector`** ((μ+λ) sans doublons, décision D4). Tri stable par `cost.total` croissant ; un seul exemplaire de chaque génome ; les `size` meilleurs. S'il y a moins de `size` génomes distincts, complète avec les doublons écartés, dans l'ordre des coûts. Le meilleur individu n'est jamais perdu.
 - L'élimination des doublons empêche les copies produites par le `LocalSolver` (plusieurs individus réparés vers la même solution) d'envahir la population.
 - Limite connue (D3) : deux génomes égaux à une permutation des employés près ne sont pas des doublons.
+- `prefer_newest` (étape 10e) : à coût égal, le dernier arrivé l'emporte au lieu du premier. Le moteur ajoute les nouveaux individus après les parents, donc à coût égal l'enfant remplace le parent. Sert à la recherche locale itérée (1+1) du témoin fort (population 1, NR = 0, NM = 1), pour se déplacer sur un plateau ; dans une configuration : `"survivor_selector": {"name": "plus", "parameters": {"prefer_newest": true}}`.
 
 **`DeathPenaltySurvivorSelector`** (variante « peine de mort », D4). Les individus faisables d'abord, sans doublons et par `cost.total` croissant ; s'il en manque, les meilleurs infaisables ; s'il manque encore des individus, les doublons écartés (faisables d'abord). La population garde sa taille, et la variante se rapproche de la pénalité quand les faisables manquent. « Faisable » veut dire `cost.is_feasible` : ni violation structurelle, ni violation de la couverture « au moins un » (section 9).
 
