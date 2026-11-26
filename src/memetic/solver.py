@@ -323,7 +323,12 @@ class SolverAdapter(ABC):
             model: ModelVariant = ModelVariants.RELAXED,
             weights: PenaltyWeights = PenaltyWeights(),
     ) -> None:
-        """Vérifie que la limite est comprise, puis localise MiniZinc et le solveur.
+        """Vérifie que la limite est comprise, localise MiniZinc et le solveur, et prépare le ``minizinc.Model``.
+
+        Le ``minizinc.Model`` est construit une seule fois et partagé par tous les appels à ``solve`` (étape 12-0) :
+        il garde en cache l'analyse d'interface de MiniZinc (``--model-interface-only``, environ 0,14 s), qu'un
+        modèle neuf referait à chaque appel. Il n'est jamais modifié : chaque appel construit sa propre
+        ``minizinc.Instance``, qui copie le modèle avant de recevoir ses données et ses contraintes.
 
         Raises:
             UnsupportedLimitError: si le type de ``options.limit`` n'est pas dans ``supported_limits()``.
@@ -340,6 +345,7 @@ class SolverAdapter(ABC):
         self.model = model
         self.weights = weights
         self.solver = lookup_solver(self.solver_id(), locate_minizinc_driver())
+        self.minizinc_model = minizinc.Model(self.model.path)
 
     @classmethod
     @abstractmethod
@@ -366,7 +372,7 @@ class SolverAdapter(ABC):
         Raises:
             SolverFailureError: si MiniZinc échoue (contrainte mal formée, statut ERROR ou inattendu).
         """
-        minizinc_instance = minizinc.Instance(self.solver, minizinc.Model(self.model.path))
+        minizinc_instance = minizinc.Instance(self.solver, self.minizinc_model)
         for name, value in self.model.parameters(self.weights).items():
             minizinc_instance[name] = value
         self._assign_instance_data(minizinc_instance, instance)

@@ -4,6 +4,7 @@ import dataclasses
 import unittest
 import warnings
 from datetime import timedelta
+from unittest import mock
 
 import minizinc
 from minizinc.error import MiniZincWarning
@@ -64,6 +65,10 @@ FIXED_START: int = 4
 FIX_FIRST_START: str = "constraint {variable}[1] = {value};".format(variable=ModelVariableNames.START, value=FIXED_START)
 # Une période bien au-delà de toute instance : hors du domaine de debut[1], donc insatisfiable.
 IMPOSSIBLE_START: str = "constraint {variable}[1] = 1000;".format(variable=ModelVariableNames.START)
+
+# Étape 12-0 : avec le minizinc.Model réutilisé, un appel ne refait plus qu'une analyse d'interface
+# (``--model-interface-only``), celle qui suit les contraintes ajoutées ; il en faisait deux.
+INTERFACE_ANALYSES_PER_REUSED_CALL: int = 1
 MALFORMED_CONSTRAINT: str = "constraint this is not minizinc;"
 
 
@@ -289,6 +294,57 @@ class TestCpSatSolve(unittest.TestCase):
         self.assertEqual(run.outcome, SolveOutcome.NO_SOLUTION)
         self.assertIsNone(run.variables)
         self.assertIsNone(run.objective)
+
+
+class TestSharedMiniZincModel(unittest.TestCase):
+    """Étape 12-0 : l'adaptateur réutilise son ``minizinc.Model`` d'un appel à l'autre, sans fuite entre appels."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.bench_1 = bench("bench_1")
+
+    @staticmethod
+    def count_interface_analyses(adapter: CpSatAdapter, instance, extra_constraints) -> int:
+        """Nombre d'analyses d'interface (``minizinc.Instance.analyse``) lancées par un appel à ``solve``."""
+        with mock.patch.object(
+                minizinc.Instance, "analyse", autospec=True, side_effect=minizinc.Instance.analyse
+        ) as analyse:
+            adapter.solve(instance, extra_constraints=extra_constraints)
+        return analyse.call_count
+
+    def test_reused_call_makes_a_single_interface_analysis(self) -> None:
+        adapter = CpSatAdapter()
+        adapter.solve(self.bench_1, extra_constraints=[FIX_FIRST_START])
+        analyses = self.count_interface_analyses(adapter, self.bench_1, [FIX_FIRST_START])
+        self.assertEqual(analyses, INTERFACE_ANALYSES_PER_REUSED_CALL)
+
+    def test_extra_constraints_do_not_leak_into_the_next_call(self) -> None:
+        adapter = CpSatAdapter()
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", MiniZincWarning)
+            impossible = adapter.solve(self.bench_1, extra_constraints=[IMPOSSIBLE_START])
+        unconstrained = adapter.solve(self.bench_1)
+        self.assertEqual(impossible.outcome, SolveOutcome.UNSATISFIABLE)
+        self.assertEqual(unconstrained.outcome, SolveOutcome.OPTIMAL)
+        self.assertEqual(unconstrained.objective, BENCH_1_OPTIMUM)
+
+    def test_fixed_value_does_not_leak_into_the_next_call(self) -> None:
+        adapter = CpSatAdapter()
+        adapter.solve(self.bench_1, extra_constraints=[FIX_FIRST_START])
+        reused = adapter.solve(self.bench_1)
+        fresh = CpSatAdapter().solve(self.bench_1)
+        self.assertEqual(reused.variables, fresh.variables)
+
+    def test_reused_adapter_matches_a_fresh_adapter(self) -> None:
+        limit = DeterministicTimeLimit(GENEROUS_DETERMINISTIC_UNITS)
+        reused_adapter = cp_sat(limit, seed=SOME_SEED)
+        reused_adapter.solve(self.bench_1, extra_constraints=[FIX_FIRST_START])
+        reused = reused_adapter.solve(self.bench_1, extra_constraints=[FIX_FIRST_START])
+        fresh = cp_sat(limit, seed=SOME_SEED).solve(self.bench_1, extra_constraints=[FIX_FIRST_START])
+        self.assertEqual(reused.objective, fresh.objective)
+        self.assertEqual(reused.variables, fresh.variables)
+        self.assertEqual(reused.statistics.failures, fresh.statistics.failures)
+        self.assertEqual(reused.statistics.propagations, fresh.statistics.propagations)
 
 
 if __name__ == "__main__":
