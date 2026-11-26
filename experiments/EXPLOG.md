@@ -8844,3 +8844,523 @@ Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 2.5,
 - Voisinage 1 et budget 5 conserves pour les prochaines series.
 - Rapport : experiments/analysis/bench3_neighborhood_budget.md.
 - Script : experiments/analysis/analyze_bench3_neighborhood_budget.py.
+
+## 2026-11-26 22:42 — bench3_nr3_nm12_s00
+
+Comparaison des ratios NR/NM sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 0.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr3_nm12_s00.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr3_nm12_s00_224244.json`
+- Instance : bench_3 ; graine 0 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 42** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 55278 ; propagations 249086663 ; nodes non rapporté ; temps de résolution 119.8 s (non déterministe)
+- Durée de l'exécution : 356.1 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:42 — bench3_nr3_nm12_s01
+
+Comparaison des ratios NR/NM sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 1.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr3_nm12_s01.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr3_nm12_s01_224244.json`
+- Instance : bench_3 ; graine 1 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 47** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 53565 ; propagations 258610643 ; nodes non rapporté ; temps de résolution 128.9 s (non déterministe)
+- Durée de l'exécution : 366.6 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:42 — bench3_nr3_nm12_s02
+
+Comparaison des ratios NR/NM sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 2.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr3_nm12_s02.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr3_nm12_s02_224245.json`
+- Instance : bench_3 ; graine 2 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 30** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 56135 ; propagations 254823781 ; nodes non rapporté ; temps de résolution 125.5 s (non déterministe)
+- Durée de l'exécution : 364.4 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:42 — bench3_nr3_nm12_s03
+
+Comparaison des ratios NR/NM sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 3.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr3_nm12_s03.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr3_nm12_s03_224244.json`
+- Instance : bench_3 ; graine 3 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 49** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 79893 ; propagations 344010583 ; nodes non rapporté ; temps de résolution 173.8 s (non déterministe)
+- Durée de l'exécution : 420.0 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:42 — bench3_nr3_nm12_s04
+
+Comparaison des ratios NR/NM sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 4.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr3_nm12_s04.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr3_nm12_s04_224245.json`
+- Instance : bench_3 ; graine 4 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 28** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 70653 ; propagations 296966183 ; nodes non rapporté ; temps de résolution 150.5 s (non déterministe)
+- Durée de l'exécution : 397.2 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:42 — bench3_nr3_nm12_s05
+
+Comparaison des ratios NR/NM sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 5.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr3_nm12_s05.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr3_nm12_s05_224244.json`
+- Instance : bench_3 ; graine 5 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 51** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 87505 ; propagations 381620126 ; nodes non rapporté ; temps de résolution 193.4 s (non déterministe)
+- Durée de l'exécution : 442.0 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:42 — bench3_nr3_nm12_s06
+
+Comparaison des ratios NR/NM sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 6.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr3_nm12_s06.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr3_nm12_s06_224245.json`
+- Instance : bench_3 ; graine 6 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 29** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 62911 ; propagations 282433672 ; nodes non rapporté ; temps de résolution 138.9 s (non déterministe)
+- Durée de l'exécution : 376.7 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:42 — bench3_nr3_nm12_s07
+
+Comparaison des ratios NR/NM sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 7.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr3_nm12_s07.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr3_nm12_s07_224244.json`
+- Instance : bench_3 ; graine 7 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 41** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 59695 ; propagations 279789962 ; nodes non rapporté ; temps de résolution 135.1 s (non déterministe)
+- Durée de l'exécution : 372.6 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:42 — bench3_nr3_nm12_s08
+
+Comparaison des ratios NR/NM sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 8.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr3_nm12_s08.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr3_nm12_s08_224244.json`
+- Instance : bench_3 ; graine 8 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 35** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 59176 ; propagations 276024279 ; nodes non rapporté ; temps de résolution 140.8 s (non déterministe)
+- Durée de l'exécution : 387.1 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:42 — bench3_nr3_nm12_s09
+
+Comparaison des ratios NR/NM sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 9.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr3_nm12_s09.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr3_nm12_s09_224244.json`
+- Instance : bench_3 ; graine 9 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 37** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 58479 ; propagations 256483629 ; nodes non rapporté ; temps de résolution 125.1 s (non déterministe)
+- Durée de l'exécution : 363.5 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:42 — bench3_nr3_nm12_s10
+
+Comparaison des ratios NR/NM sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 10.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr3_nm12_s10.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr3_nm12_s10_224244.json`
+- Instance : bench_3 ; graine 10 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 27** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 63714 ; propagations 289844552 ; nodes non rapporté ; temps de résolution 143.3 s (non déterministe)
+- Durée de l'exécution : 383.0 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:42 — bench3_nr3_nm12_s11
+
+Comparaison des ratios NR/NM sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 11.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr3_nm12_s11.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr3_nm12_s11_224245.json`
+- Instance : bench_3 ; graine 11 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 23** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 82592 ; propagations 356830900 ; nodes non rapporté ; temps de résolution 180.2 s (non déterministe)
+- Durée de l'exécution : 425.1 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:42 — bench3_nr3_nm12_s12
+
+Comparaison des ratios NR/NM sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 12.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr3_nm12_s12.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr3_nm12_s12_224245.json`
+- Instance : bench_3 ; graine 12 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 29** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 81676 ; propagations 352089837 ; nodes non rapporté ; temps de résolution 176.9 s (non déterministe)
+- Durée de l'exécution : 423.3 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:42 — bench3_nr3_nm12_s13
+
+Comparaison des ratios NR/NM sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 13.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr3_nm12_s13.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr3_nm12_s13_224245.json`
+- Instance : bench_3 ; graine 13 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 41** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 71941 ; propagations 303916201 ; nodes non rapporté ; temps de résolution 152.1 s (non déterministe)
+- Durée de l'exécution : 389.2 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:42 — bench3_nr3_nm12_s14
+
+Comparaison des ratios NR/NM sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 14.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr3_nm12_s14.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr3_nm12_s14_224245.json`
+- Instance : bench_3 ; graine 14 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 40** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 60647 ; propagations 277238550 ; nodes non rapporté ; temps de résolution 138.0 s (non déterministe)
+- Durée de l'exécution : 374.8 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:42 — bench3_nr3_nm12_s15
+
+Comparaison des ratios NR/NM sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 15.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr3_nm12_s15.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr3_nm12_s15_224244.json`
+- Instance : bench_3 ; graine 15 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 46** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 52410 ; propagations 221204075 ; nodes non rapporté ; temps de résolution 109.5 s (non déterministe)
+- Durée de l'exécution : 346.6 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:42 — bench3_nr3_nm12_s16
+
+Comparaison des ratios NR/NM sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 16.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr3_nm12_s16.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr3_nm12_s16_224245.json`
+- Instance : bench_3 ; graine 16 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 48** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 59840 ; propagations 278177266 ; nodes non rapporté ; temps de résolution 137.5 s (non déterministe)
+- Durée de l'exécution : 376.1 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:42 — bench3_nr3_nm12_s17
+
+Comparaison des ratios NR/NM sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 17.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr3_nm12_s17.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr3_nm12_s17_224244.json`
+- Instance : bench_3 ; graine 17 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 50** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 85291 ; propagations 372107325 ; nodes non rapporté ; temps de résolution 186.5 s (non déterministe)
+- Durée de l'exécution : 433.1 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:42 — bench3_nr3_nm12_s18
+
+Comparaison des ratios NR/NM sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 18.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr3_nm12_s18.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr3_nm12_s18_224245.json`
+- Instance : bench_3 ; graine 18 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 22** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 57598 ; propagations 263783862 ; nodes non rapporté ; temps de résolution 129.6 s (non déterministe)
+- Durée de l'exécution : 367.2 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:42 — bench3_nr3_nm12_s19
+
+Comparaison des ratios NR/NM sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 19.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr3_nm12_s19.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr3_nm12_s19_224244.json`
+- Instance : bench_3 ; graine 19 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 60884 ; propagations 257562362 ; nodes non rapporté ; temps de résolution 124.8 s (non déterministe)
+- Durée de l'exécution : 364.4 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:48 — bench3_nr3_nm12_s20
+
+Comparaison des ratios NR/NM sur bench_3 : NR=3, NM=12, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 20.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr3_nm12_s20.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr3_nm12_s20_224832.json`
+- Instance : bench_3 ; graine 20 ; population 18, NR = 3, NM = 12, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 81675 ; propagations 363453118 ; nodes non rapporté ; temps de résolution 183.9 s (non déterministe)
+- Durée de l'exécution : 430.4 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:48 — bench3_nr8_nm2_s00
+
+Comparaison des ratios NR/NM sur bench_3 : NR=8, NM=2, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 0.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr8_nm2_s00.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr8_nm2_s00_224842.json`
+- Instance : bench_3 ; graine 0 ; population 18, NR = 8, NM = 2, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 43** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 77072 ; propagations 326575494 ; nodes non rapporté ; temps de résolution 166.1 s (non déterministe)
+- Durée de l'exécution : 411.6 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:48 — bench3_nr8_nm2_s01
+
+Comparaison des ratios NR/NM sur bench_3 : NR=8, NM=2, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 1.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr8_nm2_s01.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr8_nm2_s01_224848.json`
+- Instance : bench_3 ; graine 1 ; population 18, NR = 8, NM = 2, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 37** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 76984 ; propagations 354511060 ; nodes non rapporté ; temps de résolution 176.8 s (non déterministe)
+- Durée de l'exécution : 415.6 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:48 — bench3_nr8_nm2_s02
+
+Comparaison des ratios NR/NM sur bench_3 : NR=8, NM=2, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 2.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr8_nm2_s02.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr8_nm2_s02_224850.json`
+- Instance : bench_3 ; graine 2 ; population 18, NR = 8, NM = 2, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 119615 ; propagations 510229723 ; nodes non rapporté ; temps de résolution 263.3 s (non déterministe)
+- Durée de l'exécution : 506.3 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:48 — bench3_nr8_nm2_s03
+
+Comparaison des ratios NR/NM sur bench_3 : NR=8, NM=2, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 3.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr8_nm2_s03.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr8_nm2_s03_224850.json`
+- Instance : bench_3 ; graine 3 ; population 18, NR = 8, NM = 2, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 31** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 62779 ; propagations 269325325 ; nodes non rapporté ; temps de résolution 139.3 s (non déterministe)
+- Durée de l'exécution : 378.5 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:48 — bench3_nr8_nm2_s04
+
+Comparaison des ratios NR/NM sur bench_3 : NR=8, NM=2, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 4.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr8_nm2_s04.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr8_nm2_s04_224852.json`
+- Instance : bench_3 ; graine 4 ; population 18, NR = 8, NM = 2, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 34** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 85120 ; propagations 379077236 ; nodes non rapporté ; temps de résolution 185.1 s (non déterministe)
+- Durée de l'exécution : 431.5 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:48 — bench3_nr8_nm2_s05
+
+Comparaison des ratios NR/NM sur bench_3 : NR=8, NM=2, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 5.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr8_nm2_s05.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr8_nm2_s05_224853.json`
+- Instance : bench_3 ; graine 5 ; population 18, NR = 8, NM = 2, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 1000037** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 64143 ; propagations 301494023 ; nodes non rapporté ; temps de résolution 159.5 s (non déterministe)
+- Durée de l'exécution : 405.8 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:48 — bench3_nr8_nm2_s06
+
+Comparaison des ratios NR/NM sur bench_3 : NR=8, NM=2, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 6.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr8_nm2_s06.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr8_nm2_s06_224857.json`
+- Instance : bench_3 ; graine 6 ; population 18, NR = 8, NM = 2, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 31** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 89722 ; propagations 422737182 ; nodes non rapporté ; temps de résolution 215.6 s (non déterministe)
+- Durée de l'exécution : 451.9 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:49 — bench3_nr8_nm2_s07
+
+Comparaison des ratios NR/NM sur bench_3 : NR=8, NM=2, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 7.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr8_nm2_s07.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr8_nm2_s07_224901.json`
+- Instance : bench_3 ; graine 7 ; population 18, NR = 8, NM = 2, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 33** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 109432 ; propagations 497707989 ; nodes non rapporté ; temps de résolution 245.5 s (non déterministe)
+- Durée de l'exécution : 489.7 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:49 — bench3_nr8_nm2_s08
+
+Comparaison des ratios NR/NM sur bench_3 : NR=8, NM=2, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 8.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr8_nm2_s08.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr8_nm2_s08_224902.json`
+- Instance : bench_3 ; graine 8 ; population 18, NR = 8, NM = 2, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 42** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 75366 ; propagations 345821228 ; nodes non rapporté ; temps de résolution 169.6 s (non déterministe)
+- Durée de l'exécution : 416.4 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:49 — bench3_nr8_nm2_s09
+
+Comparaison des ratios NR/NM sur bench_3 : NR=8, NM=2, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 9.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr8_nm2_s09.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr8_nm2_s09_224902.json`
+- Instance : bench_3 ; graine 9 ; population 18, NR = 8, NM = 2, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 28** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 92427 ; propagations 408290666 ; nodes non rapporté ; temps de résolution 209.6 s (non déterministe)
+- Durée de l'exécution : 455.9 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:49 — bench3_nr8_nm2_s10
+
+Comparaison des ratios NR/NM sur bench_3 : NR=8, NM=2, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 10.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr8_nm2_s10.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr8_nm2_s10_224908.json`
+- Instance : bench_3 ; graine 10 ; population 18, NR = 8, NM = 2, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 35** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 82085 ; propagations 379514909 ; nodes non rapporté ; temps de résolution 194.9 s (non déterministe)
+- Durée de l'exécution : 441.5 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:49 — bench3_nr8_nm2_s11
+
+Comparaison des ratios NR/NM sur bench_3 : NR=8, NM=2, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 11.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr8_nm2_s11.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr8_nm2_s11_224912.json`
+- Instance : bench_3 ; graine 11 ; population 18, NR = 8, NM = 2, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 34** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 110038 ; propagations 477516919 ; nodes non rapporté ; temps de résolution 247.4 s (non déterministe)
+- Durée de l'exécution : 488.2 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:49 — bench3_nr8_nm2_s12
+
+Comparaison des ratios NR/NM sur bench_3 : NR=8, NM=2, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 12.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr8_nm2_s12.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr8_nm2_s12_224915.json`
+- Instance : bench_3 ; graine 12 ; population 18, NR = 8, NM = 2, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 30** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 101876 ; propagations 479690932 ; nodes non rapporté ; temps de résolution 241.5 s (non déterministe)
+- Durée de l'exécution : 482.7 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:49 — bench3_nr8_nm2_s13
+
+Comparaison des ratios NR/NM sur bench_3 : NR=8, NM=2, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 13.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr8_nm2_s13.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr8_nm2_s13_224923.json`
+- Instance : bench_3 ; graine 13 ; population 18, NR = 8, NM = 2, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 34** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 68630 ; propagations 341174753 ; nodes non rapporté ; temps de résolution 172.4 s (non déterministe)
+- Durée de l'exécution : 408.3 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:49 — bench3_nr8_nm2_s14
+
+Comparaison des ratios NR/NM sur bench_3 : NR=8, NM=2, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 14.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr8_nm2_s14.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr8_nm2_s14_224945.json`
+- Instance : bench_3 ; graine 14 ; population 18, NR = 8, NM = 2, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 41** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 114388 ; propagations 486532440 ; nodes non rapporté ; temps de résolution 240.9 s (non déterministe)
+- Durée de l'exécution : 481.8 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:49 — bench3_nr8_nm2_s15
+
+Comparaison des ratios NR/NM sur bench_3 : NR=8, NM=2, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 15.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr8_nm2_s15.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr8_nm2_s15_224949.json`
+- Instance : bench_3 ; graine 15 ; population 18, NR = 8, NM = 2, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 27** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 74380 ; propagations 314435200 ; nodes non rapporté ; temps de résolution 165.8 s (non déterministe)
+- Durée de l'exécution : 410.0 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:49 — bench3_nr8_nm2_s16
+
+Comparaison des ratios NR/NM sur bench_3 : NR=8, NM=2, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 16.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr8_nm2_s16.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr8_nm2_s16_224951.json`
+- Instance : bench_3 ; graine 16 ; population 18, NR = 8, NM = 2, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 43** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 63733 ; propagations 312934838 ; nodes non rapporté ; temps de résolution 155.3 s (non déterministe)
+- Durée de l'exécution : 390.6 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:49 — bench3_nr8_nm2_s17
+
+Comparaison des ratios NR/NM sur bench_3 : NR=8, NM=2, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 17.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr8_nm2_s17.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr8_nm2_s17_224958.json`
+- Instance : bench_3 ; graine 17 ; population 18, NR = 8, NM = 2, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 46** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 75283 ; propagations 323608009 ; nodes non rapporté ; temps de résolution 162.9 s (non déterministe)
+- Durée de l'exécution : 398.3 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:50 — bench3_nr8_nm2_s18
+
+Comparaison des ratios NR/NM sur bench_3 : NR=8, NM=2, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 18.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr8_nm2_s18.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr8_nm2_s18_225007.json`
+- Instance : bench_3 ; graine 18 ; population 18, NR = 8, NM = 2, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 21** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 66981 ; propagations 313652832 ; nodes non rapporté ; temps de résolution 158.9 s (non déterministe)
+- Durée de l'exécution : 395.7 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:55 — bench3_nr8_nm2_s19
+
+Comparaison des ratios NR/NM sur bench_3 : NR=8, NM=2, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 19.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr8_nm2_s19.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr8_nm2_s19_225510.json`
+- Instance : bench_3 ; graine 19 ; population 18, NR = 8, NM = 2, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 43** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 101746 ; propagations 459599533 ; nodes non rapporté ; temps de résolution 201.0 s (non déterministe)
+- Durée de l'exécution : 391.8 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## 2026-11-26 22:55 — bench3_nr8_nm2_s20
+
+Comparaison des ratios NR/NM sur bench_3 : NR=8, NM=2, population 18, 26 generations, voisinage 1, budget deterministe 5, graine 20.
+
+- Configuration : `experiments/config/bench3_ratio/bench3_nr8_nm2_s20.json`
+- Résultats : `experiments/results/2026-11-26/bench3_nr8_nm2_s20_225534.json`
+- Instance : bench_3 ; graine 20 ; population 18, NR = 8, NM = 2, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 37** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 74928 ; propagations 338494844 ; nodes non rapporté ; temps de résolution 147.6 s (non déterministe)
+- Durée de l'exécution : 330.2 s ; commit `91aa95633017c9c6cc8001da885f1e595be8c4cd`
+
+## Synthese - Ratios NR/NM sur bench_3
+
+- 42 nouvelles executions et 21 references reutilisees.
+- Comparaison des ratios 3/12, 6/6 et 8/2.
+- Budget nominal constant de 486 individus.
+- Aucun optimum atteint.
+- Toutes les solutions finales sont faisables.
+- Ratio 3/12 : 21/21 solutions sans violation quasi stricte.
+- Ratio 6/6 : 21/21 solutions sans violation quasi stricte.
+- Ratio 8/2 : 20/21 solutions sans violation quasi stricte.
+- Ratio 3/12 : reduction du cout moyen global de 8.77 %
+  et des propagations de 12.48 % relativement au ratio 6/6.
+- Ratio 3/12 retenu, en coherence avec bench_2.
+- Rapport : experiments/analysis/bench3_ratio.md.
+- Script : experiments/analysis/analyze_bench3_ratio.py.
