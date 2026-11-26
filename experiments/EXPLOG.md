@@ -3699,3 +3699,523 @@ Séries `experiments/config/bench2_memetique_ref/` et `experiments/config/bench2
 - **La faisabilité vient des opérateurs** : avant la recherche locale, 60 à 70 % des enfants du mémétique sont faisables ; un génome aléatoire ne l'est presque jamais, et le LocalSolver (voisinage 1) n'en répare que 1 %. Le témoin met 11 générations (médiane) à trouver un horaire faisable, et chacune de ses recherches locales coûte 3,6 fois plus cher.
 - Le mémétique relancé redonne exactement la série `bench2_seuil` (21/21) : la réutilisation du modèle (12-0) et le journal du solveur ne changent pas les résultats.
 - Suite : témoin « marche aléatoire », plus sévère.
+
+## 2026-11-26 11:54 — bench2_memetique_pop18_s00
+
+Mémétique sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; uniform_gene et shift_start ; graine 0. Mêmes réglages que bench2_pop18, relancé pour mesurer le temps déterministe et l'effort par génération.
+
+- Configuration : `experiments/config/bench2_memetique_pop18/bench2_memetique_pop18_s00.json`
+- Résultats : `experiments/results/2026-11-26/bench2_memetique_pop18_s00_115448.json`
+- Instance : bench_2 ; graine 0 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8700 ; propagations 6640268 ; nodes non rapporté ; temps déterministe 1.735 ; temps de résolution 5.0 s (non déterministe)
+- Durée de l'exécution : 180.3 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 11:54 — bench2_memetique_pop18_s01
+
+Mémétique sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; uniform_gene et shift_start ; graine 1. Mêmes réglages que bench2_pop18, relancé pour mesurer le temps déterministe et l'effort par génération.
+
+- Configuration : `experiments/config/bench2_memetique_pop18/bench2_memetique_pop18_s01.json`
+- Résultats : `experiments/results/2026-11-26/bench2_memetique_pop18_s01_115448.json`
+- Instance : bench_2 ; graine 1 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 8901 ; propagations 6638089 ; nodes non rapporté ; temps déterministe 1.604 ; temps de résolution 4.6 s (non déterministe)
+- Durée de l'exécution : 174.3 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 11:54 — bench2_memetique_pop18_s02
+
+Mémétique sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; uniform_gene et shift_start ; graine 2. Mêmes réglages que bench2_pop18, relancé pour mesurer le temps déterministe et l'effort par génération.
+
+- Configuration : `experiments/config/bench2_memetique_pop18/bench2_memetique_pop18_s02.json`
+- Résultats : `experiments/results/2026-11-26/bench2_memetique_pop18_s02_115448.json`
+- Instance : bench_2 ; graine 2 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8968 ; propagations 5929310 ; nodes non rapporté ; temps déterministe 1.468 ; temps de résolution 4.4 s (non déterministe)
+- Durée de l'exécution : 179.7 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 11:54 — bench2_memetique_pop18_s03
+
+Mémétique sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; uniform_gene et shift_start ; graine 3. Mêmes réglages que bench2_pop18, relancé pour mesurer le temps déterministe et l'effort par génération.
+
+- Configuration : `experiments/config/bench2_memetique_pop18/bench2_memetique_pop18_s03.json`
+- Résultats : `experiments/results/2026-11-26/bench2_memetique_pop18_s03_115448.json`
+- Instance : bench_2 ; graine 3 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 7377 ; propagations 5222562 ; nodes non rapporté ; temps déterministe 1.316 ; temps de résolution 4.1 s (non déterministe)
+- Durée de l'exécution : 174.0 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 11:54 — bench2_memetique_pop18_s04
+
+Mémétique sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; uniform_gene et shift_start ; graine 4. Mêmes réglages que bench2_pop18, relancé pour mesurer le temps déterministe et l'effort par génération.
+
+- Configuration : `experiments/config/bench2_memetique_pop18/bench2_memetique_pop18_s04.json`
+- Résultats : `experiments/results/2026-11-26/bench2_memetique_pop18_s04_115448.json`
+- Instance : bench_2 ; graine 4 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 7629 ; propagations 5111547 ; nodes non rapporté ; temps déterministe 1.447 ; temps de résolution 4.4 s (non déterministe)
+- Durée de l'exécution : 173.7 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 11:54 — bench2_memetique_pop18_s05
+
+Mémétique sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; uniform_gene et shift_start ; graine 5. Mêmes réglages que bench2_pop18, relancé pour mesurer le temps déterministe et l'effort par génération.
+
+- Configuration : `experiments/config/bench2_memetique_pop18/bench2_memetique_pop18_s05.json`
+- Résultats : `experiments/results/2026-11-26/bench2_memetique_pop18_s05_115448.json`
+- Instance : bench_2 ; graine 5 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8484 ; propagations 6295640 ; nodes non rapporté ; temps déterministe 1.623 ; temps de résolution 4.8 s (non déterministe)
+- Durée de l'exécution : 179.6 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 11:57 — bench2_memetique_pop18_s06
+
+Mémétique sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; uniform_gene et shift_start ; graine 6. Mêmes réglages que bench2_pop18, relancé pour mesurer le temps déterministe et l'effort par génération.
+
+- Configuration : `experiments/config/bench2_memetique_pop18/bench2_memetique_pop18_s06.json`
+- Résultats : `experiments/results/2026-11-26/bench2_memetique_pop18_s06_115742.json`
+- Instance : bench_2 ; graine 6 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 7232 ; propagations 4981428 ; nodes non rapporté ; temps déterministe 1.345 ; temps de résolution 4.3 s (non déterministe)
+- Durée de l'exécution : 179.1 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 11:57 — bench2_memetique_pop18_s07
+
+Mémétique sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; uniform_gene et shift_start ; graine 7. Mêmes réglages que bench2_pop18, relancé pour mesurer le temps déterministe et l'effort par génération.
+
+- Configuration : `experiments/config/bench2_memetique_pop18/bench2_memetique_pop18_s07.json`
+- Résultats : `experiments/results/2026-11-26/bench2_memetique_pop18_s07_115743.json`
+- Instance : bench_2 ; graine 7 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8965 ; propagations 6537864 ; nodes non rapporté ; temps déterministe 1.655 ; temps de résolution 5.0 s (non déterministe)
+- Durée de l'exécution : 185.3 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 11:57 — bench2_memetique_pop18_s08
+
+Mémétique sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; uniform_gene et shift_start ; graine 8. Mêmes réglages que bench2_pop18, relancé pour mesurer le temps déterministe et l'effort par génération.
+
+- Configuration : `experiments/config/bench2_memetique_pop18/bench2_memetique_pop18_s08.json`
+- Résultats : `experiments/results/2026-11-26/bench2_memetique_pop18_s08_115743.json`
+- Instance : bench_2 ; graine 8 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8792 ; propagations 6402294 ; nodes non rapporté ; temps déterministe 1.651 ; temps de résolution 5.0 s (non déterministe)
+- Durée de l'exécution : 185.4 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 11:57 — bench2_memetique_pop18_s09
+
+Mémétique sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; uniform_gene et shift_start ; graine 9. Mêmes réglages que bench2_pop18, relancé pour mesurer le temps déterministe et l'effort par génération.
+
+- Configuration : `experiments/config/bench2_memetique_pop18/bench2_memetique_pop18_s09.json`
+- Résultats : `experiments/results/2026-11-26/bench2_memetique_pop18_s09_115748.json`
+- Instance : bench_2 ; graine 9 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8107 ; propagations 5411674 ; nodes non rapporté ; temps déterministe 1.404 ; temps de résolution 4.5 s (non déterministe)
+- Durée de l'exécution : 185.2 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 11:57 — bench2_memetique_pop18_s10
+
+Mémétique sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; uniform_gene et shift_start ; graine 10. Mêmes réglages que bench2_pop18, relancé pour mesurer le temps déterministe et l'effort par génération.
+
+- Configuration : `experiments/config/bench2_memetique_pop18/bench2_memetique_pop18_s10.json`
+- Résultats : `experiments/results/2026-11-26/bench2_memetique_pop18_s10_115748.json`
+- Instance : bench_2 ; graine 10 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 9564 ; propagations 6742391 ; nodes non rapporté ; temps déterministe 1.737 ; temps de résolution 5.1 s (non déterministe)
+- Durée de l'exécution : 186.5 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 11:57 — bench2_memetique_pop18_s11
+
+Mémétique sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; uniform_gene et shift_start ; graine 11. Mêmes réglages que bench2_pop18, relancé pour mesurer le temps déterministe et l'effort par génération.
+
+- Configuration : `experiments/config/bench2_memetique_pop18/bench2_memetique_pop18_s11.json`
+- Résultats : `experiments/results/2026-11-26/bench2_memetique_pop18_s11_115749.json`
+- Instance : bench_2 ; graine 11 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 6005 ; propagations 4102979 ; nodes non rapporté ; temps déterministe 1.081 ; temps de résolution 3.9 s (non déterministe)
+- Durée de l'exécution : 178.0 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 12:00 — bench2_memetique_pop18_s12
+
+Mémétique sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; uniform_gene et shift_start ; graine 12. Mêmes réglages que bench2_pop18, relancé pour mesurer le temps déterministe et l'effort par génération.
+
+- Configuration : `experiments/config/bench2_memetique_pop18/bench2_memetique_pop18_s12.json`
+- Résultats : `experiments/results/2026-11-26/bench2_memetique_pop18_s12_120042.json`
+- Instance : bench_2 ; graine 12 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8697 ; propagations 6094512 ; nodes non rapporté ; temps déterministe 1.57 ; temps de résolution 4.8 s (non déterministe)
+- Durée de l'exécution : 183.5 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 12:00 — bench2_memetique_pop18_s13
+
+Mémétique sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; uniform_gene et shift_start ; graine 13. Mêmes réglages que bench2_pop18, relancé pour mesurer le temps déterministe et l'effort par génération.
+
+- Configuration : `experiments/config/bench2_memetique_pop18/bench2_memetique_pop18_s13.json`
+- Résultats : `experiments/results/2026-11-26/bench2_memetique_pop18_s13_120047.json`
+- Instance : bench_2 ; graine 13 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 9218 ; propagations 6509970 ; nodes non rapporté ; temps déterministe 1.631 ; temps de résolution 4.7 s (non déterministe)
+- Durée de l'exécution : 183.2 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 12:00 — bench2_memetique_pop18_s14
+
+Mémétique sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; uniform_gene et shift_start ; graine 14. Mêmes réglages que bench2_pop18, relancé pour mesurer le temps déterministe et l'effort par génération.
+
+- Configuration : `experiments/config/bench2_memetique_pop18/bench2_memetique_pop18_s14.json`
+- Résultats : `experiments/results/2026-11-26/bench2_memetique_pop18_s14_120048.json`
+- Instance : bench_2 ; graine 14 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 9211 ; propagations 6758836 ; nodes non rapporté ; temps déterministe 1.744 ; temps de résolution 5.0 s (non déterministe)
+- Durée de l'exécution : 183.4 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 12:00 — bench2_memetique_pop18_s15
+
+Mémétique sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; uniform_gene et shift_start ; graine 15. Mêmes réglages que bench2_pop18, relancé pour mesurer le temps déterministe et l'effort par génération.
+
+- Configuration : `experiments/config/bench2_memetique_pop18/bench2_memetique_pop18_s15.json`
+- Résultats : `experiments/results/2026-11-26/bench2_memetique_pop18_s15_120049.json`
+- Instance : bench_2 ; graine 15 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 7176 ; propagations 5017645 ; nodes non rapporté ; temps déterministe 1.251 ; temps de résolution 4.2 s (non déterministe)
+- Durée de l'exécution : 177.6 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 12:00 — bench2_memetique_pop18_s16
+
+Mémétique sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; uniform_gene et shift_start ; graine 16. Mêmes réglages que bench2_pop18, relancé pour mesurer le temps déterministe et l'effort par génération.
+
+- Configuration : `experiments/config/bench2_memetique_pop18/bench2_memetique_pop18_s16.json`
+- Résultats : `experiments/results/2026-11-26/bench2_memetique_pop18_s16_120054.json`
+- Instance : bench_2 ; graine 16 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 8372 ; propagations 5878647 ; nodes non rapporté ; temps déterministe 1.463 ; temps de résolution 4.5 s (non déterministe)
+- Durée de l'exécution : 178.0 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 12:00 — bench2_memetique_pop18_s17
+
+Mémétique sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; uniform_gene et shift_start ; graine 17. Mêmes réglages que bench2_pop18, relancé pour mesurer le temps déterministe et l'effort par génération.
+
+- Configuration : `experiments/config/bench2_memetique_pop18/bench2_memetique_pop18_s17.json`
+- Résultats : `experiments/results/2026-11-26/bench2_memetique_pop18_s17_120055.json`
+- Instance : bench_2 ; graine 17 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8025 ; propagations 5902145 ; nodes non rapporté ; temps déterministe 1.54 ; temps de résolution 4.8 s (non déterministe)
+- Durée de l'exécution : 184.4 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 12:03 — bench2_memetique_pop18_s18
+
+Mémétique sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; uniform_gene et shift_start ; graine 18. Mêmes réglages que bench2_pop18, relancé pour mesurer le temps déterministe et l'effort par génération.
+
+- Configuration : `experiments/config/bench2_memetique_pop18/bench2_memetique_pop18_s18.json`
+- Résultats : `experiments/results/2026-11-26/bench2_memetique_pop18_s18_120346.json`
+- Instance : bench_2 ; graine 18 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8963 ; propagations 6308613 ; nodes non rapporté ; temps déterministe 1.683 ; temps de résolution 5.1 s (non déterministe)
+- Durée de l'exécution : 185.1 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 12:03 — bench2_memetique_pop18_s19
+
+Mémétique sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; uniform_gene et shift_start ; graine 19. Mêmes réglages que bench2_pop18, relancé pour mesurer le temps déterministe et l'effort par génération.
+
+- Configuration : `experiments/config/bench2_memetique_pop18/bench2_memetique_pop18_s19.json`
+- Résultats : `experiments/results/2026-11-26/bench2_memetique_pop18_s19_120347.json`
+- Instance : bench_2 ; graine 19 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 9597 ; propagations 6708231 ; nodes non rapporté ; temps déterministe 1.77 ; temps de résolution 5.2 s (non déterministe)
+- Durée de l'exécution : 184.8 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 12:03 — bench2_memetique_pop18_s20
+
+Mémétique sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; uniform_gene et shift_start ; graine 20. Mêmes réglages que bench2_pop18, relancé pour mesurer le temps déterministe et l'effort par génération.
+
+- Configuration : `experiments/config/bench2_memetique_pop18/bench2_memetique_pop18_s20.json`
+- Résultats : `experiments/results/2026-11-26/bench2_memetique_pop18_s20_120351.json`
+- Instance : bench_2 ; graine 20 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 8329 ; propagations 6498032 ; nodes non rapporté ; temps déterministe 1.612 ; temps de résolution 4.9 s (non déterministe)
+- Durée de l'exécution : 184.3 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 12:03 — bench2_temoin_aleatoire_s00
+
+Témoin « individus aléatoires + LocalSolver » sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; croisement et mutation random_genome ; graine 0. Même budget d'appels que bench2_memetique_pop18.
+
+- Configuration : `experiments/config/bench2_temoin_aleatoire/bench2_temoin_aleatoire_s00.json`
+- Résultats : `experiments/results/2026-11-26/bench2_temoin_aleatoire_s00_120352.json`
+- Instance : bench_2 ; graine 0 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `random_genome` ; mutation `random_genome`
+- **Coût obtenu : 46** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 12575 ; propagations 13568078 ; nodes non rapporté ; temps déterministe 3.595 ; temps de résolution 8.9 s (non déterministe)
+- Durée de l'exécution : 183.6 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 12:03 — bench2_temoin_aleatoire_s01
+
+Témoin « individus aléatoires + LocalSolver » sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; croisement et mutation random_genome ; graine 1. Même budget d'appels que bench2_memetique_pop18.
+
+- Configuration : `experiments/config/bench2_temoin_aleatoire/bench2_temoin_aleatoire_s01.json`
+- Résultats : `experiments/results/2026-11-26/bench2_temoin_aleatoire_s01_120353.json`
+- Instance : bench_2 ; graine 1 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `random_genome` ; mutation `random_genome`
+- **Coût obtenu : 41** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 13623 ; propagations 14455631 ; nodes non rapporté ; temps déterministe 3.819 ; temps de résolution 9.0 s (non déterministe)
+- Durée de l'exécution : 184.2 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 12:04 — bench2_temoin_aleatoire_s02
+
+Témoin « individus aléatoires + LocalSolver » sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; croisement et mutation random_genome ; graine 2. Même budget d'appels que bench2_memetique_pop18.
+
+- Configuration : `experiments/config/bench2_temoin_aleatoire/bench2_temoin_aleatoire_s02.json`
+- Résultats : `experiments/results/2026-11-26/bench2_temoin_aleatoire_s02_120400.json`
+- Instance : bench_2 ; graine 2 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `random_genome` ; mutation `random_genome`
+- **Coût obtenu : 51** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 13317 ; propagations 14636714 ; nodes non rapporté ; temps déterministe 3.853 ; temps de résolution 9.1 s (non déterministe)
+- Durée de l'exécution : 188.7 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 12:06 — bench2_temoin_aleatoire_s03
+
+Témoin « individus aléatoires + LocalSolver » sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; croisement et mutation random_genome ; graine 3. Même budget d'appels que bench2_memetique_pop18.
+
+- Configuration : `experiments/config/bench2_temoin_aleatoire/bench2_temoin_aleatoire_s03.json`
+- Résultats : `experiments/results/2026-11-26/bench2_temoin_aleatoire_s03_120652.json`
+- Instance : bench_2 ; graine 3 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `random_genome` ; mutation `random_genome`
+- **Coût obtenu : 39** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 12740 ; propagations 13792240 ; nodes non rapporté ; temps déterministe 3.671 ; temps de résolution 8.8 s (non déterministe)
+- Durée de l'exécution : 181.7 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 12:06 — bench2_temoin_aleatoire_s04
+
+Témoin « individus aléatoires + LocalSolver » sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; croisement et mutation random_genome ; graine 4. Même budget d'appels que bench2_memetique_pop18.
+
+- Configuration : `experiments/config/bench2_temoin_aleatoire/bench2_temoin_aleatoire_s04.json`
+- Résultats : `experiments/results/2026-11-26/bench2_temoin_aleatoire_s04_120652.json`
+- Instance : bench_2 ; graine 4 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `random_genome` ; mutation `random_genome`
+- **Coût obtenu : 43** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 12660 ; propagations 13762528 ; nodes non rapporté ; temps déterministe 3.668 ; temps de résolution 8.8 s (non déterministe)
+- Durée de l'exécution : 182.4 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 12:06 — bench2_temoin_aleatoire_s05
+
+Témoin « individus aléatoires + LocalSolver » sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; croisement et mutation random_genome ; graine 5. Même budget d'appels que bench2_memetique_pop18.
+
+- Configuration : `experiments/config/bench2_temoin_aleatoire/bench2_temoin_aleatoire_s05.json`
+- Résultats : `experiments/results/2026-11-26/bench2_temoin_aleatoire_s05_120656.json`
+- Instance : bench_2 ; graine 5 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `random_genome` ; mutation `random_genome`
+- **Coût obtenu : 42** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 12700 ; propagations 14173615 ; nodes non rapporté ; temps déterministe 3.794 ; temps de résolution 8.9 s (non déterministe)
+- Durée de l'exécution : 182.0 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 12:06 — bench2_temoin_aleatoire_s06
+
+Témoin « individus aléatoires + LocalSolver » sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; croisement et mutation random_genome ; graine 6. Même budget d'appels que bench2_memetique_pop18.
+
+- Configuration : `experiments/config/bench2_temoin_aleatoire/bench2_temoin_aleatoire_s06.json`
+- Résultats : `experiments/results/2026-11-26/bench2_temoin_aleatoire_s06_120656.json`
+- Instance : bench_2 ; graine 6 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `random_genome` ; mutation `random_genome`
+- **Coût obtenu : 41** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 13544 ; propagations 14382221 ; nodes non rapporté ; temps déterministe 3.845 ; temps de résolution 9.0 s (non déterministe)
+- Durée de l'exécution : 188.1 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 12:06 — bench2_temoin_aleatoire_s07
+
+Témoin « individus aléatoires + LocalSolver » sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; croisement et mutation random_genome ; graine 7. Même budget d'appels que bench2_memetique_pop18.
+
+- Configuration : `experiments/config/bench2_temoin_aleatoire/bench2_temoin_aleatoire_s07.json`
+- Résultats : `experiments/results/2026-11-26/bench2_temoin_aleatoire_s07_120657.json`
+- Instance : bench_2 ; graine 7 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `random_genome` ; mutation `random_genome`
+- **Coût obtenu : 41** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 12156 ; propagations 13460357 ; nodes non rapporté ; temps déterministe 3.535 ; temps de résolution 8.3 s (non déterministe)
+- Durée de l'exécution : 175.5 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 12:07 — bench2_temoin_aleatoire_s08
+
+Témoin « individus aléatoires + LocalSolver » sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; croisement et mutation random_genome ; graine 8. Même budget d'appels que bench2_memetique_pop18.
+
+- Configuration : `experiments/config/bench2_temoin_aleatoire/bench2_temoin_aleatoire_s08.json`
+- Résultats : `experiments/results/2026-11-26/bench2_temoin_aleatoire_s08_120710.json`
+- Instance : bench_2 ; graine 8 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `random_genome` ; mutation `random_genome`
+- **Coût obtenu : 39** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 12927 ; propagations 13943319 ; nodes non rapporté ; temps déterministe 3.752 ; temps de résolution 8.8 s (non déterministe)
+- Durée de l'exécution : 182.6 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 12:09 — bench2_temoin_aleatoire_s09
+
+Témoin « individus aléatoires + LocalSolver » sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; croisement et mutation random_genome ; graine 9. Même budget d'appels que bench2_memetique_pop18.
+
+- Configuration : `experiments/config/bench2_temoin_aleatoire/bench2_temoin_aleatoire_s09.json`
+- Résultats : `experiments/results/2026-11-26/bench2_temoin_aleatoire_s09_120953.json`
+- Instance : bench_2 ; graine 9 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `random_genome` ; mutation `random_genome`
+- **Coût obtenu : 38** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 13035 ; propagations 13682096 ; nodes non rapporté ; temps déterministe 3.717 ; temps de résolution 8.8 s (non déterministe)
+- Durée de l'exécution : 182.4 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 12:09 — bench2_temoin_aleatoire_s10
+
+Témoin « individus aléatoires + LocalSolver » sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; croisement et mutation random_genome ; graine 10. Même budget d'appels que bench2_memetique_pop18.
+
+- Configuration : `experiments/config/bench2_temoin_aleatoire/bench2_temoin_aleatoire_s10.json`
+- Résultats : `experiments/results/2026-11-26/bench2_temoin_aleatoire_s10_120954.json`
+- Instance : bench_2 ; graine 10 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `random_genome` ; mutation `random_genome`
+- **Coût obtenu : 44** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 12917 ; propagations 13764178 ; nodes non rapporté ; temps déterministe 3.699 ; temps de résolution 8.8 s (non déterministe)
+- Durée de l'exécution : 183.7 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 12:09 — bench2_temoin_aleatoire_s11
+
+Témoin « individus aléatoires + LocalSolver » sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; croisement et mutation random_genome ; graine 11. Même budget d'appels que bench2_memetique_pop18.
+
+- Configuration : `experiments/config/bench2_temoin_aleatoire/bench2_temoin_aleatoire_s11.json`
+- Résultats : `experiments/results/2026-11-26/bench2_temoin_aleatoire_s11_120955.json`
+- Instance : bench_2 ; graine 11 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `random_genome` ; mutation `random_genome`
+- **Coût obtenu : 42** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 14072 ; propagations 14799511 ; nodes non rapporté ; temps déterministe 3.97 ; temps de résolution 9.4 s (non déterministe)
+- Durée de l'exécution : 189.0 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 12:09 — bench2_temoin_aleatoire_s12
+
+Témoin « individus aléatoires + LocalSolver » sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; croisement et mutation random_genome ; graine 12. Même budget d'appels que bench2_memetique_pop18.
+
+- Configuration : `experiments/config/bench2_temoin_aleatoire/bench2_temoin_aleatoire_s12.json`
+- Résultats : `experiments/results/2026-11-26/bench2_temoin_aleatoire_s12_120959.json`
+- Instance : bench_2 ; graine 12 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `random_genome` ; mutation `random_genome`
+- **Coût obtenu : 57** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 13382 ; propagations 14000578 ; nodes non rapporté ; temps déterministe 3.767 ; temps de résolution 9.0 s (non déterministe)
+- Durée de l'exécution : 183.0 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 12:10 — bench2_temoin_aleatoire_s13
+
+Témoin « individus aléatoires + LocalSolver » sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; croisement et mutation random_genome ; graine 13. Même budget d'appels que bench2_memetique_pop18.
+
+- Configuration : `experiments/config/bench2_temoin_aleatoire/bench2_temoin_aleatoire_s13.json`
+- Résultats : `experiments/results/2026-11-26/bench2_temoin_aleatoire_s13_121005.json`
+- Instance : bench_2 ; graine 13 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `random_genome` ; mutation `random_genome`
+- **Coût obtenu : 54** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 13398 ; propagations 14006358 ; nodes non rapporté ; temps déterministe 3.777 ; temps de résolution 9.2 s (non déterministe)
+- Durée de l'exécution : 183.7 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 12:10 — bench2_temoin_aleatoire_s14
+
+Témoin « individus aléatoires + LocalSolver » sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; croisement et mutation random_genome ; graine 14. Même budget d'appels que bench2_memetique_pop18.
+
+- Configuration : `experiments/config/bench2_temoin_aleatoire/bench2_temoin_aleatoire_s14.json`
+- Résultats : `experiments/results/2026-11-26/bench2_temoin_aleatoire_s14_121013.json`
+- Instance : bench_2 ; graine 14 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `random_genome` ; mutation `random_genome`
+- **Coût obtenu : 41** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 12861 ; propagations 13794846 ; nodes non rapporté ; temps déterministe 3.757 ; temps de résolution 8.9 s (non déterministe)
+- Durée de l'exécution : 182.4 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 12:12 — bench2_temoin_aleatoire_s15
+
+Témoin « individus aléatoires + LocalSolver » sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; croisement et mutation random_genome ; graine 15. Même budget d'appels que bench2_memetique_pop18.
+
+- Configuration : `experiments/config/bench2_temoin_aleatoire/bench2_temoin_aleatoire_s15.json`
+- Résultats : `experiments/results/2026-11-26/bench2_temoin_aleatoire_s15_121256.json`
+- Instance : bench_2 ; graine 15 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `random_genome` ; mutation `random_genome`
+- **Coût obtenu : 43** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 13724 ; propagations 14586376 ; nodes non rapporté ; temps déterministe 3.961 ; temps de résolution 9.4 s (non déterministe)
+- Durée de l'exécution : 189.1 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 12:12 — bench2_temoin_aleatoire_s16
+
+Témoin « individus aléatoires + LocalSolver » sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; croisement et mutation random_genome ; graine 16. Même budget d'appels que bench2_memetique_pop18.
+
+- Configuration : `experiments/config/bench2_temoin_aleatoire/bench2_temoin_aleatoire_s16.json`
+- Résultats : `experiments/results/2026-11-26/bench2_temoin_aleatoire_s16_121258.json`
+- Instance : bench_2 ; graine 16 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `random_genome` ; mutation `random_genome`
+- **Coût obtenu : 46** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 13348 ; propagations 14269354 ; nodes non rapporté ; temps déterministe 3.784 ; temps de résolution 9.0 s (non déterministe)
+- Durée de l'exécution : 188.0 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 12:13 — bench2_temoin_aleatoire_s17
+
+Témoin « individus aléatoires + LocalSolver » sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; croisement et mutation random_genome ; graine 17. Même budget d'appels que bench2_memetique_pop18.
+
+- Configuration : `experiments/config/bench2_temoin_aleatoire/bench2_temoin_aleatoire_s17.json`
+- Résultats : `experiments/results/2026-11-26/bench2_temoin_aleatoire_s17_121302.json`
+- Instance : bench_2 ; graine 17 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `random_genome` ; mutation `random_genome`
+- **Coût obtenu : 40** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 12490 ; propagations 14014144 ; nodes non rapporté ; temps déterministe 3.707 ; temps de résolution 8.8 s (non déterministe)
+- Durée de l'exécution : 182.9 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 12:13 — bench2_temoin_aleatoire_s18
+
+Témoin « individus aléatoires + LocalSolver » sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; croisement et mutation random_genome ; graine 18. Même budget d'appels que bench2_memetique_pop18.
+
+- Configuration : `experiments/config/bench2_temoin_aleatoire/bench2_temoin_aleatoire_s18.json`
+- Résultats : `experiments/results/2026-11-26/bench2_temoin_aleatoire_s18_121305.json`
+- Instance : bench_2 ; graine 18 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `random_genome` ; mutation `random_genome`
+- **Coût obtenu : 42** (faisable) ; 26 générations, 0 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 12212 ; propagations 13659129 ; nodes non rapporté ; temps déterministe 3.616 ; temps de résolution 8.4 s (non déterministe)
+- Durée de l'exécution : 176.0 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 12:13 — bench2_temoin_aleatoire_s19
+
+Témoin « individus aléatoires + LocalSolver » sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; croisement et mutation random_genome ; graine 19. Même budget d'appels que bench2_memetique_pop18.
+
+- Configuration : `experiments/config/bench2_temoin_aleatoire/bench2_temoin_aleatoire_s19.json`
+- Résultats : `experiments/results/2026-11-26/bench2_temoin_aleatoire_s19_121309.json`
+- Instance : bench_2 ; graine 19 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `random_genome` ; mutation `random_genome`
+- **Coût obtenu : 40** (faisable) ; 26 générations, 2 restart(s)
+- **Effort cumulé du solveur** : 520 appels ; failures 13228 ; propagations 14392032 ; nodes non rapporté ; temps déterministe 3.788 ; temps de résolution 8.8 s (non déterministe)
+- Durée de l'exécution : 185.6 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 12:13 — bench2_temoin_aleatoire_s20
+
+Témoin « individus aléatoires + LocalSolver » sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; croisement et mutation random_genome ; graine 20. Même budget d'appels que bench2_memetique_pop18.
+
+- Configuration : `experiments/config/bench2_temoin_aleatoire/bench2_temoin_aleatoire_s20.json`
+- Résultats : `experiments/results/2026-11-26/bench2_temoin_aleatoire_s20_121316.json`
+- Instance : bench_2 ; graine 20 ; population 18, NR = 6, NM = 6, 26 générations
+- Stratégies : crossover `random_genome` ; mutation `random_genome`
+- **Coût obtenu : 45** (faisable) ; 26 générations, 1 restart(s)
+- **Effort cumulé du solveur** : 503 appels ; failures 13264 ; propagations 14179317 ; nodes non rapporté ; temps déterministe 3.746 ; temps de résolution 8.6 s (non déterministe)
+- Durée de l'exécution : 179.6 s ; commit `9535bc72fffedc8e28719e09606f5b99a52680d1`
+
+## 2026-11-26 — Synthèse : mémétique contre individus aléatoires + LocalSolver, population 18 (étape 10d)
+
+Séries `experiments/config/bench2_memetique_pop18/` et `experiments/config/bench2_temoin_aleatoire/` (21 graines chacune ; réglages de Mély : population 18, 26 générations, NR = NM = 6, voisinage 1 ; commit `9535bc7`, copie de travail propre). Seule la variation diffère (`random_genome` pour le témoin) ; même budget de 18 appels par génération. Rapport : `experiments/analysis/bench2_temoin_aleatoire.md`.
+
+| Indicateur | Mémétique | Témoin |
+|---|---:|---:|
+| Optimum 38 atteint | 21/21 | 1/21 |
+| Succès en 100 / 200 / 520 appels | 14 / 20 / 21 | 0 / 1 / 1 |
+| Appels avant 38 (médiane) | 72 | 180 (une exécution) |
+| Temps déterministe avant 38 (médiane) | 0,32 | 1,30 (une exécution) |
+| Meilleur coût final (médiane ; max) | 38 ; 38 | 42 ; 57 |
+
+- Wilcoxon apparié : le témoin dépense plus que le mémétique avant 38 (appels, propagations, temps déterministe) dans les 21 paires de graines, p = 9,5 × 10⁻⁷.
+- Faisabilité après le LocalSolver : croisement 51 %, mutation 72 % pour le mémétique, contre 0,9 % pour le témoin. La faisabilité vient des opérateurs.
+- Cohérent avec la série à population 6 (21/21 contre 1/21).

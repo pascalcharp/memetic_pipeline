@@ -366,16 +366,17 @@ Ce témoin est un **échantillonnage aléatoire**, pas une marche aléatoire : l
 - [x] Garder l'effort du solveur **par génération** dans le fichier de résultats (`solver_effort_by_generation`, 2026-11-26) (rejoint la mesure « appels cumulés par génération » ci-dessus) : nécessaire pour l'effort au moment du succès et pour les courbes en fonction des appels
 
 #### Mesures
-- [ ] Vérifier que le fichier de résultats permet de compter les **appels cumulés par génération**, restarts compris (`SolverEffortCollector` émet déjà un enregistrement par génération ; vérifier ce que `run_experiment` en garde, sinon l'écrire). Sans ça, les comparaisons se font au budget nominal, comme dans la PR #15
+- [x] Vérifier que le fichier de résultats permet de compter les **appels cumulés par génération**, restarts compris (`SolverEffortCollector` émet déjà un enregistrement par génération ; vérifier ce que `run_experiment` en garde, sinon l'écrire). Sans ça, les comparaisons se font au budget nominal, comme dans la PR #15
 - [x] Configurations `experiments/config/bench2_temoin_aleatoire/` (et `experiments/config/bench2_memetique_pop18/`, le mémétique de `bench2_pop18` relancé pour le temps déterministe et l'effort par génération) (21 graines, clé `strategies` : `random_genome` pour les deux rôles), commitées avant le lancement, copie de travail propre
 
 #### Analyse (`experiments/analysis/`)
 Bench_2 est saturé : le mémétique atteint 38 dans 21 cas sur 21. La comparaison du coût final ne suffit donc pas ; on compare à chaque nombre d'appels.
-- [ ] Courbe du meilleur coût jusque-là en fonction des appels cumulés (médiane et quartiles sur 21 graines), mémétique contre témoin
-- [ ] Nombre d'appels avant d'atteindre 38 (distribution empirique, les exécutions qui n'y arrivent pas sont censurées au budget) ; taux de succès à 100, 200 et 520 appels
-- [ ] Première génération faisable, taux de faisabilité après recherche locale par origine, diversité génotypique
-- [ ] Test apparié sur les graines (Wilcoxon) pour le nombre d'appels avant 38 ; propagations jusqu'à 38, puisqu'un appel ne coûte pas toujours autant
-- [ ] Rapport `experiments/analysis/bench2_temoin_aleatoire.md`, synthèse dans EXPLOG.md, DEVLOG
+- [x] Courbe du meilleur coût jusque-là en fonction des appels cumulés (médiane et quartiles sur 21 graines), mémétique contre témoin
+- [x] Nombre d'appels avant d'atteindre 38 (distribution empirique, les exécutions qui n'y arrivent pas sont censurées au budget) ; taux de succès à 100, 200 et 520 appels
+- [x] Première génération faisable, taux de faisabilité après recherche locale par origine, diversité génotypique
+- [x] Test apparié sur les graines (Wilcoxon) pour le nombre d'appels avant 38 ; propagations jusqu'à 38, puisqu'un appel ne coûte pas toujours autant
+- [x] Rapport `experiments/analysis/bench2_temoin_aleatoire.md`, synthèse dans EXPLOG.md, DEVLOG
+  - résultat (2026-11-26) : mémétique 21/21 succès (72 appels avant 38 en médiane), témoin 1/21 ; Wilcoxon apparié p = 9,5 × 10⁻⁷ sur les appels, les propagations et le temps déterministe avant 38. Rapport : `experiments/analysis/bench2_temoin_aleatoire.md`
 
 ### 10e — Témoin fort : recherche locale itérée (1+1) **(C→P)** — après 10d
 - [ ] Population 1, NR = 0, NM = 1 (accepté par `MemeticDefaults`), `shift_start`, sans restart (seuil de stagnation plus grand que le budget), budget de 520 appels (1 + 519 générations)

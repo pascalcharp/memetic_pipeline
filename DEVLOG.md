@@ -1131,3 +1131,11 @@ Aucun changement de comportement. Suite complète verte.
 - On garde le temps déterministe et la première série. La série prévue par le plan (population 18, 26 générations, contre `bench2_population`) et le témoin fort de 10e (recherche locale itérée, acceptation « pas pire ») restent à faire.
 
 **Validation.** 640 tests, verts en local et dans Docker (`OK (skipped=6)`).
+
+## 2026-11-26 — Étape 10d : série prévue au plan (population 18) et effort par génération (Pascal et Claude)
+
+**Mesure ajoutée.** Le fichier de résultats garde maintenant l'effort du solveur de chaque génération (`solver_effort_by_generation` : appels, échecs, propagations, temps déterministe ; génération 0 et restarts compris). `SolverEffortCollector` l'émettait déjà ; `run_experiment` ne gardait que le cumul. Test : la somme par génération redonne l'effort cumulé.
+
+**Expérience** (plan du 25 novembre). bench_2, réglages de Mély (population 18, 26 générations, NR = NM = 6, voisinage 1), 21 graines : `bench2_temoin_aleatoire` contre `bench2_memetique_pop18` (le mémétique de `bench2_pop18` relancé pour le temps déterministe et l'effort par génération). Commit `9535bc7`, copie de travail propre. Mémétique 21/21 succès, 72 appels avant 38 en médiane ; témoin 1/21. Wilcoxon apparié sur l'effort avant 38 (appels, propagations, temps déterministe ; exécutions censurées au-delà du budget) : le témoin dépense plus dans les 21 paires, p = 9,5 × 10⁻⁷. Rapport : `experiments/analysis/bench2_temoin_aleatoire.md` ; script : `experiments/analysis/analyze_random_witness.py`, qui calcule le test de Wilcoxon exact en Python pur (ni scipy ni matplotlib dans l'environnement).
+
+**Incident évité.** Le script d'analyse a été écrit dans `experiments/analysis/` pendant la série : un fichier non suivi rend la copie de travail « modifiée » pour les exécutions qui démarrent. Il a été déplacé hors du dépôt quelques secondes plus tard. Les 42 résultats ont `git_dirty = false` : aucune exécution n'a démarré dans l'intervalle. Règle : ne rien écrire dans le dépôt tant qu'une série tourne.
