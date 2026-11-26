@@ -149,7 +149,7 @@ Tout est dans `src/memetic/solver.py`. Le `MiniZincLocalSolver` reçoit un `Solv
 |---|---|---|---|
 | `CpSatAdapter` | `cp-sat` (OR-Tools CP-SAT) | `DeterministicTimeLimit`, `WallTimeLimit` | ✅ |
 
-**`CpSatAdapter`**. Transmet la graine (`random_seed`), le nombre de threads et la limite. Les autres solveurs du *bundle* MiniZinc (Gecode, Chuffed, HiGHS) n'ont pas encore d'adaptateur : voir [`HOWTO.md`, section 10](HOWTO.md#10-je-veux-essayer-la-boucle-avec-un-autre-solveur-sur-minizinc).
+**`CpSatAdapter`**. Transmet la graine (`random_seed`), le nombre de threads et la limite. Demande le journal du solveur (`--verbose-solving`), seul endroit où CP-SAT rapporte le temps déterministe consommé : `SolverStatistics.deterministic_time` (étape 10d ; le journal ne change pas la recherche). Les autres solveurs du *bundle* MiniZinc (Gecode, Chuffed, HiGHS) n'ont pas encore d'adaptateur : voir [`HOWTO.md`, section 10](HOWTO.md#10-je-veux-essayer-la-boucle-avec-un-autre-solveur-sur-minizinc).
 
 **Options** (`SolverOptions`) :
 
@@ -269,7 +269,7 @@ Rôle `dispatcher` : un `ObservationHub(collectors, sinks)` (`src/observability/
 | `CostStatisticsCollector` | aucun | `cost_statistics` | à chaque fin de génération | taille, nombre de faisables, min, moyenne, médiane, max et écart-type de `cost.total`, moyennes du coût décomposé |
 | `DiversityCollector` | `period_count` (`instance.period_count`), `every: int = 1` | `diversity` | toutes les `every` générations | diversité génotypique (insensible à la permutation des employés), phénotypique (grilles distinctes), nombre de coûts distincts |
 | `FeasibilityRateCollector` | aucun | `feasibility_rates` | par génération et cumulé à la fin, par (origine, opérateur) | taux de faisabilité avant et après le `LocalSolver` |
-| `SolverEffortCollector` | aucun | `solver_effort` | par génération et cumulé à la fin | nombre d'appels, `nodes`, `failures`, `propagations`, temps de résolution (non déterministe) |
+| `SolverEffortCollector` | aucun | `solver_effort` | par génération et cumulé à la fin | nombre d'appels, `nodes`, `failures`, `propagations`, `deterministic_time` (temps déterministe consommé, étape 10d), temps de résolution (non déterministe) |
 
 Les origines sont `initialization`, `crossover`, `mutation` et `restart` (`Origins`, `src/observability/events.py`) ; l'opérateur est le nom de la classe du croisement ou de la mutation, `None` pour l'initialisation et le restart.
 
