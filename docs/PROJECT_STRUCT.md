@@ -24,10 +24,15 @@ memetic_pipeline/
 ├── experiments/                # Exploitation du cœur (étape 10) : pilotage, configurations, résultats, analyses ; versionné
 │   ├── __init__.py
 │   ├── EXPLOG.md               # Journal des expériences : une entrée par exécution, ajoutée par run_experiment
+│   ├── analysis/               # Scripts d'analyse des résultats et rapports (.md) des séries
+│   │   ├── __init__.py
+│   │   ├── analyze_bench3_cpsat_alone.py # Mémétique contre CP-SAT seul à effort égal sur bench_3 (étape 10g)
+│   │   └── …                   # Analyses et rapports des séries de Mély (bench_2, bench_3) et synthèse
 │   ├── config/                 # Configurations JSON des expériences (description, instance, paramètres)
 │   │   └── integration_bench1.json # Configuration de base : les réglages de la 9-intégration sur bench_1
 │   ├── drivers/                # Scripts de pilotage des expériences
 │   │   ├── __init__.py
+│   │   ├── run_cpsat_alone.py  # Témoin CP-SAT seul : instance complète, 1 thread, toutes les solutions intermédiaires avec leur effort (étape 10g)
 │   │   └── run_experiment.py   # Script d'expériences : configuration JSON → exécution mesurée → résultats JSON et entrée d'EXPLOG.md (étape 10a)
 │   └── results/                # Résultats JSON, un répertoire par jour (AAAA-MM-JJ/)
 ├── src/                        # Cœur : modèle, algorithme génétique, mémétique, observabilité
@@ -95,6 +100,8 @@ memetic_pipeline/
 │   ├── test_observability.py   # Observabilité : schéma, destinations, ObservationHub, journal, répertoire d'exécution
 │   ├── test_operators.py       # Variation (étape 7b) : propriétés avec un vrai Random, cas limites, messages
 │   ├── test_population.py      # Population (étape 8) : sélecteurs (doublons, peine de mort), stagnation, restart (élite, nouveaux, recherches)
+│   ├── test_run_cpsat_alone.py # Témoin CP-SAT seul (étape 10g) : configuration, lecture de la sortie de MiniZinc, ligne de commande, journal, résolution de bench_1
+│   ├── test_analyze_bench3_cpsat_alone.py # Analyse « CP-SAT seul à effort égal » (étape 10g) sur des données construites
 │   ├── test_run_experiment.py  # Script d'expériences (étapes 10a, 10c) : configuration et stratégies, chemins, résultats, journal, exécution courte sur bench_1
 │   ├── test_registry.py        # Registre (étapes 7a, 10c) : enregistrement et création par nom, vérification des paramètres, compatibilité opérateur / encodage
 │   ├── test_selection.py       # Sélection (étape 7a) : check_selectable, tournoi, tirage uniforme, reproductibilité
