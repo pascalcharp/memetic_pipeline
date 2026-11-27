@@ -1,5 +1,7 @@
 # TODO — Proof of concept : algorithme mémétique pour l'horaire
 
+> **Archivé le 2026-11-27.** Ce plan a servi à concevoir et programmer le cœur (étapes 1 à 12-0) ; il garde les décisions de conception D1 à D14. Le travail en cours est dans [`TASKS.md`](../../TASKS.md). Les liens relatifs ci-dessous datent d'avant l'archivage.
+
 Légende :
 - `[ ]` à faire · `[~]` en cours · `[x]` validé (tests verts)
 - **(C)** Claude écrit · **(P)** le membre responsable écrit, Claude vérifie · **(C→P)** Claude scaffolde (signatures, docstrings, tests), le membre responsable implémente

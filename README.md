@@ -117,20 +117,20 @@ Ce qui existe déjà, rôle par rôle (classes, paramètres, garanties, stratég
 
 Le projet suit une méthode stricte, décrite dans [`CLAUDE.md`](CLAUDE.md) :
 
-- **une seule tâche à la fois**, planifiée au préalable dans `TODO.md` ;
+- **une seule tâche à la fois**, planifiée au préalable dans `TASKS.md` ;
 - **des tests automatisés pour chaque tâche** (`unittest`), qui couvrent les cas nominaux et les cas limites ;
 - **on ne passe à la tâche suivante que si tous les tests sont verts** ;
-- **`TODO.md` et `DEVLOG.md` sont mis à jour** à la fin de chaque tâche validée.
+- **`TASKS.md` et `DEVLOG.md` sont mis à jour** à la fin de chaque tâche validée.
 
-Le projet est aussi pédagogique : les méthodes et algorithmes clés sont écrits à la main, et Claude Code prépare le squelette et vérifie le résultat. Dans le TODO, chaque tâche porte l'une de ces marques : **(C)** Claude écrit, **(P)** le développeur écrit et Claude vérifie, **(C→P)** Claude prépare le squelette et le développeur implémente.
+Le projet est aussi pédagogique : les méthodes et algorithmes clés sont écrits à la main, et Claude Code prépare le squelette et vérifie le résultat. Dans `TASKS.md` (comme dans l'ancien TODO), chaque tâche porte l'une de ces marques : **(C)** Claude écrit, **(P)** le développeur écrit et Claude vérifie, **(C→P)** Claude prépare le squelette et le développeur implémente.
 
 ### 4.2 État d'avancement
 
-Étapes planifiées, tâches terminées et décisions de conception encore ouvertes : [`TODO.md`](TODO.md).
+Travail en cours, par ordre de priorité : [`TASKS.md`](TASKS.md). Le plan de conception du cœur, avec ses étapes terminées, est archivé dans [`docs/archive/TODO.md`](docs/archive/TODO.md).
 
 ### 4.3 Décisions de conception
 
-Le **pourquoi** du code. Les décisions de conception D1 à D14 sont énoncées en tête de [`TODO.md`](TODO.md). Leur contexte, les blocages rencontrés et les correctifs appliqués sont consignés dans l'ordre chronologique dans [`DEVLOG.md`](DEVLOG.md).
+Le **pourquoi** du code. Les décisions de conception D1 à D14 sont énoncées en tête de l'ancien plan, archivé dans [`docs/archive/TODO.md`](docs/archive/TODO.md). Leur contexte, les blocages rencontrés et les correctifs appliqués sont consignés dans l'ordre chronologique dans [`DEVLOG.md`](DEVLOG.md).
 
 ### 4.4 Conventions de code
 

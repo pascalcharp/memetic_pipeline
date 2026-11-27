@@ -2,7 +2,7 @@
 
 Ce document décrit le problème que l'algorithme mémétique doit résoudre. La référence formelle est le modèle MiniZinc fourni, [`src/model/horaire.mzn`](../src/model/horaire.mzn). En cas de doute, c'est lui qui fait foi.
 
-Le pipeline résout une variante, [`src/model/horaire_assoupli.mzn`](../src/model/horaire_assoupli.mzn) (décision D12 du [`TODO.md`](../TODO.md)) : mêmes données, mêmes règles d'un quart, mais la contrainte de couverture « au moins un » y devient une pénalité (sections 5 et 6). C'est la fonction de coût que minimise aussi l'évaluation Python (`CostEvaluator`).
+Le pipeline résout une variante, [`src/model/horaire_assoupli.mzn`](../src/model/horaire_assoupli.mzn) (décision D12 du [`TODO.md` archivé](archive/TODO.md)) : mêmes données, mêmes règles d'un quart, mais la contrainte de couverture « au moins un » y devient une pénalité (sections 5 et 6). C'est la fonction de coût que minimise aussi l'évaluation Python (`CostEvaluator`).
 
 ---
 
@@ -206,6 +206,6 @@ Optimums prouvés par CP-SAT à 8 threads, avec les deux modèles (mesures du 20
 
 ## 9. Particularités à garder en tête
 
-- **Symétrie.** Les employés sont interchangeables : permuter deux horaires donne une solution équivalente, de même coût. Ça compte pour l'algorithme génétique, puisque croiser « employé par employé » deux parents équivalents mais permutés peut être destructeur (décision D3 du [`TODO.md`](../TODO.md)). Le modèle MiniZinc contient une contrainte de bris de symétrie, mais elle est **désactivée** (en commentaire).
+- **Symétrie.** Les employés sont interchangeables : permuter deux horaires donne une solution équivalente, de même coût. Ça compte pour l'algorithme génétique, puisque croiser « employé par employé » deux parents équivalents mais permutés peut être destructeur (décision D3 du [`TODO.md` archivé](archive/TODO.md)). Le modèle MiniZinc contient une contrainte de bris de symétrie, mais elle est **désactivée** (en commentaire).
 - **Faisabilité difficile.** Sur les grosses instances, la contrainte « au moins un employé si demande > 0 » rend même la recherche d'une première solution coûteuse. Générer des individus initiaux faisables (étape 6) ne sera donc pas trivial. Le modèle assoupli (D12) a toujours une solution : c'est ce qui permet au `LocalSolver` d'améliorer un horaire qui laisse des cellules vides. Avec 8 threads, les deux modèles atteignent l'optimum aussi vite ; avec un seul thread et un petit budget, les solutions du modèle assoupli laissent encore beaucoup de cellules vides, et le modèle de référence est plus efficace pour une résolution complète.
 - **Deux sorties dans le modèle.** `horaire.mzn` imprime les variables au format JSON, puis une grille « employé × période » où 0 signifie « aucune activité » (hors quart, pause ou dîner). Contrairement à l'exemple ci-dessus, cette grille ne distingue pas la pause du dîner. `horaire_assoupli.mzn` ajoute `violations_couverture` et `cout_penalise` au JSON. Ces sorties servent en ligne de commande ; minizinc-python lit plutôt les variables annotées `::add_to_output`.

@@ -111,7 +111,7 @@ Rôle `mutation`, interface `Mutation[G]` (`src/ga/operators.py`). Le moteur fai
 **`ShiftStartMutation`**. Décale le quart entier d'un employé tiré au hasard, de 1 à 3 périodes (`MIN_SHIFT_AMPLITUDE`, `MAX_SHIFT_AMPLITUDE`) vers le plus tôt ou le plus tard. Le décalage est borné pour que le quart reste dans les fenêtres de début et de fin de l'instance. Les durées ne changent pas.
 
 **`BlockBoundaryMutation`**. Déplace la frontière entre deux blocs voisins d'un employé tiré au hasard : une durée augmente de 1 à 3 périodes (`MIN_BOUNDARY_TRANSFER`, `MAX_BOUNDARY_TRANSFER`), l'autre diminue d'autant. La somme des durées est conservée, et chaque durée reste au moins `ShiftStructure.MIN_ACTIVITY_DURATION`. Si aucun gène ne peut céder la quantité tirée, le génome est rendu inchangé.
-- Limite connue : le déplacement d'une pause ou du dîner peut sortir de sa fenêtre ; une amplitude calculée à partir des contraintes du quart est prévue (TODO, étape 7b).
+- Limite connue : le déplacement d'une pause ou du dîner peut sortir de sa fenêtre ; une amplitude calculée à partir des contraintes du quart est prévue (`TODO.md` archivé, étape 7b).
 
 **`ActivityMutation`**. Change l'activité d'un bloc tiré au hasard pour une **autre** activité de l'instance. Les jalons ne changent pas, donc le quart reste faisable. Sur une instance à une seule activité (`bench_1`), le génome est rendu inchangé.
 
@@ -289,7 +289,7 @@ Les origines sont `initialization`, `crossover`, `mutation` et `restart` (`Origi
 
 ## 16. Stratégies prévues
 
-Planifiées dans [`TODO.md`](../TODO.md), pas encore écrites :
+Planifiées, pas encore écrites. Les tâches en cours sont dans [`TASKS.md`](../TASKS.md) ; les autres sont détaillées dans le [`TODO.md` archivé](archive/TODO.md) :
 
 | Rôle | Stratégie | Où dans le TODO |
 |---|---|---|

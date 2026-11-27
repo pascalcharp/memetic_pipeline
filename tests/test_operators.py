@@ -1,7 +1,7 @@
 """Tests des opérateurs de variation (src/ga/operators.py) — étape 7b, Xavier.
 
 Sur ``main`` : tests de contrat du scaffold seulement (verts). Cas à couvrir sur la branche
-``etape-7b-variation`` (voir TODO.md, 7b), sans MiniZinc :
+``etape-7b-variation`` (voir docs/archive/TODO.md, 7b), sans MiniZinc :
     - faisabilité préservée : un opérateur appliqué à des génomes faisables (``reference_genome``, ou des génomes
       variés construits à la main) rend des génomes faisables (``FeasibilityChecker`` sur le décodage) ;
     - entrées jamais modifiées (comparer avec une copie prise avant l'appel) ;
@@ -438,7 +438,7 @@ class TestBlockBoundaryMutationWithRealRandom(unittest.TestCase):
                     (OperatorDefaults.MIN_BOUNDARY_TRANSFER, OperatorDefaults.MAX_BOUNDARY_TRANSFER),
                 )
 
-    # Bogue 4 : la mutation déplace la frontière entre deux blocs VOISINS (docstring, TODO.md 7b). Les deux blocs
+    # Bogue 4 : la mutation déplace la frontière entre deux blocs VOISINS (docstring, docs/archive/TODO.md 7b). Les deux blocs
     # dont la durée change doivent donc avoir des indices consécutifs.
 
     def test_givenReferenceGenome_whenMutateManyTimes_thenTheTwoChangedBlocksAreNeighbors(self) -> None:

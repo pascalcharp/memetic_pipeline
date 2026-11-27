@@ -1168,3 +1168,19 @@ Aucun changement de comportement. Suite complète verte.
 3. 10i, les croisements.
 
 Ce sont des intuitions à mesurer. Le récit visé pour le rapport : sur bench_2, le croisement fait la différence ; sur bench_3, la limite devient la recherche locale.
+
+## 2026-11-27 — Organisation : TODO.md archivé, TASKS.md (Pascal et Claude)
+
+**Décision de Pascal.** `TODO.md` a servi à concevoir et programmer le cœur, et ce travail est terminé. Avec les ajouts de l'étape 10, il devenait difficile à suivre. Il est archivé dans `docs/archive/TODO.md`, avec ses décisions de conception D1 à D14 et l'historique des étapes 1 à 12-0. `TASKS.md` le remplace, rangé **par ordre de priorité** :
+1. 10h (protocole de Mély sur bench_4 et bench_5) et 10j (témoin CP-SAT avec portefeuille), en parallèle ;
+2. 10k (recherche locale renforcée sur bench_3) ;
+3. 10i (croisements).
+
+Viennent ensuite les tâches en attente (10e et 10f sur leur branche ; la série de Xavier) et celles reportées depuis l'archive. Les tâches gardent leur identifiant d'origine, cité dans les branches, l'EXPLOG et les rapports.
+
+**Liens mis à jour :**
+- les règles de travail de `CLAUDE.md` (planification dans `TASKS.md`) ;
+- `README.md`, `TEAM.md` et les documents de `docs/` ;
+- les commentaires du code et des tests qui citaient `TODO.md`.
+
+Suite complète verte en local.

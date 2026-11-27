@@ -1,6 +1,6 @@
 """Tests de l'infrastructure d'observabilité (src/observability/) — scaffold commun de la semaine du 16 novembre.
 
-Couvre ce que Claude a écrit (marqué (C) dans TODO.md, 8b) : schéma des enregistrements, destinations, diffusion par
+Couvre ce que Claude a écrit (marqué (C) dans docs/archive/TODO.md, 8b) : schéma des enregistrements, destinations, diffusion par
 ``ObservationHub``, journal de diagnostic, répertoire d'exécution. Les collecteurs (Mély) sont testés dans
 ``tests/test_collectors.py``.
 """
