@@ -24,15 +24,17 @@ memetic_pipeline/
 ├── experiments/                # Exploitation du cœur (étape 10) : pilotage, configurations, résultats, analyses ; versionné
 │   ├── __init__.py
 │   ├── EXPLOG.md               # Journal des expériences : une entrée par exécution, ajoutée par run_experiment
-│   ├── analysis/               # Scripts d'analyse des résultats et rapports (.md) des séries
+│   ├── analysis/               # Scripts d'analyse (analyze_*.py) et rapports (.md) des séries d'expériences
 │   │   ├── __init__.py
-│   │   ├── analyze_bench3_cpsat_alone.py # Mémétique contre CP-SAT seul à effort égal sur bench_3 (étape 10g)
-│   │   └── …                   # Analyses et rapports des séries de Mély (bench_2, bench_3) et synthèse
-│   ├── config/                 # Configurations JSON des expériences (description, instance, paramètres)
-│   ├── analysis/               # Scripts d'analyse (analyze_*.py) et rapports (bench2_*.md) des séries d'expériences
+│   │   ├── analyze_<facteur>.py, bench2_<facteur>.md         # Séries de Mély sur bench_2 : population, voisinage, stagnation, temps déterministe, ratio NR/NM, mutation, RL initiale, validation
+│   │   ├── analyze_bench3_<facteur>.py, bench3_<facteur>.md  # Les mêmes séries sur bench_3, et compare_bench3_deterministic_time.py
+│   │   ├── synthese_bench2_bench3.md                         # Synthèse de Mély : paramètres retenus, configurations économique et qualité
 │   │   ├── analyze_random_restarts.py, bench2_temoin_redemarrages.md # 10d : mémétique contre redémarrages aléatoires (population 6)
-│   │   └── analyze_random_witness.py, bench2_temoin_aleatoire.md     # 10d : mémétique contre individus aléatoires + LocalSolver (population 18)
+│   │   ├── analyze_random_witness.py, bench2_temoin_aleatoire.md     # 10d : mémétique contre individus aléatoires + LocalSolver (population 18)
+│   │   └── analyze_bench3_cpsat_alone.py, bench3_cpsat_alone.md      # 10g : mémétique contre CP-SAT seul à effort égal sur bench_3
 │   ├── config/                 # Configurations JSON des expériences (description, instance, paramètres, stratégies), une série par répertoire
+│   │   ├── <série>/            # Un répertoire par série (bench2_*, bench3_*, dont bench3_cpsat_alone/ pour run_cpsat_alone)
+│   │   ├── xavier_bench_p<population>_<instance>.json # Série de Xavier : population de 1 à 100 × bench_1 à bench_5 (seul bench_1 exécuté)
 │   │   └── integration_bench1.json # Configuration de base : les réglages de la 9-intégration sur bench_1
 │   ├── drivers/                # Scripts de pilotage des expériences
 │   │   ├── __init__.py
@@ -87,6 +89,7 @@ memetic_pipeline/
 │   ├── fixtures.py             # Outil de test (pas un test) : individus aux coûts choisis, génome de référence, faux objets (LocalSolver, opérateurs, stratégies de population, collecteur)
 │   ├── minizinc_probe.py       # Outil de test (pas un test) : sonde horaire.mzn pour vérifier la cohérence avec Python
 │   ├── test_catalog.py         # Catalogue des stratégies (étape 10c) : noms, création avec le contexte, vérification des paramètres, choix par défaut
+│   ├── test_config.py          # MemeticConfig.validate : compatibilité opérateurs / encodage, paramètres invalides
 │   ├── test_chromosome.py      # Génotype : allers-retours, génomes infaisables, conditions de D1, solutions MiniZinc
 │   ├── test_collectors.py      # Collecteurs (étape 8b) : événements construits à la main, valeurs attendues calculées à la main
 │   ├── test_engine.py          # Moteur (étape 9) : faux objets, lots NR et NM, graines, événements (initialisation et restart compris), reproductibilité
