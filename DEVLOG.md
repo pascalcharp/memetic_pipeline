@@ -1108,6 +1108,18 @@ Aucun changement de comportement. Suite complète verte.
 **Import.** `operators.py` importe maintenant `RandomBlockInitializer` (`src/ga/initialization.py`) ; pas de cycle, puisque `initialization` n'importe pas `operators`.
 **Constat annexe : la reproductibilité dépend de la machine.** La même exécution faite sur le Mac de Pascal (Python 3.14.0, MiniZinc 2.10.0) diffère de celle de Mély (Python 3.13.18) sur les seuls compteurs de CP-SAT (8700 contre 8784 échecs, 6 640 268 contre 6 596 583 propagations). La trajectoire est identique : coûts par génération, faisabilité, diversité, restarts, meilleure solution. Les versions de MiniZinc et de CP-SAT ne sont pas consignées dans les fichiers de résultats, si bien qu'on ne peut pas dire d'où vient l'écart. À ajouter (TODO 12-0), avant les campagnes sur le serveur de Xavier.
 
+## 2026-11-27 — Étape 10g : témoin CP-SAT seul sur bench_3 (Pascal et Claude)
+
+**Question.** Avec les configurations retenues par Mély, le mémétique réduit-il l'effort du solveur par rapport à CP-SAT seul sur bench_3 ? Contre le chiffre du TP (16 prouvé en 1,9 s), non : mais ce chiffre vient de CP-SAT 8 threads. Il fallait un témoin dans les conditions des sous-problèmes : 1 thread, limite déterministe.
+
+**Driver.** `experiments/drivers/run_cpsat_alone.py` appelle l'exécutable `minizinc` directement (`-i -s`) plutôt que de passer par `SolverAdapter` : MiniZinc imprime alors les statistiques du solveur après chaque solution, ce qui donne la trajectoire « meilleur coût en fonction de l'effort ». `SolverAdapter` ne garde que la dernière solution, et on n'a pas voulu changer cette interface commune pour un témoin. Le driver réutilise l'écriture des résultats et du journal de `run_experiment`. Tests : 30 (configuration, lecture de la sortie, ligne de commande, document et journal, résolution réelle de bench_1). Analyse `experiments/analysis/analyze_bench3_cpsat_alone.py` et 9 tests.
+
+**Résultat.** Six résolutions (modèles de référence et assoupli, graines 0 à 2, 5400 unités) : aucune solution sans violation quasi stricte, même après 887 à 2 825 M de propagations. Au même effort que la configuration économique de Mély (280 M, coût médian 38), CP-SAT seul est à 6 à 9 × 10⁶. Le mémétique réduit donc très fortement l'effort face à CP-SAT monothread : l'objectif 2 de l'étape 10 est atteint sur bench_3. Rapport : `experiments/analysis/bench3_cpsat_alone.md`.
+
+**Constats.**
+- Le `solveTime` rapporté par CP-SAT via MiniZinc dépasse la durée réelle des runs (4608 s pour 3274 s) : il ne mesure pas le temps écoulé du processus. Les comparaisons se font en propagations.
+- Pendant les runs, chaque processus n'avait qu'environ 56 % d'un cœur (machine partagée, veille possible). La veille suspend les processus sans les tuer ; `caffeinate -i -s -w <pid du lanceur>` l'empêche jusqu'à la fin d'une série.
+- Sous macOS, `xargs -I` refuse les lignes de plus de 255 octets : le lancement en parallèle passe par un petit script (`xargs -P 4 -n 1 script`). Le lanceur de séries de 10h réglera ce point proprement.
 ## 2026-11-26 — Étape 10d : témoin « redémarrages aléatoires » et temps déterministe cumulé (Pascal et Claude)
 
 **Question.** Le mémétique bat-il le hasard (objectif 1 de l'étape 10) ? Décision de Pascal : deux témoins, du plus simple au plus sévère ; d'abord les redémarrages aléatoires, puis la marche aléatoire. Pascal demande aussi le temps déterministe dans les métriques cumulées, en plus des échecs et des propagations.
