@@ -10431,3 +10431,1226 @@ Recherche locale initiale desactivee sur bench_3 : NR=3, NM=12, population 18, 2
 - Recommandations dependantes du compromis qualite-effort.
 - Les combinaisons non testees restent des configurations candidates.
 - Synthese : experiments/analysis/synthese_bench2_bench3.md.
+## 2026-11-26 16:22 — xavier_bench_p1_1
+
+Série de tests de Xavier avec la population d isolée: Population: 1;
+
+- Configuration : `experiments/config/xavier_bench_p1_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p1_1_162209.json`
+- Instance : bench_1 ; graine 97 ; population 1, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 301 appels ; failures 827 ; propagations 1145802 ; nodes non rapporté ; temps de résolution 1.9 s (non déterministe)
+- Durée de l'exécution : 77.4 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 16:23 — xavier_bench_p2_1
+
+Série de tests de Xavier avec la population d isolée: Population: 2;
+
+- Configuration : `experiments/config/xavier_bench_p2_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p2_1_162327.json`
+- Instance : bench_1 ; graine 97 ; population 2, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 95** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 306 appels ; failures 1174 ; propagations 1704200 ; nodes non rapporté ; temps de résolution 2.3 s (non déterministe)
+- Durée de l'exécution : 78.5 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 16:24 — xavier_bench_p3_1
+
+Série de tests de Xavier avec la population d isolée: Population: 3;
+
+- Configuration : `experiments/config/xavier_bench_p3_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p3_1_162446.json`
+- Instance : bench_1 ; graine 97 ; population 3, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 95** (faisable) ; 10 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 313 appels ; failures 1786 ; propagations 1635010 ; nodes non rapporté ; temps de résolution 2.4 s (non déterministe)
+- Durée de l'exécution : 79.8 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 16:26 — xavier_bench_p4_1
+
+Série de tests de Xavier avec la population d isolée: Population: 4;
+
+- Configuration : `experiments/config/xavier_bench_p4_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p4_1_162607.json`
+- Instance : bench_1 ; graine 97 ; population 4, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 95** (faisable) ; 10 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 319 appels ; failures 1413 ; propagations 1806230 ; nodes non rapporté ; temps de résolution 2.4 s (non déterministe)
+- Durée de l'exécution : 79.1 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 16:27 — xavier_bench_p5_1
+
+Série de tests de Xavier avec la population d isolée: Population: 5;
+
+- Configuration : `experiments/config/xavier_bench_p5_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p5_1_162726.json`
+- Instance : bench_1 ; graine 97 ; population 5, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 95** (faisable) ; 10 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 325 appels ; failures 1291 ; propagations 1789961 ; nodes non rapporté ; temps de résolution 2.4 s (non déterministe)
+- Durée de l'exécution : 78.9 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 16:28 — xavier_bench_p6_1
+
+Série de tests de Xavier avec la population d isolée: Population: 6;
+
+- Configuration : `experiments/config/xavier_bench_p6_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p6_1_162846.json`
+- Instance : bench_1 ; graine 97 ; population 6, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 326 appels ; failures 1382 ; propagations 1791572 ; nodes non rapporté ; temps de résolution 2.4 s (non déterministe)
+- Durée de l'exécution : 80.0 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 16:30 — xavier_bench_p7_1
+
+Série de tests de Xavier avec la population d isolée: Population: 7;
+
+- Configuration : `experiments/config/xavier_bench_p7_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p7_1_163007.json`
+- Instance : bench_1 ; graine 97 ; population 7, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 337 appels ; failures 1731 ; propagations 2175018 ; nodes non rapporté ; temps de résolution 2.8 s (non déterministe)
+- Durée de l'exécution : 84.0 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 16:31 — xavier_bench_p8_1
+
+Série de tests de Xavier avec la population d isolée: Population: 8;
+
+- Configuration : `experiments/config/xavier_bench_p8_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p8_1_163132.json`
+- Instance : bench_1 ; graine 97 ; population 8, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 336 appels ; failures 1712 ; propagations 2197657 ; nodes non rapporté ; temps de résolution 2.8 s (non déterministe)
+- Durée de l'exécution : 84.2 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 16:32 — xavier_bench_p9_1
+
+Série de tests de Xavier avec la population d isolée: Population: 9;
+
+- Configuration : `experiments/config/xavier_bench_p9_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p9_1_163257.json`
+- Instance : bench_1 ; graine 97 ; population 9, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 349 appels ; failures 2026 ; propagations 2495484 ; nodes non rapporté ; temps de résolution 3.0 s (non déterministe)
+- Durée de l'exécution : 86.2 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 16:34 — xavier_bench_p10_1
+
+Série de tests de Xavier avec la population d isolée: Population: 10;
+
+- Configuration : `experiments/config/xavier_bench_p10_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p10_1_163423.json`
+- Instance : bench_1 ; graine 97 ; population 10, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 355 appels ; failures 1968 ; propagations 2638879 ; nodes non rapporté ; temps de résolution 3.1 s (non déterministe)
+- Durée de l'exécution : 88.5 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 16:35 — xavier_bench_p11_1
+
+Série de tests de Xavier avec la population d isolée: Population: 11;
+
+- Configuration : `experiments/config/xavier_bench_p11_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p11_1_163553.json`
+- Instance : bench_1 ; graine 97 ; population 11, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 361 appels ; failures 1704 ; propagations 2504295 ; nodes non rapporté ; temps de résolution 3.1 s (non déterministe)
+- Durée de l'exécution : 92.5 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 16:37 — xavier_bench_p12_1
+
+Série de tests de Xavier avec la population d isolée: Population: 12;
+
+- Configuration : `experiments/config/xavier_bench_p12_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p12_1_163726.json`
+- Instance : bench_1 ; graine 97 ; population 12, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 367 appels ; failures 1979 ; propagations 2683520 ; nodes non rapporté ; temps de résolution 3.3 s (non déterministe)
+- Durée de l'exécution : 94.5 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 16:39 — xavier_bench_p13_1
+
+Série de tests de Xavier avec la population d isolée: Population: 13;
+
+- Configuration : `experiments/config/xavier_bench_p13_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p13_1_163901.json`
+- Instance : bench_1 ; graine 97 ; population 13, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 373 appels ; failures 2012 ; propagations 2698198 ; nodes non rapporté ; temps de résolution 3.4 s (non déterministe)
+- Durée de l'exécution : 95.0 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 16:40 — xavier_bench_p14_1
+
+Série de tests de Xavier avec la population d isolée: Population: 14;
+
+- Configuration : `experiments/config/xavier_bench_p14_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p14_1_164037.json`
+- Instance : bench_1 ; graine 97 ; population 14, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 366 appels ; failures 2147 ; propagations 2644107 ; nodes non rapporté ; temps de résolution 3.3 s (non déterministe)
+- Durée de l'exécution : 95.6 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 16:42 — xavier_bench_p15_1
+
+Série de tests de Xavier avec la population d isolée: Population: 15;
+
+- Configuration : `experiments/config/xavier_bench_p15_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p15_1_164213.json`
+- Instance : bench_1 ; graine 97 ; population 15, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 385 appels ; failures 2151 ; propagations 2750454 ; nodes non rapporté ; temps de résolution 3.5 s (non déterministe)
+- Durée de l'exécution : 101.1 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 16:43 — xavier_bench_p16_1
+
+Série de tests de Xavier avec la population d isolée: Population: 16;
+
+- Configuration : `experiments/config/xavier_bench_p16_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p16_1_164355.json`
+- Instance : bench_1 ; graine 97 ; population 16, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 391 appels ; failures 1992 ; propagations 2900043 ; nodes non rapporté ; temps de résolution 3.6 s (non déterministe)
+- Durée de l'exécution : 100.6 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 16:45 — xavier_bench_p17_1
+
+Série de tests de Xavier avec la population d isolée: Population: 17;
+
+- Configuration : `experiments/config/xavier_bench_p17_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p17_1_164537.json`
+- Instance : bench_1 ; graine 97 ; population 17, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 397 appels ; failures 2259 ; propagations 2966662 ; nodes non rapporté ; temps de résolution 3.6 s (non déterministe)
+- Durée de l'exécution : 100.1 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 16:47 — xavier_bench_p18_1
+
+Série de tests de Xavier avec la population d isolée: Population: 18;
+
+- Configuration : `experiments/config/xavier_bench_p18_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p18_1_164717.json`
+- Instance : bench_1 ; graine 97 ; population 18, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 403 appels ; failures 2219 ; propagations 2840912 ; nodes non rapporté ; temps de résolution 3.5 s (non déterministe)
+- Durée de l'exécution : 101.4 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 16:49 — xavier_bench_p19_1
+
+Série de tests de Xavier avec la population d isolée: Population: 19;
+
+- Configuration : `experiments/config/xavier_bench_p19_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p19_1_164900.json`
+- Instance : bench_1 ; graine 97 ; population 19, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 409 appels ; failures 2172 ; propagations 2969580 ; nodes non rapporté ; temps de résolution 3.1 s (non déterministe)
+- Durée de l'exécution : 87.6 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 16:50 — xavier_bench_p20_1
+
+Série de tests de Xavier avec la population d isolée: Population: 20;
+
+- Configuration : `experiments/config/xavier_bench_p20_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p20_1_165028.json`
+- Instance : bench_1 ; graine 97 ; population 20, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 415 appels ; failures 2252 ; propagations 3073967 ; nodes non rapporté ; temps de résolution 2.8 s (non déterministe)
+- Durée de l'exécution : 80.6 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 16:51 — xavier_bench_p21_1
+
+Série de tests de Xavier avec la population d isolée: Population: 21;
+
+- Configuration : `experiments/config/xavier_bench_p21_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p21_1_165149.json`
+- Instance : bench_1 ; graine 97 ; population 21, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 95** (faisable) ; 10 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 421 appels ; failures 2329 ; propagations 3139115 ; nodes non rapporté ; temps de résolution 2.8 s (non déterministe)
+- Durée de l'exécution : 83.9 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 16:53 — xavier_bench_p22_1
+
+Série de tests de Xavier avec la population d isolée: Population: 22;
+
+- Configuration : `experiments/config/xavier_bench_p22_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p22_1_165314.json`
+- Instance : bench_1 ; graine 97 ; population 22, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 427 appels ; failures 2178 ; propagations 3204058 ; nodes non rapporté ; temps de résolution 2.9 s (non déterministe)
+- Durée de l'exécution : 81.1 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 16:54 — xavier_bench_p23_1
+
+Série de tests de Xavier avec la population d isolée: Population: 23;
+
+- Configuration : `experiments/config/xavier_bench_p23_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p23_1_165436.json`
+- Instance : bench_1 ; graine 97 ; population 23, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 411 appels ; failures 2308 ; propagations 3057328 ; nodes non rapporté ; temps de résolution 2.7 s (non déterministe)
+- Durée de l'exécution : 75.9 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 16:55 — xavier_bench_p24_1
+
+Série de tests de Xavier avec la population d isolée: Population: 24;
+
+- Configuration : `experiments/config/xavier_bench_p24_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p24_1_165552.json`
+- Instance : bench_1 ; graine 97 ; population 24, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 416 appels ; failures 2476 ; propagations 3296180 ; nodes non rapporté ; temps de résolution 2.8 s (non déterministe)
+- Durée de l'exécution : 76.0 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 16:57 — xavier_bench_p25_1
+
+Série de tests de Xavier avec la population d isolée: Population: 25;
+
+- Configuration : `experiments/config/xavier_bench_p25_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p25_1_165709.json`
+- Instance : bench_1 ; graine 97 ; population 25, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 421 appels ; failures 2563 ; propagations 3199268 ; nodes non rapporté ; temps de résolution 2.7 s (non déterministe)
+- Durée de l'exécution : 76.3 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 16:58 — xavier_bench_p26_1
+
+Série de tests de Xavier avec la population d isolée: Population: 26;
+
+- Configuration : `experiments/config/xavier_bench_p26_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p26_1_165826.json`
+- Instance : bench_1 ; graine 97 ; population 26, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 426 appels ; failures 2620 ; propagations 3437186 ; nodes non rapporté ; temps de résolution 2.8 s (non déterministe)
+- Durée de l'exécution : 76.8 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 16:59 — xavier_bench_p27_1
+
+Série de tests de Xavier avec la population d isolée: Population: 27;
+
+- Configuration : `experiments/config/xavier_bench_p27_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p27_1_165943.json`
+- Instance : bench_1 ; graine 97 ; population 27, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 431 appels ; failures 2559 ; propagations 3479316 ; nodes non rapporté ; temps de résolution 2.9 s (non déterministe)
+- Durée de l'exécution : 78.0 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 17:01 — xavier_bench_p28_1
+
+Série de tests de Xavier avec la population d isolée: Population: 28;
+
+- Configuration : `experiments/config/xavier_bench_p28_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p28_1_170102.json`
+- Instance : bench_1 ; graine 97 ; population 28, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 436 appels ; failures 2610 ; propagations 3537796 ; nodes non rapporté ; temps de résolution 2.9 s (non déterministe)
+- Durée de l'exécution : 78.2 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 17:02 — xavier_bench_p29_1
+
+Série de tests de Xavier avec la population d isolée: Population: 29;
+
+- Configuration : `experiments/config/xavier_bench_p29_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p29_1_170221.json`
+- Instance : bench_1 ; graine 97 ; population 29, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 469 appels ; failures 2529 ; propagations 3701970 ; nodes non rapporté ; temps de résolution 3.1 s (non déterministe)
+- Durée de l'exécution : 84.2 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 17:03 — xavier_bench_p30_1
+
+Série de tests de Xavier avec la population d isolée: Population: 30;
+
+- Configuration : `experiments/config/xavier_bench_p30_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p30_1_170346.json`
+- Instance : bench_1 ; graine 97 ; population 30, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 475 appels ; failures 2667 ; propagations 3737843 ; nodes non rapporté ; temps de résolution 3.3 s (non déterministe)
+- Durée de l'exécution : 89.6 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 17:05 — xavier_bench_p31_1
+
+Série de tests de Xavier avec la population d isolée: Population: 31;
+
+- Configuration : `experiments/config/xavier_bench_p31_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p31_1_170516.json`
+- Instance : bench_1 ; graine 97 ; population 31, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 481 appels ; failures 2726 ; propagations 3915793 ; nodes non rapporté ; temps de résolution 3.3 s (non déterministe)
+- Durée de l'exécution : 88.9 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 17:06 — xavier_bench_p32_1
+
+Série de tests de Xavier avec la population d isolée: Population: 32;
+
+- Configuration : `experiments/config/xavier_bench_p32_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p32_1_170646.json`
+- Instance : bench_1 ; graine 97 ; population 32, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 487 appels ; failures 2950 ; propagations 4235797 ; nodes non rapporté ; temps de résolution 3.5 s (non déterministe)
+- Durée de l'exécution : 87.2 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 17:08 — xavier_bench_p33_1
+
+Série de tests de Xavier avec la population d isolée: Population: 33;
+
+- Configuration : `experiments/config/xavier_bench_p33_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p33_1_170814.json`
+- Instance : bench_1 ; graine 97 ; population 33, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 493 appels ; failures 2826 ; propagations 4041723 ; nodes non rapporté ; temps de résolution 3.4 s (non déterministe)
+- Durée de l'exécution : 87.7 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 17:09 — xavier_bench_p34_1
+
+Série de tests de Xavier avec la population d isolée: Population: 34;
+
+- Configuration : `experiments/config/xavier_bench_p34_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p34_1_170942.json`
+- Instance : bench_1 ; graine 97 ; population 34, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 499 appels ; failures 2846 ; propagations 3998346 ; nodes non rapporté ; temps de résolution 3.4 s (non déterministe)
+- Durée de l'exécution : 89.1 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 17:11 — xavier_bench_p35_1
+
+Série de tests de Xavier avec la population d isolée: Population: 35;
+
+- Configuration : `experiments/config/xavier_bench_p35_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p35_1_171112.json`
+- Instance : bench_1 ; graine 97 ; population 35, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 471 appels ; failures 2861 ; propagations 3888868 ; nodes non rapporté ; temps de résolution 3.3 s (non déterministe)
+- Durée de l'exécution : 83.8 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 17:12 — xavier_bench_p36_1
+
+Série de tests de Xavier avec la population d isolée: Population: 36;
+
+- Configuration : `experiments/config/xavier_bench_p36_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p36_1_171236.json`
+- Instance : bench_1 ; graine 97 ; population 36, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 511 appels ; failures 2843 ; propagations 4168770 ; nodes non rapporté ; temps de résolution 3.5 s (non déterministe)
+- Durée de l'exécution : 90.8 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 17:14 — xavier_bench_p37_1
+
+Série de tests de Xavier avec la population d isolée: Population: 37;
+
+- Configuration : `experiments/config/xavier_bench_p37_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p37_1_171408.json`
+- Instance : bench_1 ; graine 97 ; population 37, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 481 appels ; failures 3040 ; propagations 4048187 ; nodes non rapporté ; temps de résolution 3.4 s (non déterministe)
+- Durée de l'exécution : 85.2 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 17:15 — xavier_bench_p38_1
+
+Série de tests de Xavier avec la population d isolée: Population: 38;
+
+- Configuration : `experiments/config/xavier_bench_p38_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p38_1_171534.json`
+- Instance : bench_1 ; graine 97 ; population 38, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 486 appels ; failures 2909 ; propagations 3976950 ; nodes non rapporté ; temps de résolution 3.4 s (non déterministe)
+- Durée de l'exécution : 86.4 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 17:17 — xavier_bench_p39_1
+
+Série de tests de Xavier avec la population d isolée: Population: 39;
+
+- Configuration : `experiments/config/xavier_bench_p39_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p39_1_171701.json`
+- Instance : bench_1 ; graine 97 ; population 39, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 491 appels ; failures 2735 ; propagations 3922403 ; nodes non rapporté ; temps de résolution 3.2 s (non déterministe)
+- Durée de l'exécution : 83.2 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 17:18 — xavier_bench_p40_1
+
+Série de tests de Xavier avec la population d isolée: Population: 40;
+
+- Configuration : `experiments/config/xavier_bench_p40_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p40_1_171825.json`
+- Instance : bench_1 ; graine 97 ; population 40, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 496 appels ; failures 2689 ; propagations 3967896 ; nodes non rapporté ; temps de résolution 3.4 s (non déterministe)
+- Durée de l'exécution : 88.3 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 17:19 — xavier_bench_p41_1
+
+Série de tests de Xavier avec la population d isolée: Population: 41;
+
+- Configuration : `experiments/config/xavier_bench_p41_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p41_1_171954.json`
+- Instance : bench_1 ; graine 97 ; population 41, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 501 appels ; failures 2990 ; propagations 4242803 ; nodes non rapporté ; temps de résolution 3.5 s (non déterministe)
+- Durée de l'exécution : 89.3 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 17:21 — xavier_bench_p42_1
+
+Série de tests de Xavier avec la population d isolée: Population: 42;
+
+- Configuration : `experiments/config/xavier_bench_p42_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p42_1_172124.json`
+- Instance : bench_1 ; graine 97 ; population 42, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 506 appels ; failures 2946 ; propagations 4244689 ; nodes non rapporté ; temps de résolution 3.6 s (non déterministe)
+- Durée de l'exécution : 89.7 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 17:22 — xavier_bench_p43_1
+
+Série de tests de Xavier avec la population d isolée: Population: 43;
+
+- Configuration : `experiments/config/xavier_bench_p43_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p43_1_172254.json`
+- Instance : bench_1 ; graine 97 ; population 43, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 511 appels ; failures 3061 ; propagations 4394877 ; nodes non rapporté ; temps de résolution 3.6 s (non déterministe)
+- Durée de l'exécution : 91.0 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 17:24 — xavier_bench_p44_1
+
+Série de tests de Xavier avec la population d isolée: Population: 44;
+
+- Configuration : `experiments/config/xavier_bench_p44_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p44_1_172426.json`
+- Instance : bench_1 ; graine 97 ; population 44, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 516 appels ; failures 2866 ; propagations 4139477 ; nodes non rapporté ; temps de résolution 3.6 s (non déterministe)
+- Durée de l'exécution : 91.5 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 17:25 — xavier_bench_p45_1
+
+Série de tests de Xavier avec la population d isolée: Population: 45;
+
+- Configuration : `experiments/config/xavier_bench_p45_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p45_1_172558.json`
+- Instance : bench_1 ; graine 97 ; population 45, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 521 appels ; failures 3102 ; propagations 4395948 ; nodes non rapporté ; temps de résolution 3.7 s (non déterministe)
+- Durée de l'exécution : 92.7 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 17:27 — xavier_bench_p46_1
+
+Série de tests de Xavier avec la population d isolée: Population: 46;
+
+- Configuration : `experiments/config/xavier_bench_p46_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p46_1_172731.json`
+- Instance : bench_1 ; graine 97 ; population 46, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 526 appels ; failures 2937 ; propagations 4289692 ; nodes non rapporté ; temps de résolution 3.6 s (non déterministe)
+- Durée de l'exécution : 93.6 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 17:29 — xavier_bench_p47_1
+
+Série de tests de Xavier avec la population d isolée: Population: 47;
+
+- Configuration : `experiments/config/xavier_bench_p47_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p47_1_172906.json`
+- Instance : bench_1 ; graine 97 ; population 47, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 531 appels ; failures 3070 ; propagations 4481574 ; nodes non rapporté ; temps de résolution 3.8 s (non déterministe)
+- Durée de l'exécution : 94.4 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 17:30 — xavier_bench_p48_1
+
+Série de tests de Xavier avec la population d isolée: Population: 48;
+
+- Configuration : `experiments/config/xavier_bench_p48_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p48_1_173041.json`
+- Instance : bench_1 ; graine 97 ; population 48, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 536 appels ; failures 3020 ; propagations 4471477 ; nodes non rapporté ; temps de résolution 3.8 s (non déterministe)
+- Durée de l'exécution : 95.2 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 17:32 — xavier_bench_p49_1
+
+Série de tests de Xavier avec la population d isolée: Population: 49;
+
+- Configuration : `experiments/config/xavier_bench_p49_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p49_1_173217.json`
+- Instance : bench_1 ; graine 97 ; population 49, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 541 appels ; failures 3155 ; propagations 4605306 ; nodes non rapporté ; temps de résolution 3.9 s (non déterministe)
+- Durée de l'exécution : 96.5 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 17:33 — xavier_bench_p50_1
+
+Série de tests de Xavier avec la population d isolée: Population: 50;
+
+- Configuration : `experiments/config/xavier_bench_p50_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p50_1_173354.json`
+- Instance : bench_1 ; graine 97 ; population 50, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 546 appels ; failures 3297 ; propagations 4769830 ; nodes non rapporté ; temps de résolution 4.0 s (non déterministe)
+- Durée de l'exécution : 97.3 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 17:35 — xavier_bench_p51_1
+
+Série de tests de Xavier avec la population d isolée: Population: 51;
+
+- Configuration : `experiments/config/xavier_bench_p51_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p51_1_173532.json`
+- Instance : bench_1 ; graine 97 ; population 51, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 551 appels ; failures 3130 ; propagations 4704910 ; nodes non rapporté ; temps de résolution 4.0 s (non déterministe)
+- Durée de l'exécution : 98.1 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 17:37 — xavier_bench_p52_1
+
+Série de tests de Xavier avec la population d isolée: Population: 52;
+
+- Configuration : `experiments/config/xavier_bench_p52_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p52_1_173711.json`
+- Instance : bench_1 ; graine 97 ; population 52, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 556 appels ; failures 3209 ; propagations 4774321 ; nodes non rapporté ; temps de résolution 4.0 s (non déterministe)
+- Durée de l'exécution : 99.0 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 17:38 — xavier_bench_p53_1
+
+Série de tests de Xavier avec la population d isolée: Population: 53;
+
+- Configuration : `experiments/config/xavier_bench_p53_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p53_1_173851.json`
+- Instance : bench_1 ; graine 97 ; population 53, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 561 appels ; failures 3428 ; propagations 4935714 ; nodes non rapporté ; temps de résolution 4.0 s (non déterministe)
+- Durée de l'exécution : 99.6 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 17:40 — xavier_bench_p54_1
+
+Série de tests de Xavier avec la population d isolée: Population: 54;
+
+- Configuration : `experiments/config/xavier_bench_p54_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p54_1_174031.json`
+- Instance : bench_1 ; graine 97 ; population 54, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 566 appels ; failures 3376 ; propagations 4924449 ; nodes non rapporté ; temps de résolution 4.0 s (non déterministe)
+- Durée de l'exécution : 99.8 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 17:42 — xavier_bench_p55_1
+
+Série de tests de Xavier avec la population d isolée: Population: 55;
+
+- Configuration : `experiments/config/xavier_bench_p55_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p55_1_174211.json`
+- Instance : bench_1 ; graine 97 ; population 55, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 571 appels ; failures 3520 ; propagations 4934233 ; nodes non rapporté ; temps de résolution 5.0 s (non déterministe)
+- Durée de l'exécution : 126.0 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 17:44 — xavier_bench_p56_1
+
+Série de tests de Xavier avec la population d isolée: Population: 56;
+
+- Configuration : `experiments/config/xavier_bench_p56_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p56_1_174418.json`
+- Instance : bench_1 ; graine 97 ; population 56, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 576 appels ; failures 3497 ; propagations 4976486 ; nodes non rapporté ; temps de résolution 5.3 s (non déterministe)
+- Durée de l'exécution : 140.6 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 17:46 — xavier_bench_p57_1
+
+Série de tests de Xavier avec la population d isolée: Population: 57;
+
+- Configuration : `experiments/config/xavier_bench_p57_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p57_1_174639.json`
+- Instance : bench_1 ; graine 97 ; population 57, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 581 appels ; failures 3428 ; propagations 5016157 ; nodes non rapporté ; temps de résolution 5.4 s (non déterministe)
+- Durée de l'exécution : 141.3 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 17:49 — xavier_bench_p58_1
+
+Série de tests de Xavier avec la population d isolée: Population: 58;
+
+- Configuration : `experiments/config/xavier_bench_p58_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p58_1_174901.json`
+- Instance : bench_1 ; graine 97 ; population 58, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 95** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 586 appels ; failures 3411 ; propagations 5010277 ; nodes non rapporté ; temps de résolution 5.6 s (non déterministe)
+- Durée de l'exécution : 142.0 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 17:51 — xavier_bench_p59_1
+
+Série de tests de Xavier avec la population d isolée: Population: 59;
+
+- Configuration : `experiments/config/xavier_bench_p59_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p59_1_175124.json`
+- Instance : bench_1 ; graine 97 ; population 59, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 591 appels ; failures 3446 ; propagations 5175366 ; nodes non rapporté ; temps de résolution 5.6 s (non déterministe)
+- Durée de l'exécution : 144.9 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 17:53 — xavier_bench_p60_1
+
+Série de tests de Xavier avec la population d isolée: Population: 60;
+
+- Configuration : `experiments/config/xavier_bench_p60_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p60_1_175350.json`
+- Instance : bench_1 ; graine 97 ; population 60, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 596 appels ; failures 3421 ; propagations 5203874 ; nodes non rapporté ; temps de résolution 5.4 s (non déterministe)
+- Durée de l'exécution : 143.3 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 17:56 — xavier_bench_p61_1
+
+Série de tests de Xavier avec la population d isolée: Population: 61;
+
+- Configuration : `experiments/config/xavier_bench_p61_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p61_1_175614.json`
+- Instance : bench_1 ; graine 97 ; population 61, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 95** (faisable) ; 10 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 661 appels ; failures 3863 ; propagations 5831128 ; nodes non rapporté ; temps de résolution 4.9 s (non déterministe)
+- Durée de l'exécution : 129.2 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 17:58 — xavier_bench_p62_1
+
+Série de tests de Xavier avec la population d isolée: Population: 62;
+
+- Configuration : `experiments/config/xavier_bench_p62_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p62_1_175824.json`
+- Instance : bench_1 ; graine 97 ; population 62, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 606 appels ; failures 3433 ; propagations 5209528 ; nodes non rapporté ; temps de résolution 4.3 s (non déterministe)
+- Durée de l'exécution : 108.7 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 18:00 — xavier_bench_p63_1
+
+Série de tests de Xavier avec la population d isolée: Population: 63;
+
+- Configuration : `experiments/config/xavier_bench_p63_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p63_1_180013.json`
+- Instance : bench_1 ; graine 97 ; population 63, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 611 appels ; failures 3656 ; propagations 5383390 ; nodes non rapporté ; temps de résolution 4.3 s (non déterministe)
+- Durée de l'exécution : 108.5 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 18:02 — xavier_bench_p64_1
+
+Série de tests de Xavier avec la population d isolée: Population: 64;
+
+- Configuration : `experiments/config/xavier_bench_p64_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p64_1_180202.json`
+- Instance : bench_1 ; graine 97 ; population 64, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 616 appels ; failures 3673 ; propagations 5490186 ; nodes non rapporté ; temps de résolution 4.4 s (non déterministe)
+- Durée de l'exécution : 108.3 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 18:03 — xavier_bench_p65_1
+
+Série de tests de Xavier avec la population d isolée: Population: 65;
+
+- Configuration : `experiments/config/xavier_bench_p65_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p65_1_180351.json`
+- Instance : bench_1 ; graine 97 ; population 65, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 621 appels ; failures 3571 ; propagations 5437290 ; nodes non rapporté ; temps de résolution 4.3 s (non déterministe)
+- Durée de l'exécution : 109.3 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 18:05 — xavier_bench_p66_1
+
+Série de tests de Xavier avec la population d isolée: Population: 66;
+
+- Configuration : `experiments/config/xavier_bench_p66_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p66_1_180541.json`
+- Instance : bench_1 ; graine 97 ; population 66, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 626 appels ; failures 3735 ; propagations 5675131 ; nodes non rapporté ; temps de résolution 5.3 s (non déterministe)
+- Durée de l'exécution : 133.5 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 18:07 — xavier_bench_p67_1
+
+Série de tests de Xavier avec la population d isolée: Population: 67;
+
+- Configuration : `experiments/config/xavier_bench_p67_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p67_1_180755.json`
+- Instance : bench_1 ; graine 97 ; population 67, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 95** (faisable) ; 10 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 697 appels ; failures 4164 ; propagations 6300312 ; nodes non rapporté ; temps de résolution 6.7 s (non déterministe)
+- Durée de l'exécution : 170.9 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 18:10 — xavier_bench_p68_1
+
+Série de tests de Xavier avec la population d isolée: Population: 68;
+
+- Configuration : `experiments/config/xavier_bench_p68_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p68_1_181047.json`
+- Instance : bench_1 ; graine 97 ; population 68, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 636 appels ; failures 3595 ; propagations 5569172 ; nodes non rapporté ; temps de résolution 5.9 s (non déterministe)
+- Durée de l'exécution : 152.9 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 18:13 — xavier_bench_p69_1
+
+Série de tests de Xavier avec la population d isolée: Population: 69;
+
+- Configuration : `experiments/config/xavier_bench_p69_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p69_1_181321.json`
+- Instance : bench_1 ; graine 97 ; population 69, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 95** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 641 appels ; failures 3719 ; propagations 5724275 ; nodes non rapporté ; temps de résolution 4.7 s (non déterministe)
+- Durée de l'exécution : 116.5 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 18:15 — xavier_bench_p70_1
+
+Série de tests de Xavier avec la population d isolée: Population: 70;
+
+- Configuration : `experiments/config/xavier_bench_p70_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p70_1_181518.json`
+- Instance : bench_1 ; graine 97 ; population 70, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 646 appels ; failures 3736 ; propagations 5654249 ; nodes non rapporté ; temps de résolution 4.6 s (non déterministe)
+- Durée de l'exécution : 113.8 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 18:17 — xavier_bench_p71_1
+
+Série de tests de Xavier avec la population d isolée: Population: 71;
+
+- Configuration : `experiments/config/xavier_bench_p71_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p71_1_181712.json`
+- Instance : bench_1 ; graine 97 ; population 71, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 721 appels ; failures 4347 ; propagations 6558314 ; nodes non rapporté ; temps de résolution 5.3 s (non déterministe)
+- Durée de l'exécution : 126.7 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 18:19 — xavier_bench_p72_1
+
+Série de tests de Xavier avec la population d isolée: Population: 72;
+
+- Configuration : `experiments/config/xavier_bench_p72_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p72_1_181920.json`
+- Instance : bench_1 ; graine 97 ; population 72, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 656 appels ; failures 3910 ; propagations 5878804 ; nodes non rapporté ; temps de résolution 5.6 s (non déterministe)
+- Durée de l'exécution : 136.5 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 18:21 — xavier_bench_p73_1
+
+Série de tests de Xavier avec la population d isolée: Population: 73;
+
+- Configuration : `experiments/config/xavier_bench_p73_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p73_1_182137.json`
+- Instance : bench_1 ; graine 97 ; population 73, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 95** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 661 appels ; failures 3868 ; propagations 5984051 ; nodes non rapporté ; temps de résolution 6.4 s (non déterministe)
+- Durée de l'exécution : 162.9 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 18:24 — xavier_bench_p74_1
+
+Série de tests de Xavier avec la population d isolée: Population: 74;
+
+- Configuration : `experiments/config/xavier_bench_p74_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p74_1_182421.json`
+- Instance : bench_1 ; graine 97 ; population 74, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 666 appels ; failures 3861 ; propagations 5927290 ; nodes non rapporté ; temps de résolution 6.5 s (non déterministe)
+- Durée de l'exécution : 163.3 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 18:27 — xavier_bench_p75_1
+
+Série de tests de Xavier avec la population d isolée: Population: 75;
+
+- Configuration : `experiments/config/xavier_bench_p75_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p75_1_182705.json`
+- Instance : bench_1 ; graine 97 ; population 75, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 745 appels ; failures 4384 ; propagations 6737330 ; nodes non rapporté ; temps de résolution 7.3 s (non déterministe)
+- Durée de l'exécution : 183.0 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 18:30 — xavier_bench_p76_1
+
+Série de tests de Xavier avec la population d isolée: Population: 76;
+
+- Configuration : `experiments/config/xavier_bench_p76_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p76_1_183008.json`
+- Instance : bench_1 ; graine 97 ; population 76, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 95** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 676 appels ; failures 4024 ; propagations 6088364 ; nodes non rapporté ; temps de résolution 6.5 s (non déterministe)
+- Durée de l'exécution : 162.8 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 18:32 — xavier_bench_p77_1
+
+Série de tests de Xavier avec la population d isolée: Population: 77;
+
+- Configuration : `experiments/config/xavier_bench_p77_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p77_1_183252.json`
+- Instance : bench_1 ; graine 97 ; population 77, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 95** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 681 appels ; failures 3905 ; propagations 6057302 ; nodes non rapporté ; temps de résolution 5.1 s (non déterministe)
+- Durée de l'exécution : 129.2 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 18:35 — xavier_bench_p78_1
+
+Série de tests de Xavier avec la population d isolée: Population: 78;
+
+- Configuration : `experiments/config/xavier_bench_p78_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p78_1_183502.json`
+- Instance : bench_1 ; graine 97 ; population 78, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 686 appels ; failures 4055 ; propagations 6203543 ; nodes non rapporté ; temps de résolution 5.0 s (non déterministe)
+- Durée de l'exécution : 123.0 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 18:37 — xavier_bench_p79_1
+
+Série de tests de Xavier avec la population d isolée: Population: 79;
+
+- Configuration : `experiments/config/xavier_bench_p79_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p79_1_183706.json`
+- Instance : bench_1 ; graine 97 ; population 79, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 691 appels ; failures 4109 ; propagations 6351633 ; nodes non rapporté ; temps de résolution 5.1 s (non déterministe)
+- Durée de l'exécution : 121.8 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 18:39 — xavier_bench_p80_1
+
+Série de tests de Xavier avec la population d isolée: Population: 80;
+
+- Configuration : `experiments/config/xavier_bench_p80_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p80_1_183908.json`
+- Instance : bench_1 ; graine 97 ; population 80, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 696 appels ; failures 4157 ; propagations 6372500 ; nodes non rapporté ; temps de résolution 5.6 s (non déterministe)
+- Durée de l'exécution : 137.4 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 18:41 — xavier_bench_p81_1
+
+Série de tests de Xavier avec la population d isolée: Population: 81;
+
+- Configuration : `experiments/config/xavier_bench_p81_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p81_1_184126.json`
+- Instance : bench_1 ; graine 97 ; population 81, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 95** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 701 appels ; failures 4024 ; propagations 6114172 ; nodes non rapporté ; temps de résolution 6.7 s (non déterministe)
+- Durée de l'exécution : 170.9 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 18:44 — xavier_bench_p82_1
+
+Série de tests de Xavier avec la population d isolée: Population: 82;
+
+- Configuration : `experiments/config/xavier_bench_p82_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p82_1_184418.json`
+- Instance : bench_1 ; graine 97 ; population 82, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 706 appels ; failures 4347 ; propagations 6496674 ; nodes non rapporté ; temps de résolution 6.5 s (non déterministe)
+- Durée de l'exécution : 165.1 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 18:47 — xavier_bench_p83_1
+
+Série de tests de Xavier avec la population d isolée: Population: 83;
+
+- Configuration : `experiments/config/xavier_bench_p83_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p83_1_184704.json`
+- Instance : bench_1 ; graine 97 ; population 83, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 711 appels ; failures 4163 ; propagations 6399227 ; nodes non rapporté ; temps de résolution 5.2 s (non déterministe)
+- Durée de l'exécution : 126.3 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 18:49 — xavier_bench_p84_1
+
+Série de tests de Xavier avec la population d isolée: Population: 84;
+
+- Configuration : `experiments/config/xavier_bench_p84_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p84_1_184911.json`
+- Instance : bench_1 ; graine 97 ; population 84, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 799 appels ; failures 4897 ; propagations 7525404 ; nodes non rapporté ; temps de résolution 5.9 s (non déterministe)
+- Durée de l'exécution : 141.2 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 18:51 — xavier_bench_p85_1
+
+Série de tests de Xavier avec la population d isolée: Population: 85;
+
+- Configuration : `experiments/config/xavier_bench_p85_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p85_1_185133.json`
+- Instance : bench_1 ; graine 97 ; population 85, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 721 appels ; failures 4152 ; propagations 6482824 ; nodes non rapporté ; temps de résolution 5.2 s (non déterministe)
+- Durée de l'exécution : 126.9 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 18:53 — xavier_bench_p86_1
+
+Série de tests de Xavier avec la population d isolée: Population: 86;
+
+- Configuration : `experiments/config/xavier_bench_p86_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p86_1_185340.json`
+- Instance : bench_1 ; graine 97 ; population 86, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 726 appels ; failures 4530 ; propagations 6740024 ; nodes non rapporté ; temps de résolution 5.4 s (non déterministe)
+- Durée de l'exécution : 128.3 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 18:55 — xavier_bench_p87_1
+
+Série de tests de Xavier avec la population d isolée: Population: 87;
+
+- Configuration : `experiments/config/xavier_bench_p87_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p87_1_185549.json`
+- Instance : bench_1 ; graine 97 ; population 87, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 95** (faisable) ; 10 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 817 appels ; failures 4902 ; propagations 7649901 ; nodes non rapporté ; temps de résolution 6.0 s (non déterministe)
+- Durée de l'exécution : 143.9 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 18:58 — xavier_bench_p88_1
+
+Série de tests de Xavier avec la population d isolée: Population: 88;
+
+- Configuration : `experiments/config/xavier_bench_p88_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p88_1_185814.json`
+- Instance : bench_1 ; graine 97 ; population 88, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 736 appels ; failures 4562 ; propagations 6764801 ; nodes non rapporté ; temps de résolution 5.4 s (non déterministe)
+- Durée de l'exécution : 129.5 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 19:00 — xavier_bench_p89_1
+
+Série de tests de Xavier avec la population d isolée: Population: 89;
+
+- Configuration : `experiments/config/xavier_bench_p89_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p89_1_190024.json`
+- Instance : bench_1 ; graine 97 ; population 89, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 741 appels ; failures 4475 ; propagations 6695019 ; nodes non rapporté ; temps de résolution 5.4 s (non déterministe)
+- Durée de l'exécution : 130.6 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 19:02 — xavier_bench_p90_1
+
+Série de tests de Xavier avec la population d isolée: Population: 90;
+
+- Configuration : `experiments/config/xavier_bench_p90_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p90_1_190235.json`
+- Instance : bench_1 ; graine 97 ; population 90, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 746 appels ; failures 4530 ; propagations 6887374 ; nodes non rapporté ; temps de résolution 5.5 s (non déterministe)
+- Durée de l'exécution : 131.7 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 19:04 — xavier_bench_p91_1
+
+Série de tests de Xavier avec la population d isolée: Population: 91;
+
+- Configuration : `experiments/config/xavier_bench_p91_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p91_1_190448.json`
+- Instance : bench_1 ; graine 97 ; population 91, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 751 appels ; failures 4468 ; propagations 6677320 ; nodes non rapporté ; temps de résolution 5.5 s (non déterministe)
+- Durée de l'exécution : 136.2 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 19:07 — xavier_bench_p92_1
+
+Série de tests de Xavier avec la population d isolée: Population: 92;
+
+- Configuration : `experiments/config/xavier_bench_p92_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p92_1_190704.json`
+- Instance : bench_1 ; graine 97 ; population 92, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 756 appels ; failures 4722 ; propagations 6987590 ; nodes non rapporté ; temps de résolution 5.6 s (non déterministe)
+- Durée de l'exécution : 133.7 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 19:09 — xavier_bench_p93_1
+
+Série de tests de Xavier avec la population d isolée: Population: 93;
+
+- Configuration : `experiments/config/xavier_bench_p93_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p93_1_190919.json`
+- Instance : bench_1 ; graine 97 ; population 93, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 853 appels ; failures 5167 ; propagations 8049954 ; nodes non rapporté ; temps de résolution 6.4 s (non déterministe)
+- Durée de l'exécution : 150.7 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 19:11 — xavier_bench_p94_1
+
+Série de tests de Xavier avec la population d isolée: Population: 94;
+
+- Configuration : `experiments/config/xavier_bench_p94_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p94_1_191150.json`
+- Instance : bench_1 ; graine 97 ; population 94, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 859 appels ; failures 5183 ; propagations 8095498 ; nodes non rapporté ; temps de résolution 6.4 s (non déterministe)
+- Durée de l'exécution : 151.4 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 19:14 — xavier_bench_p95_1
+
+Série de tests de Xavier avec la population d isolée: Population: 95;
+
+- Configuration : `experiments/config/xavier_bench_p95_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p95_1_191422.json`
+- Instance : bench_1 ; graine 97 ; population 95, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 771 appels ; failures 4532 ; propagations 7098197 ; nodes non rapporté ; temps de résolution 5.6 s (non déterministe)
+- Durée de l'exécution : 136.1 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 19:16 — xavier_bench_p96_1
+
+Série de tests de Xavier avec la population d isolée: Population: 96;
+
+- Configuration : `experiments/config/xavier_bench_p96_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p96_1_191639.json`
+- Instance : bench_1 ; graine 97 ; population 96, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 776 appels ; failures 4530 ; propagations 7013911 ; nodes non rapporté ; temps de résolution 5.6 s (non déterministe)
+- Durée de l'exécution : 137.0 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 19:18 — xavier_bench_p97_1
+
+Série de tests de Xavier avec la population d isolée: Population: 97;
+
+- Configuration : `experiments/config/xavier_bench_p97_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p97_1_191857.json`
+- Instance : bench_1 ; graine 97 ; population 97, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 95** (faisable) ; 10 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 877 appels ; failures 5371 ; propagations 8407417 ; nodes non rapporté ; temps de résolution 6.6 s (non déterministe)
+- Durée de l'exécution : 155.0 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 19:21 — xavier_bench_p98_1
+
+Série de tests de Xavier avec la population d isolée: Population: 98;
+
+- Configuration : `experiments/config/xavier_bench_p98_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p98_1_192132.json`
+- Instance : bench_1 ; graine 97 ; population 98, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 95** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 786 appels ; failures 4510 ; propagations 7169695 ; nodes non rapporté ; temps de résolution 5.7 s (non déterministe)
+- Durée de l'exécution : 138.9 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 19:23 — xavier_bench_p99_1
+
+Série de tests de Xavier avec la population d isolée: Population: 99;
+
+- Configuration : `experiments/config/xavier_bench_p99_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p99_1_192352.json`
+- Instance : bench_1 ; graine 97 ; population 99, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 791 appels ; failures 4629 ; propagations 7359624 ; nodes non rapporté ; temps de résolution 5.8 s (non déterministe)
+- Durée de l'exécution : 139.8 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 19:26 — xavier_bench_p100_1
+
+Série de tests de Xavier avec la population d isolée: Population: 100;
+
+- Configuration : `experiments/config/xavier_bench_p100_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_p100_1_192612.json`
+- Instance : bench_1 ; graine 97 ; population 100, NR = 10, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 95** (faisable) ; 10 générations, 5 restart(s)
+- **Effort cumulé du solveur** : 895 appels ; failures 5311 ; propagations 8453477 ; nodes non rapporté ; temps de résolution 6.7 s (non déterministe)
+- Durée de l'exécution : 158.1 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 19:28 — xavier_bench_c0_1
+
+Série de tests de Xavier avec le crossover d isolée: Crossover: 0;
+
+- Configuration : `experiments/config/xavier_bench_c0_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_c0_1_192851.json`
+- Instance : bench_1 ; graine 97 ; population 100, NR = 0, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 95** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 596 appels ; failures 3656 ; propagations 5909837 ; nodes non rapporté ; temps de résolution 4.6 s (non déterministe)
+- Durée de l'exécution : 105.4 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 19:30 — xavier_bench_c1_1
+
+Série de tests de Xavier avec le crossover d isolée: Crossover: 1;
+
+- Configuration : `experiments/config/xavier_bench_c1_1.json`
+- Résultats : `experiments/results/2026-11-26/xavier_bench_c1_1_193037.json`
+- Instance : bench_1 ; graine 97 ; population 100, NR = 1, NM = 10, 10 générations
+- Stratégies : crossover `uniform_gene` ; mutation `shift_start`
+- **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
+- **Effort cumulé du solveur** : 616 appels ; failures 3735 ; propagations 6133114 ; nodes non rapporté ; temps de résolution 4.8 s (non déterministe)
+- Durée de l'exécution : 108.7 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**

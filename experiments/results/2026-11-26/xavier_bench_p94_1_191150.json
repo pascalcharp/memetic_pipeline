@@ -1,0 +1,427 @@
+{
+  "schema_version": 1,
+  "experiment": "xavier_bench_p94_1",
+  "description": "Série de tests de Xavier avec la population d isolée: Population: 94;",
+  "config_path": "experiments/config/xavier_bench_p94_1.json",
+  "instance": "bench_1",
+  "settings": {
+    "population_size": 94,
+    "crossover_count": 10,
+    "mutation_count": 10,
+    "generations": 10,
+    "master_seed": 97,
+    "tournament_size": 2,
+    "stagnation_generations": 1,
+    "elite_count": 1,
+    "neighborhood_size": 1,
+    "deterministic_time_units": 5.0,
+    "initial_local_search": true
+  },
+  "strategies": {
+    "crossover": {
+      "name": "uniform_gene",
+      "parameters": {}
+    },
+    "mutation": {
+      "name": "shift_start",
+      "parameters": {}
+    }
+  },
+  "started_at": "2026-11-26T19:11:50.668902-05:00",
+  "duration_seconds": 151.37450830001035,
+  "git_commit": "25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3",
+  "git_dirty": true,
+  "python_version": "3.14.10",
+  "packages": {
+    "minizinc": "0.10.0",
+    "numpy": "2.5.5"
+  },
+  "best": {
+    "cost": {
+      "under_coverage_cost": 0,
+      "over_coverage_cost": 94,
+      "quasi_hard_cells": 0,
+      "coverage_violations": 0,
+      "structural_violations": 0,
+      "penalty_cost": 0,
+      "total": 94,
+      "is_feasible": true
+    },
+    "schedule": [
+      {
+        "start": 5,
+        "break1": 9,
+        "lunch": 16,
+        "break2": 25,
+        "end": 32,
+        "activities": [
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "start": 4,
+        "break1": 8,
+        "lunch": 13,
+        "break2": 26,
+        "end": 31,
+        "activities": [
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "start": 1,
+        "break1": 5,
+        "lunch": 10,
+        "break2": 20,
+        "end": 28,
+        "activities": [
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    ]
+  },
+  "generations": 10,
+  "restarts": 5,
+  "solver_effort": {
+    "schema_version": 1,
+    "event": "solver_effort",
+    "generation": 10,
+    "scope": "cumulative",
+    "calls": 859,
+    "nodes": null,
+    "failures": 5183,
+    "propagations": 8095498,
+    "solve_time_seconds": 6.3581809999999965
+  },
+  "feasibility_rates": [
+    {
+      "schema_version": 1,
+      "event": "feasibility_rates",
+      "generation": 10,
+      "scope": "cumulative",
+      "origin": "initialization",
+      "operator": null,
+      "count": 94,
+      "feasible_before": 24,
+      "feasible_after": 94,
+      "rate_before": 0.2553191489361702,
+      "rate_after": 1.0
+    },
+    {
+      "schema_version": 1,
+      "event": "feasibility_rates",
+      "generation": 10,
+      "scope": "cumulative",
+      "origin": "crossover",
+      "operator": "UniformGeneCrossover",
+      "count": 200,
+      "feasible_before": 142,
+      "feasible_after": 200,
+      "rate_before": 0.71,
+      "rate_after": 1.0
+    },
+    {
+      "schema_version": 1,
+      "event": "feasibility_rates",
+      "generation": 10,
+      "scope": "cumulative",
+      "origin": "mutation",
+      "operator": "ShiftStartMutation",
+      "count": 100,
+      "feasible_before": 75,
+      "feasible_after": 100,
+      "rate_before": 0.75,
+      "rate_after": 1.0
+    },
+    {
+      "schema_version": 1,
+      "event": "feasibility_rates",
+      "generation": 10,
+      "scope": "cumulative",
+      "origin": "restart",
+      "operator": null,
+      "count": 465,
+      "feasible_before": 109,
+      "feasible_after": 465,
+      "rate_before": 0.23440860215053763,
+      "rate_after": 1.0
+    }
+  ],
+  "cost_statistics": [
+    {
+      "schema_version": 1,
+      "event": "cost_statistics",
+      "generation": 0,
+      "size": 94,
+      "feasible_count": 94,
+      "total_min": 100,
+      "total_mean": 1159709.9893617022,
+      "total_median": 1000137.0,
+      "total_max": 4000148,
+      "total_stdev": 1123285.7831246355,
+      "under_coverage_mean": 1159574.4680851065,
+      "over_coverage_mean": 135.5212765957447,
+      "coverage_violations_mean": 0.0,
+      "quasi_hard_cells_mean": 1.1595744680851063
+    },
+    {
+      "schema_version": 1,
+      "event": "cost_statistics",
+      "generation": 1,
+      "size": 94,
+      "feasible_count": 94,
+      "total_min": 94,
+      "total_mean": 500129.92553191487,
+      "total_median": 143.0,
+      "total_max": 2000134,
+      "total_stdev": 648242.0172823103,
+      "under_coverage_mean": 500000.0,
+      "over_coverage_mean": 129.9255319148936,
+      "coverage_violations_mean": 0.0,
+      "quasi_hard_cells_mean": 0.5
+    },
+    {
+      "schema_version": 1,
+      "event": "cost_statistics",
+      "generation": 2,
+      "size": 94,
+      "feasible_count": 94,
+      "total_min": 94,
+      "total_mean": 266081.8829787234,
+      "total_median": 131.0,
+      "total_max": 1000141,
+      "total_stdev": 441843.6717108828,
+      "under_coverage_mean": 265957.44680851063,
+      "over_coverage_mean": 124.43617021276596,
+      "coverage_violations_mean": 0.0,
+      "quasi_hard_cells_mean": 0.26595744680851063
+    },
+    {
+      "schema_version": 1,
+      "event": "cost_statistics",
+      "generation": 3,
+      "size": 94,
+      "feasible_count": 94,
+      "total_min": 94,
+      "total_mean": 585234.3617021276,
+      "total_median": 140.5,
+      "total_max": 2000134,
+      "total_stdev": 749604.968977148,
+      "under_coverage_mean": 585106.3829787234,
+      "over_coverage_mean": 127.97872340425532,
+      "coverage_violations_mean": 0.0,
+      "quasi_hard_cells_mean": 0.5851063829787234
+    },
+    {
+      "schema_version": 1,
+      "event": "cost_statistics",
+      "generation": 4,
+      "size": 94,
+      "feasible_count": 94,
+      "total_min": 94,
+      "total_mean": 266081.3404255319,
+      "total_median": 131.5,
+      "total_max": 1000141,
+      "total_stdev": 441844.2390597487,
+      "under_coverage_mean": 265957.44680851063,
+      "over_coverage_mean": 123.8936170212766,
+      "coverage_violations_mean": 0.0,
+      "quasi_hard_cells_mean": 0.26595744680851063
+    },
+    {
+      "schema_version": 1,
+      "event": "cost_statistics",
+      "generation": 5,
+      "size": 94,
+      "feasible_count": 94,
+      "total_min": 94,
+      "total_mean": 521405.78723404254,
+      "total_median": 143.0,
+      "total_max": 2000135,
+      "total_stdev": 647890.5218655628,
+      "under_coverage_mean": 521276.59574468085,
+      "over_coverage_mean": 129.19148936170214,
+      "coverage_violations_mean": 0.0,
+      "quasi_hard_cells_mean": 0.5212765957446809
+    },
+    {
+      "schema_version": 1,
+      "event": "cost_statistics",
+      "generation": 6,
+      "size": 94,
+      "feasible_count": 94,
+      "total_min": 94,
+      "total_mean": 234165.31914893616,
+      "total_median": 127.5,
+      "total_max": 1000135,
+      "total_stdev": 423398.26008688356,
+      "under_coverage_mean": 234042.55319148937,
+      "over_coverage_mean": 122.76595744680851,
+      "coverage_violations_mean": 0.0,
+      "quasi_hard_cells_mean": 0.23404255319148937
+    },
+    {
+      "schema_version": 1,
+      "event": "cost_statistics",
+      "generation": 7,
+      "size": 94,
+      "feasible_count": 94,
+      "total_min": 94,
+      "total_mean": 521404.97872340423,
+      "total_median": 149.0,
+      "total_max": 2000132,
+      "total_stdev": 647891.8456088041,
+      "under_coverage_mean": 521276.59574468085,
+      "over_coverage_mean": 128.38297872340425,
+      "coverage_violations_mean": 0.0,
+      "quasi_hard_cells_mean": 0.5212765957446809
+    },
+    {
+      "schema_version": 1,
+      "event": "cost_statistics",
+      "generation": 8,
+      "size": 94,
+      "feasible_count": 94,
+      "total_min": 94,
+      "total_mean": 287357.0319148936,
+      "total_median": 130.0,
+      "total_max": 1000141,
+      "total_stdev": 452473.29118952644,
+      "under_coverage_mean": 287234.0425531915,
+      "over_coverage_mean": 122.98936170212765,
+      "coverage_violations_mean": 0.0,
+      "quasi_hard_cells_mean": 0.2872340425531915
+    },
+    {
+      "schema_version": 1,
+      "event": "cost_statistics",
+      "generation": 9,
+      "size": 94,
+      "feasible_count": 94,
+      "total_min": 94,
+      "total_mean": 627786.4361702128,
+      "total_median": 147.5,
+      "total_max": 2000145,
+      "total_stdev": 743543.5673965719,
+      "under_coverage_mean": 627659.5744680851,
+      "over_coverage_mean": 126.86170212765957,
+      "coverage_violations_mean": 0.0,
+      "quasi_hard_cells_mean": 0.6276595744680851
+    },
+    {
+      "schema_version": 1,
+      "event": "cost_statistics",
+      "generation": 10,
+      "size": 94,
+      "feasible_count": 94,
+      "total_min": 94,
+      "total_mean": 287357.1808510638,
+      "total_median": 130.0,
+      "total_max": 1000139,
+      "total_stdev": 452472.35016068706,
+      "under_coverage_mean": 287234.0425531915,
+      "over_coverage_mean": 123.13829787234043,
+      "coverage_violations_mean": 0.0,
+      "quasi_hard_cells_mean": 0.2872340425531915
+    }
+  ],
+  "diversity": [
+    {
+      "schema_version": 1,
+      "event": "diversity",
+      "generation": 0,
+      "genotypic_diversity": 1.0,
+      "phenotypic_diversity": 1.0,
+      "distinct_costs": 71
+    },
+    {
+      "schema_version": 1,
+      "event": "diversity",
+      "generation": 1,
+      "genotypic_diversity": 0.9893617021276596,
+      "phenotypic_diversity": 1.0,
+      "distinct_costs": 62
+    },
+    {
+      "schema_version": 1,
+      "event": "diversity",
+      "generation": 2,
+      "genotypic_diversity": 0.9787234042553191,
+      "phenotypic_diversity": 1.0,
+      "distinct_costs": 57
+    },
+    {
+      "schema_version": 1,
+      "event": "diversity",
+      "generation": 3,
+      "genotypic_diversity": 1.0,
+      "phenotypic_diversity": 1.0,
+      "distinct_costs": 61
+    },
+    {
+      "schema_version": 1,
+      "event": "diversity",
+      "generation": 4,
+      "genotypic_diversity": 1.0,
+      "phenotypic_diversity": 1.0,
+      "distinct_costs": 58
+    },
+    {
+      "schema_version": 1,
+      "event": "diversity",
+      "generation": 5,
+      "genotypic_diversity": 1.0,
+      "phenotypic_diversity": 1.0,
+      "distinct_costs": 66
+    },
+    {
+      "schema_version": 1,
+      "event": "diversity",
+      "generation": 6,
+      "genotypic_diversity": 1.0,
+      "phenotypic_diversity": 1.0,
+      "distinct_costs": 56
+    },
+    {
+      "schema_version": 1,
+      "event": "diversity",
+      "generation": 7,
+      "genotypic_diversity": 0.9893617021276596,
+      "phenotypic_diversity": 1.0,
+      "distinct_costs": 65
+    },
+    {
+      "schema_version": 1,
+      "event": "diversity",
+      "generation": 8,
+      "genotypic_diversity": 0.9893617021276596,
+      "phenotypic_diversity": 1.0,
+      "distinct_costs": 57
+    },
+    {
+      "schema_version": 1,
+      "event": "diversity",
+      "generation": 9,
+      "genotypic_diversity": 1.0,
+      "phenotypic_diversity": 1.0,
+      "distinct_costs": 69
+    },
+    {
+      "schema_version": 1,
+      "event": "diversity",
+      "generation": 10,
+      "genotypic_diversity": 1.0,
+      "phenotypic_diversity": 1.0,
+      "distinct_costs": 60
+    }
+  ]
+}

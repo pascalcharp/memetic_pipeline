@@ -1,0 +1,12 @@
+{
+  "description": "Série de tests de Xavier avec la population d isolée: Population: 34;",
+  "instance": "bench_5",
+  "settings": {
+    "population_size": 34,
+    "crossover_count": 10,
+    "mutation_count": 10,
+    "generations": 10,
+    "master_seed": 97,
+    "stagnation_generations": 1
+  }
+}
