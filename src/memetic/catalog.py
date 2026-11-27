@@ -24,6 +24,8 @@ from src.ga.operators import (
     BlockBoundaryMutation,
     Crossover,
     Mutation,
+    RandomGenomeCrossover,
+    RandomGenomeMutation,
     ShiftStartMutation,
     UniformGeneCrossover,
 )
@@ -44,6 +46,8 @@ class StrategyNames:
 
     # Croisements
     UNIFORM_GENE: str = "uniform_gene"
+    # Témoin de l'étape 10d, même nom pour le croisement et pour la mutation : des génomes tirés au hasard
+    RANDOM_GENOME: str = "random_genome"
     # Mutations
     SHIFT_START: str = "shift_start"
     BLOCK_BOUNDARY: str = "block_boundary"
@@ -135,6 +139,10 @@ def uniform_gene_crossover(context: BuildContext) -> UniformGeneCrossover:
     return UniformGeneCrossover()
 
 
+def random_genome_crossover(context: BuildContext) -> RandomGenomeCrossover:
+    return RandomGenomeCrossover(context.instance)
+
+
 def shift_start_mutation(context: BuildContext) -> ShiftStartMutation:
     return ShiftStartMutation(context.instance)
 
@@ -147,13 +155,19 @@ def activity_mutation(context: BuildContext) -> ActivityMutation:
     return ActivityMutation(context.instance)
 
 
+def random_genome_mutation(context: BuildContext) -> RandomGenomeMutation:
+    return RandomGenomeMutation(context.instance)
+
+
 CROSSOVER_FACTORIES: dict[str, Callable[..., Crossover]] = {
     StrategyNames.UNIFORM_GENE: uniform_gene_crossover,
+    StrategyNames.RANDOM_GENOME: random_genome_crossover,
 }
 MUTATION_FACTORIES: dict[str, Callable[..., Mutation]] = {
     StrategyNames.SHIFT_START: shift_start_mutation,
     StrategyNames.BLOCK_BOUNDARY: block_boundary_mutation,
     StrategyNames.ACTIVITY: activity_mutation,
+    StrategyNames.RANDOM_GENOME: random_genome_mutation,
 }
 
 

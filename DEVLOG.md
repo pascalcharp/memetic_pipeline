@@ -1078,4 +1078,64 @@ Aucun changement de comportement. Suite complète verte.
 
 **Vérification de bout en bout.** On a refait `bench2_pop18_s00` (config de Mély) avant et après le changement, sur la même machine. Les fichiers de résultats sont identiques, hors durées, état Git et `solve_time_seconds`. Le temps réel passe de 249 s à 173 s (−30 %).
 
+**Suite.** Les autres rôles (sélecteurs, survivants, restart, convergence, voisinage) suivront le même patron : un nom dans `StrategyRoles`, un dictionnaire de fabriques, un champ dans `StrategyChoices`.
+
+## 2026-11-25 — Étape 10d : plan du témoin « individus aléatoires + LocalSolver » (Pascal et Claude)
+
+**Question (Pascal).** L'algorithme fait-il mieux qu'une marche aléatoire ? On se concentre sur bench_2, et le témoin doit soumettre au solveur autant d'individus qu'une exécution du mémétique.
+
+**Décision.** Le premier témoin garde la boucle mémétique entière et remplace seulement le croisement et la mutation par des stratégies qui rendent des génomes aléatoires (`random_genome`, choisies par la clé `strategies` de 10c). Le budget est le même par construction (2 × NR + NM appels par génération), et la comparaison isole l'apport des opérateurs. Plan au TODO (10d).
+
+**Précisions.**
+- Ce témoin est un échantillonnage aléatoire, pas une marche aléatoire au sens strict : les nouveaux individus ne dépendent pas de la population. Le témoin fort, une recherche locale itérée (1+1) sur un seul individu, est planifié en 10e.
+- Bench_2 étant saturé (38 dans 21 cas sur 21 pour le mémétique), on comparera le meilleur coût en fonction des appels cumulés et le nombre d'appels avant l'optimum, pas seulement le coût final.
+- Voisinage 1 : à partir de V3, le solveur trouve l'optimum seul dès la génération 0 et les opérateurs ne jouent plus de rôle.
+- `PlusSurvivorSelector` garde le parent en cas d'égalité (tri stable) ; pour 10e, il faudra une sélection qui accepte l'enfant à coût égal.
+
+**Coordination.** Mély a une branche en cours (`etape-10-validation-strategies` : ratios NR/NM, opérateurs de mutation, recherche locale initiale), sans recouvrement avec ce témoin.
+
+## 2026-11-25 — Étape 10d : scaffold et tests des opérateurs témoins (Claude, pour Pascal)
+
+**Scaffold.** `RandomGenomeCrossover` et `RandomGenomeMutation` dans `src/ga/operators.py` : constructeur (`instance`), `encoding_type` (`BlockEncoding`), `parent_count` (2, comme `UniformGeneCrossover`) et le contrat dans la docstring ; `recombine` et `mutate` lèvent `NotImplementedError` (Pascal). `OperatorDefaults.RANDOM_CROSSOVER_CHILD_COUNT` (2). Au catalogue, le nom `random_genome` pour les deux rôles et deux fabriques qui passent l'instance du contexte. `docs/AVAILABLE_STRATEGIES.md` à jour.
+
+**Contrat retenu.** Les génomes suivent exactement la loi de l'initialisation : avec un `rng` dans le même état, le croisement rend deux tirages successifs de `RandomBlockInitializer.random_genome`, la mutation un tirage, et aucun des deux ne consomme autre chose dans `rng`. La recherche locale qui suit dans la même tâche voit donc un état du générateur bien défini. Le croisement vérifie le nombre de parents, sans lire leurs gènes ; la mutation accepte un génome vide.
+
+**Tests** (écrits par Claude, validés contre une implantation jetable hors du dépôt, injectée en mémoire) :
+- `tests/test_operators.py`, `TestRandomGenomeOperators`, 15 tests : compatibilité d'encodage, nombre de parents et d'enfants, égalité avec les tirages de l'initialiseur, état du `rng` après l'appel, entrées ignorées (parents différents ou génome vide : même résultat ; des parents dont la lecture d'un gène échoue), mauvais nombre de parents (message avec l'opérateur et les nombres), reproductibilité, tirages différents selon la graine, faisabilité structurelle de 200 tirages sur bench_2 et bench_5.
+- `tests/test_catalog.py` : les deux noms ajoutés aux classes attendues, et un test qui vérifie que l'instance du contexte est transmise.
+- `tests/test_integration.py`, `TestRandomGenomeWitnessOnBench1`, 5 tests avec MiniZinc (environ 30 s) : exécution complète sur bench_1 avec les deux stratégies, même nombre de recherches locales par génération que le mémétique (2 × NR et NM), individus structurellement faisables, reproductibilité.
+
+**Import.** `operators.py` importe maintenant `RandomBlockInitializer` (`src/ga/initialization.py`) ; pas de cycle, puisque `initialization` n'importe pas `operators`.
 **Constat annexe : la reproductibilité dépend de la machine.** La même exécution faite sur le Mac de Pascal (Python 3.14.0, MiniZinc 2.10.0) diffère de celle de Mély (Python 3.13.18) sur les seuls compteurs de CP-SAT (8700 contre 8784 échecs, 6 640 268 contre 6 596 583 propagations). La trajectoire est identique : coûts par génération, faisabilité, diversité, restarts, meilleure solution. Les versions de MiniZinc et de CP-SAT ne sont pas consignées dans les fichiers de résultats, si bien qu'on ne peut pas dire d'où vient l'écart. À ajouter (TODO 12-0), avant les campagnes sur le serveur de Xavier.
+
+## 2026-11-26 — Étape 10d : témoin « redémarrages aléatoires » et temps déterministe cumulé (Pascal et Claude)
+
+**Question.** Le mémétique bat-il le hasard (objectif 1 de l'étape 10) ? Décision de Pascal : deux témoins, du plus simple au plus sévère ; d'abord les redémarrages aléatoires, puis la marche aléatoire. Pascal demande aussi le temps déterministe dans les métriques cumulées, en plus des échecs et des propagations.
+
+**Temps déterministe.** fzn-cp-sat ne le rapporte pas dans ses statistiques MiniZinc (`%%%mzn-stat`), seulement dans son journal (`-v`) : une ligne `%% deterministic_time: 0.253438`. Avec `--verbose-solving`, MiniZinc transmet `-v` au solveur seul. Dans le flux JSON, cette ligne arrive comme un objet `comment`, que minizinc-python ignore. `CommentCapturingInstance` (sous-classe de `minizinc.Instance`) garde ces commentaires en redéfinissant `_parse_stream_obj`, une méthode interne de minizinc-python 0.10 : si elle change, les tests du temps déterministe échouent. `CpSatAdapter.deterministic_time_of` lit la dernière valeur (regex ancrée en début de ligne, pour ne pas lire le paramètre `max_deterministic_time`). Nouveau champ `SolverStatistics.deterministic_time`, sommé par `SolverEffortCollector` (`deterministic_time`), rapporté dans les résultats et dans EXPLOG.md. Vérifié par un test : sans le journal, la recherche est identique (mêmes échecs, propagations et solution) ; le journal ne sert qu'à lire la mesure. Coût : environ 290 lignes de journal par appel, négligeable.
+
+**Témoin 1.** Plutôt qu'une boucle à part, le témoin passe par le moteur : `RandomGenomeCrossover` et `RandomGenomeMutation` (`src/ga/baselines.py`, nom `random_genome` au catalogue de 10c) ignorent leurs entrées et rendent des génomes aléatoires neufs, tirés par `RandomBlockInitializer` sans LocalSolver. Moteur, LocalSolver, sélection, restarts, mesure et journal sont ceux du mémétique, avec le même budget d'appels (2·NR + NM par génération) : seule la variation change. Une seule clé de configuration suffit (`"strategies": {"crossover": "random_genome", "mutation": "random_genome"}`).
+
+**Expérience.** bench_2, 21 graines, 80 générations, réglages par défaut : `bench2_memetique_ref` contre `bench2_temoin_redemarrages` (commit `c760577`, copie de travail propre, 6 exécutions en parallèle). Mémétique : 21/21 succès (médiane 8 générations) ; témoin : 1/21 (meilleur coût final médian 42). Temps déterministe cumulé : 1,07 contre 3,82 (×3,6) ; propagations : 4,1 M contre 14,3 M. Cause : 60 à 70 % des enfants du mémétique sont faisables avant la recherche locale ; un génome aléatoire presque jamais, et le LocalSolver (voisinage 1) n'en répare que 1 %. Le mémétique relancé redonne exactement `bench2_seuil` (21/21). Rapport : `experiments/analysis/bench2_temoin_redemarrages.md` ; synthèse dans EXPLOG.md.
+
+**Limite relevée.** Le fichier de résultats ne garde que l'effort cumulé de l'exécution, pas l'effort par génération : on ne peut pas lire l'effort au moment du succès. À ajouter pour les courbes « meilleur coût en fonction de l'effort » (TODO, étape 10).
+
+## 2026-11-26 — Étape 10d : fusion avec le plan et le scaffold du 25 novembre (Pascal et Claude)
+
+**Blocage.** La branche `etape-10d-temoin-aleatoire` existait déjà sur GitHub (plan et scaffold du 25 novembre, commits `9998822` et `ddc8dfd`), mais Claude était reparti de `main` sans la voir : même témoin, fait deux fois. Le push a été refusé (non fast-forward). Leçon : vérifier les branches distantes (`git ls-remote --heads origin`) avant de créer une branche.
+
+**Réconciliation (décision de Pascal).**
+- Fusion (pas de rebase) pour garder `c760577`, le commit cité par les résultats de la première série.
+- On garde l'emplacement et l'API du scaffold : `RandomGenomeCrossover` et `RandomGenomeMutation` dans `src/ga/operators.py`, construits avec `instance`, et ses 21 tests. Le catalogue et ses tests sont pris de la branche distante. `src/ga/baselines.py` et `tests/test_baselines.py`, doublons, sont supprimés.
+- `recombine` et `mutate` écrits par Claude, par composition avec `RandomBlockInitializer.random_genome`. C'est le même contrat que la première implémentation : la série `bench2_temoin_redemarrages` reste valide. Vérifié en relançant les graines 0 et 9 hors dépôt : statistiques par génération et effort cumulé identiques.
+- On garde le temps déterministe et la première série. La série prévue par le plan (population 18, 26 générations, contre `bench2_population`) et le témoin fort de 10e (recherche locale itérée, acceptation « pas pire ») restent à faire.
+
+**Validation.** 640 tests, verts en local et dans Docker (`OK (skipped=6)`).
+
+## 2026-11-26 — Étape 10d : série prévue au plan (population 18) et effort par génération (Pascal et Claude)
+
+**Mesure ajoutée.** Le fichier de résultats garde maintenant l'effort du solveur de chaque génération (`solver_effort_by_generation` : appels, échecs, propagations, temps déterministe ; génération 0 et restarts compris). `SolverEffortCollector` l'émettait déjà ; `run_experiment` ne gardait que le cumul. Test : la somme par génération redonne l'effort cumulé.
+
+**Expérience** (plan du 25 novembre). bench_2, réglages de Mély (population 18, 26 générations, NR = NM = 6, voisinage 1), 21 graines : `bench2_temoin_aleatoire` contre `bench2_memetique_pop18` (le mémétique de `bench2_pop18` relancé pour le temps déterministe et l'effort par génération). Commit `9535bc7`, copie de travail propre. Mémétique 21/21 succès, 72 appels avant 38 en médiane ; témoin 1/21. Wilcoxon apparié sur l'effort avant 38 (appels, propagations, temps déterministe ; exécutions censurées au-delà du budget) : le témoin dépense plus dans les 21 paires, p = 9,5 × 10⁻⁷. Rapport : `experiments/analysis/bench2_temoin_aleatoire.md` ; script : `experiments/analysis/analyze_random_witness.py`, qui calcule le test de Wilcoxon exact en Python pur (ni scipy ni matplotlib dans l'environnement).
+
+**Incident évité.** Le script d'analyse a été écrit dans `experiments/analysis/` pendant la série : un fichier non suivi rend la copie de travail « modifiée » pour les exécutions qui démarrent. Il a été déplacé hors du dépôt quelques secondes plus tard. Les 42 résultats ont `git_dirty = false` : aucune exécution n'a démarré dans l'intervalle. Règle : ne rien écrire dans le dépôt tant qu'une série tourne.

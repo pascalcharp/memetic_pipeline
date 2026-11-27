@@ -142,14 +142,15 @@ En cas d'erreur (configuration refusée, fichier de résultats déjà présent),
   - la provenance : `started_at`, `duration_seconds`, `git_commit`, `git_dirty`, versions de Python et des paquets ;
   - `best` : le coût décomposé (`cost`, dont `total` et `is_feasible`) et l'horaire (`schedule`) du meilleur individu ;
   - `generations` et `restarts` ;
-  - `solver_effort` : l'effort cumulé du solveur (D10 : appels, échecs, propagations, temps de résolution), initialisation et restarts compris ;
+  - `solver_effort` : l'effort cumulé du solveur (D10 : appels, échecs, propagations, temps déterministe, temps de résolution), initialisation et restarts compris ;
+  - `solver_effort_by_generation` : le même effort, génération par génération (la génération 0 et les restarts compris) ; la somme redonne `solver_effort`, et le cumul donne l'effort au moment où un coût est atteint ;
   - `feasibility_rates` : taux de faisabilité cumulés avant et après la recherche locale, par origine (initialisation, croisement, mutation, restart) et par opérateur ;
   - `cost_statistics` et `diversity` : une entrée par génération.
 - **Une entrée dans `EXPLOG.md`** : description, chemins de la configuration et des résultats, coût obtenu, effort cumulé du solveur, durée, commit et état de la copie de travail.
 
 **5. Commiter les résultats et le journal** avec un message qui dit ce que l'expérience montre. Les résultats sont versionnés : c'est ce qui permet de citer une expérience dans le rapport.
 
-**Reproductibilité** : même configuration et même commit ⇒ même résultat, car CP-SAT tourne en monothread sous limite déterministe. Le temps de résolution (`solve_time`) varie d'une machine à l'autre ; pour comparer l'effort, utiliser les appels et les propagations.
+**Reproductibilité** : même configuration et même commit ⇒ même résultat, car CP-SAT tourne en monothread sous limite déterministe. Le temps de résolution (`solve_time`) varie d'une machine à l'autre ; pour comparer l'effort, utiliser les appels, les propagations ou le temps déterministe (`deterministic_time`, dans les unités de la limite de CP-SAT).
 
 **Depuis Docker.** Monter le dépôt pour que les résultats et le journal arrivent sur la machine hôte :
 
@@ -576,7 +577,7 @@ class TunedCpSatAdapter(CpSatAdapter):
 
 adapter = TunedCpSatAdapter({"linearization_level": 2}, SolverOptions(limit=DeterministicTimeLimit(2.0), seed=3))
 adapter.solver_arguments()
-# {'processes': 1, 'fzn-flags': '--params random_seed:3,max_deterministic_time:2.0,linearization_level:2'}
+# {'processes': 1, 'verbose-solving': True, 'fzn-flags': '--params random_seed:3,max_deterministic_time:2.0,linearization_level:2'}
 ```
 
 Puis brancher `adapter` dans un `MiniZincLocalSolver`, comme à la section 10.

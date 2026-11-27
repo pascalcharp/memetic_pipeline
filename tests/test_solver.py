@@ -55,6 +55,7 @@ TINY_DETERMINISTIC_UNITS: float = 0.5
 # Valeurs arbitraires, distinctes des valeurs par défaut, pour vérifier la traduction des options.
 SOME_SEED: int = 7
 SOME_UNITS: float = 2.5
+SOME_DETERMINISTIC_TIME: float = 0.25
 SOME_SECONDS: float = 3.0
 SOME_THREADS: int = 4
 SOME_WEIGHT: int = 123
@@ -164,6 +165,12 @@ class TestCpSatAdapterConfiguration(unittest.TestCase):
         self.assertNotIn(CpSatFlags.MAX_DETERMINISTIC_TIME, flags)
         self.assertIn("{name}:{value}".format(name=CpSatFlags.RANDOM_SEED, value=SOME_SEED), flags)
 
+    def test_solver_log_is_requested_for_the_deterministic_time(self) -> None:
+        # Étape 10d : le temps déterministe consommé n'est rapporté que dans le journal du solveur (-v).
+        for limit in (DeterministicTimeLimit(SOME_UNITS), WallTimeLimit(SOME_SECONDS)):
+            with self.subTest(limit=type(limit).__name__):
+                self.assertIs(cp_sat(limit).solver_arguments()[CpSatFlags.VERBOSE_SOLVING_OPTION], True)
+
     def test_unsupported_limit_is_rejected_at_construction(self) -> None:
         with self.assertRaises(UnsupportedLimitError) as context:
             CpSatAdapter(SolverOptions(limit=FakeLimit()))
@@ -229,6 +236,29 @@ class TestStatisticsTranslation(unittest.TestCase):
         expected = SolverStatistics(nodes=3, failures=5, propagations=8, solve_time=timedelta(seconds=1))
         self.assertEqual(SolverAdapter._statistics_of(raw), expected)
 
+    def test_deterministic_time_is_passed_through(self) -> None:
+        statistics = SolverAdapter._statistics_of({}, deterministic_time=SOME_DETERMINISTIC_TIME)
+        self.assertEqual(statistics, SolverStatistics(deterministic_time=SOME_DETERMINISTIC_TIME))
+
+
+class TestDeterministicTimeParsing(unittest.TestCase):
+    """Étape 10d : lecture du temps déterministe dans les commentaires du journal de CP-SAT."""
+
+    def test_reported_line_is_parsed(self) -> None:
+        comments = ["%% Parameters: max_deterministic_time: 5\n", "%% deterministic_time: 0.253438\n", "%% gap: 0\n"]
+        self.assertAlmostEqual(CpSatAdapter.deterministic_time_of(comments), 0.253438)
+
+    def test_scientific_notation_is_parsed(self) -> None:
+        self.assertAlmostEqual(CpSatAdapter.deterministic_time_of(["%% deterministic_time: 1.5e-05\n"]), 1.5e-05)
+
+    def test_last_reported_value_wins(self) -> None:
+        comments = ["%% deterministic_time: 0.1\n", "%% deterministic_time: 0.3\n"]
+        self.assertAlmostEqual(CpSatAdapter.deterministic_time_of(comments), 0.3)
+
+    def test_missing_or_parameter_only_is_none(self) -> None:
+        self.assertIsNone(CpSatAdapter.deterministic_time_of([]))
+        self.assertIsNone(CpSatAdapter.deterministic_time_of(["%% Parameters: max_deterministic_time: 5\n"]))
+
 
 class TestCpSatSolve(unittest.TestCase):
     """Résolutions réelles avec CP-SAT."""
@@ -262,6 +292,30 @@ class TestCpSatSolve(unittest.TestCase):
         self.assertEqual(first.variables, second.variables)
         self.assertEqual(first.statistics.failures, second.statistics.failures)
         self.assertEqual(first.statistics.propagations, second.statistics.propagations)
+
+    def test_deterministic_time_is_reported_within_the_limit_and_reproducible(self) -> None:
+        deterministic_time = self.optimum_run.statistics.deterministic_time
+        self.assertIsInstance(deterministic_time, float)
+        self.assertGreater(deterministic_time, 0.0)
+        self.assertLessEqual(deterministic_time, GENEROUS_DETERMINISTIC_UNITS)
+        again = cp_sat(DeterministicTimeLimit(GENEROUS_DETERMINISTIC_UNITS)).solve(self.bench_1)
+        self.assertEqual(again.statistics.deterministic_time, deterministic_time)
+
+    def test_solver_log_does_not_change_the_search(self) -> None:
+        # Le journal (-v) ne sert qu'à lire le temps déterministe : sans lui, la recherche est la même.
+        class QuietCpSatAdapter(CpSatAdapter):
+            def solver_arguments(self):
+                arguments = super().solver_arguments()
+                del arguments[CpSatFlags.VERBOSE_SOLVING_OPTION]
+                return arguments
+
+        limit = DeterministicTimeLimit(GENEROUS_DETERMINISTIC_UNITS)
+        quiet = QuietCpSatAdapter(SolverOptions(limit=limit)).solve(self.bench_1)
+        self.assertEqual(quiet.objective, self.optimum_run.objective)
+        self.assertEqual(quiet.variables, self.optimum_run.variables)
+        self.assertEqual(quiet.statistics.failures, self.optimum_run.statistics.failures)
+        self.assertEqual(quiet.statistics.propagations, self.optimum_run.statistics.propagations)
+        self.assertIsNone(quiet.statistics.deterministic_time)
 
     def test_wall_time_limit(self) -> None:
         run = cp_sat(WallTimeLimit(GENEROUS_WALL_SECONDS)).solve(self.bench_1)

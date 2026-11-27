@@ -31,6 +31,8 @@ from src.ga.operators import (
     Mutation,
     OperatorDefaults,
     ParentLengthMismatchError,
+    RandomGenomeCrossover,
+    RandomGenomeMutation,
     ShiftStartMutation,
     UniformGeneCrossover,
     VariationOperator,
@@ -616,6 +618,143 @@ class TestOperatorErrorMessages(unittest.TestCase):
         self.assertIn(str(transfer), message)
         self.assertIn(str(ShiftStructure.MIN_ACTIVITY_DURATION), message)
 
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Opérateurs témoins (étape 10d) : RandomGenomeCrossover et RandomGenomeMutation
+# ---------------------------------------------------------------------------------------------------------------------
+
+RANDOM_GENOME_SEED: int = 23
+RANDOM_GENOME_DRAW_COUNT: int = 200
+RANDOM_GENOME_BENCH_FILES: tuple[str, ...] = ("bench_2.json", "bench_5.json")
+RANDOM_GENOME_REFERENCE_BENCH: str = "bench_2.json"
+# Assez de graines pour qu'au moins deux tirages diffèrent, sur une instance où les génomes possibles se comptent
+# par milliards.
+RANDOM_GENOME_DISTINCT_SEEDS: tuple[int, ...] = tuple(range(10))
+
+
+def bench_instance(file_name: str) -> ProblemInstance:
+    return load_instance(ProjectPaths.DATA_DIR / file_name)
+
+
+class TestRandomGenomeOperators(unittest.TestCase):
+    """Contrat des opérateurs témoins : la loi de l'initialisation, des entrées jamais lues, aucun autre tirage.
+
+    La référence est ``RandomBlockInitializer.random_genome`` : avec un ``rng`` dans le même état, l'opérateur doit
+    rendre les mêmes génomes, et laisser ``rng`` dans le même état.
+    """
+
+    def setUp(self) -> None:
+        self.instance = bench_instance(RANDOM_GENOME_REFERENCE_BENCH)
+        self.reference = RandomBlockInitializer(self.instance, BlockEncoding())
+        self.crossover = RandomGenomeCrossover(self.instance)
+        self.mutation = RandomGenomeMutation(self.instance)
+        sampler = Random(RANDOM_GENOME_SEED)
+        self.parents = (self.reference.random_genome(sampler), self.reference.random_genome(sampler))
+        self.other_parents = (self.reference.random_genome(sampler), self.reference.random_genome(sampler))
+
+    # --- Interface ---------------------------------------------------------------------------------------------------
+
+    def test_givenRandomOperators_whenCheckingEncoding_thenCompatibleWithBlockEncodingOnly(self) -> None:
+        for operator in (self.crossover, self.mutation):
+            with self.subTest(operator=type(operator).__name__):
+                self.assertTrue(operator.is_compatible_with(BlockEncoding()))
+                self.assertFalse(operator.is_compatible_with(OtherEncoding()))
+
+    def test_givenRandomCrossover_whenAskingParentCount_thenSameAsUniformGeneCrossover(self) -> None:
+        self.assertEqual(self.crossover.parent_count(), UniformGeneCrossover().parent_count())
+
+    # --- Croisement --------------------------------------------------------------------------------------------------
+
+    def test_givenSeed_whenRandomRecombine_thenTwoSuccessiveInitializerDraws(self) -> None:
+        reference_rng = Random(RANDOM_GENOME_SEED)
+        expected = (self.reference.random_genome(reference_rng), self.reference.random_genome(reference_rng))
+        children = self.crossover.recombine(self.parents, Random(RANDOM_GENOME_SEED))
+        self.assertEqual(len(children), OperatorDefaults.RANDOM_CROSSOVER_CHILD_COUNT)
+        self.assertEqual(children, expected)
+
+    def test_givenRandomRecombine_whenFinished_thenRngStateAsAfterTwoInitializerDraws(self) -> None:
+        reference_rng = Random(RANDOM_GENOME_SEED)
+        self.reference.random_genome(reference_rng)
+        self.reference.random_genome(reference_rng)
+        rng = Random(RANDOM_GENOME_SEED)
+        self.crossover.recombine(self.parents, rng)
+        self.assertEqual(rng.getstate(), reference_rng.getstate())
+
+    def test_givenDifferentParents_whenRandomRecombineWithSameSeed_thenSameChildren(self) -> None:
+        first = self.crossover.recombine(self.parents, Random(RANDOM_GENOME_SEED))
+        second = self.crossover.recombine(self.other_parents, Random(RANDOM_GENOME_SEED))
+        self.assertEqual(first, second)
+
+    def test_givenParentsWhoseGenesMustNotBeRead_whenRandomRecombine_thenGenesAreNotAccessed(self) -> None:
+        # Des « parents » qui échouent dès qu'on lit un gène : seul leur nombre peut être consulté.
+        unreadable = mock.MagicMock()
+        unreadable.__getitem__.side_effect = AssertionError
+        unreadable.__iter__.side_effect = AssertionError
+        self.crossover.recombine([unreadable, unreadable], Random(RANDOM_GENOME_SEED))
+
+    def test_givenWrongParentCount_whenRandomRecombine_thenRaisesNamingOperatorAndCounts(self) -> None:
+        for parents in ((self.parents[0],), self.parents + (self.parents[0],)):
+            with self.subTest(parent_count=len(parents)):
+                with self.assertRaises(WrongParentCountError) as context:
+                    self.crossover.recombine(parents, Random(RANDOM_GENOME_SEED))
+                message = str(context.exception)
+                self.assertIn(RandomGenomeCrossover.__name__, message)
+                self.assertIn(str(OperatorDefaults.CROSSOVER_PARENT_COUNT), message)
+                self.assertIn(str(len(parents)), message)
+
+    def test_givenSameSeed_whenRandomRecombineTwice_thenSameChildren(self) -> None:
+        first = self.crossover.recombine(self.parents, Random(RANDOM_GENOME_SEED))
+        second = self.crossover.recombine(self.parents, Random(RANDOM_GENOME_SEED))
+        self.assertEqual(first, second)
+
+    def test_givenSeveralSeeds_whenRandomRecombine_thenChildrenDiffer(self) -> None:
+        children = {self.crossover.recombine(self.parents, Random(seed)) for seed in RANDOM_GENOME_DISTINCT_SEEDS}
+        self.assertGreater(len(children), 1)
+
+    # --- Mutation ----------------------------------------------------------------------------------------------------
+
+    def test_givenSeed_whenRandomMutate_thenInitializerDraw(self) -> None:
+        expected = self.reference.random_genome(Random(RANDOM_GENOME_SEED))
+        self.assertEqual(self.mutation.mutate(self.parents[0], Random(RANDOM_GENOME_SEED)), expected)
+
+    def test_givenRandomMutate_whenFinished_thenRngStateAsAfterOneInitializerDraw(self) -> None:
+        reference_rng = Random(RANDOM_GENOME_SEED)
+        self.reference.random_genome(reference_rng)
+        rng = Random(RANDOM_GENOME_SEED)
+        self.mutation.mutate(self.parents[0], rng)
+        self.assertEqual(rng.getstate(), reference_rng.getstate())
+
+    def test_givenDifferentGenomes_whenRandomMutateWithSameSeed_thenSameResult(self) -> None:
+        first = self.mutation.mutate(self.parents[0], Random(RANDOM_GENOME_SEED))
+        second = self.mutation.mutate(self.other_parents[1], Random(RANDOM_GENOME_SEED))
+        self.assertEqual(first, second)
+
+    def test_givenEmptyGenome_whenRandomMutate_thenRandomGenomeWithoutError(self) -> None:
+        expected = self.reference.random_genome(Random(RANDOM_GENOME_SEED))
+        self.assertEqual(self.mutation.mutate((), Random(RANDOM_GENOME_SEED)), expected)
+
+    def test_givenSeveralSeeds_whenRandomMutate_thenResultsDiffer(self) -> None:
+        results = {self.mutation.mutate(self.parents[0], Random(seed)) for seed in RANDOM_GENOME_DISTINCT_SEEDS}
+        self.assertGreater(len(results), 1)
+
+    # --- Faisabilité structurelle, sur plusieurs instances ------------------------------------------------------------
+
+    def test_givenManyDraws_whenRandomOperators_thenEveryGenomeIsStructurallyFeasibleForTheInstance(self) -> None:
+        encoding = BlockEncoding()
+        for file_name in RANDOM_GENOME_BENCH_FILES:
+            instance = bench_instance(file_name)
+            checker = FeasibilityChecker(instance)
+            crossover = RandomGenomeCrossover(instance)
+            mutation = RandomGenomeMutation(instance)
+            rng = Random(RANDOM_GENOME_SEED)
+            parents = (reference_genome(instance.employee_count), reference_genome(instance.employee_count))
+            for draw in range(RANDOM_GENOME_DRAW_COUNT):
+                genomes = crossover.recombine(parents, rng) + (mutation.mutate(parents[0], rng),)
+                for genome in genomes:
+                    with self.subTest(instance=file_name, draw=draw):
+                        self.assertEqual(len(genome), instance.employee_count)
+                        self.assertTrue(checker.is_feasible(encoding.decode(genome)))
 
 if __name__ == "__main__":
     unittest.main()

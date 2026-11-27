@@ -107,6 +107,7 @@ class SolverEffortFields:
     FAILURES: str = "failures"
     PROPAGATIONS: str = "propagations"
     SOLVE_TIME_SECONDS: str = "solve_time_seconds"
+    DETERMINISTIC_TIME: str = "deterministic_time"
 
 
 class CollectorMessages:
@@ -382,6 +383,7 @@ class _SolverEffortCounts:
     failures: int | None = None
     propagations: int | None = None
     solve_time_seconds: float | None = None
+    deterministic_time: float | None = None
 
     def add(self, statistics: SolverStatistics) -> None:
         """Additionne les statistiques rapportées par un appel."""
@@ -404,6 +406,9 @@ class _SolverEffortCounts:
                 (self.solve_time_seconds or 0.0) + seconds
             )
 
+        if statistics.deterministic_time is not None:
+            self.deterministic_time = (self.deterministic_time or 0.0) + statistics.deterministic_time
+
 
 class SolverEffortCollector(MetricCollector):
     """Charge du solveur (D10), à partir de ``LocalSearchDone.result.statistics``.
@@ -417,8 +422,9 @@ class SolverEffortCollector(MetricCollector):
     Champs (``RecordFields``, ``SolverEffortFields``) : ``generation``, ``scope``, ``calls`` ; ``nodes``,
     ``failures``, ``propagations`` : somme des valeurs rapportées (une statistique ``None`` n'est pas comptée ;
     ``None`` si aucun appel de la portée ne l'a rapportée) ; ``solve_time_seconds`` : somme des ``solve_time`` en
-    secondes (``float``), même règle pour ``None``. ``solve_time`` n'est pas déterministe (D8) ; les trois autres
-    le sont sous limite déterministe."""
+    secondes (``float``), même règle pour ``None`` ; ``deterministic_time`` : somme des temps déterministes consommés
+    (étape 10d, unités de ``DeterministicTimeLimit``), même règle. ``solve_time`` n'est pas déterministe (D8) ; les
+    autres le sont sous limite déterministe."""
 
     def __init__(self) -> None:
         self._generation_stats: _SolverEffortCounts = _SolverEffortCounts()
@@ -440,6 +446,7 @@ class SolverEffortCollector(MetricCollector):
                 SolverEffortFields.FAILURES: statistics.failures,
                 SolverEffortFields.PROPAGATIONS: statistics.propagations,
                 SolverEffortFields.SOLVE_TIME_SECONDS: statistics.solve_time_seconds,
+                SolverEffortFields.DETERMINISTIC_TIME: statistics.deterministic_time,
             },
         )
 
