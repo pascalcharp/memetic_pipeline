@@ -11654,3 +11654,73 @@ Série de tests de Xavier avec le crossover d isolée: Crossover: 1;
 - **Coût obtenu : 94** (faisable) ; 10 générations, 4 restart(s)
 - **Effort cumulé du solveur** : 616 appels ; failures 3735 ; propagations 6133114 ; nodes non rapporté ; temps de résolution 4.8 s (non déterministe)
 - Durée de l'exécution : 108.7 s ; commit `25afb1e0e5c36224c4d3bcd2d80ca8de996ddaa3` — **copie de travail modifiée : ce résultat ne peut pas être reproduit à partir de ce seul commit**
+
+## 2026-11-26 21:26 — bench3_cpsat_reference_s00
+
+Témoin CP-SAT seul sur bench_3 (optimum 16) : instance complète, modèle de référence horaire.mzn (couverture dure), 1 thread, limite déterministe 5400 (environ 3600 s de temps de résolution, l'effort moyen de la configuration « qualité » de Mély), graine 0. Toutes les solutions intermédiaires sont gardées, pour comparer le meilleur coût à effort égal avec le mémétique.
+
+- Configuration : `experiments/config/bench3_cpsat_alone/bench3_cpsat_reference_s00.json`
+- Résultats : `experiments/results/2026-11-26/bench3_cpsat_reference_s00_212630.json`
+- Témoin CP-SAT seul : instance bench_3 ; modèle `reference` ; graine 0 ; 1 thread ; limite déterministe 5400.0
+- **Meilleur coût : 4000020** (non prouvé) ; 243 solutions intermédiaires
+- **Effort du solveur** : propagations 887150364 ; failures 391069 ; temps de résolution 4608.5 s (non déterministe)
+- Durée de l'exécution : 3273.9 s ; commit `918ce81902ff27f3c55f5e5c6c13b0648704e60d`
+
+## 2026-11-26 21:26 — bench3_cpsat_reference_s01
+
+Témoin CP-SAT seul sur bench_3 (optimum 16) : instance complète, modèle de référence horaire.mzn (couverture dure), 1 thread, limite déterministe 5400 (environ 3600 s de temps de résolution, l'effort moyen de la configuration « qualité » de Mély), graine 1. Toutes les solutions intermédiaires sont gardées, pour comparer le meilleur coût à effort égal avec le mémétique.
+
+- Configuration : `experiments/config/bench3_cpsat_alone/bench3_cpsat_reference_s01.json`
+- Résultats : `experiments/results/2026-11-26/bench3_cpsat_reference_s01_212630.json`
+- Témoin CP-SAT seul : instance bench_3 ; modèle `reference` ; graine 1 ; 1 thread ; limite déterministe 5400.0
+- **Meilleur coût : 2000030** (non prouvé) ; 310 solutions intermédiaires
+- **Effort du solveur** : propagations 1369974363 ; failures 990333 ; temps de résolution 5196.4 s (non déterministe)
+- Durée de l'exécution : 3861.7 s ; commit `918ce81902ff27f3c55f5e5c6c13b0648704e60d`
+
+## 2026-11-26 21:26 — bench3_cpsat_reference_s02
+
+Témoin CP-SAT seul sur bench_3 (optimum 16) : instance complète, modèle de référence horaire.mzn (couverture dure), 1 thread, limite déterministe 5400 (environ 3600 s de temps de résolution, l'effort moyen de la configuration « qualité » de Mély), graine 2. Toutes les solutions intermédiaires sont gardées, pour comparer le meilleur coût à effort égal avec le mémétique.
+
+- Configuration : `experiments/config/bench3_cpsat_alone/bench3_cpsat_reference_s02.json`
+- Résultats : `experiments/results/2026-11-26/bench3_cpsat_reference_s02_212630.json`
+- Témoin CP-SAT seul : instance bench_3 ; modèle `reference` ; graine 2 ; 1 thread ; limite déterministe 5400.0
+- **Meilleur coût : 6000020** (non prouvé) ; 264 solutions intermédiaires
+- **Effort du solveur** : propagations 1095825596 ; failures 612013 ; temps de résolution 4988.1 s (non déterministe)
+- Durée de l'exécution : 3653.5 s ; commit `918ce81902ff27f3c55f5e5c6c13b0648704e60d`
+
+## 2026-11-26 21:26 — bench3_cpsat_relaxed_s00
+
+Témoin CP-SAT seul sur bench_3 (optimum 16) : instance complète, modèle assoupli horaire_assoupli.mzn (celui des sous-problèmes du mémétique), 1 thread, limite déterministe 5400 (environ 3600 s de temps de résolution, l'effort moyen de la configuration « qualité » de Mély), graine 0. Toutes les solutions intermédiaires sont gardées, pour comparer le meilleur coût à effort égal avec le mémétique.
+
+- Configuration : `experiments/config/bench3_cpsat_alone/bench3_cpsat_relaxed_s00.json`
+- Résultats : `experiments/results/2026-11-26/bench3_cpsat_relaxed_s00_212630.json`
+- Témoin CP-SAT seul : instance bench_3 ; modèle `relaxed` ; graine 0 ; 1 thread ; limite déterministe 5400.0
+- **Meilleur coût : 3000030** (non prouvé) ; 1368 solutions intermédiaires
+- **Effort du solveur** : propagations 1930904795 ; failures 228115 ; temps de résolution 4304.1 s (non déterministe)
+- Durée de l'exécution : 2969.5 s ; commit `918ce81902ff27f3c55f5e5c6c13b0648704e60d`
+
+## 2026-11-26 22:38 — bench3_cpsat_relaxed_s01
+
+Témoin CP-SAT seul sur bench_3 (optimum 16) : instance complète, modèle assoupli horaire_assoupli.mzn (celui des sous-problèmes du mémétique), 1 thread, limite déterministe 5400 (environ 3600 s de temps de résolution, l'effort moyen de la configuration « qualité » de Mély), graine 1. Toutes les solutions intermédiaires sont gardées, pour comparer le meilleur coût à effort égal avec le mémétique.
+
+- Configuration : `experiments/config/bench3_cpsat_alone/bench3_cpsat_relaxed_s01.json`
+- Résultats : `experiments/results/2026-11-26/bench3_cpsat_relaxed_s01_223815.json`
+- Témoin CP-SAT seul : instance bench_3 ; modèle `relaxed` ; graine 1 ; 1 thread ; limite déterministe 5400.0
+- **Meilleur coût : 14000000** (non prouvé) ; 1067 solutions intermédiaires
+- **Effort du solveur** : propagations 2102976192 ; failures 720655 ; temps de résolution 3731.7 s (non déterministe)
+- Durée de l'exécution : 3732.0 s ; commit `cd8d8437cd89bd5e4cdb1f2a662db362e21f6eae`
+
+## 2026-11-26 22:43 — bench3_cpsat_relaxed_s02
+
+Témoin CP-SAT seul sur bench_3 (optimum 16) : instance complète, modèle assoupli horaire_assoupli.mzn (celui des sous-problèmes du mémétique), 1 thread, limite déterministe 5400 (environ 3600 s de temps de résolution, l'effort moyen de la configuration « qualité » de Mély), graine 2. Toutes les solutions intermédiaires sont gardées, pour comparer le meilleur coût à effort égal avec le mémétique.
+
+- Configuration : `experiments/config/bench3_cpsat_alone/bench3_cpsat_relaxed_s02.json`
+- Résultats : `experiments/results/2026-11-26/bench3_cpsat_relaxed_s02_224319.json`
+- Témoin CP-SAT seul : instance bench_3 ; modèle `relaxed` ; graine 2 ; 1 thread ; limite déterministe 5400.0
+- **Meilleur coût : 4000030** (non prouvé) ; 2480 solutions intermédiaires
+- **Effort du solveur** : propagations 2825305386 ; failures 172900 ; temps de résolution 2541.3 s (non déterministe)
+- Durée de l'exécution : 2541.6 s ; commit `cd8d8437cd89bd5e4cdb1f2a662db362e21f6eae`
+
+## 2026-11-27 — Synthèse : témoin CP-SAT seul sur bench_3 (étape 10g)
+
+Six résolutions de l'instance complète par CP-SAT seul, 1 thread, 5400 unités déterministes (modèles de référence et assoupli, graines 0 à 2). **Aucune ne trouve de solution sans violation quasi stricte** : meilleurs coûts de 2 000 030 à 14 000 000 après 887 à 2 825 M de propagations. Avec 280 M de propagations, l'effort médian de la configuration économique de Mély (coût médian 38, 21/21 sans violation), CP-SAT seul en est à 6 à 9 × 10⁶ (modèle de référence). CP-SAT seul n'atteint jamais le coût médian d'une configuration du mémétique qui réussit. Conclusion : face à CP-SAT seul monothread, le mémétique réduit très fortement l'effort sur bench_3 (objectif 2 de l'étape 10). Le `solveTime` rapporté dépasse la durée réelle des runs (par exemple 4608 s pour 3274 s) : seules les propagations servent à la comparaison. Rapport : `experiments/analysis/bench3_cpsat_alone.md`.
