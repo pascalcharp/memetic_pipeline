@@ -42,7 +42,7 @@ class OperatorDefaults:
     RANDOM_CROSSOVER_CHILD_COUNT: int = 2
 
     # BlockBoundaryMutation : nombre de périodes déplacées d'un bloc à l'autre, tiré dans cet intervalle (bornes
-    # incluses). Une petite amplitude garde la mutation locale (voir TODO.md, 7b, pour une amplitude calculée).
+    # incluses). Une petite amplitude garde la mutation locale (voir docs/archive/TODO.md, 7b, pour une amplitude calculée).
     MIN_BOUNDARY_TRANSFER: int = 1
     MAX_BOUNDARY_TRANSFER: int = 3
 
@@ -291,7 +291,7 @@ class BlockBoundaryMutation(Mutation[BlockGenome]):
 
         Politique actuelle : bornes fixes, ``OperatorDefaults.MIN_BOUNDARY_TRANSFER`` et
         ``OperatorDefaults.MAX_BOUNDARY_TRANSFER``, quel que soit le génome. Le paramètre ``genome`` prépare une
-        politique calculée à partir des durées des blocs (voir TODO.md, 7b).
+        politique calculée à partir des durées des blocs (voir docs/archive/TODO.md, 7b).
         """
         return OperatorDefaults.MIN_BOUNDARY_TRANSFER, OperatorDefaults.MAX_BOUNDARY_TRANSFER
 

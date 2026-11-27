@@ -1,5 +1,7 @@
 # TODO — Proof of concept : algorithme mémétique pour l'horaire
 
+> **Archivé le 2026-11-27.** Ce plan a servi à concevoir et programmer le cœur (étapes 1 à 12-0) ; il garde les décisions de conception D1 à D14. Le travail en cours est dans [`TASKS.md`](../../TASKS.md). Les liens relatifs ci-dessous datent d'avant l'archivage.
+
 Légende :
 - `[ ]` à faire · `[~]` en cours · `[x]` validé (tests verts)
 - **(C)** Claude écrit · **(P)** le membre responsable écrit, Claude vérifie · **(C→P)** Claude scaffolde (signatures, docstrings, tests), le membre responsable implémente
@@ -300,6 +302,7 @@ Croisement arithmétique : pour chaque employé, l'enfant reçoit `d·p1 + (1−
 ## Étape 10 — Driver et expériences (`experiments/`) **(C)**
 Organisation (Pascal, 2026-11-23) : `src/` est le cœur ; `experiments/` contient ce qui sert à l'exploiter : scripts de pilotage (`experiments/drivers/`), scripts d'analyse (`experiments/analysis/`), configurations, résultats et journal.
 Objectifs (Pascal, 2026-11-21) : montrer, sur au moins quelques instances, que le mémétique (1) bat une marche aléatoire, et (2) réduit la charge du solveur par rapport à CP-SAT seul, en monothread et sous limite déterministe.
+Les sous-étapes sont rangées par lettre. **L'ordre d'exécution** (décision de Pascal, 2026-11-27) est différent : 10h et 10j, puis 10k, puis 10i. Les sous-étapes 10e (déjà exécutée) et 10f (sa suite) sont sur la branche `etape-10e-temoin-fort`, dont la PR n'est pas encore ouverte. Leurs sections ci-dessous seront remplacées à la fusion de cette branche.
 
 ### 10a — Script `run_experiment` **(C)** — Pascal et Claude, branche `etape-10a-run-experiment`
 Conventions (Pascal, 2026-11-22) : configurations dans `experiments/config/`, résultats dans `experiments/results/<AAAA-MM-JJ>/` (un répertoire par jour, versionné dans Git), journal des expériences `experiments/EXPLOG.md`.
@@ -343,34 +346,6 @@ But (Pascal, 2026-11-23) : choisir les stratégies dans le fichier de configurat
 - [x] Documentation : HOWTO (section 1 : clé `strategies` et noms permis), AVAILABLE_STRATEGIES (nom de chaque stratégie), PROJECT_STRUCT, CLAUDE.md
   - validé le 2026-11-23 : 606 tests (36 nouveaux : 5 dans `test_registry`, 20 dans `test_catalog`, 2 dans `TestAssembly`, 9 dans `test_run_experiment`), suite complète verte en local et dans Docker (`OK (skipped=6)`)
 
-### 10g — Témoin « CP-SAT seul » sur bench_3, à effort égal **(C)** — Pascal et Claude, branche `etape-10g-cpsat-seul`
-Question de Pascal (2026-11-26) : avec les configurations retenues par Mély, le mémétique réduit-il l'effort du solveur par rapport à CP-SAT seul sur bench_3 ? Le chiffre du TP (16 prouvé en 1,9 s) vient de CP-SAT **8 threads** : il n'est pas comparable aux sous-problèmes monothread du mémétique. Il faut un témoin dans les mêmes conditions.
-- [x] Driver `experiments/drivers/run_cpsat_alone.py` : instance complète, 1 thread, limite déterministe, graine ; garde **toutes** les solutions intermédiaires avec l'effort au moment de chacune (`minizinc -i -s`), écrit un fichier de résultats et une entrée d'EXPLOG.md
-- [x] Configurations `experiments/config/bench3_cpsat_alone/` : modèle de référence (couverture dure) et modèle assoupli, graines 0 à 2, 5400 unités déterministes (environ 3600 s, l'effort moyen de la configuration « qualité » de Mély)
-- [x] Tests : configuration (nominal, clés absentes ou inconnues, types, modèle, instance, limite), lecture de la sortie (solutions, preuve, aucune solution), ligne de commande, document et journal, résolution réelle de bench_1 (94 prouvé)
-- [x] Analyse `experiments/analysis/analyze_bench3_cpsat_alone.py` : pour chaque configuration du mémétique de Mély, meilleur coût de CP-SAT seul au même effort (propagations, puis temps de résolution), et effort de CP-SAT pour atteindre le coût médian du mémétique ; tests sur des données construites
-- [x] Exécution des 6 résolutions, rapport `experiments/analysis/bench3_cpsat_alone.md`, EXPLOG.md, DEVLOG
-  - fait le 2026-11-27 : aucune résolution de CP-SAT seul ne trouve de solution sans violation quasi stricte (887 à 2 825 M de propagations) ; au même effort que la configuration économique (280 M, coût médian 38), CP-SAT seul est à 6 à 9 × 10⁶. Objectif 2 atteint sur bench_3
-
-### 10h — Protocole de Mély sur bench_4 et bench_5 **(C)** — **priorité**, Pascal et Claude (décision de Pascal, 2026-11-26 : Mély prend une pause, on termine son protocole)
-Référence : `experiments/analysis/synthese_bench2_bench3.md` (sections 15 et 17). Coût à prévoir : une exécution de bench_3 avec voisinage 1 prend environ 400 s de temps réel (médiane), et le protocole complet de Mély compte environ 460 exécutions par instance. bench_4 (8 × 4 × 44) et bench_5 (8 × 5 × 48) sont plus gros : le protocole complet coûterait plusieurs centaines d'heures de calcul. On le **réduit** aux facteurs qui ont changé d'une instance à l'autre, et on ne refait les autres que si les résultats contredisent bench_2 et bench_3.
-- [ ] **Lanceur de séries** (`experiments/drivers/`) : exécuter un répertoire de configurations en parallèle (nombre de processus en paramètre, 4 par défaut : un par cœur performant, pour ne pas fausser `solveTime`), une entrée d'EXPLOG.md par exécution sans écritures concurrentes, reprise possible (sauter les configurations qui ont déjà un résultat) ; générateur des configurations d'une série (instance × réglage × graines). Tests
-- [ ] **Calibration** : la configuration économique, graine 0, sur bench_4 et bench_5 (temps réel, `solveTime`, propagations, coût) ; le témoin CP-SAT seul (10g, 1 thread, deux modèles, 3 graines) sur les deux instances. Estimer le coût de chaque série et fixer le nombre de graines (21 si c'est abordable, sinon 11, noté dans EXPLOG.md)
-- [ ] **Configurations recommandées**, sur les deux instances : économique (pop 18, 26 gén., NR/NM 3/12, voisinage 1, budget 5, stagnation 10, `shift_start`, RL initiale) ; qualité (NR/NM 6/6, voisinage 2, budget 10) ; et la candidate jamais testée (NR/NM 3/12, voisinage 2, budget 10, section 17)
-- [ ] **Facteurs dépendants de l'instance** (section 15) : voisinage {1, 2} × budget {5, 10} ; recherche locale initiale {vraie, fausse} avec la configuration économique
-- [ ] **Facteurs stables sur bench_2 et bench_3** (ratio NR/NM, stagnation, mutation, population) : non refaits, sauf contradiction ci-dessus
-- [ ] **Comparaison avec CP-SAT seul à effort égal** : généraliser `analyze_bench3_cpsat_alone.py` à toute instance (instance et optimum en paramètres)
-- [ ] Rapports `experiments/analysis/bench4_*.md`, `bench5_*.md`, synthèse mise à jour (bench_2 à bench_5) ; EXPLOG.md, DEVLOG
-
-### 10i — Explorer d'autres croisements **(C)** — proposition de Pascal, 2026-11-26, après 10h
-Intuition de Pascal : c'est le croisement qui reste à exploiter pour tirer plus de l'algorithme. Cadre : la thèse de 10f (le croisement est un compromis entre la **distance** aux parents et la **réparabilité**). Un seul croisement existe (`uniform_gene`), et il ignore la permutation des employés (limite D3). Chaque nouveau croisement entre au catalogue (10c) et se compare à `uniform_gene` sur bench_2 et bench_3 avec la configuration économique (21 graines), en coût, effort cumulé, et distance et réparabilité des enfants.
-- [ ] **Mesure d'abord** : distance des enfants à leurs parents et faisabilité avant et après la recherche locale, par opérateur (la deuxième expérience de 10f) ; c'est le critère qui permet de comparer les croisements autrement que par le coût final
-- [ ] **Croisement avec alignement des employés** (D3) : apparier les employés des deux parents (affectation de coût minimal sur la distance des grilles employé × période) avant l'échange uniforme ; les enfants restent plus près de leurs deux parents. Le croisement le plus simple qui corrige un défaut connu
-- [ ] **Croisement temporel** : pour chaque employé, une coupe dans le temps (le début du quart vient d'un parent, la fin de l'autre), réparée par la recherche locale ; plus fin que l'échange de gènes entiers
-- [ ] **Croisement glouton guidé par la couverture** : parmi les 2E gènes des deux parents (les employés sont interchangeables), choisir E gènes un à un en minimisant le coût de couverture ; exploite la structure du problème
-- [ ] **Recombinaison optimale par CP** : fixer ce que les parents (alignés) ont en commun et laisser CP-SAT choisir le reste parmi les valeurs des parents. Fusionne le croisement et la recherche locale : comparer à effort cumulé égal, pas par appel
-- [ ] **Croisement par interpolation** (7c, déjà dans 10f) : bouton de réglage de la distance
-- [ ] Ordre proposé : alignement, puis glouton, puis temporel ; la recombinaison par CP en dernier (la plus coûteuse à écrire). Chaque croisement : tests, catalogue, AVAILABLE_STRATEGIES.md, série, rapport
 ### 10d — Témoin « individus aléatoires + `LocalSolver` » sur bench_2 **(C→P)** — proposition de Pascal, 2026-11-25 ; branche `etape-10d-temoin-aleatoire`
 Répond au premier témoin de la « Première expérience, avant la campagne » ci-dessus : **les opérateurs font-ils mieux que des individus tirés au hasard ?** On garde la boucle mémétique telle quelle (population, sélection des parents et des survivants, restarts, `LocalSolver`, graines) et on remplace seulement le croisement et la mutation par des stratégies qui ignorent leurs entrées et rendent des génomes aléatoires. Un seul ingrédient change, et le budget est le même par construction : chaque génération soumet 2 × NR + NM individus au solveur.
 
@@ -410,6 +385,58 @@ Bench_2 est saturé : le mémétique atteint 38 dans 21 cas sur 21. La comparais
 - [ ] Population 1, NR = 0, NM = 1 (accepté par `MemeticDefaults`), `shift_start`, sans restart (seuil de stagnation plus grand que le budget), budget de 520 appels (1 + 519 générations)
 - [ ] Sélection des survivants qui accepte l'enfant **à coût égal** : `PlusSurvivorSelector` trie de façon stable et garde le parent en cas d'égalité, ce qui bloquerait la recherche sur les plateaux à 39 et 40 observés sur bench_2. Nouveau rôle au catalogue (sélection des survivants) ou nouvelle stratégie, à décider
 - [ ] Même analyse qu'en 10d
+
+### 10g — Témoin « CP-SAT seul » sur bench_3, à effort égal **(C)** — Pascal et Claude, branche `etape-10g-cpsat-seul`
+Question de Pascal (2026-11-26) : avec les configurations retenues par Mély, le mémétique réduit-il l'effort du solveur par rapport à CP-SAT seul sur bench_3 ? Le chiffre du TP (16 prouvé en 1,9 s) vient de CP-SAT **8 threads** : il n'est pas comparable aux sous-problèmes monothread du mémétique. Il faut un témoin dans les mêmes conditions.
+- [x] Driver `experiments/drivers/run_cpsat_alone.py` : instance complète, 1 thread, limite déterministe, graine ; garde **toutes** les solutions intermédiaires avec l'effort au moment de chacune (`minizinc -i -s`), écrit un fichier de résultats et une entrée d'EXPLOG.md
+- [x] Configurations `experiments/config/bench3_cpsat_alone/` : modèle de référence (couverture dure) et modèle assoupli, graines 0 à 2, 5400 unités déterministes (environ 3600 s, l'effort moyen de la configuration « qualité » de Mély)
+- [x] Tests : configuration (nominal, clés absentes ou inconnues, types, modèle, instance, limite), lecture de la sortie (solutions, preuve, aucune solution), ligne de commande, document et journal, résolution réelle de bench_1 (94 prouvé)
+- [x] Analyse `experiments/analysis/analyze_bench3_cpsat_alone.py` : pour chaque configuration du mémétique de Mély, meilleur coût de CP-SAT seul au même effort (propagations, puis temps de résolution), et effort de CP-SAT pour atteindre le coût médian du mémétique ; tests sur des données construites
+- [x] Exécution des 6 résolutions, rapport `experiments/analysis/bench3_cpsat_alone.md`, EXPLOG.md, DEVLOG
+  - fait le 2026-11-27 : aucune résolution de CP-SAT seul ne trouve de solution sans violation quasi stricte (887 à 2 825 M de propagations) ; au même effort que la configuration économique (280 M, coût médian 38), CP-SAT seul est à 6 à 9 × 10⁶. Objectif 2 atteint sur bench_3
+
+### 10h — Protocole de Mély sur bench_4 et bench_5 **(C)** — **priorité**, Pascal et Claude (décision de Pascal, 2026-11-26 : Mély prend une pause, on termine son protocole)
+Référence : `experiments/analysis/synthese_bench2_bench3.md` (sections 15 et 17). Coût à prévoir : une exécution de bench_3 avec voisinage 1 prend environ 400 s de temps réel (médiane), et le protocole complet de Mély compte environ 460 exécutions par instance. bench_4 (8 × 4 × 44) et bench_5 (8 × 5 × 48) sont plus gros : le protocole complet coûterait plusieurs centaines d'heures de calcul. On le **réduit** aux facteurs qui ont changé d'une instance à l'autre, et on ne refait les autres que si les résultats contredisent bench_2 et bench_3.
+- [ ] **Lanceur de séries** (`experiments/drivers/`) : exécuter un répertoire de configurations en parallèle (nombre de processus en paramètre, 4 par défaut : un par cœur performant, pour ne pas fausser `solveTime`), une entrée d'EXPLOG.md par exécution sans écritures concurrentes, reprise possible (sauter les configurations qui ont déjà un résultat) ; générateur des configurations d'une série (instance × réglage × graines). Tests
+- [ ] **Calibration** : la configuration économique, graine 0, sur bench_4 et bench_5 (temps réel, `solveTime`, propagations, coût) ; le témoin CP-SAT seul (10g, 1 thread, deux modèles, 3 graines) sur les deux instances. Estimer le coût de chaque série et fixer le nombre de graines (21 si c'est abordable, sinon 11, noté dans EXPLOG.md)
+- [ ] **Configurations recommandées**, sur les deux instances : économique (pop 18, 26 gén., NR/NM 3/12, voisinage 1, budget 5, stagnation 10, `shift_start`, RL initiale) ; qualité (NR/NM 6/6, voisinage 2, budget 10) ; et la candidate jamais testée (NR/NM 3/12, voisinage 2, budget 10, section 17)
+- [ ] **Facteurs dépendants de l'instance** (section 15) : voisinage {1, 2} × budget {5, 10} ; recherche locale initiale {vraie, fausse} avec la configuration économique
+- [ ] **Facteurs stables sur bench_2 et bench_3** (ratio NR/NM, stagnation, mutation, population) : non refaits, sauf contradiction ci-dessus
+- [ ] **Comparaison avec CP-SAT seul à effort égal** : généraliser `analyze_bench3_cpsat_alone.py` à toute instance (instance et optimum en paramètres) ; fait une seule fois, avec 10j. Comparer aux deux témoins : 1 thread (10g) et portefeuille (10j)
+- [ ] Rapports `experiments/analysis/bench4_*.md`, `bench5_*.md`, synthèse mise à jour (bench_2 à bench_5) ; EXPLOG.md, DEVLOG
+
+### 10i — Explorer d'autres croisements **(C)** — proposition de Pascal, 2026-11-26, après 10h, 10j et 10k
+Intuition de Pascal : c'est le croisement qui reste à exploiter pour tirer plus de l'algorithme. Cadre : la thèse de 10f (le croisement est un compromis entre la **distance** aux parents et la **réparabilité**). Un seul croisement existe (`uniform_gene`), et il ignore la permutation des employés (limite D3). Chaque nouveau croisement entre au catalogue (10c) et se compare à `uniform_gene` sur bench_2 et bench_3 avec la configuration économique (21 graines), en coût, effort cumulé, et distance et réparabilité des enfants.
+- [ ] **Mesure d'abord** : distance des enfants à leurs parents et faisabilité avant et après la recherche locale, par opérateur (la deuxième expérience de 10f) ; c'est le critère qui permet de comparer les croisements autrement que par le coût final
+- [ ] **Croisement avec alignement des employés** (D3) : apparier les employés des deux parents (affectation de coût minimal sur la distance des grilles employé × période) avant l'échange uniforme ; les enfants restent plus près de leurs deux parents. Le croisement le plus simple qui corrige un défaut connu
+- [ ] **Croisement temporel** : pour chaque employé, une coupe dans le temps (le début du quart vient d'un parent, la fin de l'autre), réparée par la recherche locale ; plus fin que l'échange de gènes entiers
+- [ ] **Croisement glouton guidé par la couverture** : parmi les 2E gènes des deux parents (les employés sont interchangeables), choisir E gènes un à un en minimisant le coût de couverture ; exploite la structure du problème
+- [ ] **Recombinaison optimale par CP** : fixer ce que les parents (alignés) ont en commun et laisser CP-SAT choisir le reste parmi les valeurs des parents. Fusionne le croisement et la recherche locale : comparer à effort cumulé égal, pas par appel
+- [ ] **Croisement par interpolation** (7c, déjà dans 10f) : bouton de réglage de la distance
+- [ ] Ordre proposé : alignement, puis glouton, puis temporel ; la recombinaison par CP en dernier (la plus coûteuse à écrire). Chaque croisement : tests, catalogue, AVAILABLE_STRATEGIES.md, série, rapport
+
+### 10j — Témoin fort : CP-SAT avec son portefeuille **(C)** — décision de Pascal, 2026-11-27 ; en parallèle de 10h (il en partage la calibration)
+Constat du 2026-11-27 : le témoin de 10g (CP-SAT 1 thread) est faible, parce qu'il est privé du portefeuille, dont la recherche à grand voisinage. Un essai unique de CP-SAT 8 threads sur bench_3 (modèle de référence) trouve 17 vers 4 s de temps écoulé, 16 vers 31 s et la preuve vers 68 s, pour 318 s de CPU en tout (environ 4,7 cœurs en moyenne). La configuration économique du mémétique dépense environ 140 s de `solveTime` et finit à 38 (médiane). Il faut mesurer la vraie barre avant de juger une amélioration.
+- [ ] Driver `run_cpsat_alone.py` : clé facultative `threads` (1 par défaut) ; effort mesuré en **temps CPU total** du processus enfant (`resource.getrusage(RUSAGE_CHILDREN)`, utilisateur + système), à côté des propagations et du `solveTime`. Vérifier d'abord si les propagations rapportées couvrent tous les workers ou un seul. Tests
+- [ ] Vérifier s'il existe un portefeuille vraiment monothread et déterministe par MiniZinc. `interleave_search:true` a encore utilisé environ 4 cœurs : `num_workers:8` l'emporte sur `-p 1`. Si on en trouve un, l'ajouter comme troisième témoin
+- [ ] Configurations : bench_2 et bench_3, modèle de référence, 8 threads, 5 répétitions (le portefeuille n'est pas déterministe), limite en temps assez large pour la preuve ; bench_4 et bench_5 avec 10h
+- [ ] Analyse : comparer au mémétique à effort CPU égal. L'effort du mémétique est le `solveTime` cumulé de sous-problèmes monothread, donc environ son temps CPU de solveur ; le temps hors solveur (lancement, compilation) est exclu des deux côtés. Généraliser `analyze_bench3_cpsat_alone.py` (instance, optimum et témoin en paramètres), ce qui sert aussi à 10h
+- [ ] Rapport `experiments/analysis/temoin_portefeuille.md`, EXPLOG.md, DEVLOG
+
+### 10k — Recherche locale renforcée sur bench_3 **(C)** — décision de Pascal, 2026-11-27 ; après 10j, avant 10i
+Constats : la recherche locale est le facteur le plus fort des séries de Mély (passer du voisinage 1 au voisinage 2 fait baisser le coût de 41 à 23 ; les voisinages 3 et 4 s'effondrent, parce que CP-SAT monothread ne résout plus les sous-problèmes dans le budget). Les exécutions sont **tronquées** : la dernière amélioration arrive en médiane aux générations 21 à 24 sur 26.
+
+Protocole : on part de la configuration économique, avec 21 graines. On teste **un levier à la fois**, et on le compare à la base par un test de Wilcoxon apparié sur les graines (coût final, effort pour atteindre un coût). On situe ensuite le résultat par rapport à la barre de 10j. Chaque levier comprend ses tests, son entrée au catalogue s'il est configurable (10c), sa série et son rapport.
+- [ ] **Base prolongée** : la configuration économique avec 80 générations, et l'effort par génération enregistré. Ça donne la courbe coût / effort au-delà de 26 générations et tranche la question de la troncature
+- [ ] **Arrêt à l'effort** : un `TerminationCriterion` sur l'effort cumulé (propagations ou temps déterministe) au lieu de `GenerationLimit` ; budgets exprimés comme ceux des témoins
+- [ ] **Modèle dur sur les individus faisables** : `LocalSolver` choisit le `ModelVariant` de référence quand l'individu n'a aucune violation de couverture. L'individu courant est une solution du sous-problème, qui reste donc satisfiable. Le modèle assoupli ne sert plus qu'à la réparation (enfants infaisables). Mesurer la part des appels sur des individus faisables
+- [ ] **Voisinages structurés** (nouveau rôle `neighborhood` au catalogue, `RandomEmployeesNeighborhood` comme base) :
+  - fenêtre temporelle : libérer tous les employés sur une plage de périodes ;
+  - guidé par la couverture : libérer les employés présents sur les périodes les plus mal couvertes ;
+  - taille adaptative : augmenter k en cas de stagnation, le ramener en cas d'amélioration
+- [ ] **Portefeuille dans les sous-problèmes** (après 10j) : `threads` > 1 dans `SolverAdapter`, effort compté en CPU. Ça rendrait peut-être les voisinages 3 et 4 utilisables. Reproductibilité : à vérifier, sinon le noter dans le rapport
+- [ ] **Petites idées**, si le temps le permet : briser la symétrie entre les employés libérés (ils sont interchangeables) ; partir de la solution courante (`warm_start`, prise en charge par `fzn-cp-sat` à vérifier)
+- [ ] Ordre proposé : base prolongée, puis arrêt à l'effort et modèle dur (peu coûteux), puis voisinages, puis portefeuille. Synthèse `experiments/analysis/bench3_recherche_locale.md` ; ensuite, reprendre la meilleure combinaison sur bench_2 pour vérifier qu'elle ne dégrade rien
 
 ## Étape 11 — Documentation **(C)**
 - [ ] README : construction Docker, lancement des tests, lancement des expériences

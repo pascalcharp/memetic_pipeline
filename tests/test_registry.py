@@ -1,7 +1,7 @@
 """Tests du registre des opérateurs (src/ga/registry.py) — étape 7a, Tristan.
 
 Sur ``main`` : tests de contrat du scaffold seulement (verts). Cas à couvrir sur la branche
-``etape-7a-selection`` (voir TODO.md, 7a), sans MiniZinc :
+``etape-7a-selection`` (voir docs/archive/TODO.md, 7a), sans MiniZinc :
     - ``register`` puis ``create`` : l'opérateur créé est du bon type et reçoit ses paramètres
       (ex. ``TournamentSelector`` avec ``size=3``) ; chaque ``create`` rend une nouvelle instance ;
     - ``names`` : noms triés ; registre vide ;

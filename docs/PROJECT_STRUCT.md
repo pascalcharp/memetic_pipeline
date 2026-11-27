@@ -1,6 +1,6 @@
 # Structure du projet
 
-Arborescence **actuelle** du dépôt : seuls les fichiers qui existent y figurent. Les fichiers prévus mais pas encore créés sont planifiés dans [`TODO.md`](../TODO.md).
+Arborescence **actuelle** du dépôt : seuls les fichiers qui existent y figurent. Les fichiers prévus mais pas encore créés sont planifiés dans [`TASKS.md`](../TASKS.md).
 
 À mettre à jour à chaque ajout, déplacement ou suppression de fichier.
 
@@ -16,6 +16,8 @@ memetic_pipeline/
 │   ├── bench_4.json            # 8 employés × 4 activités × 44 périodes
 │   └── bench_5.json            # 8 employés × 5 activités × 48 périodes (difficile : ~1 min pour une 1re solution)
 ├── docs/                       # Toute la documentation, accessible depuis README.md
+│   ├── archive/
+│   │   └── TODO.md             # Plan de conception du cœur (étapes 1 à 12-0) et décisions D1 à D14, archivé le 2026-11-27
 │   ├── AVAILABLE_STRATEGIES.md # Catalogue des stratégies disponibles par rôle : classes, paramètres, garanties, stratégies prévues
 │   ├── ALGO.md                 # Pseudo-code de l'algorithme mémétique, correspondance avec le code, écarts assumés
 │   ├── HOWTO.md                # Comment faire ? Lancer la boucle, ajouter un opérateur, changer de solveur, etc.
@@ -122,7 +124,7 @@ memetic_pipeline/
 ├── Dockerfile                  # Image Python 3.13 + MiniZinc 2.10 (CP-SAT, Gecode, Chuffed, HiGHS)
 ├── README.md                   # Point d'entrée de la documentation
 ├── TEAM.md                     # Travail en équipe : règles communes et répartition de la semaine
-├── TODO.md                     # Planification des étapes et décisions de conception
+├── TASKS.md                    # Travail en cours, par ordre de priorité
 └── requirements.txt            # Dépendances Python (minizinc, numpy)
 ```
 

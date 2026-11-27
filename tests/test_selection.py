@@ -1,7 +1,7 @@
 """Tests de la sélection (src/ga/selection.py) — étape 7a, Tristan.
 
 Sur ``main`` : tests du scaffold (verts), dont la vérification commune ``check_selectable``. Cas à couvrir sur la
-branche ``etape-7a-selection`` (voir TODO.md, 7a), sans MiniZinc, avec ``evaluated_individual`` (tests/fixtures.py) :
+branche ``etape-7a-selection`` (voir docs/archive/TODO.md, 7a), sans MiniZinc, avec ``evaluated_individual`` (tests/fixtures.py) :
     - ``select(population, count, rng)`` rend exactement ``count`` individus, tous issus de la population ;
     - tournoi : le meilleur gagne un tournoi qui couvre toute la population (taille grande, graine fixée) ;
       sur beaucoup de tirages, un individu meilleur est tiré plus souvent qu'un moins bon ;

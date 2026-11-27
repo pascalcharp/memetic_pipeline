@@ -7,7 +7,7 @@ Usage, depuis la racine du dépôt :
 CP-SAT résout l'instance entière, dans les conditions des sous-problèmes du mémétique : un seul thread, limite
 déterministe (``max_deterministic_time``), graine fixée. On garde **toutes** ses solutions intermédiaires, chacune
 avec l'effort dépensé au moment où elle est trouvée (``solveTime``, propagations, failures), pour tracer le meilleur
-coût en fonction de l'effort cumulé et le comparer à celui du mémétique (TODO, étape 10 : courbes « meilleur coût
+coût en fonction de l'effort cumulé et le comparer à celui du mémétique (docs/archive/TODO.md, étape 10 : courbes « meilleur coût
 en fonction de l'effort cumulé du solveur »).
 
 Format de la configuration (``CpSatAloneKeys``) :

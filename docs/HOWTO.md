@@ -702,7 +702,7 @@ class UniformShiftCrossover(Crossover[DirectGenome]):
     ...
 ```
 
-Un opérateur de `BlockEncoding` branché sur `DirectEncoding` est refusé par `MemeticConfig.validate` (`IncompatibleOperatorError`). Les variantes d'encodage à comparer sont prévues à l'étape 10 du [`TODO.md`](../TODO.md) (`DirectEncoding`, `SortedBlockEncoding`, D1 et D3).
+Un opérateur de `BlockEncoding` branché sur `DirectEncoding` est refusé par `MemeticConfig.validate` (`IncompatibleOperatorError`). Les variantes d'encodage à comparer sont listées dans la section « Plus tard » de [`TASKS.md`](../TASKS.md) (`DirectEncoding`, `SortedBlockEncoding`, D1 et D3).
 
 ---
 

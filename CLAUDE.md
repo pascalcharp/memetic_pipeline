@@ -30,17 +30,17 @@ Memetic(NR, NM):
 ## 🔄 Workflow de Développement & Validation Strict
 L'implémentation de fonctionnalités doit suivre une méthodologie rigoureuse étape par étape.
 0. **Pédagogie :** Le projet est pédagogique. Les méthodes et algos clés sont scaffoldés, mais chaque membre de l'équipe écrit lui-même ceux de sa sous-étape ; Claude vérifie ensuite. Les tests automatisés peuvent être écrits par un agent de codage (depuis le 13 novembre) : c'est plus rapide, et chaque membre se concentre sur l'essentiel. Le membre reste responsable de ses tests : il les relit, et ils sont revus comme le reste de la *pull request*. La provenance des tests est indiquée dans la *pull request* et dans le DEVLOG.
-1. **Planification (TODO.md) :** Avant d'écrire la moindre ligne de code, les étapes du travail doivent être planifiées à l'avance et consignées dans un fichier `TODO.md` à la racine du projet.
+1. **Planification (TASKS.md) :** Avant d'écrire la moindre ligne de code, les étapes du travail doivent être planifiées à l'avance et consignées dans un fichier `TASKS.md` à la racine du projet, rangé par ordre de priorité. Le plan de conception du cœur (étapes 1 à 12-0, décisions D1 à D14) est archivé dans `docs/archive/TODO.md` depuis le 2026-11-27.
 2. **Journal de bord (DEVLOG.md) :** Les étapes du développement, les décisions architecturales prises, les blocages rencontrés et les correctifs appliqués sont consignés au fur et à mesure dans un fichier `DEVLOG.md`.
-3. **Isolation par Étape :** Claude Code doit traiter une seule tâche du `TODO.md` à la fois.
+3. **Isolation par Étape :** Claude Code doit traiter une seule tâche du `TASKS.md` à la fois.
 4. **Automatisation des Tests :** Chaque étape doit obligatoirement inclure l'écriture de tests automatisés. Nous suggérons **unittest**.
 5. **Validation Avant Passage à la Suite :** Il est strictement interdit de passer à l'étape subséquente avant d'avoir testé à fond l'étape courante. Les tests doivent tous passer au vert (`green`) et couvrir les cas nominaux ainsi que les cas aux limites (edge cases).
-6. **Mise à jour du statut :** Le fichier `TODO.md` et le `DEVLOG.md` doivent être mis à jour à la fin de chaque étape validée.
+6. **Mise à jour du statut :** Le fichier `TASKS.md` et le `DEVLOG.md` doivent être mis à jour à la fin de chaque étape validée.
 7. **Travail en équipe :** Depuis le 9 novembre, quatre membres travaillent sur le dépôt. La répartition et les règles communes sont dans [`TEAM.md`](TEAM.md). Les règles 3 et 5 s'appliquent **par personne et par branche** :
     * chacun travaille sur sa branche (`etape-<numéro>-<sujet>`), une sous-étape à la fois ;
     * une branche n'est fusionnée dans `main` (par *pull request*) que lorsque ses tests et la suite complète sont verts ;
     * seules des sous-étapes sans dépendance entre elles avancent en parallèle ; leurs interfaces communes sont scaffoldées d'avance sur `main` et ne changent qu'après concertation ;
-    * DEVLOG.md : entrées ajoutées à la fin, sous un titre `## AAAA-MM-JJ — Étape Xy : sujet (prénom)` ; TODO.md : chacun ne coche que sa sous-étape.
+    * DEVLOG.md : entrées ajoutées à la fin, sous un titre `## AAAA-MM-JJ — Étape Xy : sujet (prénom)` ; TASKS.md : chacun ne coche que sa tâche.
 
 ## 🏗️ Architecture & Stack Technique
 Le projet est entièrement conteneurisé avec Docker.
@@ -100,7 +100,7 @@ memetic_pipeline/
 │   │   └── io.py               # Lecture et validation des instances (ProblemInstance)
 ├── tests/                      # Tests unittest (python -m unittest discover)
 ├── CLAUDE.md                   # Guide de développement
-├── TODO.md                     # Planification des étapes
+├── TASKS.md                    # Travail en cours, par ordre de priorité (l'ancien TODO.md est dans docs/archive/)
 ├── DEVLOG.md                   # Journal de bord
 ├── requirements.txt            # Dépendances Python
 └── README.md                   # Instructions d'exécution

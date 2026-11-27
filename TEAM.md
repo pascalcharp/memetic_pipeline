@@ -41,7 +41,7 @@ Puis ouvrir la *pull request* de `<branche>` vers `main` sur GitHub. La CI relan
 
 ### Journal et planification
 - **DEVLOG.md** : chacun ajoute ses entrées **à la fin du fichier**, sous un titre `## AAAA-MM-JJ — Étape Xy : sujet (prénom)`. On y consigne les décisions, les blocages et les correctifs. On ne modifie jamais l'entrée d'un autre membre.
-- **TODO.md** : chacun coche les cases de **sa** sous-étape seulement (`[~]` en cours, `[x]` validée, tests verts).
+- **TASKS.md** (depuis le 2026-11-27 ; l'ancien TODO.md est dans `docs/archive/`) : chacun coche les cases de **sa** tâche seulement (`[~]` en cours, `[x]` validée, tests verts).
 - **TEAM.md** (ce fichier) porte la répartition de la semaine. Chacun coche sa ligne quand sa branche est fusionnée.
 
 ### Environnement et tests
