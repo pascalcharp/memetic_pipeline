@@ -1151,3 +1151,20 @@ Aucun changement de comportement. Suite complète verte.
 **Expérience** (plan du 25 novembre). bench_2, réglages de Mély (population 18, 26 générations, NR = NM = 6, voisinage 1), 21 graines : `bench2_temoin_aleatoire` contre `bench2_memetique_pop18` (le mémétique de `bench2_pop18` relancé pour le temps déterministe et l'effort par génération). Commit `9535bc7`, copie de travail propre. Mémétique 21/21 succès, 72 appels avant 38 en médiane ; témoin 1/21. Wilcoxon apparié sur l'effort avant 38 (appels, propagations, temps déterministe ; exécutions censurées au-delà du budget) : le témoin dépense plus dans les 21 paires, p = 9,5 × 10⁻⁷. Rapport : `experiments/analysis/bench2_temoin_aleatoire.md` ; script : `experiments/analysis/analyze_random_witness.py`, qui calcule le test de Wilcoxon exact en Python pur (ni scipy ni matplotlib dans l'environnement).
 
 **Incident évité.** Le script d'analyse a été écrit dans `experiments/analysis/` pendant la série : un fichier non suivi rend la copie de travail « modifiée » pour les exécutions qui démarrent. Il a été déplacé hors du dépôt quelques secondes plus tard. Les 42 résultats ont `git_dirty = false` : aucune exécution n'a démarré dans l'intervalle. Règle : ne rien écrire dans le dépôt tant qu'une série tourne.
+
+## 2026-11-27 — Étape 10 : bilan et plan de travail après 10g (Pascal et Claude)
+
+**Bilan de Pascal.** Sur bench_2, le mémétique trouve l'optimum ; il bat nettement le hasard (10d) et CP-SAT seul. Sur bench_3, il ne trouve jamais l'optimum (16). Il bat encore CP-SAT seul à 1 thread (10g), mais ce témoin est faible.
+
+**Constats (Claude).**
+- **Le témoin de 10g est faible.** Un essai unique de CP-SAT 8 threads (portefeuille, modèle de référence) trouve 16 vers 31 s de temps écoulé et le prouve vers 68 s, pour 318 s de CPU en tout. À effort CPU comparable, le mémétique est battu sur bench_3 : la configuration économique dépense environ 140 s de `solveTime` et finit à 38.
+- **La recherche locale est le goulot.** C'est le facteur le plus fort des séries de Mély, et les voisinages 3 et 4 s'effondrent faute de solveur assez fort.
+- **Les exécutions sont tronquées.** La dernière amélioration arrive en médiane aux générations 21 à 24 sur 26.
+- Le mode `interleave_search:true` n'a pas tourné sur un seul thread par MiniZinc : `num_workers:8` l'emporte sur `-p 1`.
+
+**Décision.** Trois étapes, dans cet ordre :
+1. 10j, le témoin portefeuille (la vraie barre), en parallèle de 10h dont il partage la calibration ;
+2. 10k, la recherche locale renforcée sur bench_3, un levier à la fois : base prolongée, arrêt à l'effort, modèle dur sur les individus faisables, voisinages structurés, portefeuille dans les sous-problèmes ;
+3. 10i, les croisements.
+
+Ce sont des intuitions à mesurer. Le récit visé pour le rapport : sur bench_2, le croisement fait la différence ; sur bench_3, la limite devient la recherche locale.
