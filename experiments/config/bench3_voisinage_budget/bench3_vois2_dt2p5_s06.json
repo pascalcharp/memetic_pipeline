@@ -1,0 +1,21 @@
+{
+  "instance": "bench_3",
+  "description": "Interaction voisinage-budget sur bench_3 : voisinage 2, budget deterministe 2.5, population 18, 26 generations, NR=6, NM=6, graine 6.",
+  "settings": {
+    "population_size": 18,
+    "generations": 26,
+    "crossover_count": 6,
+    "mutation_count": 6,
+    "master_seed": 6,
+    "stagnation_generations": 10,
+    "neighborhood_size": 2,
+    "deterministic_time_units": 2.5,
+    "tournament_size": 2,
+    "elite_count": 1,
+    "initial_local_search": true
+  },
+  "strategies": {
+    "crossover": "uniform_gene",
+    "mutation": "shift_start"
+  }
+}
