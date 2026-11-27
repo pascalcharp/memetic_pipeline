@@ -1,0 +1,12 @@
+{
+  "description": "Série de tests de Xavier avec la seed d isolée: Seed: 26;",
+  "instance": "bench_1",
+  "settings": {
+    "population_size": 100,
+    "crossover_count": 10,
+    "mutation_count": 10,
+    "generations": 10,
+    "master_seed": 26,
+    "stagnation_generations": 1
+  }
+}

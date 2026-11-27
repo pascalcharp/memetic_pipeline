@@ -1,0 +1,12 @@
+{
+  "description": "Série de tests de Xavier avec la generation d isolée: Generation: 31;",
+  "instance": "bench_3",
+  "settings": {
+    "population_size": 100,
+    "crossover_count": 10,
+    "mutation_count": 10,
+    "generations": 31,
+    "master_seed": 97,
+    "stagnation_generations": 1
+  }
+}
