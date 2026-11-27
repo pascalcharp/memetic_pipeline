@@ -1,0 +1,17 @@
+{
+  "description": "Témoin « individus aléatoires + LocalSolver » sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; croisement et mutation random_genome ; graine 19. Même budget d'appels que bench2_memetique_pop18.",
+  "instance": "bench_2",
+  "settings": {
+    "population_size": 18,
+    "generations": 26,
+    "crossover_count": 6,
+    "mutation_count": 6,
+    "stagnation_generations": 10,
+    "neighborhood_size": 1,
+    "master_seed": 19
+  },
+  "strategies": {
+    "crossover": "random_genome",
+    "mutation": "random_genome"
+  }
+}

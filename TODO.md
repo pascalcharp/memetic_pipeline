@@ -371,6 +371,45 @@ Intuition de Pascal : c'est le croisement qui reste à exploiter pour tirer plus
 - [ ] **Recombinaison optimale par CP** : fixer ce que les parents (alignés) ont en commun et laisser CP-SAT choisir le reste parmi les valeurs des parents. Fusionne le croisement et la recherche locale : comparer à effort cumulé égal, pas par appel
 - [ ] **Croisement par interpolation** (7c, déjà dans 10f) : bouton de réglage de la distance
 - [ ] Ordre proposé : alignement, puis glouton, puis temporel ; la recombinaison par CP en dernier (la plus coûteuse à écrire). Chaque croisement : tests, catalogue, AVAILABLE_STRATEGIES.md, série, rapport
+### 10d — Témoin « individus aléatoires + `LocalSolver` » sur bench_2 **(C→P)** — proposition de Pascal, 2026-11-25 ; branche `etape-10d-temoin-aleatoire`
+Répond au premier témoin de la « Première expérience, avant la campagne » ci-dessus : **les opérateurs font-ils mieux que des individus tirés au hasard ?** On garde la boucle mémétique telle quelle (population, sélection des parents et des survivants, restarts, `LocalSolver`, graines) et on remplace seulement le croisement et la mutation par des stratégies qui ignorent leurs entrées et rendent des génomes aléatoires. Un seul ingrédient change, et le budget est le même par construction : chaque génération soumet 2 × NR + NM individus au solveur.
+
+Ce témoin est un **échantillonnage aléatoire**, pas une marche aléatoire : les nouveaux individus ne dépendent plus de la population, la sélection ne fait que trier. Le meilleur trouvé est le meilleur de N tirages aléatoires suivis de la recherche locale. Le témoin fort (mutation + `LocalSolver` sur un seul individu, accepté s'il n'est pas pire, soit une recherche locale itérée (1+1)) viendra ensuite, en 10e.
+
+**Réglages** : ceux retenus par Mély (PR #15) : bench_2, population 18, 26 générations, NR = NM = 6, voisinage 1, stagnation 10, élite 1, tournoi 2, temps déterministe 5, recherche locale à l'initialisation, graines 0 à 20. Le voisinage 1 est le réglage où les opérateurs ont un rôle ; à partir de V3, le solveur atteint l'optimum seul dès la génération 0. Les 21 exécutions du mémétique existent déjà (série `bench2_population`, population 18) ; seul le témoin est à exécuter (21 exécutions).
+
+**Prévision** (à confirmer) : avec V1, seulement 0,53 % des individus aléatoires sont faisables après la recherche locale (PR #15), soit environ 3 sur 520 appels : le témoin devrait rarement atteindre 38.
+
+#### Composants (interfaces et tests par Claude ; implémentation par un membre de l'équipe)
+- [x] `RandomGenomeCrossover` (`src/ga/operators.py`) : même `parent_count()` que `UniformGeneCrossover` (2) et deux enfants, pour garder 2 × NR appels par génération ; ignore les parents, tire chaque enfant avec le `rng` de la tâche. Le tirage réutilise celui de l'initialiseur (`RandomBlockInitializer.random_genome`), par composition, pour que les individus aléatoires suivent exactement la même loi qu'à l'initialisation
+- [x] `RandomGenomeMutation` (`src/ga/operators.py`) : ignore le génome reçu, rend un génome aléatoire tiré de la même façon
+- [x] Registre et catalogue : noms stables `random_genome` dans `StrategyNames`, pour le croisement et pour la mutation ; compatibilité avec `BlockEncoding` déclarée ; `docs/AVAILABLE_STRATEGIES.md` à jour
+- [x] **Scaffold** (Claude, 2026-11-25) : les deux classes dans `src/ga/operators.py` (constructeur avec `instance`, `encoding_type`, `parent_count`, contrat dans la docstring ; `recombine` et `mutate` lèvent `NotImplementedError`), `OperatorDefaults.RANDOM_CROSSOVER_CHILD_COUNT`, nom `random_genome` et fabriques au catalogue, `docs/AVAILABLE_STRATEGIES.md`
+- [x] **`recombine` et `mutate`** : écrits par Claude le 2026-11-26 (pédagogie assouplie, accord de Pascal) ; les tests ci-dessous passent
+- [x] Tests écrits (Claude), validés contre une implantation jetable hors du dépôt : `TestRandomGenomeOperators` (15 tests, `tests/test_operators.py`), dans `tests/test_catalog.py`, un test et les deux noms ajoutés aux classes attendues, `TestRandomGenomeWitnessOnBench1` (5 tests, `tests/test_integration.py`, environ 30 s avec MiniZinc). Ils couvrent : les entrées ne sont jamais lues ni modifiées (deux entrées différentes, même `rng` ⇒ mêmes sorties) ; mêmes graines ⇒ mêmes génomes ; génomes valides pour l'encodage (décodables, gènes dans les fenêtres) ; même loi que l'initialiseur (même `rng` ⇒ même génome que `random_genome`) ; nombre d'enfants et `parent_count` ; création par le catalogue ; exécution courte du moteur sur bench_1 avec les deux stratégies
+
+#### Fait le 2026-11-26 (Pascal et Claude)
+- [x] **Temps déterministe cumulé**, en plus des échecs et des propagations (demande de Pascal) : CP-SAT le rapporte seulement dans son journal (`--verbose-solving`) ; `CommentCapturingInstance` garde les commentaires du flux JSON, `CpSatAdapter.deterministic_time_of` les lit ; `SolverStatistics.deterministic_time`, `SolverEffortFields.DETERMINISTIC_TIME`, résultats et EXPLOG.md. Vérifié : le journal ne change pas la recherche (mêmes échecs, propagations et solution)
+- [x] **Première série, réglages par défaut** (population 6, NR = NM = 2, 80 générations, 21 graines) : `experiments/config/bench2_temoin_redemarrages/` contre `experiments/config/bench2_memetique_ref/` (le mémétique relancé pour le temps déterministe ; il redonne exactement `bench2_seuil`). Mémétique 21/21 succès, témoin 1/21 ; temps déterministe cumulé 1,07 contre 3,82. Rapport : `experiments/analysis/bench2_temoin_redemarrages.md`. Faite avec une première implémentation des opérateurs (`src/ga/baselines.py`, commit `c760577`), remplacée à la fusion par celle du scaffold, qui rend les mêmes génomes (même contrat)
+- [x] Garder l'effort du solveur **par génération** dans le fichier de résultats (`solver_effort_by_generation`, 2026-11-26) (rejoint la mesure « appels cumulés par génération » ci-dessus) : nécessaire pour l'effort au moment du succès et pour les courbes en fonction des appels
+
+#### Mesures
+- [x] Vérifier que le fichier de résultats permet de compter les **appels cumulés par génération**, restarts compris (`SolverEffortCollector` émet déjà un enregistrement par génération ; vérifier ce que `run_experiment` en garde, sinon l'écrire). Sans ça, les comparaisons se font au budget nominal, comme dans la PR #15
+- [x] Configurations `experiments/config/bench2_temoin_aleatoire/` (et `experiments/config/bench2_memetique_pop18/`, le mémétique de `bench2_pop18` relancé pour le temps déterministe et l'effort par génération) (21 graines, clé `strategies` : `random_genome` pour les deux rôles), commitées avant le lancement, copie de travail propre
+
+#### Analyse (`experiments/analysis/`)
+Bench_2 est saturé : le mémétique atteint 38 dans 21 cas sur 21. La comparaison du coût final ne suffit donc pas ; on compare à chaque nombre d'appels.
+- [x] Courbe du meilleur coût jusque-là en fonction des appels cumulés (médiane et quartiles sur 21 graines), mémétique contre témoin
+- [x] Nombre d'appels avant d'atteindre 38 (distribution empirique, les exécutions qui n'y arrivent pas sont censurées au budget) ; taux de succès à 100, 200 et 520 appels
+- [x] Première génération faisable, taux de faisabilité après recherche locale par origine, diversité génotypique
+- [x] Test apparié sur les graines (Wilcoxon) pour le nombre d'appels avant 38 ; propagations jusqu'à 38, puisqu'un appel ne coûte pas toujours autant
+- [x] Rapport `experiments/analysis/bench2_temoin_aleatoire.md`, synthèse dans EXPLOG.md, DEVLOG
+  - résultat (2026-11-26) : mémétique 21/21 succès (72 appels avant 38 en médiane), témoin 1/21 ; Wilcoxon apparié p = 9,5 × 10⁻⁷ sur les appels, les propagations et le temps déterministe avant 38. Rapport : `experiments/analysis/bench2_temoin_aleatoire.md`
+
+### 10e — Témoin fort : recherche locale itérée (1+1) **(C→P)** — après 10d
+- [ ] Population 1, NR = 0, NM = 1 (accepté par `MemeticDefaults`), `shift_start`, sans restart (seuil de stagnation plus grand que le budget), budget de 520 appels (1 + 519 générations)
+- [ ] Sélection des survivants qui accepte l'enfant **à coût égal** : `PlusSurvivorSelector` trie de façon stable et garde le parent en cas d'égalité, ce qui bloquerait la recherche sur les plateaux à 39 et 40 observés sur bench_2. Nouveau rôle au catalogue (sélection des survivants) ou nouvelle stratégie, à décider
+- [ ] Même analyse qu'en 10d
 
 ## Étape 11 — Documentation **(C)**
 - [ ] README : construction Docker, lancement des tests, lancement des expériences

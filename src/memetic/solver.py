@@ -16,6 +16,7 @@ Une résolution sans solution (insatisfiable, ou budget épuisé) n'est pas une 
 (``SolveOutcome``). Seules les pannes lèvent une exception.
 """
 
+import re
 from abc import ABC, abstractmethod
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
@@ -86,6 +87,15 @@ class MiniZincStatisticNames:
     SOLVE_TIME: str = "solveTime"
 
 
+class MiniZincStreamTypes:
+    """Types des objets du flux JSON de MiniZinc (``--json-stream``) lus en plus de ceux que minizinc-python traite."""
+
+    TYPE_FIELD: str = "type"
+    # Ligne de commentaire écrite par le solveur (son journal, avec ``--verbose-solving``) ; minizinc-python l'ignore.
+    COMMENT: str = "comment"
+    COMMENT_FIELD: str = "comment"
+
+
 class CpSatFlags:
     """Options de ligne de commande propres à CP-SAT, transmises par minizinc-python.
 
@@ -101,6 +111,15 @@ class CpSatFlags:
     PARAMETER_SEPARATOR: str = ","
     MAX_DETERMINISTIC_TIME: str = "max_deterministic_time"
     RANDOM_SEED: str = "random_seed"
+
+    # Journal du solveur seul (``-v`` transmis à fzn-cp-sat, la compilation reste silencieuse) : c'est le seul endroit
+    # où CP-SAT rapporte le temps déterministe consommé (étape 10d). Il ne change pas la recherche.
+    VERBOSE_SOLVING_OPTION: str = "verbose-solving"
+    # Ligne de fin du journal, par exemple « %% deterministic_time: 0.253438 ». Ancrée en début de ligne, pour ne pas
+    # lire le paramètre « max_deterministic_time » de la ligne « %% Parameters: ... ».
+    DETERMINISTIC_TIME_PATTERN: re.Pattern[str] = re.compile(
+        r"^%%\s*deterministic_time:\s*([0-9.]+(?:[eE][-+]?[0-9]+)?)\s*$", re.MULTILINE
+    )
 
 
 class MiniZincPythonArguments:
@@ -268,13 +287,34 @@ class SolverStatistics:
 
     Chaque champ vaut ``None`` si le solveur ne le rapporte pas (CP-SAT ne rapporte pas ``nodes``).
     ``nodes``, ``failures`` et ``propagations`` sont déterministes sous limite déterministe ;
-    ``solve_time`` ne l'est jamais (D8).
+    ``solve_time`` ne l'est jamais (D8). ``deterministic_time`` (étape 10d) est le temps déterministe consommé, dans
+    les unités de ``DeterministicTimeLimit`` : déterministe, et comparable d'une machine à l'autre. Seul CP-SAT le
+    rapporte, dans son journal.
     """
 
     nodes: int | None = None
     failures: int | None = None
     propagations: int | None = None
     solve_time: timedelta | None = None
+    deterministic_time: float | None = None
+
+
+class CommentCapturingInstance(minizinc.Instance):
+    """``minizinc.Instance`` qui garde les commentaires du flux JSON (le journal du solveur), que minizinc-python
+    ignore, dans ``solver_comments`` (étape 10d).
+
+    S'appuie sur ``_parse_stream_obj``, une méthode interne de minizinc-python (0.10) : si elle change, les tests du
+    temps déterministe (``tests/test_solver.py``) échouent.
+    """
+
+    def __init__(self, solver: minizinc.Solver, model: minizinc.Model) -> None:
+        super().__init__(solver, model)
+        self.solver_comments: list[str] = []
+
+    def _parse_stream_obj(self, obj, statistics):
+        if obj.get(MiniZincStreamTypes.TYPE_FIELD) == MiniZincStreamTypes.COMMENT:
+            self.solver_comments.append(obj.get(MiniZincStreamTypes.COMMENT_FIELD, ""))
+        return super()._parse_stream_obj(obj, statistics)
 
 
 @dataclass(frozen=True)
@@ -372,7 +412,7 @@ class SolverAdapter(ABC):
         Raises:
             SolverFailureError: si MiniZinc échoue (contrainte mal formée, statut ERROR ou inattendu).
         """
-        minizinc_instance = minizinc.Instance(self.solver, self.minizinc_model)
+        minizinc_instance = CommentCapturingInstance(self.solver, self.minizinc_model)
         for name, value in self.model.parameters(self.weights).items():
             minizinc_instance[name] = value
         self._assign_instance_data(minizinc_instance, instance)
@@ -391,7 +431,9 @@ class SolverAdapter(ABC):
             ) from error
 
         outcome = self._outcome_of(result.status, instance)
-        statistics = self._statistics_of(result.statistics)
+        statistics = self._statistics_of(
+            result.statistics, deterministic_time=self.deterministic_time_of(minizinc_instance.solver_comments)
+        )
         if not outcome.has_solution:
             return SolverRun(outcome=outcome, variables=None, objective=None, statistics=statistics)
 
@@ -431,8 +473,15 @@ class SolverAdapter(ABC):
         return outcomes_by_status[status]
 
     @staticmethod
-    def _statistics_of(raw_statistics: Mapping[str, Any]) -> SolverStatistics:
-        """Extrait les statistiques standard ; une statistique absente vaut ``None``."""
+    def deterministic_time_of(solver_comments: Sequence[str]) -> float | None:
+        """Le temps déterministe consommé, lu dans le journal du solveur ; ``None`` par défaut (le solveur ne le
+        rapporte pas). ``CpSatAdapter`` le redéfinit."""
+        return None
+
+    @staticmethod
+    def _statistics_of(raw_statistics: Mapping[str, Any], deterministic_time: float | None = None) -> SolverStatistics:
+        """Extrait les statistiques standard ; une statistique absente vaut ``None``. ``deterministic_time`` vient
+        du journal du solveur (``deterministic_time_of``)."""
 
         def optional_int(name: str) -> int | None:
             value = raw_statistics.get(name)
@@ -443,6 +492,7 @@ class SolverAdapter(ABC):
             failures=optional_int(MiniZincStatisticNames.FAILURES),
             propagations=optional_int(MiniZincStatisticNames.PROPAGATIONS),
             solve_time=raw_statistics.get(MiniZincStatisticNames.SOLVE_TIME),
+            deterministic_time=deterministic_time,
         )
 
 
@@ -450,7 +500,8 @@ class CpSatAdapter(SolverAdapter):
     """Adaptateur pour OR-Tools CP-SAT, le solveur par défaut (D2).
 
     Limites comprises : ``DeterministicTimeLimit`` (par défaut, reproductible avec un seul thread)
-    et ``WallTimeLimit``. La graine est transmise dans les deux cas.
+    et ``WallTimeLimit``. La graine est transmise dans les deux cas. Le journal du solveur est demandé
+    (``--verbose-solving``) pour lire le temps déterministe consommé (étape 10d).
     """
 
     @classmethod
@@ -463,7 +514,10 @@ class CpSatAdapter(SolverAdapter):
 
     def solver_arguments(self) -> dict[str, Any]:
         parameters = [CpSatFlags.PARAMETER_TEMPLATE.format(name=CpSatFlags.RANDOM_SEED, value=self.options.seed)]
-        arguments: dict[str, Any] = {MiniZincPythonArguments.THREADS: self.options.threads}
+        arguments: dict[str, Any] = {
+            MiniZincPythonArguments.THREADS: self.options.threads,
+            CpSatFlags.VERBOSE_SOLVING_OPTION: True,
+        }
 
         limit = self.options.limit
         if isinstance(limit, DeterministicTimeLimit):
@@ -477,3 +531,11 @@ class CpSatAdapter(SolverAdapter):
             parameters=CpSatFlags.PARAMETER_SEPARATOR.join(parameters)
         )
         return arguments
+
+    @staticmethod
+    def deterministic_time_of(solver_comments: Sequence[str]) -> float | None:
+        """La dernière valeur « %% deterministic_time: ... » du journal de CP-SAT ; ``None`` si absente."""
+        matches = CpSatFlags.DETERMINISTIC_TIME_PATTERN.findall("".join(solver_comments))
+        if not matches:
+            return None
+        return float(matches[-1])

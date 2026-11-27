@@ -29,6 +29,10 @@ memetic_pipeline/
 │   │   ├── analyze_bench3_cpsat_alone.py # Mémétique contre CP-SAT seul à effort égal sur bench_3 (étape 10g)
 │   │   └── …                   # Analyses et rapports des séries de Mély (bench_2, bench_3) et synthèse
 │   ├── config/                 # Configurations JSON des expériences (description, instance, paramètres)
+│   ├── analysis/               # Scripts d'analyse (analyze_*.py) et rapports (bench2_*.md) des séries d'expériences
+│   │   ├── analyze_random_restarts.py, bench2_temoin_redemarrages.md # 10d : mémétique contre redémarrages aléatoires (population 6)
+│   │   └── analyze_random_witness.py, bench2_temoin_aleatoire.md     # 10d : mémétique contre individus aléatoires + LocalSolver (population 18)
+│   ├── config/                 # Configurations JSON des expériences (description, instance, paramètres, stratégies), une série par répertoire
 │   │   └── integration_bench1.json # Configuration de base : les réglages de la 9-intégration sur bench_1
 │   ├── drivers/                # Scripts de pilotage des expériences
 │   │   ├── __init__.py

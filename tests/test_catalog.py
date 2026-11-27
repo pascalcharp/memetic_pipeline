@@ -8,7 +8,14 @@ import unittest
 
 from src.config import ProjectPaths
 from src.ga.chromosome import BlockEncoding
-from src.ga.operators import ActivityMutation, BlockBoundaryMutation, ShiftStartMutation, UniformGeneCrossover
+from src.ga.operators import (
+    ActivityMutation,
+    BlockBoundaryMutation,
+    RandomGenomeCrossover,
+    RandomGenomeMutation,
+    ShiftStartMutation,
+    UniformGeneCrossover,
+)
 from src.ga.registry import InvalidOperatorParametersError, UnknownOperatorError
 from src.memetic.catalog import (
     BuildContext,
@@ -29,11 +36,15 @@ UNKNOWN_ROLE: str = "sélection_magique"
 UNKNOWN_NAME: str = "croisement_inexistant"
 UNEXPECTED_PARAMETER: str = "taux"
 EXPECTED_CLASSES: dict[str, dict[str, type]] = {
-    StrategyRoles.CROSSOVER: {StrategyNames.UNIFORM_GENE: UniformGeneCrossover},
+    StrategyRoles.CROSSOVER: {
+        StrategyNames.UNIFORM_GENE: UniformGeneCrossover,
+        StrategyNames.RANDOM_GENOME: RandomGenomeCrossover,
+    },
     StrategyRoles.MUTATION: {
         StrategyNames.SHIFT_START: ShiftStartMutation,
         StrategyNames.BLOCK_BOUNDARY: BlockBoundaryMutation,
         StrategyNames.ACTIVITY: ActivityMutation,
+        StrategyNames.RANDOM_GENOME: RandomGenomeMutation,
     },
 }
 
@@ -82,6 +93,12 @@ class TestCatalogCreate(unittest.TestCase):
             with self.subTest(name=name):
                 mutation = self.catalog.create(StrategyRoles.MUTATION, StrategyChoice(name), self.context)
                 self.assertIs(mutation.instance, self.instance)
+
+    def test_givenRandomGenomeWitness_whenCreateForEachRole_thenItReceivesTheContextInstance(self) -> None:
+        for role in (StrategyRoles.CROSSOVER, StrategyRoles.MUTATION):
+            with self.subTest(role=role):
+                operator = self.catalog.create(role, StrategyChoice(StrategyNames.RANDOM_GENOME), self.context)
+                self.assertIs(operator.instance, self.instance)
 
     def test_givenSameChoice_whenCreateTwice_thenTwoDistinctOperators(self) -> None:
         choice = StrategyChoice(StrategyNames.SHIFT_START)

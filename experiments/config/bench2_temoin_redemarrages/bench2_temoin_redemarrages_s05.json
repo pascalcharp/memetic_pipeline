@@ -1,0 +1,12 @@
+{
+  "description": "Témoin « redémarrages aléatoires » sur bench_2 (optimum prouvé 38) : croisement et mutation random_genome (génomes aléatoires neufs passés au LocalSolver), le reste comme le mémétique de référence (population 6, NR = 2, NM = 2, stagnation 10, voisinage 1), 80 générations, graine 5. Même budget d'appels que bench2_memetique_ref.",
+  "instance": "bench_2",
+  "settings": {
+    "generations": 80,
+    "master_seed": 5
+  },
+  "strategies": {
+    "crossover": "random_genome",
+    "mutation": "random_genome"
+  }
+}

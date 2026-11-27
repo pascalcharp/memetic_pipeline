@@ -1,0 +1,13 @@
+{
+  "description": "Mémétique sur bench_2 (optimum prouvé 38), réglages retenus par Mély (PR #15) : population 18, 26 générations, NR = 6, NM = 6, stagnation 10, voisinage 1 ; uniform_gene et shift_start ; graine 15. Mêmes réglages que bench2_pop18, relancé pour mesurer le temps déterministe et l'effort par génération.",
+  "instance": "bench_2",
+  "settings": {
+    "population_size": 18,
+    "generations": 26,
+    "crossover_count": 6,
+    "mutation_count": 6,
+    "stagnation_generations": 10,
+    "neighborhood_size": 1,
+    "master_seed": 15
+  }
+}
