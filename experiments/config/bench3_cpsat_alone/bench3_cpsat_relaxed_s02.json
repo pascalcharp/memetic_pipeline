@@ -1,0 +1,7 @@
+{
+  "description": "Témoin CP-SAT seul sur bench_3 (optimum 16) : instance complète, modèle assoupli horaire_assoupli.mzn (celui des sous-problèmes du mémétique), 1 thread, limite déterministe 5400 (environ 3600 s de temps de résolution, l'effort moyen de la configuration « qualité » de Mély), graine 2. Toutes les solutions intermédiaires sont gardées, pour comparer le meilleur coût à effort égal avec le mémétique.",
+  "instance": "bench_3",
+  "model": "relaxed",
+  "seed": 2,
+  "deterministic_time_units": 5400
+}
