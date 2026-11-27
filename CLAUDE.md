@@ -29,7 +29,7 @@ Memetic(NR, NM):
 
 ## 🔄 Workflow de Développement & Validation Strict
 L'implémentation de fonctionnalités doit suivre une méthodologie rigoureuse étape par étape.
-0. **Pédagogie :** Le projet est pédagogique. Les méthodes et algos clés sont scaffoldés, mais chaque membre de l'équipe écrit lui-même ceux de sa sous-étape ; Claude vérifie ensuite.
+0. **Pédagogie :** Le projet est pédagogique. Les méthodes et algos clés sont scaffoldés, mais chaque membre de l'équipe écrit lui-même ceux de sa sous-étape ; Claude vérifie ensuite. Les tests automatisés peuvent être écrits par un agent de codage (depuis le 13 novembre) : c'est plus rapide, et chaque membre se concentre sur l'essentiel. Le membre reste responsable de ses tests : il les relit, et ils sont revus comme le reste de la *pull request*. La provenance des tests est indiquée dans la *pull request* et dans le DEVLOG.
 1. **Planification (TODO.md) :** Avant d'écrire la moindre ligne de code, les étapes du travail doivent être planifiées à l'avance et consignées dans un fichier `TODO.md` à la racine du projet.
 2. **Journal de bord (DEVLOG.md) :** Les étapes du développement, les décisions architecturales prises, les blocages rencontrés et les correctifs appliqués sont consignés au fur et à mesure dans un fichier `DEVLOG.md`.
 3. **Isolation par Étape :** Claude Code doit traiter une seule tâche du `TODO.md` à la fois.
