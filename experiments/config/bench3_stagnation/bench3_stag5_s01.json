@@ -1,0 +1,21 @@
+{
+  "instance": "bench_3",
+  "description": "Comparaison des seuils de stagnation sur bench_3 : stagnation 5, population 18, 26 generations, NR=6, NM=6, graine 1.",
+  "settings": {
+    "population_size": 18,
+    "generations": 26,
+    "crossover_count": 6,
+    "mutation_count": 6,
+    "master_seed": 1,
+    "stagnation_generations": 5,
+    "neighborhood_size": 1,
+    "deterministic_time_units": 5.0,
+    "tournament_size": 2,
+    "elite_count": 1,
+    "initial_local_search": true
+  },
+  "strategies": {
+    "crossover": "uniform_gene",
+    "mutation": "shift_start"
+  }
+}

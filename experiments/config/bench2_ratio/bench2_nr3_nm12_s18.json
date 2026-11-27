@@ -1,0 +1,13 @@
+{
+  "description": "Comparaison du ratio croisement-mutation sur bench_2 : population 18, 26 generations, NR=3, NM=12, budget nominal 486, graine 18.",
+  "instance": "bench_2",
+  "settings": {
+    "population_size": 18,
+    "generations": 26,
+    "crossover_count": 3,
+    "mutation_count": 12,
+    "master_seed": 18,
+    "stagnation_generations": 10,
+    "neighborhood_size": 1
+  }
+}
